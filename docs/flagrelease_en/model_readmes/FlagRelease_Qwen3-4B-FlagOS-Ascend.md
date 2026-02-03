@@ -78,7 +78,6 @@ modelscope download --model Qwen/Qwen3-4B --local_dir /data/weights/Qwen3-4B/
 
 ```python
 #Download the image for the A3 chip
-#docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_ascend_qwen3_4b
 docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_qwen3-4b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.11.11-torch_npu2.6.0rc1-pcp_cann8.2rc1.alpha002-gpu_ascend001-arc_arm64-driver_25.2.0:2512101714
 #Download the image for the A2 chip
 docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagopen-910b-ubuntu24.04.2-py311
@@ -106,7 +105,7 @@ docker run -itd --name flagos \
     -e CPU_AFFINITY_CONF=2 \
     -e PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256 \
     -e USE_FLAGGEMS=true \
-  flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_ascend_qwen3_4b bash
+  harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_qwen3-4b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.11.11-torch_npu2.6.0rc1-pcp_cann8.2rc1.alpha002-gpu_ascend001-arc_arm64-driver_25.2.0:2512101714 bash
 
 #Enter the container
 docker exec -it flagos bash
