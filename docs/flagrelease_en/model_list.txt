@@ -15,6 +15,12 @@ FlagRelease/Kimi-K2-Instruct-FlagOS
 FlagRelease/Kimi-K2-Thinking-FlagOS
 FlagRelease/MiniCPM-V-4-FlagOS
 FlagRelease/MiniCPM-V-4-metax-FlagOS
+FlagRelease/MiniCPM-o-4.5-ascend-FlagOS
+FlagRelease/MiniCPM-o-4.5-hygon-FlagOS
+FlagRelease/MiniCPM-o-4.5-iluvatar-FlagOS
+FlagRelease/MiniCPM-o-4.5-metax-FlagOS
+FlagRelease/MiniCPM-o-4.5-nvidia-FlagOS
+FlagRelease/MiniCPM-o-4.5-zhenwu-FlagOS
 FlagRelease/MiniCPM_o_2.6-FlagOS-Cambricon
 FlagRelease/MiniCPM_o_2.6-FlagOS-NVIDIA
 FlagRelease/MiniMax-M1-80k-FlagOS
