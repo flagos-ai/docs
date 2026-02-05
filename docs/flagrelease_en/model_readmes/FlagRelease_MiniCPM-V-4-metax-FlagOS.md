@@ -78,14 +78,14 @@ modelscope download --model OpenBMB/MiniCPM-V-4 --local_dir /nfs/MiniCPM-V-4
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_metax_minicpm
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_minicpm-v-4-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.0.0.3-pcp_maca3.0.0.8-gpu_metax001-arc_amd64-driver_3.3.12:2510141031
 ```
 
 ### Start the inference service
 
 ```bash
 #Container Startup
-docker run -it --device=/dev/dri --device=/dev/mxcd --group-add video     --name flagos --device=/dev/mem --network=host     --security-opt seccomp=unconfined --security-opt apparmor=unconfined     --shm-size '100gb' --ulimit memlock=-1     -v /usr/local/:/usr/local/ -v /nfs:/nfs   harbor.baai.ac.cn/flagrelease-public/flagrelease_metax_minicpm   /bin/bash
+docker run -it --device=/dev/dri --device=/dev/mxcd --group-add video     --name flagos --device=/dev/mem --network=host     --security-opt seccomp=unconfined --security-opt apparmor=unconfined     --shm-size '100gb' --ulimit memlock=-1     -v /usr/local/:/usr/local/ -v /nfs:/nfs   harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_minicpm-v-4-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.0.0.3-pcp_maca3.0.0.8-gpu_metax001-arc_amd64-driver_3.3.12:2510141031   /bin/bash
 ```
 
 ### Serve

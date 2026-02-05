@@ -74,14 +74,14 @@ modelscope download --model FlagRelease/Qwen3-Next-80B-A3B-Instruct-metax-FlagOS
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_metax_qwen3next
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3-next-80b-a3b-instruct-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.2.1.3-pcp_maca3.2.1.10-gpu_metax001-arc_amd64-driver_3.3.12:2512110945
 ```
 
 ### Start the inference service
 
 ```bash
 #Container Startup
-docker run -it --device=/dev/dri --device=/dev/mxcd --group-add video     --name flagos --device=/dev/mem --network=host     --security-opt seccomp=unconfined --security-opt apparmor=unconfined     --shm-size '100gb' --ulimit memlock=-1     -v /usr/local/:/usr/local/ -v /nfs:/nfs  harbor.baai.ac.cn/flagrelease-public/flagrelease_metax_qwen3next   /bin/bash
+docker run -it --device=/dev/dri --device=/dev/mxcd --group-add video     --name flagos --device=/dev/mem --network=host     --security-opt seccomp=unconfined --security-opt apparmor=unconfined     --shm-size '100gb' --ulimit memlock=-1     -v /usr/local/:/usr/local/ -v /nfs:/nfs  harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3-next-80b-a3b-instruct-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.2.1.3-pcp_maca3.2.1.10-gpu_metax001-arc_amd64-driver_3.3.12:2512110945   /bin/bash
 
 ```
 

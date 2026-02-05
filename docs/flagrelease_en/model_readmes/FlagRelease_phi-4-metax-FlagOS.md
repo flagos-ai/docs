@@ -74,7 +74,7 @@ modelscope download --model LLM-Research/phi-4 --local_dir /nfs/models/phi-4
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_phi-4-gems_3.0-scale_0.8.0-pcp_maca3.2.1.10-python_3.10.10-torch_2.6.0_metax3.0.0.3-gpu_mc550:latest
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_phi-4-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.0.0.3-pcp_maca3.0.0.8-gpu_metax001-arc_amd64-driver_3.3.12:2511051500
 ```
 
 ### Start the inference service
@@ -85,7 +85,7 @@ docker run -d -it --net=host --uts=host --ipc=host -e USE_FLAGGEMS=1 \
             --privileged=true --group-add video --shm-size 100gb --ulimit memlock=-1 \
             --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri \
             --device=/dev/mxcd -v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro -v /nfs/:/nfs/\
-            --name phi_4_release harbor.baai.ac.cn/flagrelease-public/metax_phi_4_flagrelease:latest bash
+            --name phi_4_release harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_phi-4-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.0.0.3-pcp_maca3.0.0.8-gpu_metax001-arc_amd64-driver_3.3.12:2511051500 bash
 ```
 
 ### Serve
@@ -104,7 +104,7 @@ flagscale serve phi-4
 import openai
 openai.api_key = "EMPTY"
 openai.base_url = "http://<server_ip>:8100/v1/"
-model = "/nfs/models/phi-4/"
+model = "metax_phi4"
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "What's the weather like today?"}

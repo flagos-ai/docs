@@ -75,7 +75,7 @@ modelscope download --model Qwen/Qwen3-235B-A22B-Instruct-2507 --local_dir /shar
 
 BE AWARE!, Hygon's FLAGOS image have not decided public-accesible through internet or not. To obtain this image, you can contact us or hygon through issues.
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-inner/flagrelease_hygon_qwen3_2507
+docker pull harbor.baai.ac.cn/flagrelease-inner/flagrelease-hygon-release-model_qwen3-235b-a22b-instruct-2507-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10-torch_2.4.1_das.opt2.dtk2504-pcp_dtk-25.04-gpu_hygon001-arc_amd64-driver_6.3.13-v1.12.0a:2508220949
 ```
 
 ### Start the inference service
@@ -100,7 +100,7 @@ docker run -it \
   -u root \
   -v /opt/hyhal:/opt/hyhal \
   -v /share:/share \
-  harbor.baai.ac.cn/flagrelease-inner/flagrelease_hygon_qwen3_2507 \
+  harbor.baai.ac.cn/flagrelease-inner/flagrelease-hygon-release-model_qwen3-235b-a22b-instruct-2507-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10-torch_2.4.1_das.opt2.dtk2504-pcp_dtk-25.04-gpu_hygon001-arc_amd64-driver_6.3.13-v1.12.0a:2508220949 \
   /bin/bash
 ```
 

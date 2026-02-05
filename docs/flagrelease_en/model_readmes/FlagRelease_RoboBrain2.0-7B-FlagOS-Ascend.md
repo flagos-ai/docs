@@ -119,15 +119,15 @@ source /usr/local/Ascend/nnal/atb/set_env.sh
 #Use 'pip show flag_scale' to find the installation path of FlagScale.
 pip show flag_scale
 
-# Modify the 7b.yaml file located at flag_scale/examples/qwen3/conf/serve
+# Modify the 7b.yaml file located at flag_scale/examples/robobrain2/conf/serve
 - serve_id: vllm_model
   engine: vllm
   engine_args:
-    model: /data/weights/RoboBrain2.0-7B/ # path of weight of deepseek r1
+    model: /data/weights/RoboBrain2.0-7B/ # path of weight of robobrain2.0-7b
     served_model_name: RoboBrain2.0-7B-ascend-flagos
     tensor_parallel_size: 4
     gpu_memory_utilization: 0.8
-    host: x.x.x.xxx  #Modify the host field in the 4b.yaml configuration file to use the machine's actual IP address.
+    host: x.x.x.xxx  #Modify the host field in the 7b.yaml configuration file to use the machine's actual IP address.
     port: 9010
     block_size: 128
     enforce_eager: true
