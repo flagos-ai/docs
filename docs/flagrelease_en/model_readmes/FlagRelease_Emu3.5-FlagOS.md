@@ -73,14 +73,14 @@ modelscope download --model FlagRelease/Emu3.5-FlagOS --local_dir /data/Emu3.5-F
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_emu3p5
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_emu3.5-tree_none-gems_4.1-scale_none-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511191157
 ```
 
 ### Start the inference service
 
 ```bash
 #Container Startup
-docker run --rm --init --detach   --net=host --uts=host --ipc=host   --security-opt=seccomp=unconfined   --privileged=true   --ulimit stack=67108864   --ulimit memlock=-1   --ulimit nofile=1048576:1048576   --shm-size=32G   -v /data/Emu3.5-FlagOS:/share   --gpus all   --name flagos   harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_emu3p5  sleep infinity
+docker run --rm --init --detach   --net=host --uts=host --ipc=host   --security-opt=seccomp=unconfined   --privileged=true   --ulimit stack=67108864   --ulimit memlock=-1   --ulimit nofile=1048576:1048576   --shm-size=32G   -v /data/Emu3.5-FlagOS:/share   --gpus all   --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_emu3.5-tree_none-gems_4.1-scale_none-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511191157  sleep infinity
 ```
 
 ### Use Emu3.5

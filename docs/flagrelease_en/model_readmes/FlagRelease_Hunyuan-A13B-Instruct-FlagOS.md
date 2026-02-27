@@ -74,7 +74,7 @@ modelscope download --model FlagRelease/Hunyuan-A13B-Instruct-FlagOS --local_dir
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_hunyuan-a13b-instruct-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda13.0-gpu_nvidia004-arc_amd64-driver_535.183.06:2512041016
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_hunyuan-a13b-instruct-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda13.0-gpu_nvidia004-arc_amd64-driver_535.183.06:260226
 ```
 
 ### Start the inference service
