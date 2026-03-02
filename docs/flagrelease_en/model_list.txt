@@ -47,6 +47,7 @@ FlagRelease/Qwen3-4B-FlagOS-Nvidia
 FlagRelease/Qwen3-4B-FlagOS-cambricon
 FlagRelease/Qwen3-4B-hygon-FlagOS
 FlagRelease/Qwen3-8B-FlagOS
+FlagRelease/Qwen3-8B-iluvatar-FlagOS
 FlagRelease/Qwen3-8B-metax-FlagOS
 FlagRelease/Qwen3-8B-mthreads-FlagOS
 FlagRelease/Qwen3-Next-80B-A3B-Instruct-FlagOS

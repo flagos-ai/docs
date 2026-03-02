@@ -74,7 +74,7 @@ modelscope download --model FlagRelease/MiniMax-M2-FlagOS --local_dir /share/Min
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_minimaxm2
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_minimax-m2-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0a0_5228986c39.nv25.6-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511041437
 ```
 
 ### Start the inference service
@@ -85,7 +85,8 @@ docker run --init --detach --net=host --user 0 --ipc=host \
            -v /share:/share --security-opt=seccomp=unconfined \
            --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
            --shm-size=512G --gpus all -e USE_FLAGGEMS=1 \
-           --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_minimaxm2 sleep infinity
+           --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_minimax-m2-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0a0_5228986c39.nv25.6-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511041437  sleep infinity
+docker exec -it flagos /bin/bash
 ```
 
 ### Serve

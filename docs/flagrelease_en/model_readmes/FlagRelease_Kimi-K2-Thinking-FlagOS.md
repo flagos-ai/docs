@@ -75,7 +75,7 @@ modelscope download --model FlagRelease/Kimi-K2-Thinking-FlagOS --local_dir /sha
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_kimi_k2_thinking
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_kimi-k2-thinking-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2512151813
 ```
 
 ### Start the inference service
@@ -86,7 +86,7 @@ docker run --init --detach --net=host --user 0 --ipc=host \
            -v /share:/share --security-opt=seccomp=unconfined \
            --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
            --shm-size=512G --gpus all -e USE_FLAGGEMS=1 \
-           --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_kimi_k2_thinking sleep infinity
+           --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_kimi-k2-thinking-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2512151813 sleep infinity
 ```
 
 ### Serve
