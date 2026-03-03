@@ -67,25 +67,26 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ```bash
 pip install modelscope
-modelscope download --model Qwen/Qwen2-7B-Instruct --local_dir /nfs/models/Qwen2-7B-Instruct
+modelscope download --model Qwen/Qwen2-7B-Instruct --local_dir /data/Qwen2-7B-Instruct
 
 ```
 
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_qwen2_7b
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen2-7b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:2512151909
 ```
 
 ### Start the inference service
 
 ```bash
 #Container Startup
-docker run -d -it --net=host --uts=host --ipc=host -e USE_FLAGGEMS=1 \
+docker run -d -it --net=host --uts=host --ipc=host  -e USE_FLAGGEMS=1 --gpus all \
             --privileged=true --group-add video --shm-size 100gb --ulimit memlock=-1 \
             --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri \
-            --device=/dev/mxcd -v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro -v /nfs/:/nfs/\
-            --name qwen2_7b_release harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_qwen2_7b bash
+            --device=/dev/mxcd -v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro -v /data:/data/\
+            --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen2-7b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:2512151909 bash
+docker exec -it flagos /bin/bash
 ```
 
 ### Serve
@@ -103,7 +104,7 @@ flagscale serve qwen2
 import openai
 openai.api_key = "EMPTY"
 openai.base_url = "http://<server_ip>:8000/v1/"
-model = "/nfs/models/Qwen2-7B-Instruct/"
+model = "/data/Qwen2-7B-Instruct"
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "What's the weather like today?"}

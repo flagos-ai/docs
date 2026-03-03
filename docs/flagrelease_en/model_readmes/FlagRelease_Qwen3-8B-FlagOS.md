@@ -59,7 +59,7 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 | Docker Version                  | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2| 
 | Operating System                | Description:    Ubuntu 22.04.4 LTS     | 
 | FlagScale                       | Version: 0.8.0                        | 
-| FlagGems                        | Version: 3.0                         | 
+| FlagGems                        | Version: 4.2.1rc0                         | 
 
 ## Operation Steps
 
@@ -74,7 +74,7 @@ modelscope download --model Qwen/Qwen3-8B --local_dir /root/qwen3-8b
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:2510211417
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:260225
 ```
 
 ### Start the inference service
@@ -85,7 +85,7 @@ docker run --init --detach --net=host --user 0 --ipc=host \
            -v /root:/root --security-opt=seccomp=unconfined \
            --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
            --shm-size=512G --gpus all -e USE_FLAGGEMS=1 \
-           --name qwen3_8b_release harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:2510211417 sleep infinity
+           --name qwen3_8b_release harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:260225 sleep infinity
 docker exec -it qwen3_8b_release bash
 ```
 

@@ -52,14 +52,14 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen3-235B-
 ```bash
 
 pip install modelscope
-modelscope download --model Qwen/Qwen3-235B-A22B --local_dir /nfs/Qwen3-235B-A22B
+modelscope download --model Qwen/Qwen3-235B-A22B --local_dir /share/Qwen3-235B-A22B
 
 ```
 
 ### Download the FlagOS image
 
 ```bash
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-235b-a22b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.0-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.158.01:2508011525
 ```
 
 ### Start the inference service
@@ -73,61 +73,40 @@ docker run --rm --init --detach \
   --ulimit memlock=-1 \
   --ulimit nofile=1048576:1048576 \
   --shm-size=32G \
-  -v /nfs:/nfs \
+  -v /share:/share \
   --gpus all \
   --name flagos \
-  flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b \
+  harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-235b-a22b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.0-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.158.01:2508011525 \
   sleep infinity
 
 docker exec -it flagos bash
-```
-
-### Modify serve configuration
-
-1. Use  `pip show flag_scale` to find the location of installed flag_scale framework like `/usr/local/lib/python3.12/dist-packages`
-2. `cd  /usr/local/lib/python3.12/dist-packages/flag_scale/examples/`
-3. Use `mv robobrain2 qwen3` to modify the config name
-4. `vim qwen3/serve/32b.yaml` to replace the content of RoboBrain2-32B to this model(Qwen3):
-
-```
-- serve_id: vllm_model
-  engine: vllm
-  engine_args:
-    model: /share/project/jiyuheng/ckpt/32b_stage2_K1
-    served_model_name: RoboBrain2.0-32B-nvidia-flagos
-    tensor_parallel_size: 8
-    pipeline_parallel_size: 1
-    gpu_memory_utilization: 0.9
-    limit_mm_per_prompt: image=18 # should be customized, 18 images/request is enough for most scenarios
-    port: 9010
-    trust_remote_code: true
-    enforce_eager: false # set true if use FlagGems
-    enable_chunked_prefill: true
-
-```
-
-you should modify the 32b.yaml to:
-
-```
-- serve_id: vllm_model
-  engine: vllm
-  engine_args:
-    model: /nfs/Qwen3-235B-A22B
-    served_model_name: Qwen3-235B-A22B-nvidia-flagos
-    tensor_parallel_size: 8
-    pipeline_parallel_size: 1
-    gpu_memory_utilization: 0.9
-    port: 9010
-    trust_remote_code: true
-    enforce_eager: false # set true if use FlagGems
-    enable_chunked_prefill: true
-
 ```
 
 ### Serve
 
 ```bash
 flagscale serve qwen3
+```
+# Service Invocation
+
+## API-based Invocation Script
+
+```
+import openai
+openai.api_key = "EMPTY"
+openai.base_url = "http://<server_ip>:9010/v1/"
+model = "Qwen3-235B-A22B-FlagOS-nvidia"
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "What's the weather like today?"}
+]
+response = openai.chat.completions.create(
+    model=model,
+    messages=messages,
+    stream=False,
+)
+for item in response:
+    print(item)
 ```
 
 # Contributing
