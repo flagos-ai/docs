@@ -59,7 +59,7 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 | Docker Version                  | Docker version 28.1.0, build 4d8c241 | 
 | Operating System                | Ubuntu 22.04.5 LTS    | 
 | FlagScale                       | Version: 0.8.0                        | 
-| FlagGems                        | Version: 3.0                          | 
+| FlagGems                        | Version:  4.2.1rc0                           | 
 
 ## Operation Steps
 
@@ -74,14 +74,14 @@ modelscope download --model FlagRelease/Seed-OSS-36B-Instruct-FlagOS --local_dir
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_seed-oss-36b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:2509111457
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_seed-oss-36b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:260227
 ```
 
 ### Start the inference service
 
 ```bash
 #Container Startup
-docker run --rm --init --detach   --net=host --uts=host --ipc=host   --security-opt=seccomp=unconfined   --privileged=true   --ulimit stack=67108864   --ulimit memlock=-1   --ulimit nofile=1048576:1048576   --shm-size=32G   -v /share:/share   --gpus all   --name flagos   harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_seed-oss-36b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:2509111457   sleep infinity
+docker run --rm --init --detach   --net=host --uts=host --ipc=host   --security-opt=seccomp=unconfined   --privileged=true   --ulimit stack=67108864   --ulimit memlock=-1   --ulimit nofile=1048576:1048576   --shm-size=32G   -v /share:/share   --gpus all   --name flagos   harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_seed-oss-36b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:260227   sleep infinity
 ```
 
 ### Serve
