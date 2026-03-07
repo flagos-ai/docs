@@ -76,13 +76,13 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ```python
 pip install modelscope
-modelscope download --model BAAI/RoboBrain2.0-7B --local_dir /nfs/RoboBrain2.0-7B
+modelscope download --model FlagRelease/RoboBrain2.0-7B-FlagOS --local_dir /data/RoboBrain2.0-7B
 ```
 
 ### Download FlagOS Image
 
 ```python
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_7B
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_robobrain2.0-7b-tree_none-gems_2.2-scale_0.6.0-cx_none-python_3.10.12-torch_2.6.0-pcp_cuda12.6-gpu_nvidia004-arc_amd64-driver_535.183.06:2508011526
 ```
 
 ### Start the inference service
@@ -97,10 +97,10 @@ docker run --rm --init --detach \
   --ulimit memlock=-1 \
   --ulimit nofile=1048576:1048576 \
   --shm-size=32G \
-  -v /nfs:/nfs \
+  -v /data:/share/models \
   --gpus all \
   --name flagos \
-  flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_7B \
+  harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_robobrain2.0-7b-tree_none-gems_2.2-scale_0.6.0-cx_none-python_3.10.12-torch_2.6.0-pcp_cuda12.6-gpu_nvidia004-arc_amd64-driver_535.183.06:2508011526 \
   sleep infinity
   
 docker exec -it flagos bash
@@ -168,7 +168,7 @@ for item in response:
 ### Q1: What should I do if the model fails to load?
 
 - Check if the model weight path is correct.
-- Ensure the Qwen3-4B model files are present in the `/share` directory inside the container.
+- Ensure the model files are present in the `/share/models` directory inside the container.
 - Check the container logs: `docker logs flagos`.
 
 ### Q2: API call returns a timeout error. What should I do?

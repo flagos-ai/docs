@@ -59,7 +59,7 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 | Docker Version                  | Docker version 28.2.1, build 879ac3f| 
 | Operating System                | Description:    Ubuntu 22.04.4 LTS     | 
 | FlagScale                       | Version: 0.8.0                        | 
-| FlagGems                        | Version: 3.0                         | 
+| FlagGems                        | Version: 4.2.1rc0                         | 
 
 ## Operation Steps
 
@@ -85,7 +85,7 @@ docker run -d -it --net=host --uts=host --ipc=host -e USE_FLAGGEMS=1 \
             --privileged=true --group-add video --shm-size 100gb --ulimit memlock=-1 \
             --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri \
             --device=/dev/mxcd -v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime:ro -v /nfs/:/nfs/\
-            --name qwen3_8b_release harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.0.0.3-pcp_maca3.0.0.8-gpu_metax001-arc_amd64-driver_3.3.12:2510280921 bash
+            --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.10-torch_2.6.0_metax3.0.0.3-pcp_maca3.0.0.8-gpu_metax001-arc_amd64-driver_3.3.12:260211 bash
 ```
 
 ### Serve

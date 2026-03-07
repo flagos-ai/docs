@@ -77,7 +77,7 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 | Type            | Location                                                                                                                                     |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------|
 | Model Weights   | https://www.modelscope.cn/models/BAAI/RoboBrain2.0-32B/files                                                                                 |
-| Container Image | flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b                                        |
+| Container Image | harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_robobrain2.0-32b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.0-pcp_cuda12.2-gpu_nvidia004-arc_amd64-driver_535.183.06:2508011525                                        |
 
 **Environment Setup**
 
@@ -95,13 +95,13 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ```python
 pip install modelscope
-modelscope download --model BAAI/RoboBrain2.0-32B --local_dir /share/project/jiyuheng/ckpt/32b_stage2_K1
+modelscope download --model FlagRelease/RoboBrain2.0-32B-FlagOS --local_dir /share/RoboBrain2.0-32B
 ```
 
 ### Download FlagOS Image
 
 ```python
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_robobrain2.0-32b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.0-pcp_cuda12.2-gpu_nvidia004-arc_amd64-driver_535.183.06:2508011525
 ```
 
 ### Start the inference service
@@ -119,7 +119,7 @@ docker run --rm --init --detach \
   -v /share:/share \
   --gpus all \
   --name flagos \
-  flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b \
+  harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_robobrain2.0-32b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.0-pcp_cuda12.2-gpu_nvidia004-arc_amd64-driver_535.183.06:2508011525 \
   sleep infinity
   
 docker exec -it flagos bash
