@@ -10,7 +10,6 @@ frameworks:
 
 Based on this, the **MiniCPM-o-4.5-hygon-FlagOS** model is adapted for the Hygon chip using the FlagOS software stack, enabling:
 
-
 ## Integrated Deployment
 
 - Deep integration with the open-source [FlagScale framework](https://github.com/FlagOpen/FlagScale)
@@ -56,7 +55,6 @@ Accuracy Difference between using FLAGOS on Hygon backend and Nvidia-CUDA
 | ---------------------- | ---------------------  |
 | Video-MME 0-shot avg@1 ↑ |         0.17%        |
 
-
 # User Guide
 
 **Environment Setup**
@@ -68,18 +66,17 @@ Accuracy Difference between using FLAGOS on Hygon backend and Nvidia-CUDA
 
 ## Operation Steps
 
+### Download FlagOS Image
+```
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hygon-release-model_minicpm-o-45-tree_none-gems_4.2.0-scale_none-cx_none-python_3.10.12-torch_2.5.1_das.opt1.dtk25042-pcp_dtk-25.04.2-gpu_hygon001-arc_amd64-driver_6.3.13-v1.12.0a:latest
+```
+
 ### Download Open-source Model Weights
 
 ``` shell
 pip install modelscope
 modelscope download --model FlagRelease/MiniCPM-o-4.5-hygon-FlagOS --local_dir /share/MiniCPMO45
 ```
-### Download FlagOS Image
-```
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hygon-release-model_minicpm-o-45-tree_none-gems_4.2.0-scale_none-cx_none-python_3.10.12-torch_2.5.1_das.opt1.dtk25042-pcp_dtk-25.04.2-gpu_hygon001-arc_amd64-driver_6.3.13-v1.12.0a:latest
-```
-	 
-
 
 ### Start the Container
 
@@ -107,7 +104,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

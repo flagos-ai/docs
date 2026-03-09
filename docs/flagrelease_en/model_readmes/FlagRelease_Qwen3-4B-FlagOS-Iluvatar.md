@@ -48,20 +48,20 @@ We use a variety of Triton-implemented operation kernels  to run the QwQ-32B mod
 
 ## 📌 Getting Started
 
-### Download open-source weights
-
-```bash
-pip install modelscope
-modelscope download --model Qwen/Qwen3-4B --local_dir /nfs/Qwen/Qwen3-4B
-
-```
-
 ### Download the FlagOS image
 
 Please contact services@iluvatar.com by email to request the image files required for the model, and be sure to include your organization name, contact person, contact information, equipment source, and specific requirements.
 
 ```bash
 docker pull <IMAGE>
+```
+
+### Download open-source weights
+
+```bash
+pip install modelscope
+modelscope download --model Qwen/Qwen3-4B --local_dir /nfs/Qwen/Qwen3-4B
+
 ```
 
 ### Start the inference service

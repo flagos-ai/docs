@@ -52,6 +52,12 @@ We use a variety of Triton-implemented operation kernels  to run the QwQ-32B mod
 
 # How to Run Locally
 ## 📌 Getting Started
+### Download the FlagOS image
+
+```bash
+docker pull <IMAGE>
+```
+
 ### Download open-source weights
 
 ```bash
@@ -59,12 +65,6 @@ We use a variety of Triton-implemented operation kernels  to run the QwQ-32B mod
 pip install modelscope
 modelscope download --model Qwen/QwQ-32B --local_dir /nfs/QwQ-32B
 
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull <IMAGE>
 ```
 
 ### Start the inference service

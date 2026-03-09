@@ -43,17 +43,17 @@ Qwen2-7B is a pre-o1 model without "thinking" or "reasoning" abilities. We use M
 
 # How to Run Locally
 ## 📌 Getting Started
+### Download the FlagOS image
+
+```bash
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease-arm
+```
+
 ### Download open-source weights
 
 ```bash
 pip install modelscope
 modelscope download --model Qwen/Qwen2-7B-Instruct --local_dir /nfs/Qwen/Qwen2-7B-Instruct
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease-arm
 ```
 
 ### Start the inference service

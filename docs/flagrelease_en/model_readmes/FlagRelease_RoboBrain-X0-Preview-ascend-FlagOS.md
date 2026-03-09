@@ -60,18 +60,18 @@ The MAPE between Nvidia's CUDA and FlagOS(CUDA as ground truth) is 0.0000%. You 
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_robobrain-x0-preview-tree_none-gems_3.0-scale_none-cx_none-python_3.11.13-torch_npu2.7.1_gitb7c90d0-pcp_cann8.2.0.0.201_8.2.rc1-gpu_ascend001-arc_arm64-driver_25.2.0:202511071524
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model BAAI/RoboBrain-X0-Preview --local_dir /data/shared/weights/RoboBrain-X0-Preview
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_robobrain-x0-preview-tree_none-gems_3.0-scale_none-cx_none-python_3.11.13-torch_npu2.7.1_gitb7c90d0-pcp_cann8.2.0.0.201_8.2.rc1-gpu_ascend001-arc_arm64-driver_25.2.0:202511071524
 ```
 
 ### Start the inference service
@@ -144,7 +144,6 @@ torch.backends.cudnn.benchmark = False
 
 1. You can try to load Model in BF16 for lower memory occupancy or quicker inference. But BF16 have only 7 precision bits, which cannnot constrain MAPE under 5% even if you launch two CUDA server on different Nvidia's GPU on the same Nvidia's GPU server. 
 
-
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -153,7 +152,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

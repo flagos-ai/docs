@@ -53,17 +53,17 @@ We use a variety of Triton-implemented operation kernels—approximately 70%—t
 
 ## 📌 Getting Started
 
+### Download the FlagOS image
+
+```bash
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:deepseek-flagos-nvidia
+```
+
 ### Download open-source weights
 
 ```bash
 pip install modelscope
 modelscope download --model Qwen/QwQ-32B --local_dir /nfs/QwQ-32B
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:deepseek-flagos-nvidia
 ```
 
 ### Start the inference service

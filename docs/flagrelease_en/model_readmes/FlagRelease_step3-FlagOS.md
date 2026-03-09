@@ -54,7 +54,6 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 |CII-Bench|66.27|65.75|
 |Blink|62.70|62.37|
 
-
 # User Guide
 
 **Environment Setup**
@@ -68,18 +67,18 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_step3
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model stepfun-ai/step3 --local_dir /share/step3
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_step3
 ```
 
 ### Start the inference service
@@ -95,7 +94,6 @@ docker run --rm --init --detach   --net=host --uts=host --ipc=host   --security-
 flagscale serve step3
 
 ```
-
 
 ## Service Invocation
 
@@ -150,7 +148,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

@@ -63,18 +63,18 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_ds32
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model deepseek-ai/DeepSeek-V3.2-Exp --local_dir /share/DeepSeek-V3.2-Exp
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_ds32
 ```
 
 ### Start the inference service
@@ -90,7 +90,6 @@ docker run --rm --init --detach   --net=host --uts=host --ipc=host   --security-
 flagscale serve deepseek_3.2_exp
 
 ```
-
 
 ## Service Invocation
 
@@ -145,7 +144,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

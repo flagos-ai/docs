@@ -63,18 +63,18 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_qwen3-32b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.11.13-torch_npu2.6.0.post1-pcp_cann8.2.rc1-gpu_ascend001-arc_arm64-driver_25.2.0:2509231411
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/Qwen3-32B-ascend-FlagOS --local_dir /data/weights/Qwen3-32B-w8a8-MindIE
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_qwen3-32b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.11.13-torch_npu2.6.0.post1-pcp_cann8.2.rc1-gpu_ascend001-arc_arm64-driver_25.2.0:2509231411
 ```
 
 ### Start the inference service
@@ -105,7 +105,6 @@ docker exec -it flagos /bin/bash
 flagscale serve qwen3
 
 ```
-
 
 ## Service Invocation
 
@@ -160,7 +159,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

@@ -63,19 +63,19 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+BE AWARE!, Hygon's FLAGOS image have not decided public-accesible through internet or not. To obtain this image, you can contact us or hygon through issues.
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-inner/flagrelease-hygon-release-model_qwen3-235b-a22b-instruct-2507-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10-torch_2.4.1_das.opt2.dtk2504-pcp_dtk-25.04-gpu_hygon001-arc_amd64-driver_6.3.13-v1.12.0a:2508220949
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model Qwen/Qwen3-235B-A22B-Instruct-2507 --local_dir /share/Qwen3-235B-A22B-Instruct-2507
 
-```
-
-### Download FlagOS Image
-
-BE AWARE!, Hygon's FLAGOS image have not decided public-accesible through internet or not. To obtain this image, you can contact us or hygon through issues.
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-inner/flagrelease-hygon-release-model_qwen3-235b-a22b-instruct-2507-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10-torch_2.4.1_das.opt2.dtk2504-pcp_dtk-25.04-gpu_hygon001-arc_amd64-driver_6.3.13-v1.12.0a:2508220949
 ```
 
 ### Start the inference service
@@ -110,7 +110,6 @@ docker run -it \
 flagscale serve qwen3
 
 ```
-
 
 ## Service Invocation
 
@@ -167,7 +166,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

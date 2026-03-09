@@ -49,17 +49,17 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen3-4B mo
 
 # How to Run Locally
 ## 📌 Getting Started
+### Download the FlagOS image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/nv_vllm085_gemscbbf39
+```
+
 ### Download open-source weights
 
 ```bash
 pip install modelscope
 modelscope download --model Qwen/Qwen3-4B --local_dir /nfs/Qwen3-4B
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/nv_vllm085_gemscbbf39
 ```
 
 ### Start the inference service

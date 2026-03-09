@@ -30,7 +30,6 @@ vllm-plugin-fl is a vLLM plugin built on the FlagOS unified multi-chip backend, 
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
 
-
 # User Guide
 
 **Environment Setup**
@@ -44,18 +43,18 @@ vllm-plugin-fl is a vLLM plugin built on the FlagOS unified multi-chip backend, 
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-iluvatar-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_ix-ml4.4.0-gpu_iluvatar001-arc_amd64-driver_4.4.0:260227
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model Qwen/Qwen3-8B --local_dir /nfs/Qwen3-8B
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-iluvatar-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_ix-ml4.4.0-gpu_iluvatar001-arc_amd64-driver_4.4.0:260227
 ```
 
 ### Start the inference service
@@ -71,7 +70,6 @@ docker run --shm-size 128g -dit --name flagos  -v /nfs:/root/data -e USE_FLAGGEM
 flagscale serve qwen3
 
 ```
-
 
 ## Service Invocation
 
@@ -99,7 +97,6 @@ response = openai.chat.completions.create(
 )
 
 print(response.choices[0].message.content)
-
 
 ```
 
@@ -133,7 +130,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

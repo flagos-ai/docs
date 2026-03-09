@@ -67,17 +67,17 @@ Accuracy Difference between using FLAGOS and Ascend on Nvidia-CUDA
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```Plaintext
+docker pull  harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_minicpm-o-45-tree_none-gems_4.2.0-scale_none-cx_none-python_3.11.13-torch_npu2.8.0-pcp_cann8.3.0.2.220_8.3.rc2-gpu_ascend001-arc_arm64-driver_25.2.0:latest
+```
+
 ### Download Open-source Model Weights
 
 ```Shell
 pip install modelscope
 modelscope download --model FlagRelease/MiniCPM-o-4.5-ascend-FlagOS --local_dir /share/MiniCPMO45
-```
-
-### Download FlagOS Image
-
-```Plaintext
-docker pull  harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_minicpm-o-45-tree_none-gems_4.2.0-scale_none-cx_none-python_3.11.13-torch_npu2.8.0-pcp_cann8.3.0.2.220_8.3.rc2-gpu_ascend001-arc_arm64-driver_25.2.0:latest
 ```
 
 ### Start the Container

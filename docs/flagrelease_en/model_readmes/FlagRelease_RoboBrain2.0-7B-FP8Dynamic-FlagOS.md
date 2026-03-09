@@ -72,17 +72,17 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```python
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b
+```
+
 ### Download Open-source Model Weights
 
 ```python
 pip install modelscope
 modelscope download --model FlagRelease/RoboBrain2.0-7B-FP8Dynamic-FlagOS --local_dir /nfs/RoboBrain2.0-7B-FP8Dynamic
-```
-
-### Download FlagOS Image
-
-```python
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b
 ```
 
 ### Start the inference service

@@ -20,7 +20,6 @@ Leveraging the cross-chip capabilities of FlagOS, a unified open-source system s
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
-
 # Evaluation Results
 ## Benchmark Result
 |Metrics|Qwen3.5-35B-A3B-Nvidia-Origin|Qwen3.5-35B-A3B-FlagOS|
@@ -36,16 +35,17 @@ Environment Setup
 |Docker Version|24.0.0 |
 |Operating System|Ubuntu 22.04.4|
 
+### Download FlagOS Image
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3.5-35b-a3b-tree_0.4.0-3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.10.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:2603031500
+```
+
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/Qwen3.5-35B-A3B-FlagOS --local_dir /data/Qwen3.5-35B-A3B
 ```
 
-### Download FlagOS Image
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3.5-35b-a3b-tree_0.4.0-3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.10.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:2603031500
-```
 ### Start the inference service
 ```bash
 # Container Startup
@@ -64,7 +64,6 @@ vllm serve /data/Qwen3.5-35B-A3B --port 9010 --served-model-name qwen35-flagos -
 ```
 
 ## Service Invocation
-
 
 ### API-based Invocation Script
 ```bash
@@ -128,7 +127,6 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
 
-
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -141,6 +139,4 @@ We warmly welcome global developers to join us:
 # License
 
 本模型的权重来源于Qwen/Qwen3.5-35B-A3B，以apache2.0协议https://www.apache.org/licenses/LICENSE-2.0.txt开源。
-
-
 

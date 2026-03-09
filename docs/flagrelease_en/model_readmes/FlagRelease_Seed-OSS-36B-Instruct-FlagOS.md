@@ -63,18 +63,18 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_seed-oss-36b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:260227
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/Seed-OSS-36B-Instruct-FlagOS --local_dir /share/models/Seed-OSS-36B-Instruct
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_seed-oss-36b-instruct-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia004-arc_amd64-driver_535.183.06:260227
 ```
 
 ### Start the inference service
@@ -91,7 +91,6 @@ docker exec -it flagos bash
 flagscale serve seed
 
 ```
-
 
 ## Service Invocation
 
@@ -146,7 +145,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

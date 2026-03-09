@@ -67,18 +67,17 @@ Accuracy Difference between USE_FLAGGEMS=1 on Zhenwu and launch vllm server dire
 | FlagGems                        | Version: 4.2.1rc0                        |
 | vllm & vllm-plugin-fl           | Version: 0.13.0 + vllm_fl 0.0.0                        |
 
+## Download FlagOS Image
+
+```bash
+docker pull baai-cp-registry.cn-wulanchabu.cr.aliyuncs.com/flagos/flagos:vllm-plugin-fl
+```
 
 ## Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/MiniCPM-o-4.5-zhenwu-FlagOS --local_dir /share/MiniCPMO45
-```
-
-## Download FlagOS Image
-
-```bash
-docker pull baai-cp-registry.cn-wulanchabu.cr.aliyuncs.com/flagos/flagos:vllm-plugin-fl
 ```
 
 ## Start the Container
@@ -111,7 +110,6 @@ to launch server with FlagOS.
 
 After that, you can do whatever you want with the vllm's server at 0.0.0.0:8000!
 
-
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -120,7 +118,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 
