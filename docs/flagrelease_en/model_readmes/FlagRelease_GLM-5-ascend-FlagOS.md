@@ -29,6 +29,11 @@ Environment Setup
 |Docker Version|20.10.8 |
 |Operating System|Linux 5.10.0|
 
+### Download FlagOS Image
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagreleaes_ascend_glm5
+```
+
 ### Download Open-source Model Weights
 ```bash
 mkdir -p /data/glm
@@ -36,10 +41,7 @@ pip install modelscope
 modelscope download --model FlagRelease/GLM-5-ascend-FlagOS --local_dir /data/glm/glm5-w4a8
 ```
 
-### Download FlagOS Image
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagreleaes_ascend_glm5
-```
+
 ### Start the inference service
 ```bash
 # Container Startup

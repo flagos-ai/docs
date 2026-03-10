@@ -50,18 +50,18 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen2.5-32B
 
 ## 📌 Getting Started
 
+### Download the FlagOS image
+
+```bash
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:nv_vllm084_gems20250401release
+```
+
 ### Download open-source weights
 
 ```bash
 pip install modelscope
 modelscope download --model Qwen/Qwen2.5-VL-32B-Instruct --local_dir /share/Qwen2.5-VL-32B-Instruct
 
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:nv_vllm084_gems20250401release
 ```
 
 ### Start the inference service

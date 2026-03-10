@@ -67,17 +67,17 @@ Accuracy Difference between using FLAGOS and Metax on Nvidia-CUDA
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```Plaintext
+docker pull   harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_minicpm-o-45-tree_none-gems_4.2.0-scale_none-cx_none-python_3.10.10-torch_2.8.0_metax3.3.0.2-pcp_maca3.0.0.15-gpu_metax001-arc_amd64-driver_3.3.12:new
+```
+
 ### Download Open-source Model Weights
 
 ```Shell
 pip install modelscope
 modelscope download --model FlagRelease/MiniCPM-o-4.5-metax-FlagOS --local_dir /share/MiniCPMO45
-```
-
-### Download FlagOS Image
-
-```Plaintext
-docker pull   harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_minicpm-o-45-tree_none-gems_4.2.0-scale_none-cx_none-python_3.10.10-torch_2.8.0_metax3.3.0.2-pcp_maca3.0.0.15-gpu_metax001-arc_amd64-driver_3.3.12:new
 ```
 
 ### Start the Container

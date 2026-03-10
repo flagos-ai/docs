@@ -32,20 +32,21 @@ Environment Setup
 |Docker Version|24.0.0 |
 |Operating System|Ubuntu 22.04.3|
 
-
 ## Operation Steps
 This model requires two machines (node1 and node2) on Metax C550. Please execute the following commands on each machine respectively to download the model, the image, create the container, and then enter it.
+
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3.5-397b-a17b-tree_none-gems_4.2.0-scale_none-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_3.3.12:2602191455
+```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/Qwen3.5-397B-A17B-metax-FlagOS --local_dir /data/Qwen3.5-397B-A17B
 ```
-### Download FlagOS Image
 
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3.5-397b-a17b-tree_none-gems_4.2.0-scale_none-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_3.3.12:2602191455
-```
 ### Start the Container
 
 ```bash
@@ -94,7 +95,6 @@ vllm serve /data/Qwen3.5-397B-A17B/snapshots/qwen35/ \
 ```
 to launch server 
 
-
 ## Service Invocation
 
 ### Invocation Script
@@ -125,7 +125,6 @@ printf '{"model": "qwen35",
 curl -v http://<node1_ip>:8000/v1/chat/completions -X POST -H "Content-Type: application/json" -d @payload.json
 
 ```
-
 
 ### AnythingLLM Integration Guide
 

@@ -50,6 +50,12 @@ We use a variety of Triton-implemented operation kernels—approximately 70%—t
 
 # How to Run Locally
 ## 📌 Getting Started
+### Download the FlagOS image
+
+```bash
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b
+```
+
 ### Download open-source weights
 
 ```bash
@@ -57,12 +63,6 @@ We use a variety of Triton-implemented operation kernels—approximately 70%—t
 pip install modelscope
 modelscope download --model Qwen/Qwen2.5-VL-32B-Instruct  --local_dir /nfs/Qwen2.5-VL-32B-Instruct
 
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_robobrain2_32b
 ```
 
 ### Start the inference service

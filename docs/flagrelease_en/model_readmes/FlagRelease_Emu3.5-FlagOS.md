@@ -47,7 +47,6 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 Unlike other models, we judge, based on expert experience, that the capability levels demonstrated by CUDA and FlagOS's Emu3.5 are equivalent or not. In the four task domains of visual editing, text-to-image generation, visual guidance, and visual storytelling, a comprehensive judgment is made from multiple aspects including structure, image-text consistency, authenticity, spatial relationships, and style. The two sets of images are consistent in proportions and structure; their color schemes, material details, and texture distributions are similar, but the results from CUDA adhere more closely to real-world logic. Regarding overall painting or rendering styles, such as lighting methods, line characteristics, and detail density, the styles match. In localized precise editing, FlagOS exhibits more stable core features, whereas CUDA excels in maintaining texture and style continuity. Taking all dimensions into account, they can be considered to perform comparably overall.
 You can find origin.tar and flagos.tar in the root directory of this model, which contain sample outputs from Emu3.5-CUDA and Emu3.5-FlagOS, respectively, across the four task domains.
 
-
 # User Guide
 
 **Environment Setup**
@@ -61,19 +60,18 @@ You can find origin.tar and flagos.tar in the root directory of this model, whic
 
 ## Operation Steps
 
-### Download Open-source Model Weights
+### Download FlagOS Image
 
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_emu3.5-tree_none-gems_4.1-scale_none-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511191157
+```
+
+### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/Emu3.5-FlagOS --local_dir /data/Emu3.5-FlagOS
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_emu3.5-tree_none-gems_4.1-scale_none-cx_none-python_3.12.3-torch_2.8.0-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511191157
 ```
 
 ### Start the inference service
@@ -93,7 +91,6 @@ python run.py --config-path examples/emu3.5/conf/ --config-name interleaved_gene
 ```
 you can change /workspace/FlagScale/flagscale/inference/emu_utils/prompt_case.py to change the prompts.
 
-
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -102,7 +99,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

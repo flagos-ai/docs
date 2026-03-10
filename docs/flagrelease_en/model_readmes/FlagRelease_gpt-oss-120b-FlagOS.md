@@ -63,18 +63,18 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_gpt-oss-120b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.9.0.dev20250804_cu128-pcp_cuda12.9-gpu_nvidia005-arc_amd64-driver_570.124.06:2508281229
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model openai-mirror/gpt-oss-120b --local_dir /share/models/gpt-oss-120b
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_gpt-oss-120b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.9.0.dev20250804_cu128-pcp_cuda12.9-gpu_nvidia005-arc_amd64-driver_570.124.06:2508281229
 ```
 
 ### Start the inference service
@@ -91,7 +91,6 @@ docker exec -it flagos bash
 flagscale serve gpt_oss
 
 ```
-
 
 ## Service Invocation
 
@@ -146,7 +145,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

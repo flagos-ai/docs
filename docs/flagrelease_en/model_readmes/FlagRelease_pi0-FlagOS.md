@@ -56,6 +56,12 @@ The MAPE between CUDA and FlagOS(CUDA as ground truth) is 1.4152%. You can easil
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_pi0_norand
+```
+
 ### Download Open-source Model Weights
 
 We have already download pi0 and its tokenizer's weights into /workspace in docker image. You don't need to download it again. If you really want to download it, you can run:
@@ -65,12 +71,6 @@ pip install modelscope
 modelscope download --model lerobot/pi0 --local_dir /workspace/pi0
 modelscope download --model google/paligemma-3b-pt-224 --local_dir /workspace/paligemma-3b-pt-224
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_pi0_norand
 ```
 
 ### Start the inference service
@@ -125,7 +125,6 @@ torch.backends.cudnn.benchmark = False
 ```
 3. Restart the container and then Repeat "Serve" and "Call the server".
 
-
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -134,7 +133,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

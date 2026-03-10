@@ -68,8 +68,12 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 | FlagGems                        | Version: 4.2.0                      |
 | VLLM-FL                         | Version: 0.0.0                      |
 
-
 ## Operation Steps
+
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_robobrain2.5-8b-tree_0.4.0_ascend3.2e-gems_4.2.0-scale_1.0.0-cx_0.8.0-python_3.11.13-torch_npu2.8.0-pcp_cann8.3.0.2.220_8.3.rc2-gpu_ascend001-arc_arm64-driver_25.2.0:2601291835
 
 ### Download Open-source Model Weights
 
@@ -77,11 +81,6 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 pip install modelscope
 modelscope download --model FlagRelease/RoboBrain2.5-8B-FlagOS --local_dir /data/workspace-robobrain2.5/RoboBrain2.5-8B
 ```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_robobrain2.5-8b-tree_0.4.0_ascend3.2e-gems_4.2.0-scale_1.0.0-cx_0.8.0-python_3.11.13-torch_npu2.8.0-pcp_cann8.3.0.2.220_8.3.rc2-gpu_ascend001-arc_arm64-driver_25.2.0:2601291835
 
 ### Start the inference service
 
@@ -110,7 +109,6 @@ harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_robobrain2
 docker exec -it flagos bash
 flagscale serve rb25
 ```
-
 
 ## Service Invocation
 
@@ -167,7 +165,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

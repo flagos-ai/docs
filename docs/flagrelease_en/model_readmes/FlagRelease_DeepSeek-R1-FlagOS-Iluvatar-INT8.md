@@ -63,6 +63,12 @@ Requested by Iluvatar, the file of docker image and model files should be applie
 
 ## 📌 Getting Started
 
+### Download the FlagOS image
+
+```
+docker pull baai:v5
+```
+
 ### Download open-source weights
 
 ```
@@ -70,12 +76,6 @@ pip install modelscope
 modelscope download --model deepseek-ai/DeepSeek-R1 --local_dir /mnt/share/DeepSeek-R1
 ```
 contact services@iluvatar.comContact to obtain the quanted weights
-
-### Download the FlagOS image
-
-```
-docker pull baai:v5
-```
 
 ### Start the inference service
 

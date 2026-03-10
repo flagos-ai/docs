@@ -50,20 +50,20 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen3-4B mo
 
 ## 📌 Getting Started
 
-### Download open-source weights
-
-```bash
-pip install modelscope
-modelscope download --model Qwen/Qwen3-4B --local_dir /share/Qwen3-4B
-
-```
-
 ### Download the FlagOS image
 
 As requested by Cambricon, the Docker image and model files must be requested via email. Please contact ecosystem@cambricon.com and include your organization name, contact person, contact information, equipment source, and specific requirements.
 
 ```bash
 docker pull <IMAGE>
+```
+
+### Download open-source weights
+
+```bash
+pip install modelscope
+modelscope download --model Qwen/Qwen3-4B --local_dir /share/Qwen3-4B
+
 ```
 
 ### Start the inference service

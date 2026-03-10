@@ -64,17 +64,17 @@ We provide dequantized model weights in bfloat16 to run DeepSeek-R1 on NVIDIA GP
 
 ## 📌 Getting Started
 
+### Download the FlagOS image
+
+```bash
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:deepseek-flagos-nvidia
+```
+
 ### Download open-source weights
 
 ```bash
 pip install modelscope
 modelscope download --model deepseek-ai/DeepSeek-R1 --local_dir /nfs/DeepSeek-R1
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:deepseek-flagos-nvidia
 ```
 
 ### Start the inference service

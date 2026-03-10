@@ -55,6 +55,12 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen2.5-VL-
 
 # How to Run Locally
 ## 📌 Getting Started
+### Download the FlagOS image
+
+```bash
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:metax_qwenvl_vllm072_gemsdeepseekr1metax_temporary
+```
+
 ### Download open-source weights
 
 ```bash
@@ -62,12 +68,6 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen2.5-VL-
 pip install modelscope
 modelscope download --model Qwen/Qwen2.5-VL-32B-Instruct --local_dir /nfs/Qwen2.5-VL-32B-Instruct
 
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:metax_qwenvl_vllm072_gemsdeepseekr1metax_temporary
 ```
 
 ### Start the inference service

@@ -88,6 +88,12 @@ Requested by Iluvatar, the file of docker image and model files should be applie
 
 # How to Run Locally
 ## 📌 Getting Started
+### Download the FlagOS image
+
+```bash
+docker pull baai_v4 
+```
+
 ### Download open-source weights
 
 ```bash
@@ -97,12 +103,6 @@ modelscope download --model deepseek-ai/DeepSeek-R1 --local_dir /nfs/DeepSeek-R1
 
 ```
 contact services@iluvatar.comContact to obtain the quanted weights
-
-### Download the FlagOS image
-
-```bash
-docker pull baai_v4 
-```
 
 ### Start the inference service
 

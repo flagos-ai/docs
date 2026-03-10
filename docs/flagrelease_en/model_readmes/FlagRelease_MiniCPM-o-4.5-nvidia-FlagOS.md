@@ -83,17 +83,17 @@ Accuracy Difference between USE_FLAGGEMS=1 FLAGCX_PATH=/workspace/FlagCX on Nvid
 
 ## Transformers version
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-gems_4.2.1rc0-tree_0.4-flagos_1.6-amd64
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/MiniCPM-o-4.5-nvidia-FlagOS --local_dir /share/MiniCPMO45
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-gems_4.2.1rc0-tree_0.4-flagos_1.6-amd64
 ```
 
 ### Start the Container
@@ -143,7 +143,6 @@ from MiniCPMO45.modeling_minicpmo import MiniCPMO
 from MiniCPMO45.modeling_minicpmo import TTSSamplingParams
 from MiniCPMO45.processing_minicpmo import MiniCPMOProcessor
 from MiniCPMO45.utils import get_video_frame_audio_segments
-
 
 def gen(stack_frames=1, max_slice_nums=None):
     ref_audio_path = "haitian_ref_audio.wav"
@@ -288,7 +287,6 @@ def gen(stack_frames=1, max_slice_nums=None):
 
         print(error_stat)
 
-
 if __name__ == "__main__":
     stack_frames = 5  # 1 - 常规, >1: 高刷 (=5, 额外 4帧合一张图)
     max_slice_nums = 1  # 1 - 常规, >1: 高清
@@ -341,7 +339,6 @@ to launch server with FlagOS.
 
 After that, you can do whatever you want with the vllm's server at 0.0.0.0:8000!
 
-
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -350,7 +347,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

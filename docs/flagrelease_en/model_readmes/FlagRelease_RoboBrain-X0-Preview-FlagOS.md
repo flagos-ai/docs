@@ -60,18 +60,18 @@ The MAPE between CUDA and FlagOS(CUDA as ground truth) is 2.2994%. You can easil
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_x0_norand
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model BAAI/RoboBrain-X0-Preview --local_dir /share/RoboBrain-X0-Preview
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_x0_norand
 ```
 
 ### Start the inference service
@@ -133,7 +133,6 @@ torch.backends.cudnn.benchmark = False
 
 1. You can try to load Model in BF16 for lower memory occupancy or quicker inference. But BF16 have only 7 precision bits, which cannnot constrain MAPE under 5% even if you launch two CUDA server on different GPUid on the same GPU server. 
 
-
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -142,7 +141,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

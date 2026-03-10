@@ -63,18 +63,18 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_minimax-m2-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0a0_5228986c39.nv25.6-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511041437
+```
+
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/MiniMax-M2-FlagOS --local_dir /share/MiniMax-M2
 
-```
-
-### Download FlagOS Image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_minimax-m2-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.3-torch_2.8.0a0_5228986c39.nv25.6-pcp_cuda12.9-gpu_nvidia003-arc_amd64-driver_570.158.01:2511041437
 ```
 
 ### Start the inference service
@@ -96,7 +96,6 @@ source .venv/bin/activate
 flagscale serve minimax
 
 ```
-
 
 ## Service Invocation
 
@@ -153,7 +152,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

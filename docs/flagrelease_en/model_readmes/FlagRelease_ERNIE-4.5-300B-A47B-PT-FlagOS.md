@@ -74,6 +74,14 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps【***need two machines***】
 
+### Download FlagOS Image
+
+**Dual-machine execution**
+
+```python
+docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_ernie_rank0 
+```
+
 ### Download Open-source Model Weights
 
 **Execution under shared storage on master node IP**
@@ -81,28 +89,6 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 ```python
 pip install modelscope
 modelscope download --model PaddlePaddle/ERNIE-4.5-300B-A47B-PT --local_dir /share/models/ERNIE-4.5-300B-A47B-PT
-```
-
-### Download FlagScale
-
-**Execution under shared storage on master node IP**  [Prerequisite: Network connectivity to github.com is required]
-
-```python
-cd /share/repos
-git clone https://github.com/FlagOpen/FlagScale.git && cd FlagScale&& git checkout 230dc1d879d8c2af1e449fc29b0cd1867e07c0c3
-
-# Modify the installation backend of FlagScale
-cd /share/repos/FlagScale; 
-vim pyproject.toml
-# Comment out line 3, which contains 'build-backend'
-```
-
-### Download FlagOS Image
-
-**Dual-machine execution**
-
-```python
-docker pull flagrelease-registry.cn-beijing.cr.aliyuncs.com/flagrelease/flagrelease:flagrelease_nv_ernie_rank0 
 ```
 
 ### Start the inference service

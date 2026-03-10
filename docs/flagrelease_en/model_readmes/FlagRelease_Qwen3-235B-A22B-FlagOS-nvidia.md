@@ -47,6 +47,12 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen3-235B-
 
 # How to Run Locally
 ## 📌 Getting Started
+### Download the FlagOS image
+
+```bash
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-235b-a22b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.0-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.158.01:2508011525
+```
+
 ### Download open-source weights
 
 ```bash
@@ -54,12 +60,6 @@ We use a variety of Triton-implemented operation kernels  to run the Qwen3-235B-
 pip install modelscope
 modelscope download --model Qwen/Qwen3-235B-A22B --local_dir /share/Qwen3-235B-A22B
 
-```
-
-### Download the FlagOS image
-
-```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-235b-a22b-tree_none-gems_2.2-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.0-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.158.01:2508011525
 ```
 
 ### Start the inference service

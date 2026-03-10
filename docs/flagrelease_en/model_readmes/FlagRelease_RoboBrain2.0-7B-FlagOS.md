@@ -72,17 +72,17 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps
 
+### Download FlagOS Image
+
+```python
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_robobrain2.0-7b-tree_none-gems_2.2-scale_0.6.0-cx_none-python_3.10.12-torch_2.6.0-pcp_cuda12.6-gpu_nvidia004-arc_amd64-driver_535.183.06:2508011526
+```
+
 ### Download Open-source Model Weights
 
 ```python
 pip install modelscope
 modelscope download --model FlagRelease/RoboBrain2.0-7B-FlagOS --local_dir /data/RoboBrain2.0-7B
-```
-
-### Download FlagOS Image
-
-```python
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_robobrain2.0-7b-tree_none-gems_2.2-scale_0.6.0-cx_none-python_3.10.12-torch_2.6.0-pcp_cuda12.6-gpu_nvidia004-arc_amd64-driver_535.183.06:2508011526
 ```
 
 ### Start the inference service
@@ -185,7 +185,6 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 
 # License
 

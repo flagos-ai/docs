@@ -65,6 +65,14 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 ## Operation Steps【***need two machines***】
 
+### Download FlagOS Image
+
+**Dual-machine execution**
+
+```python
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_kimi_k2
+```
+
 ### Download Open-source Model Weights
 
 **Execution under shared storage on master node IP**
@@ -72,14 +80,6 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 ```python
 pip install modelscope
 modelscope download --model moonshotai/Kimi-K2-Instruct --local_dir /share/models/Kimi-K2-Instruct
-```
-
-### Download FlagOS Image
-
-**Dual-machine execution**
-
-```python
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease_nvidia_kimi_k2
 ```
 
 ### Start the inference service
