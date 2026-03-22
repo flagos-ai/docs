@@ -31,7 +31,7 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagreleaes_ascend_glm5
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_glm-5-tree_0.4.1_ascend3.2-gems_4.2.1rc0-scale_none-cx_none-python_3.11.14-torch_npu2.9.0-pcp_cann8.5.0-gpu_ascend001-arc_arm64-driver_25.2.3:202603201037
 ```
 
 ### Download Open-source Model Weights
@@ -45,7 +45,7 @@ modelscope download --model FlagRelease/GLM-5-ascend-FlagOS --local_dir /data/gl
 ### Start the inference service
 ```bash
 # Container Startup
-docker run -itd --name flagos -u root --privileged=true --shm-size=1000g --net=host     -v /usr/local/Ascend/driver:/usr/local/Ascend/driver     -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi     -v /usr/local/dcmi:/usr/local/dcmi     -v /usr/local/sbin:/usr/local/sbin     -v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime     -v /etc/ascend_install.info:/etc/ascend_install.info     -v /data:/data     -v /root/.cache:/root/.cache       harbor.baai.ac.cn/flagrelease-public/flagreleaes_ascend_glm5 bash
+docker run -itd --name flagos -u root --privileged=true --shm-size=1000g --net=host     -v /usr/local/Ascend/driver:/usr/local/Ascend/driver     -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi     -v /usr/local/dcmi:/usr/local/dcmi     -v /usr/local/sbin:/usr/local/sbin     -v /usr/share/zoneinfo/Asia/Shanghai:/etc/localtime     -v /etc/ascend_install.info:/etc/ascend_install.info     -v /data:/data     -v /root/.cache:/root/.cache       harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-release-model_glm-5-tree_0.4.1_ascend3.2-gems_4.2.1rc0-scale_none-cx_none-python_3.11.14-torch_npu2.9.0-pcp_cann8.5.0-gpu_ascend001-arc_arm64-driver_25.2.3:202603201037 bash
 
 docker exec -it flagos bash
 ```

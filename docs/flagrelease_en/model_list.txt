@@ -56,6 +56,7 @@ FlagRelease/Qwen3-Next-80B-A3B-Instruct-metax-FlagOS
 FlagRelease/Qwen3-Omni-30B-A3B-Instruct-FlagOS
 FlagRelease/Qwen3-VL-235B-A22B-Instruct-FlagOS
 FlagRelease/Qwen3.5-35B-A3B-FlagOS
+FlagRelease/Qwen3.5-35B-A3B-iluvatar-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-metax-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-nvidia-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-zhenwu-FlagOS
