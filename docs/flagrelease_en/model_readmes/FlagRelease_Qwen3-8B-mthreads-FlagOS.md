@@ -44,30 +44,35 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 
 | Metrics   | Qwen3-8B-H100-CUDA | Qwen3-8B-mthreads-FlagOS |
 | --------- | ------------------ | ---------------------- |
-| AIME_0fewshot_@avg1 | 0.700 | 0.800 |
-| GPQA_0fewshot_@avg1 | 0.507 | 0.493 |
-| LiveBench-0fewshot_@avg1 | 0.502 | 0.503 |
-| MMLU_5fewshot_@avg1 | 0.699 | 0.706 |
-| MUSR_0fewshot_@avg | 0.602 | 0.603 |
+| AIME_0fewshot_@avg1 | 0.700 | 0.700 |
+| GPQA_0fewshot_@avg1 | 0.507 | 0.596 |
+
 
 # User Guide
 
 **Environment Setup**
 
-| Accelerator Card Driver Version | Kernel Mode Driver Version: 2.3.0          | 
-| ------------- | ------------------------------------------------------------ |  
-| Docker Version                  | Docker version 24.0.7, build 24.0.7-0ubuntu2~22.04.1| 
-| Operating System                | Linux | 
-| FlagScale                       | Version: 0.8.0                        | 
-| FlagGems                        | Version: 3.0                         | 
+| Item | Value |
+|------|-------|
+| Accelerator Card Driver Version | 2.2.0 |
+| Docker Version | 29.0.4 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
+| Kernel Version | 5.15.0-105-generic |
+| Chip Vendor | mthreads (mthreads) |
+| SDK Version | MUSA N/A |
+| GPU Model | mthreads |
+| Python Version | 3.12.18 |
+| PyTorch Version | torch_musa: 2.5.0 |
+| FlagScale | Version: 0.8.0 |
+| FlagGems | Version: 4.1 |
+
 
 ## Operation Steps
 
 ### Download FlagOS Image
 
 ```bash
-#docker pull harbor.baai.ac.cn/flagrelease-public/mthreads_qwen3_8b:latest
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-mthreads-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.12-torch_musa-2.1.0-pcp_musa4.1.0-gpu_mthreads001-arc_amd64-driver_2.3.0:260310
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-mthreads-release-model_qwen3-8b-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.10.18-torch_musa-2.5.0-pcp_musa3.3.2-gpu_mthreads001-arc_amd64-driver_3.3.2-server:latest
 ```
 
 ### Download Open-source Model Weights
@@ -84,14 +89,16 @@ modelscope download --model Qwen/Qwen3-8B --local_dir /data/models/Qwen3-8B
 #Container Startup
 docker run --network=host  --privileged -e MTHREADS_VISIBLE_DEVICES=all \
             -e VLLM_USE_V1=0 -e MTHREADS_DRIVER_CAPABILITIES=all --shm-size 16g -e USE_FLAGGEMS=1 \
-            --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -t -d --name qwen3_8b -v /data/models/Qwen3-8B:/root/Qwen3-8B \
-            --tmpfs /tmp:exec harbor.baai.ac.cn/flagrelease-public/flagrelease-mthreads-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.10.12-torch_musa-2.1.0-pcp_musa4.1.0-gpu_mthreads001-arc_amd64-driver_2.3.0:260310 sleep infinity
+            --cap-add=SYS_PTRACE --security-opt seccomp=unconfined -t -d --name flagos -v /data/models/Qwen3-8B:/root/Qwen3-8B \
+            --tmpfs /tmp:exec harbor.baai.ac.cn/flagrelease-public/flagrelease-mthreads-release-model_qwen3-8b-tree_none-gems_4.1-scale_0.8.0-cx_none-python_3.10.18-torch_musa-2.5.0-pcp_musa3.3.2-gpu_mthreads001-arc_amd64-driver_3.3.2-server:latest sleep infinity
+docker exec -it flagos /bin/bash
 ```
 
 ### Serve
 
 ```bash
-flagscale serve qwen3
+rm -r /root/.triton/cache # if exists
+QWEN3_PORT=8100 CUDA_VISIBLE_DEVICES=0  QWEN3_PATH=/root/Qwen3-8B flagscale serve qwen3
 
 ```
 
@@ -103,7 +110,7 @@ flagscale serve qwen3
 import openai
 openai.api_key = "EMPTY"
 openai.base_url = "http://<server_ip>:8100/v1/"
-model = "/root/Qwen3-8B/"
+model = "/root/Qwen3-8B"
 messages = [
     {"role": "system", "content": "You are a helpful assistant."},
     {"role": "user", "content": "What's the weather like today?"}

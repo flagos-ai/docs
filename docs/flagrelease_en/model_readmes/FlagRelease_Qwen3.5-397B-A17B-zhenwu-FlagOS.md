@@ -142,9 +142,5 @@ We warmly welcome global developers to join us:
 4. Expand hardware adaptation support
 
 # License
-
- 
-  
- 	 
-本模型的权重来源于Qwen/Qwen3.5-397B-A17B，以apache2.0协议开源:https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are sourced from Qwen/Qwen3.5-35B-A3B and open-sourced under the Apache 2.0 license: https://www.apache.org/licenses/LICENSE-2.0.txt
 
