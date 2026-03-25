@@ -73,6 +73,7 @@ FlagRelease/RoboBrain2.0-7B-metax-FlagOS
 FlagRelease/RoboBrain2.5-8B-FlagOS
 FlagRelease/RoboBrain2.5-8B-ascend-FlagOS
 FlagRelease/Seed-OSS-36B-Instruct-FlagOS
+FlagRelease/TeleChat3-36B-Thinking-mthreads-FlagOS
 FlagRelease/gpt-oss-120b-FlagOS
 FlagRelease/grok-2-FlagOS
 FlagRelease/phi-4-FlagOS
