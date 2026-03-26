@@ -10,6 +10,7 @@ FlagRelease/DeepSeek-V3.2-Exp-FlagOS
 FlagRelease/ERNIE-4.5-300B-A47B-PT-FlagOS
 FlagRelease/Emu3.5-FlagOS
 FlagRelease/GLM-4.5-FlagOS
+FlagRelease/GLM-5-FP8-FlagOS
 FlagRelease/GLM-5-ascend-FlagOS
 FlagRelease/Hunyuan-A13B-Instruct-FlagOS
 FlagRelease/Kimi-K2-Instruct-FlagOS
@@ -56,6 +57,7 @@ FlagRelease/Qwen3-Next-80B-A3B-Instruct-metax-FlagOS
 FlagRelease/Qwen3-Omni-30B-A3B-Instruct-FlagOS
 FlagRelease/Qwen3-VL-235B-A22B-Instruct-FlagOS
 FlagRelease/Qwen3.5-35B-A3B-FlagOS
+FlagRelease/Qwen3.5-35B-A3B-hygon-FlagOS
 FlagRelease/Qwen3.5-35B-A3B-iluvatar-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-metax-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-nvidia-FlagOS
@@ -73,6 +75,7 @@ FlagRelease/RoboBrain2.0-7B-metax-FlagOS
 FlagRelease/RoboBrain2.5-8B-FlagOS
 FlagRelease/RoboBrain2.5-8B-ascend-FlagOS
 FlagRelease/Seed-OSS-36B-Instruct-FlagOS
+FlagRelease/TeleChat3-36B-Thinking-mthreads-FlagOS
 FlagRelease/gpt-oss-120b-FlagOS
 FlagRelease/grok-2-FlagOS
 FlagRelease/phi-4-FlagOS
