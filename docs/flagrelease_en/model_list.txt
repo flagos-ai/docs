@@ -52,6 +52,7 @@ FlagRelease/Qwen3-8B-FlagOS
 FlagRelease/Qwen3-8B-iluvatar-FlagOS
 FlagRelease/Qwen3-8B-metax-FlagOS
 FlagRelease/Qwen3-8B-mthreads-FlagOS
+FlagRelease/Qwen3-Next-80B-A3B-FlagOS
 FlagRelease/Qwen3-Next-80B-A3B-Instruct-FlagOS
 FlagRelease/Qwen3-Next-80B-A3B-Instruct-metax-FlagOS
 FlagRelease/Qwen3-Omni-30B-A3B-Instruct-FlagOS
