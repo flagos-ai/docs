@@ -26,7 +26,7 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_glm-5-fp8-tree_0.4.1_3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:202604021459
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_glm-5-fp8-tree_0.4.1_3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:20260407170936
 ```
 
 ### Download Open-source Model Weights
@@ -37,7 +37,7 @@ modelscope download --model FlagRelease/GLM-5-FP8-FlagOS --local_dir /data/GLM-5
 
 ### Start the Container
 ```bash
-docker run --rm --init --detach --net=host --uts=host --ipc=host --security-opt=seccomp=unconfined --privileged=true --ulimit stack=67108864 --ulimit memlock=-1 --ulimit nofile=1048576:1048576 --shm-size=32G -v /data:/data --gpus all --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_glm-5-fp8-tree_0.4.1_3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:202604021459  sleep infinity
+docker run --rm --init --detach --net=host --uts=host --ipc=host --security-opt=seccomp=unconfined --privileged=true --ulimit stack=67108864 --ulimit memlock=-1 --ulimit nofile=1048576:1048576 --shm-size=32G -v /data:/data --gpus all --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_glm-5-fp8-tree_0.4.1_3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.9.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:20260407170936  sleep infinity
 docker exec -it flagos /bin/bash
 ```
 ### Start the Server
