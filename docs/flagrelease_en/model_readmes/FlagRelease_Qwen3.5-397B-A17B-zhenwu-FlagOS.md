@@ -39,8 +39,7 @@ Environment Setup
 
 ## Operation Steps
 
-This model requires 2 machines. Please follow this link to apply for 2 machine resources. The platform will configure a 2-machine environment by default, and you only need to execute the subsequent service-related commands.
-
+This model requires 1 machine with 16 GPUs. Please follow this link to apply for 1 machine resource.
 link：https://help.aliyun.com/zh/pai/user-guide
 
 ### Download FlagOS Image
@@ -50,7 +49,7 @@ For detailed instructions on how to use this image, please contact the PAI platf
 
 
 ```bash
-docker pull baai-cp-registry-vpc.cn-wulanchabu.cr.aliyuncs.com/flagos/flagos:vllm-qwen3-next260219
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-pp-release-model_qwen3.5-397b-a17b-tree_none-gems_5.0.1rc0-scale_none-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.22:202603182010
 ```
 
 ### Download Open-source Model Weights
