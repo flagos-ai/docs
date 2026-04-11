@@ -46,7 +46,7 @@ vllm-plugin-fl is a vLLM plugin built on the FlagOS unified multi-chip backend, 
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-iluvatar-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_ix-ml4.4.0-gpu_iluvatar001-arc_amd64-driver_4.4.0:260227
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-iluvatar-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_ix-ml4.4.0-gpu_iluvatar001-arc_amd64-driver_4.4.0:202603182010
 ```
 
 ### Download Open-source Model Weights
@@ -61,7 +61,7 @@ modelscope download --model Qwen/Qwen3-8B --local_dir /nfs/Qwen3-8B
 
 ```bash
 #Container Startup
-docker run --shm-size 128g -dit --name flagos  -v /nfs:/root/data -e USE_FLAGGEMS=1 -e QWEN3_PORT=8000 -e QWEN3_PATH=/root/data/Qwen3-8B --privileged --cap-add=ALL --pid=host --net=host harbor.baai.ac.cn/flagrelease-public/flagrelease-iluvatar-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_ix-ml4.4.0-gpu_iluvatar001-arc_amd64-driver_4.4.0:260227
+docker run --shm-size 128g -dit --name flagos  -v /nfs:/root/data -e USE_FLAGGEMS=1 -e QWEN3_PORT=8000 -e QWEN3_PATH=/root/data/Qwen3-8B --privileged --cap-add=ALL --pid=host --net=host harbor.baai.ac.cn/flagrelease-public/flagrelease-iluvatar-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_ix-ml4.4.0-gpu_iluvatar001-arc_amd64-driver_4.4.0:202603182010
 ```
 
 ### Serve
