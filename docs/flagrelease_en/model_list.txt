@@ -27,6 +27,12 @@ FlagRelease/MiniCPM_o_2.6-FlagOS-Cambricon
 FlagRelease/MiniCPM_o_2.6-FlagOS-NVIDIA
 FlagRelease/MiniMax-M1-80k-FlagOS
 FlagRelease/MiniMax-M2-FlagOS
+FlagRelease/MiniMax-M2.7-ascend-FlagOS
+FlagRelease/MiniMax-M2.7-hygon-FlagOS
+FlagRelease/MiniMax-M2.7-iluvatar-FlagOS
+FlagRelease/MiniMax-M2.7-metax-FlagOS
+FlagRelease/MiniMax-M2.7-nvidia-FlagOS
+FlagRelease/MiniMax-M2.7-zhenwu-FlagOS
 FlagRelease/QwQ-32B-FlagOS-Cambricon
 FlagRelease/QwQ-32B-FlagOS-Iluvatar
 FlagRelease/QwQ-32B-FlagOS-Nvidia
