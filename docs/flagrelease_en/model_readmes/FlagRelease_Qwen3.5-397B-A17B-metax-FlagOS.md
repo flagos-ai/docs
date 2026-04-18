@@ -38,7 +38,7 @@ This model requires two machines (node1 and node2) on Metax C550. Please execute
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3.5-397b-a17b-tree_none-gems_4.2.0-scale_none-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_3.3.12:2602191455
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3.5-397b-a17b-tree_none-gems_4.2.0-scale_none-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_3.3.12:202604071102
 ```
 
 ### Download Open-source Model Weights
@@ -66,7 +66,7 @@ docker run -itd \
 	 --device=/dev/infiniband \
 	 -v /usr/local/:/usr/local/ \
 	 -v /data/:/data/ \
-	 harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3.5-397b-a17b-tree_none-gems_4.2.0-scale_none-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_3.3.12:2602191455 \
+	 harbor.baai.ac.cn/flagrelease-public/flagrelease-metax-release-model_qwen3.5-397b-a17b-tree_none-gems_4.2.0-scale_none-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_3.3.12:202604071102 \
 	 /bin/bash
 
 docker exec -it flagos /bin/bash

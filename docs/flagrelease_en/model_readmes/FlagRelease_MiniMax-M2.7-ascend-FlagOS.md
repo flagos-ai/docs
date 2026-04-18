@@ -3,93 +3,92 @@ base_model:
 - ""
 ---
 # Introduction
-On February 16, 2026, Alibaba Cloud officially launched and open-sourced the new multimodal large model **Qwen3.5 (Qwen3.5-397B-A17B)**.Qwen3.5 features the following enhancement:  
-**Unified Vision-Language Foundation**: Early fusion training on multimodal tokens achieves cross-generational parity with Qwen3 and outperforms Qwen3-VL models across reasoning, coding, agents, and visual understanding benchmarks.  
-**Efficient Hybrid Architecture**: Gated Delta Networks combined with sparse Mixture-of-Experts deliver high-throughput inference with minimal latency and cost overhead.  
-**Scalable RL Generalization**: Reinforcement learning scaled across million-agent environments with progressively complex task distributions for robust real-world adaptability.  
-**Global Linguistic Coverage**: Expanded support to 201 languages and dialects, enabling inclusive, worldwide deployment with nuanced cultural and regional understanding.  
-**Next-Generation Training Infrastructure**: Near-100% multimodal training efficiency compared to text-only training and asynchronous RL frameworks supporting massive-scale agent scaffolds and environment orchestration.  
-
-Leveraging the cross-chip capabilities of FlagOS, a unified open-source system software stack purpose-built for diverse AI chips, [the FlagOS community](https://flagos.io "Visit the official FlagOS website") completed full adaptation, accuracy alignment, and multi-chip migration of the largest 397B MoE model immediately after the release of Qwen3.5, enabling the simultaneous adaptation and launch of Qwen3.5 on ZHENWU chips:	 
- 
+MiniMax M2.7 is the latest-generation model in the M2 series, as well as the first model in the series to deeply participate in its own iteration. It can autonomously build complex Agent Harnesses and Skills, update its own Memory, and drive self-iteration through reinforcement learning, forming a closed loop of "model-driven model evolution".
+In terms of capabilities, M2.7 covers the entire software engineering workflow from code generation and log troubleshooting to end-to-end project delivery, achieving a score of 56.22% on the SWE-Pro benchmark, on par with GPT-5.3-Codex. It also delivers strong performance in professional office scenarios, ranking behind only Opus4.6, Sonnet4.6 and GPT-5.4 on the GDPval-AA metric, while maintaining a 97% instruction-following rate across 40 complex Skills scenarios involving more than 2000 tokens.
 ### Integrated Deployment
- 
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-zhenwu** container image supporting deployment within minutes
-    
+- Released **FlagOS-Ascend** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
- 
 # Evaluation Results
 ## Benchmark Result
-|Metrics|Alibaba Tongyi's Report|Qwen3.5-397B-A17B-Nvidia-Origin| Qwen3.5-397B-A17B-zhenwu-FlagOS|
-|-------|--------------|---------------|---------------|
-|ERQA(vision)|67.5 |65.28| 67.33|
-|AIME(Text) |91.3(2026) | 90(2024)| 93.33(2024) |
-
+|Metrics|MiniMax-M2.7-Nvidia-Origin|MiniMax-M2.7-Ascend-FlagOS|
+|-------|---------------|---------------|
+|GPQA_Diamond | 0.7071| 0.6263 |
+|Aime24  | 0.9 | 0.8333 |
 
 # User Guide
- 	 
 Environment Setup
-|  Item | Version  |
-|---|---|	
-|Docker Version| Docker version 28.1.0, build 4d8c241|
-|Operating System| Ubuntu 24.04.2 LTS |	
+
+| Item             | Version              |
+|------------------|----------------------|
+| Docker Version   | 20.10.8, build 3967b7d |
+| Operating System | Linux 5.10.0-216.0.0.115.oe2203sp4.aarch64 |
 
 ## Operation Steps
 
-This model requires 1 machine with 16 GPUs. Please follow this link to apply for 1 machine resource.
-link：https://help.aliyun.com/zh/pai/user-guide
-
 ### Download FlagOS Image
-
-The image for this task is exported from Alibaba Cloud PAI and can be used on Alibaba Cloud EAS and DSW, both of which are container‑based resource services. 
-For detailed instructions on how to use this image, please contact the PAI platform support team. The task released by BAAI is developed based on the container environment launched via the PAI platform.
-
-
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-pp-release-model_qwen3.5-397b-a17b-tree_none-gems_5.0.1rc0-scale_none-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.22:202603182010
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-minimax
 ```
 
 ### Download Open-source Model Weights
-
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.5-397B-A17B-zhenwu-FlagOS --local_dir /mnt/model
-
+modelscope download --model FlagRelease/MiniMax-M2.7-ascend-FlagOS --local_dir /public-nfs/MiniMax-M2.7
 ```
 
-### Serve and use Qwen3.5-397B-A17B with vllm
-
+### Start the Container
 ```bash
-VLLM_USE_DEEP_GEMM=0 VLLM_FL_FLAGOS_WHITELIST="cos,sin,lt,le,ones,zeros,zeros_like,rand_like,sigmoid,full,pow,exponential_,clamp,arange,gelu,reciprocal,add,sub,mul_,normal_,layer_norm,cumsum_out,softmax,softmax,cumsum,gather,pad" vllm serve /mnt/model/ \
-    --host 0.0.0.0 \
-    --port 8129 \
-    --served-model-name qwen35 \
-    --tensor-parallel-size 8 \
-    --pipeline-parallel-size 2 \
-    --gpu-memory-utilization 0.8 \
-    --max-num-seqs 32 \
-    --max-num-batched-tokens 32000 \
-    --reasoning-parser qwen3 \
-    --trust-remote-code
+docker run --rm --name flagos --net=host --shm-size=1g   --device /dev/davinci0 --device /dev/davinci1 --device /dev/davinci2 --device /dev/davinci3   --device /dev/davinci4 --device /dev/davinci5 --device /dev/davinci6 --device /dev/davinci7   --device /dev/davinci8 --device /dev/davinci9 --device /dev/davinci10 --device /dev/davinci11   --device /dev/davinci12 --device /dev/davinci13 --device /dev/davinci14 --device /dev/davinci15   --device /dev/davinci_manager --device /dev/devmm_svm --device /dev/hisi_hdc   -v /usr/local/dcmi:/usr/local/dcmi   -v /usr/local/Ascend/driver/tools/hccn_tool:/usr/local/Ascend/driver/tools/hccn_tool   -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi   -v /usr/local/Ascend/driver/lib64/:/usr/local/Ascend/driver/lib64/   -v /usr/local/Ascend/driver/version.info:/usr/local/Ascend/driver/version.info   -v /etc/ascend_install.info:/etc/ascend_install.info   -v /mnt/sfs_turbo/.cache:/home/cache   -v /public-nfs:/public-nfs   -d harbor.baai.ac.cn/flagrelease-public/flagrelease-ascend-minimax sleep infinity
+docker exec -it flagos bash
+```
+### Start the Server
+```bash
+export HCCL_OP_EXPANSION_MODE="AIV"
+export HCCL_BUFFSIZE=1024
+export PYTORCH_NPU_ALLOC_CONF=expandable_segments:True
+export OMP_NUM_THREADS=1
+echo performance | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+sysctl -w vm.swappiness=0
+sysctl -w kernel.numa_balancing=0
+sysctl kernel.sched_migration_cost_ns=50000
+export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libjemalloc.so.2:$LD_PRELOAD
+export TASK_QUEUE_ENABLE=1
 
+export VLLM_ASCEND_ENABLE_FUSED_MC2=1
+export VLLM_ASCEND_ENABLE_FLASHCOMM1=1
+export VLLM_ASCEND_BALANCE_SCHEDULING=1
+
+vllm serve /public-nfs/MiniMax-M2.7 \
+    --served-model-name "MiniMax-M2.7" \
+    --host 0.0.0.0 \
+    --port 8000 \
+    --trust-remote-code \
+    --async-scheduling \
+    --compilation-config '{"cudagraph_mode": "FULL_DECODE_ONLY"}' \
+    --additional-config '{"enable_cpu_binding":true}' \
+    --enable-expert-parallel \
+    --tensor-parallel-size 8 \
+    --data-parallel-size 2 \
+    --max-num-seqs 24 \
+    --max-model-len 40690 \
+    --max-num-batched-tokens 16384 \
+    --gpu-memory-utilization 0.85
 ```
 
 ## Service Invocation
-
-### CURL-based Invocation Script
-
+### Invocation Script
 ```bash
-curl http://<server_ip>:8129/v1/chat/completions \
+curl http://0.0.0.0:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen35",
+    "model": "MiniMax-M2.7",
     "messages": [{"role": "user", "content": "你好"}]
   }'
-
 ```
+
 
 ### AnythingLLM Integration Guide
 
@@ -109,13 +108,11 @@ curl http://<server_ip>:8129/v1/chat/completions \
 #### 3. Model Interaction
 
 - After model loading is complete:
-  - Click **"New Conversation"**
-  - Enter your question (e.g., “Explain the basics of quantum computing”)
-  - Click the send button to get a response
-
-# Technical Overview	    
+- Click **"New Conversation"**
+- Enter your question (e.g., “Explain the basics of quantum computing”)
+- Click the send button to get a response
+# Technical Overview
 **FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
-
 ## FlagGems
 FlagGems is a high-performance, generic operator libraryimplemented in [Triton](https://github.com/openai/triton) language. It is built on a collection of backend-neutralkernels that aims to accelerate LLM (Large-Language Models) training and inference across diverse hardware platforms.
 ## FlagTree
@@ -130,7 +127,6 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  FlagEval is a comprehensive evaluation system and open platform for large models launched in 2023. It aims to establish scientific, fair, and open benchmarks, methodologies, and tools to help researchers assess model and training algorithm performance. It features:
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
-  
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -139,7 +135,5 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
-
 # License
-The model weights are sourced from Qwen/Qwen3.5-35B-A3B and open-sourced under the Apache 2.0 license: https://www.apache.org/licenses/LICENSE-2.0.txt
-
+本模型的权重来源于MiniMaxAI/MiniMax-M2.7，以apache2.0协议开源: https://www.apache.org/licenses/LICENSE-2.0.txt。
