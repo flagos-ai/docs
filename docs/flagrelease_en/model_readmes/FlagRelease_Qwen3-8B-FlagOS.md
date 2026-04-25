@@ -66,7 +66,7 @@ FlagEval (Libra)** is a comprehensive evaluation system and open platform for la
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:260225
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:202604160942
 ```
 
 ### Download Open-source Model Weights
@@ -85,7 +85,7 @@ docker run --init --detach --net=host --user 0 --ipc=host \
            -v /root:/root --security-opt=seccomp=unconfined \
            --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
            --shm-size=512G --gpus all -e USE_FLAGGEMS=1 \
-           --name qwen3_8b_release harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_3.0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:260225 sleep infinity
+           --name qwen3_8b_release harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3-8b-tree_none-gems_4.2.1rc0-scale_0.8.0-cx_none-python_3.12.10-torch_2.7.1-pcp_cuda12.4-gpu_nvidia004-arc_amd64-driver_535.161.08:202604160942 sleep infinity
 docker exec -it qwen3_8b_release bash
 ```
 
