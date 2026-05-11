@@ -105,8 +105,6 @@ FlagRelease/RoboBrain2.5-8B-FlagOS
 FlagRelease/RoboBrain2.5-8B-ascend-FlagOS
 FlagRelease/Seed-OSS-36B-Instruct-FlagOS
 FlagRelease/TeleChat3-36B-Thinking-mthreads-FlagOS
-FlagRelease/gemma-3-1b-it-FlagOS
-FlagRelease/gemma-3-1b-it-plugin-FlagOS
 FlagRelease/gpt-oss-120b-FlagOS
 FlagRelease/grok-2-FlagOS
 FlagRelease/phi-4-FlagOS
