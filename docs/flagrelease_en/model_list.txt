@@ -30,6 +30,8 @@ FlagRelease/GLM-5-ascend-FlagOS
 FlagRelease/Hunyuan-A13B-Instruct-FlagOS
 FlagRelease/Kimi-K2-Instruct-FlagOS
 FlagRelease/Kimi-K2-Thinking-FlagOS
+FlagRelease/Kimi-Linear-48B-A3B-Instruct-nvidia-FlagOS
+FlagRelease/Llama-3.2-1B-Instruct-ascend-FlagOS
 FlagRelease/MiniCPM-V-4-FlagOS
 FlagRelease/MiniCPM-V-4-metax-FlagOS
 FlagRelease/MiniCPM-o-4.5-ascend-FlagOS
@@ -105,8 +107,6 @@ FlagRelease/RoboBrain2.5-8B-FlagOS
 FlagRelease/RoboBrain2.5-8B-ascend-FlagOS
 FlagRelease/Seed-OSS-36B-Instruct-FlagOS
 FlagRelease/TeleChat3-36B-Thinking-mthreads-FlagOS
-FlagRelease/gemma-3-1b-it-FlagOS
-FlagRelease/gemma-3-1b-it-plugin-FlagOS
 FlagRelease/gpt-oss-120b-FlagOS
 FlagRelease/grok-2-FlagOS
 FlagRelease/phi-4-FlagOS
