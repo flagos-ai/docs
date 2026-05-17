@@ -56,7 +56,7 @@ docker pull harbor.baai.ac.cn/external-cooperation/teleai_telechat3-36b-thinking
 ### Download the Model
 
 ```bash
-modelscope download --model FlagRelease/TeleChat3-36B-Thinking-FlagOS --local_dir /data/TeleChat3-36B-Thinking
+modelscope download --model FlagRelease/TeleChat3-36B-Thinking-mthreads-FlagOS --local_dir /data/TeleChat3-36B-Thinking
 ```
 
 ### Start Inference Container
