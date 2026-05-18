@@ -1,3 +1,4 @@
+FlagRelease/C2S-Scale-Gemma-2-27B-FlagOS
 FlagRelease/DeepSeek-R1-Distill-Qwen-32B-FlagOS-Cambricon
 FlagRelease/DeepSeek-R1-Distill-Qwen-32B-FlagOS-NVIDIA
 FlagRelease/DeepSeek-R1-FlagOS-Cambricon-BF16
@@ -30,6 +31,7 @@ FlagRelease/GLM-5-ascend-FlagOS
 FlagRelease/Hunyuan-A13B-Instruct-FlagOS
 FlagRelease/Kimi-K2-Instruct-FlagOS
 FlagRelease/Kimi-K2-Thinking-FlagOS
+FlagRelease/Kimi-Linear-48B-A3B-Instruct-nvidia-FlagOS
 FlagRelease/MiniCPM-V-4-FlagOS
 FlagRelease/MiniCPM-V-4-metax-FlagOS
 FlagRelease/MiniCPM-o-4.5-ascend-FlagOS
@@ -105,10 +107,9 @@ FlagRelease/RoboBrain2.5-8B-FlagOS
 FlagRelease/RoboBrain2.5-8B-ascend-FlagOS
 FlagRelease/Seed-OSS-36B-Instruct-FlagOS
 FlagRelease/TeleChat3-36B-Thinking-mthreads-FlagOS
-FlagRelease/gemma-3-1b-it-FlagOS
-FlagRelease/gemma-3-1b-it-plugin-FlagOS
 FlagRelease/gpt-oss-120b-FlagOS
 FlagRelease/grok-2-FlagOS
+FlagRelease/internlm3-8b-instruct-nvidia-FlagOS
 FlagRelease/phi-4-FlagOS
 FlagRelease/phi-4-hygon-FlagOS
 FlagRelease/phi-4-metax-FlagOS
