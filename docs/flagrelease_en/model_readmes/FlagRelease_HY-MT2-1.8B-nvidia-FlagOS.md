@@ -1,55 +1,62 @@
+---
+base_model:
+- ""
+---
 # Introduction
-新模型介绍，待定....
+Hy-MT2 is a multilingual translation model series open-sourced by Tencent Hunyuan. It includes three sizes — Hy-MT2-1.8B, Hy-MT2-7B, and Hy-MT2-30B-A3B — all supporting translation across 33 languages and 5 Chinese ethnic minority / dialect translation pairs. The 30B-A3B uses a MoE architecture (30B total parameters / 3B activated), while the 1.8B and 7B are dense models. Compared to the previous generation Hy-MT1.5, MT2 brings improvements in domain-specific translation, instruction following, and on-device deployment:
+
+The 7B and 30B-A3B achieve 96.9% and 98.1% of Gemini 2.5 Pro's performance respectively on the FLORES-200 general translation benchmark, surpassing open-source models such as DeepSeek-V4-Pro and Kimi K2.6; the 1.8B outperforms leading commercial translation APIs overall.
+The 30B-A3B achieves a GEMBA score of 99.0% of Gemini 2.5 Pro's on the DomainMTBench benchmark across vertical domains including finance, politics, and education.
+Supports translation instructions such as glossary/terminology control, style transformation, and structured output (HTML/JSON), with instruction-following capability exceeding open-source models of the same size.
+The 1.8B offers a 1.25-bit quantized version based on the Sherry framework, requiring only ~440 MB of storage, enabling local inference on mobile chips from Apple, Qualcomm, MediaTek, and others.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Mthreads** container image supporting deployment within minutes
+- Released **FlagOS-Nvidia** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Qwen3-8B-mthreads-FlagOS-Origin | Qwen3-8B-mthreads-FlagOS-FlagOS |
-|--------------|---------------------------------|---------------------------------|
-| GPQA_Diamond | 0 | 0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| Metrics(chrf)      | HY-MT2-1.8B-Nvidia-Origin | HY-MT2-1.8B-Nvidia-FlagOS |
+|--------------|---------------------------|---------------------------|
+| flores_ca | 45.32 | 45.32 |
+| wmt16 | 57.2 | 57.22 |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 24.0.7
-24.0.7
-22.04.1 |
-| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
+| Docker Version   | 29.4.3 |
+| Operating System | Ubuntu 24.04.4 LTS (Noble Numbat) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-mthreads-release-model_qwen3-8b-tree_0.5.0.mthreads3.1-gems_5.0.1rc0-cx_none-python_3.10.12-torch_musa-2.7.1-pcp_musa4.3.5-gpu_mthreads-arc_amd64-driver_x:202605251504
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-1.8b-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.20.2-plugin_0.0.0-cx_none-python_3.12.3-torch_2.11.0-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:202605191822
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3-8B-mthreads-FlagOS --local_dir /data/Qwen3-8B-mthreads-FlagOS
+modelscope download --model FlagRelease/HY-MT2-1.8B-nvidia-FlagOS --local_dir /data/HY-MT2-1.8B
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=16g --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --tmpfs /tmp:exec -e MTHREADS_VISIBLE_DEVICES=all -e MTHREADS_DRIVER_CAPABILITIES=all -v /data:/data harbor.baai.ac.cn/flagrelease-public/flagrelease-mthreads-release-model_qwen3-8b-tree_0.5.0.mthreads3.1-gems_5.0.1rc0-cx_none-python_3.10.12-torch_musa-2.7.1-pcp_musa4.3.5-gpu_mthreads-arc_amd64-driver_x:202605251504 sleep infinity
+docker run --init --detach --net=host --uts=host --ipc=host --security-opt=seccomp=unconfined --privileged=true --ulimit stack=67108864 --ulimit memlock=-1 --ulimit nofile=1048576:1048576 --shm-size=32G -v /data:/data --gpus all --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-1.8b-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.20.2-plugin_0.0.0-cx_none-python_3.12.3-torch_2.11.0-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:202605191822 sleep infinity
+docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
-vllm serve /data/Qwen3-8B-FlagOS \
+vllm serve /data/HY-MT2-1.8B \
 --host 0.0.0.0 --port 8000 \
 --tensor-parallel-size 1 \
---served-model-name Qwen3-8B \
---trust-remote-code
+--served-model-name flagOS \
+--enforce-eager
 ```
 
 ## Service Invocation
@@ -58,7 +65,7 @@ vllm serve /data/Qwen3-8B-FlagOS \
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Qwen3-8B",
+    "model": "flagOS",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -111,4 +118,6 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from Qwen3-8B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Tencent-Hunyuan/HY-MT2-1.8B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+
+
