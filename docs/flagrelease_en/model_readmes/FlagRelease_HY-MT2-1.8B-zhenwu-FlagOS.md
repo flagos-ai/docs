@@ -3,107 +3,69 @@ base_model:
 - ""
 ---
 # Introduction
-MiniMax M2.7 is the latest-generation model in the M2 series, as well as the first model in the series to deeply participate in its own iteration. It can autonomously build complex Agent Harnesses and Skills, update its own Memory, and drive self-iteration through reinforcement learning, forming a closed loop of "model-driven model evolution".
-In terms of capabilities, M2.7 covers the entire software engineering workflow from code generation and log troubleshooting to end-to-end project delivery, achieving a score of 56.22% on the SWE-Pro benchmark, on par with GPT-5.3-Codex. It also delivers strong performance in professional office scenarios, ranking behind only Opus4.6, Sonnet4.6 and GPT-5.4 on the GDPval-AA metric, while maintaining a 97% instruction-following rate across 40 complex Skills scenarios involving more than 2000 tokens.
+Hy-MT2 is a multilingual translation model series open-sourced by Tencent Hunyuan. It includes three sizes — Hy-MT2-1.8B, Hy-MT2-7B, and Hy-MT2-30B-A3B — all supporting translation across 33 languages and 5 Chinese ethnic minority / dialect translation pairs. The 30B-A3B uses a MoE architecture (30B total parameters / 3B activated), while the 1.8B and 7B are dense models. Compared to the previous generation Hy-MT1.5, MT2 brings improvements in domain-specific translation, instruction following, and on-device deployment:
+
+The 7B and 30B-A3B achieve 96.9% and 98.1% of Gemini 2.5 Pro's performance respectively on the FLORES-200 general translation benchmark, surpassing open-source models such as DeepSeek-V4-Pro and Kimi K2.6; the 1.8B outperforms leading commercial translation APIs overall.
+The 30B-A3B achieves a GEMBA score of 99.0% of Gemini 2.5 Pro's on the DomainMTBench benchmark across vertical domains including finance, politics, and education.
+Supports translation instructions such as glossary/terminology control, style transformation, and structured output (HTML/JSON), with instruction-following capability exceeding open-source models of the same size.
+The 1.8B offers a 1.25-bit quantized version based on the Sherry framework, requiring only ~440 MB of storage, enabling local inference on mobile chips from Apple, Qualcomm, MediaTek, and others.
+
 ### Integrated Deployment
-- Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Out-of-the-box inference scripts with pre-configured hardware and software parameters
+- Released **FlagOS-Zhenwu** container image supporting deployment within minutes
 ### Consistency Validation
-- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
+- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
+
 
 # Evaluation Results
 ## Benchmark Result
-|Metrics|MiniMax-M2.7-Nvidia-Origin|MiniMax-M2.7-Hygon-FlagOS|
-|-------|---------------|---------------|
-|GPQA_Diamond |0.7071 |0.5758|
-|Aime24  | 0.9  | 0.9667|
+| Metrics(chrf)      | HY-MT2-1.8B-Nvidia-Origin | HY-MT2-1.8B-Zhenwu-FlagOS |
+|--------------|--------------------------------|--------------------------------------|
+| flores_ca | 45.32 | 45.3192 |
+| wmt16 | 57.2 | 57.1791 |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9  |
+| Docker Version   | Docker version 28.1.0, build 4d8c241 |
+| Operating System | Ubuntu 24.04.2 LTS |
 
 ## Operation Steps
+This model requires 1 machine with 16 GPUs. Please follow this link to apply for 1 machine resource. link：https://help.aliyun.com/zh/pai/user-guide
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hygon-minimax:202604120035
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-1.8b-zhenwu-tree_none-gems_5.0.1rc0-vllm_0.13.1.dev0_g72506c983.d20260218-plugin_0.1.0_vllm0.13.0-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.3.2-d7f5a2:202605191318
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/MiniMax-M2.7-hygon-FlagOS --local_dir /data/MiniMax-M2.7
-```
-
-### Start the Container
-```bash
-docker run \
-    --name flagos \
-    --network=host \
-    --ipc=host \
-    --device=/dev/kfd \
-    --device=/dev/mkfd \
-    --device=/dev/dri \
-    -v /opt/hyhal:/opt/hyhal \
-    -v /root/perfxlab:/workspace \
-    -v /data:/data \
-    --group-add video \
-    --cap-add=SYS_PTRACE \
-    --security-opt seccomp=unconfined \
-    -itd \
-    harbor.baai.ac.cn/flagrelease-public/flagrelease-hygon-minimax:202604120035
-
-docker exec -it flagos /bin/bash
+modelscope download --model FlagRelease/HY-MT2-1.8B-zhenwu-FlagOS --local_dir /data/HY-MT2-1.8B
 ```
 ### Start the Server
 ```bash
-# You need to prepare two machines named node0 and node1, and run the following commands on each respectively to start the services.
-# in node0 (master node)
-export GLOO_SOCKET_IFNAME=eno1
-export NCCL_SOCKET_IFNAME=eno1
-export GEMS_VENDOR=hygon 
-
-USE_FLAGGEMS=1 vllm serve /data/MiniMax-M2.7 \
-  --tensor-parallel-size 8 \
-  --pipeline-parallel-size 2 \
-  --served-model-name minimax-m2.7 \
-  --nnodes 2 \
-  --node-rank 0 \
-  --port 8000 \
-  --master-addr <node0_ip> \
-  --trust-remote-code 
-
-# in node1
-export GLOO_SOCKET_IFNAME=eno1
-export NCCL_SOCKET_IFNAME=eno1
-export GEMS_VENDOR=hygon 
-USE_FLAGGEMS=1 vllm serve /data/MiniMax-M2.7 \
-  --tensor-parallel-size 8 \
-  --pipeline-parallel-size 2 \
-  --served-model-name minimax-m2.7 \
-  --nnodes 2 \
-  --node-rank 1 \
-  --port 8000 \
-  --master-addr <node0_ip> \
-  --headless \
-  --trust-remote-code 
+vllm serve /data/HY-MT2-1.8B \
+--trust-remote-code \
+--dtype bfloat16 \
+--enforce-eager \
+--port 8000 \
+--host 0.0.0.0 \
+--served-model-name hy_mt2 \
+--gpu-memory-utilization 0.85
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-# in master node (node0)
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "minimax-m2.7",
+    "model": "hy_mt2",
     "messages": [{"role": "user", "content": "你好"}]
   }'
-
 ```
 
 
@@ -144,6 +106,7 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  FlagEval is a comprehensive evaluation system and open platform for large models launched in 2023. It aims to establish scientific, fair, and open benchmarks, methodologies, and tools to help researchers assess model and training algorithm performance. It features:
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
+
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -153,4 +116,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The weights of this model are derived from MiniMaxAI/MiniMax‑M2.7, open‑sourced under the Apache License 2.0. License link: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Tencent-Hunyuan/HY-MT2-1.8B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
