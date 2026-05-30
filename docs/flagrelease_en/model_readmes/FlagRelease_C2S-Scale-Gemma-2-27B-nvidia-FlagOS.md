@@ -3,107 +3,80 @@ base_model:
 - ""
 ---
 # Introduction
-MiniMax M2.7 is the latest-generation model in the M2 series, as well as the first model in the series to deeply participate in its own iteration. It can autonomously build complex Agent Harnesses and Skills, update its own Memory, and drive self-iteration through reinforcement learning, forming a closed loop of "model-driven model evolution".
-In terms of capabilities, M2.7 covers the entire software engineering workflow from code generation and log troubleshooting to end-to-end project delivery, achieving a score of 56.22% on the SWE-Pro benchmark, on par with GPT-5.3-Codex. It also delivers strong performance in professional office scenarios, ranking behind only Opus4.6, Sonnet4.6 and GPT-5.4 on the GDPval-AA metric, while maintaining a 97% instruction-following rate across 40 complex Skills scenarios involving more than 2000 tokens.
+C2S-Scale-Gemma-27B was jointly developed by the van Dijk Lab at Yale University, Google Research, and Google DeepMind. Built on the Gemma-2 27B architecture, it was trained using the Cell2Sentence (C2S) framework, which converts single-cell RNA sequencing data into "cell sentences" for model training. Trained on over 57 million cells, the model supports tasks such as cell type prediction, tissue classification, and gene expression profile generation, demonstrating the tremendous potential of applying large language models to single-cell biology.
+
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Nvidia** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
+
 # Evaluation Results
 ## Benchmark Result
-|Metrics|MiniMax-M2.7-Nvidia-Origin|MiniMax-M2.7-Hygon-FlagOS|
-|-------|---------------|---------------|
-|GPQA_Diamond |0.7071 |0.5758|
-|Aime24  | 0.9  | 0.9667|
+| Metrics      | C2S-Scale-Gemma-2-27B-Nvidia-Origin | C2S-Scale-Gemma-2-27B-Nvidia-FlagOS |
+|--------------|--------------------------------|--------------------------------------|
+| medqa_4options | 0.5169                             | 0.5224                                |
+| pubmedqa  | 0.542                              | 0.54                          |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9  |
+| Docker Version   | Docker version 24.0.0, build 98fdcd7 |
+| Operating System | 22.04.4 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hygon-minimax:202604120035
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-gemma-2-27b-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.19.0-plugin_0.0.0-cx_none-python_3.12.3-torch_2.10.0-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:202605261120
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/MiniMax-M2.7-hygon-FlagOS --local_dir /data/MiniMax-M2.7
+modelscope download --model FlagRelease/C2S-Scale-Gemma-2-27B-nvidia-FlagOS --local_dir /data/C2S-Scale-Gemma-2-27B
 ```
 
 ### Start the Container
 ```bash
-docker run \
-    --name flagos \
-    --network=host \
-    --ipc=host \
-    --device=/dev/kfd \
-    --device=/dev/mkfd \
-    --device=/dev/dri \
-    -v /opt/hyhal:/opt/hyhal \
-    -v /root/perfxlab:/workspace \
-    -v /data:/data \
-    --group-add video \
-    --cap-add=SYS_PTRACE \
-    --security-opt seccomp=unconfined \
-    -itd \
-    harbor.baai.ac.cn/flagrelease-public/flagrelease-hygon-minimax:202604120035
-
+docker run -itd \
+  --name=flagos \
+  --gpus all \
+  --network host \
+  --ipc host \
+  --uts host \
+  --privileged=true \
+  --security-opt seccomp=unconfined \
+  --ulimit stack=67108864 \
+  --ulimit memlock=-1 \
+  --ulimit nofile=1048576:1048576 \
+  --shm-size=32G \
+  -v /data/:/data \
+  harbor.baai.ac.cn/flagrelease-public/flagrelease-gemma-2-27b-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.19.0-plugin_0.0.0-cx_none-python_3.12.3-torch_2.10.0-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:202605261120
+  
 docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
-# You need to prepare two machines named node0 and node1, and run the following commands on each respectively to start the services.
-# in node0 (master node)
-export GLOO_SOCKET_IFNAME=eno1
-export NCCL_SOCKET_IFNAME=eno1
-export GEMS_VENDOR=hygon 
-
-USE_FLAGGEMS=1 vllm serve /data/MiniMax-M2.7 \
-  --tensor-parallel-size 8 \
-  --pipeline-parallel-size 2 \
-  --served-model-name minimax-m2.7 \
-  --nnodes 2 \
-  --node-rank 0 \
-  --port 8000 \
-  --master-addr <node0_ip> \
-  --trust-remote-code 
-
-# in node1
-export GLOO_SOCKET_IFNAME=eno1
-export NCCL_SOCKET_IFNAME=eno1
-export GEMS_VENDOR=hygon 
-USE_FLAGGEMS=1 vllm serve /data/MiniMax-M2.7 \
-  --tensor-parallel-size 8 \
-  --pipeline-parallel-size 2 \
-  --served-model-name minimax-m2.7 \
-  --nnodes 2 \
-  --node-rank 1 \
-  --port 8000 \
-  --master-addr <node0_ip> \
-  --headless \
-  --trust-remote-code 
+VLLM_FL_PREFER_ENABLED=True USE_FLAGGEMS=1 vllm serve /data/C2S-Scale-Gemma-2-27B \
+--host 0.0.0.0 --port 8000 \
+--tensor-parallel-size 1 \
+--served-model-name flagos \
+--trust_remote_code
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-# in master node (node0)
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "minimax-m2.7",
+    "model": "flagos",
     "messages": [{"role": "user", "content": "你好"}]
   }'
-
 ```
 
 
@@ -144,6 +117,7 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  FlagEval is a comprehensive evaluation system and open platform for large models launched in 2023. It aims to establish scientific, fair, and open benchmarks, methodologies, and tools to help researchers assess model and training algorithm performance. It features:
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
+
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -153,4 +127,5 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The weights of this model are derived from MiniMaxAI/MiniMax‑M2.7, open‑sourced under the Apache License 2.0. License link: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from vandijklab/C2S-Scale-Gemma-2-27B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+

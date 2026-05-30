@@ -50,6 +50,7 @@ docker run -itd \
     --privileged \
     --net=host \
     --name flagos \
+    -v /data:/data \
     -w /workspace \
     harbor.baai.ac.cn/flagrelease-public/qwen3.6-35b-a3b-nomtp-kunlunxin-gems_4.2.1rc0-vllm_0.13-plugin_0.1-cx_0.10.0-python_3.10.18-x86_64-driver_515.58:2604161518 bash
 docker exec -it flagos /bin/bash
@@ -72,7 +73,7 @@ vllm serve /data/Qwen3.6-35B-A3B-nomtp/ \
   --block-size 256  \
   --enforce-eager \
   --max-num-batched-tokens 16384  \
-  --port 8000
+  --port 8000 \
   --served-model-name qwen36
 ```
 
