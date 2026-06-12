@@ -105,6 +105,8 @@ FlagRelease/Qwen3.5-35B-A3B-iluvatar-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-metax-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-nvidia-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-zhenwu-FlagOS
+FlagRelease/Qwen3.6-27B-hygon-FlagOS
+FlagRelease/Qwen3.6-27B-metax-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-ascend-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-hygon-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-iluvatar-FlagOS
