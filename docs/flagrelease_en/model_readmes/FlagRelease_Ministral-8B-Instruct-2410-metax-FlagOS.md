@@ -1,86 +1,49 @@
----
-base_model:
-- ""
-frameworks:
-- ""
-language:
-- zh
-- en
-license: apache-2.0
----
 # Introduction
-On May 25, ModelBest officially released and open-sourced the next-generation edge-side foundational language model, MiniCPM5-1B. With only 1B parameters, the model achieved a score of 17.9 on the AA-Index leaderboard, surpassing all open-source foundation models under 4B parameters, including Qwen3.5-2B (16.3 points). This continues the “Density Law” proposed by ModelBest — the intelligence density of large models roughly doubles every 3.5 months. The Base version was pretrained using ForgeTrain, ModelBest’s self-developed AI training framework, which is the world’s first production-grade training framework fully written by AI. After INT4 quantization, the model weights are only 0.5 GB, enabling it to run on over 90% of terminal devices, including smartphones and web browsers. Official support has already been provided for mainstream inference frameworks such as vLLM, SGLang, and llama.cpp.
-
+新模型介绍，待定....
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Kunlunxin** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | MiniCPM5-1B-Nvidia-Origin | MiniCPM5-1B-Kunlunxin-FlagOS |
-|--------------|--------------------------------------|--------------------------------------|
-| hellaswag | 0.4742 | 0.4747 |
-| truthfulqa_mc1 | 0.3293 | 0.3317 |
-| winogrande | 0.5484 | 0.5525 |
-| commonsense_qa | 0.3473 | 0.3473 |
+| Metrics      | Ministral-8B-Instruct-2410-metax-FlagOS-Origin | Ministral-8B-Instruct-2410-metax-FlagOS-FlagOS |
+|--------------|------------------------------------------------|------------------------------------------------|
+| GPQA_Diamond | 0 | 30.0 |
+| ERQA | - | - |
+| Aime24 | - | - |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 24.0.7|
-| Operating System | Ubuntu 22.04.5 LTS (Noble Numbat) |
+| Docker Version   | 29.4.0 |
+| Operating System | Ubuntu 22.04.3 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-minicpm5-kunlunxin-tree_none-gems_4.2.1rc0-vllm_0.13.0-plugin_0.1.0-cx_0.10.0-python_3.10.18-torch_2.9.0_cu129-pcp_xpu-rtnone-gpu_kunlunxin001-arc_amd64-driver_515.58:202605211611
+docker pull harbor.baai.ac.cn/flagrelease-project/ministral-8b-instruct-2410-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607240222-v3
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/MiniCPM5-1B-kunlunxin-FlagOS --local_dir /data/MiniCPM5-1B
+modelscope download --model FlagRelease/Ministral-8B-Instruct-2410-metax-FlagOS --local_dir /data/Ministral-8B-Instruct-2410-FlagOS
 ```
 
 ### Start the Container
 ```bash
-#Container Startup
-docker run -itd \
-    --name=flagos \
-    --net=host \
-    --privileged \
-    --security-opt=seccomp=unconfined \
-    --cap-add=SYS_PTRACE \
-    --ulimit=memlock=-1 \
-    --ulimit=nofile=120000 \
-    --ulimit=stack=67108864 \
-    --shm-size=128G \
-    -w /workspace \
-    -v /data:/data \
-    harbor.baai.ac.cn/flagrelease-public/flagrelease-minicpm5-kunlunxin-tree_none-gems_4.2.1rc0-vllm_0.13.0-plugin_0.1.0-cx_0.10.0-python_3.10.18-torch_2.9.0_cu129-pcp_xpu-rtnone-gpu_kunlunxin001-arc_amd64-driver_515.58:202605211611 \
-    bash
-docker exec -it flagos /bin/bash
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g --group-add video --ulimit memlock=-1 --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri --device=/dev/mxcd -v /data:/data harbor.baai.ac.cn/flagrelease-project/ministral-8b-instruct-2410-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607240222-v3 sleep infinity
 ```
 ### Start the Server
 ```bash
-export VLLM_FL_PLATFORM=kunlunxin
-export VLLM_FL_PREFER=flagos
-export VLLM_FL_FLAGOS_WHITELIST='rms_norm,silu_and_mul,rotary_embedding'
-export FLAGCX_PATH=/env/FlagCX
-export CUDA_VISIBLE_DEVICES=0
-vllm serve /data/MiniCPM5-1B \
-    --served-model-name MiniCPM5-1B \
-    --port 8000 \
-    --tensor-parallel-size 1 \
-    --gpu-memory-utilization 0.95 \
-    --enforce-eager
+VLLM_PLUGINS=fl vllm serve /data/Ministral-8B-Instruct-2410-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Ministral-8B-Instruct-2410 --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code
 ```
 
 ## Service Invocation
@@ -89,7 +52,7 @@ vllm serve /data/MiniCPM5-1B \
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "MiniCPM5-1B",
+    "model": "Ministral-8B-Instruct-2410",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -142,5 +105,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from OpenBMB/MiniCPM5-1B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
-
+The model weights are derived from mistralai/Ministral-8B-Instruct-2410 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
