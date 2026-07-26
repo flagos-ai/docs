@@ -68,7 +68,7 @@ docker run -d \
     -v /lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu \
     -v /etc/alternatives:/etc/alternatives \
     -v /etc/localtime:/etc/localtime \
-    flagtree-mthreads3.6-test_wys:latest \
+    harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-7b-mthreads-tree_0.5.1_mthreads3.6-gems_5.0.2-vllm_0.13.1.dev44_g3d4cc4bc7.d20260310.musa-plugin_0.1.0-cx_0.8.0-python_3.10.12-torch_2.7.1-pcp_musa4.3.5-driver_3.3.6:202605281243 \
     bash
     
 docker exec -it flagos bash
