@@ -1,6 +1,10 @@
 ---
 frameworks:
 - ""
+language:
+- zh
+- en
+license: apache-2.0
 tasks: []
 ---
 # Introduction
@@ -40,7 +44,7 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/llama-3-8b-nvidia-tree_0.5.0_3.5-gems_5.0.1.rc.0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0.dev20250804_cu128-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.133.20:2605260901
+docker pull harbor.baai.ac.cn/external-cooperation/llama-3-8b-nvidia-tree_0.5.0_3.5-gems_5.0.1.rc.0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0.dev20250804_cu128-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.133.20:2605271357
 
 ```
 
@@ -57,7 +61,7 @@ docker run -d \
   -v /data/models:/data/models \
   --gpus all \
   --network host \
-  harbor.baai.ac.cn/external-cooperation/llama-3-8b-nvidia-tree_0.5.0_3.5-gems_5.0.1.rc.0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0.dev20250804_cu128-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.133.20:2605260901 \
+  harbor.baai.ac.cn/external-cooperation/llama-3-8b-nvidia-tree_0.5.0_3.5-gems_5.0.1.rc.0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0.dev20250804_cu128-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.133.20:2605271357 \
   sleep infinity
 docker exec -it meta-llama-3-8b-instruct-nvidia-flagos bash
 ```

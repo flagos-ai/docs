@@ -1,6 +1,10 @@
 ---
 frameworks:
 - ""
+language:
+- zh
+- en
+license: apache-2.0
 tasks: []
 ---
 # Introduction
@@ -36,7 +40,7 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607101038
+docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451
 ```
 
 ### Download Open-source Model Weights
@@ -44,7 +48,7 @@ docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tre
 pip install modelscope
 modelscope download \
   --model FlagRelease/AI21-Jamba-1.5-Mini-hygon-FlagOS \
-  --local_dir /data/models/vllm-plugin-fl/AI21-Jamba-1.5-Mini-hygon-FlagOS
+  --local_dir /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS
 ```
 
 ### Start the Container
@@ -54,10 +58,10 @@ docker run \
   --network=host \
   --privileged=true \
   --shm-size=16g \
-  -v /data/models/vllm-plugin-fl:/data/vllm-plugin-fl \
+  -v /data/models:/data/models \
   -v /opt/hyhal:/opt/hyhal:ro \
   -itd \
-  harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607101038 \
+  harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451 \
   sleep infinity
 
 docker exec -it ai21-jamba-hygon bash
@@ -70,7 +74,7 @@ nohup env \
   VLLM_PLUGINS=fl \
   TRITON_ALL_BLOCKS_PARALLEL=1 \
   vllm serve \
-  --model /data/vllm-plugin-fl/AI21-Jamba-1.5-Mini-hygon-FlagOS \
+  --model /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS \
   --tensor-parallel-size 2 \
   --enforce-eager \
   --max-cudagraph-capture-size 0 \

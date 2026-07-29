@@ -57,7 +57,7 @@ docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b
 
 ```bash
 pip install modelscope
-modelscope download --model DeepSeek-R1-Distill-Qwen-1.5B-nvidia-FlagOS --local_dir /data/vllm-plugin-fl/DeepSeek-R1-Distill-Qwen-1.5B-nvidia-FlagOS
+modelscope download --model DeepSeek-R1-Distill-Qwen-1.5B-nvidia-FlagOS --local_dir /data/models/DeepSeek-R1-Distill-Qwen-1.5B-nvidia-FlagOS
 ```
 
 ### Start the Container
@@ -70,7 +70,7 @@ docker exec -it flagos /bin/bash
 ### Start the Server
 
 ```bash
-CUDA_VISIBLE_DEVICES=0  VLLM_PLUGINS=fl  USE_FLAGGEMS=1  VLLM_FL_ALLOW_VENDORS=cuda  VLLM_FL_FLAGOS_WHITELIST=reciprocal,mul,cos,sin,attention_backend,embedding,rms_norm,rms_norm_forward,addmm,rotary_embedding,rope_forward,rotary_pos_embedding,fused_add_rms_norm,silu_and_mul,index,rand_like,full,argmax,sort,sort_stable,gather,lt,le  vllm  serve  --model  /data/vllm-plugin-fl/DeepSeek-R1-Distill-Qwen-1.5B  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B  --port 8000  --enforce-eager
+CUDA_VISIBLE_DEVICES=0  VLLM_PLUGINS=fl  USE_FLAGGEMS=1  VLLM_FL_ALLOW_VENDORS=cuda  VLLM_FL_FLAGOS_WHITELIST=reciprocal,mul,cos,sin,attention_backend,embedding,rms_norm,rms_norm_forward,addmm,rotary_embedding,rope_forward,rotary_pos_embedding,fused_add_rms_norm,silu_and_mul,index,rand_like,full,argmax,sort,sort_stable,gather,lt,le  vllm  serve  --model  /data/models/DeepSeek-R1-Distill-Qwen-1.5B-nvidia-FlagOS  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-nvidia-FlagOS  --port 8000  --enforce-eager
 ```
 
 ## Service Invocation
@@ -81,7 +81,7 @@ CUDA_VISIBLE_DEVICES=0  VLLM_PLUGINS=fl  USE_FLAGGEMS=1  VLLM_FL_ALLOW_VENDORS=c
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "DeepSeek-R1-Distill-Qwen-1.5B",
+    "model": "DeepSeek-R1-Distill-Qwen-1.5B-nvidia-FlagOS",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```

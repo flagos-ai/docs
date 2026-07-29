@@ -60,7 +60,7 @@ docker pull harbor.baai.ac.cn/external-cooperation/glm-4-32b-base-0414-nvidia-tr
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/GLM-4-32B-Base-0414-nvidia-FlagOS --local_dir /data/GLM-4-32B-Base-0414-nvidia-FlagOS
+modelscope download --model FlagRelease/GLM-4-32B-Base-0414-nvidia-FlagOS --local_dir /data/models/GLM-4-32B-Base-0414-nvidia-FlagOS
 ```
 
 ### Start the Container
@@ -72,7 +72,7 @@ docker run -itd \
   --ipc host \
   --privileged=true \
   --shm-size=32G \
-  -v /data:/data/models \
+  -v /data/models:/data/models \
   harbor.baai.ac.cn/external-cooperation/glm-4-32b-base-0414-nvidia-tree_0.5.0-gems_0.5.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.133.20:2606091434 \
   sleep infinity
 docker exec -it flagos bash

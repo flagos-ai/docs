@@ -1,6 +1,10 @@
 ---
 frameworks:
 - ""
+language:
+- zh
+- en
+license: apache-2.0
 tasks: []
 ---
 # Introduction
@@ -41,13 +45,13 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607021138
+docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291650
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS --local_dir /data/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS
+modelscope download --model FlagRelease/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS --local_dir /data/models/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS
 ```
 
 ### Start the Container
@@ -60,12 +64,12 @@ docker run \
   --device=/dev/mkfd \
   --device=/dev/dri \
   -v /opt/hyhal:/opt/hyhal \
-  -v /data:/data/models \
+  -v /data/models:/data/models \
   --group-add video \
   --cap-add=SYS_PTRACE \
   --security-opt seccomp=unconfined \
   -itd \
-  harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607021138 \
+  harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291650 \
   sleep infinity
 docker exec -it flagos bash
 ```

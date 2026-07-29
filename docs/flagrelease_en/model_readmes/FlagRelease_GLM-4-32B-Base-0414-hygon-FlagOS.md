@@ -1,6 +1,10 @@
 ---
 frameworks:
 - ""
+language:
+- zh
+- en
+license: apache-2.0
 tasks: []
 ---
 # Introduction
@@ -10,10 +14,10 @@ GLM-Z1-Rumination-32B-0414 is a deep reasoning model with rumination capabilitie
 Finally, GLM-Z1-9B-0414 is a surprise. We employed all the aforementioned techniques to train a small model (9B). GLM-Z1-9B-0414 exhibits excellent capabilities in mathematical reasoning and general tasks. Its overall performance is top-ranked among all open-source models of the same size. Especially in resource-constrained scenarios, this model achieves an excellent balance between efficiency and effectiveness, providing a powerful option for users seeking lightweight deployment.
 
 ### Integrated Deployment
-- Out-of-the-box inference scripts with pre-configured hardware and software parameters	
+- Out-of-the-box inference scripts with pre-configured hardware and software parameters
 - Released **FlagOS-Hygon** container image supporting deployment within minutes
 ### Consistency Validation
-- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
+- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
@@ -56,7 +60,7 @@ docker pull harbor.baai.ac.cn/external-cooperation/glm-4-32b-base-0414-hygon-tre
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/GLM-4-32B-Base-0414-hygon-FlagOS --local_dir /data/GLM-4-32B-Base-0414-hygon-FlagOS
+modelscope download --model FlagRelease/GLM-4-32B-Base-0414-hygon-FlagOS --local_dir /data/models/GLM-4-32B-Base-0414-hygon-FlagOS
 ```
 
 ### Start the Container
@@ -69,7 +73,7 @@ docker run \
   --device=/dev/mkfd \
   --device=/dev/dri \
   -v /opt/hyhal:/opt/hyhal \
-  -v /data:/data/models \
+  -v /data/models:/data/models \
   --group-add video \
   --cap-add=SYS_PTRACE \
   --security-opt seccomp=unconfined \

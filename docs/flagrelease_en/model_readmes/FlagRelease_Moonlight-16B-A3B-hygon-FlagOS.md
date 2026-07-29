@@ -64,7 +64,7 @@ modelscope download \
 
 ```bash
 docker run -itd \
-  --name flagos \
+  --name Moonlight-16B-A3B-hygon-FlagOS \
   --device=/dev/kfd \
   --device=/dev/mkfd \
   --device=/dev/dri \
@@ -77,33 +77,33 @@ docker run -itd \
   -v /data/Moonlight-16B-A3B-hygon-FlagOS:/data/Moonlight-16B-A3B-hygon-FlagOS \
   harbor.baai.ac.cn/external-cooperation/moonlight-16b-a3b-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:202607071400 \
   sleep infinity
+
 ```
 
 ### Enter the Container
 
 ```bash
-docker exec -it flagos /bin/bash
+docker exec -it Moonlight-16B-A3B-hygon-FlagOS /bin/bash
 ```
 
 ### Start the Server
 
 ```bash
-#建议按实际卡号调整
 export VLLM_FL_FLAGOS_BLACKLIST="mul,copy_"
 export HIP_VISIBLE_DEVICES=4,5
 export VLLM_PLUGINS=fl
 export TRITON_ALL_BLOCKS_PARALLEL=1
 export USE_FLAGGEMS=1
-nohup python3 -m vllm.entrypoints.openai.api_server \
-    --model /data/Moonlight-16B-A3B-hygon-FlagOS \
-    --served-model-name moonlight-flagos \
+nohup vllm serve /data/Moonlight-16B-A3B-hygon-FlagOS \
+    --served-model-name Moonlight-16B-A3B-hygon-FlagOS \
     --port 8003 \
     --trust-remote-code \
     --max-model-len 8192 \
     --gpu-memory-utilization 0.9 \
     --tensor-parallel-size 2 \
     --enforce-eager \
-    > /workspace/moon-test/flagos_server.log 2>&1 &
+    > flagos_server.log 2>&1 &
+
 ```
 
 ## Service Invocation
@@ -114,7 +114,7 @@ nohup python3 -m vllm.entrypoints.openai.api_server \
 curl http://localhost:8003/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "moonlight-flagos",
+    "model": "Moonlight-16B-A3B-hygon-FlagOS",
     "messages": [{"role": "user", "content": "hello"}]
   }'
 ```
