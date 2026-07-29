@@ -3,16 +3,16 @@
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Nvidia** container image supporting deployment within minutes
+- Released **FlagOS-Hygon** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Phi-3.5-mini-instruct-FlagOS-Origin | Phi-3.5-mini-instruct-FlagOS-FlagOS |
-|--------------|-------------------------------------|-------------------------------------|
-| GPQA_Diamond | 26.0 | 24.0 |
+| Metrics      | DeepSeek-R1-Distill-Llama-8B-hygon-FlagOS-Origin | DeepSeek-R1-Distill-Llama-8B-hygon-FlagOS-FlagOS |
+|--------------|--------------------------------------------------|--------------------------------------------------|
+| GPQA_Diamond | 0 | 42.0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,29 +21,31 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 24.0.0 |
-| Operating System | Ubuntu 24.04.3 LTS (Noble Numbat) |
+| Docker Version   | 28.2.2
+28.2.2
+22.04.1 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-project/phi-3.5-mini-instruct-nvidia003-gems5.0.2-tree0.6.0-cxnone-plugin0.0.0-vllm0.20.2-cp312-pt211-cu130-x64-570.158.01:202607161715-v5
+docker pull harbor.baai.ac.cn/flagrelease-project/deepseek-r1-distill-llama-8b-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-6.3.28-v1.3.0b:202607251225-v3
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Phi-3.5-mini-instruct-FlagOS --local_dir /data/Phi-3.5-mini-instruct-FlagOS
+modelscope download --model FlagRelease/DeepSeek-R1-Distill-Llama-8B-hygon-FlagOS --local_dir /data/DeepSeek-R1-Distill-Llama-8B-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -itd --name flagos --gpus=all --network=host -v /data:/data harbor.baai.ac.cn/flagrelease-project/phi-3.5-mini-instruct-nvidia003-gems5.0.2-tree0.6.0-cxnone-plugin0.0.0-vllm0.20.2-cp312-pt211-cu130-x64-570.158.01:202607161715-v5
+docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/deepseek-r1-distill-llama-8b-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-6.3.28-v1.3.0b:202607251225-v3 sleep infinity
 ```
 ### Start the Server
 ```bash
-vllm serve /data/Phi-3.5-mini-instruct-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Phi-3.5-mini-instruct --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code
+vllm serve /data/DeepSeek-R1-Distill-Llama-8B-FlagOS --host 0.0.0.0 --port 8000 --served-model-name DeepSeek-R1-Distill-Llama-8B --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code --reasoning-parser deepseek_r1
 ```
 
 ## Service Invocation
@@ -52,7 +54,7 @@ vllm serve /data/Phi-3.5-mini-instruct-FlagOS --host 0.0.0.0 --port 8000 --serve
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Phi-3.5-mini-instruct",
+    "model": "DeepSeek-R1-Distill-Llama-8B",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -105,4 +107,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from LLM-Research/Phi-3.5-mini-instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from deepseek-ai/DeepSeek-R1-Distill-Llama-8B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt

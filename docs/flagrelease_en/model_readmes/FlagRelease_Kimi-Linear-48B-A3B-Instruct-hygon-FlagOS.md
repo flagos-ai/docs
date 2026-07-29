@@ -7,17 +7,16 @@ language:
 license: apache-2.0
 tasks: []
 ---
-### Introduction
+# Introduction
 
 Kimi-Linear-48B-A3B-Instruct is a high-efficiency large language model developed by MoonshotAI. Built with an innovative hybrid linear attention architecture and equipped with 48B total parameters, it is specially optimized for long-context comprehension, multi-turn dialogue and complex reasoning scenarios, supporting an ultra-long context window up to 1 million tokens.
 
 Adopting a 3:1 structural ratio of Kimi Delta Attention and global MLA, this model greatly cuts down KV cache occupancy and improves inference throughput while maintaining strong comprehensive capability. It achieves outstanding results on multiple authoritative benchmarks, natively compatible with Transformers and vLLM frameworks, and can be quickly deployed for long document parsing, knowledge question answering and industrial intelligent conversation services.
 
-
 ### Integrated Deployment
 
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Nvidia** container image supporting deployment within minutes
+- Released **FlagOS-Hygon** container image supporting deployment within minutes
 
 ### Consistency Validation
 
@@ -28,62 +27,80 @@ Adopting a 3:1 structural ratio of Kimi Delta Attention and global MLA, this mod
 
 ## Benchmark Result
 
-| Metrics             | Kimi-Linear-48B-A3B-Instruct-Nvidia-Origin | Kimi-Linear-48B-A3B-Instruct-Nvidia-FlagOS |
-| ------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| aime                | 0.4667                                                   | 0.4667                                                   |
-| musr_generative     | 0.5926                                                   | 0.5635                                                   |
-| mmlu_pro            | 0.515                                                    | 0.5315                                                   |
-| gpqa_generative_cot | 0.4295                                                   | 0.4295                                                   |
-| livebench_new       | 0.5438                                                   | 0.5178                                                   |
+| Metrics             | Kimi-Linear-48B-A3B-Instruct-Nvidia-Origin | Kimi-Linear-48B-A3B-Instruct-Hygon-FlagOS |
+| ------------------- | ------------------------------------------ | ----------------------------------------- |
+| aime                | 0.4667                                     | 0.5667                                    |
+| musr_generative     | 0.5926                                     | 0.5516                                    |
+| mmlu_pro            | 0.515                                      | 0.5266                                    |
+| gpqa_generative_cot | 0.4295                                     | 0.4253                                    |
+| livebench_new       | 0.5438                                     | 0.5254                                    |
+
 
 # User Guide
 
 Environment Setup
 
-| Item             | Version                              |
-| ---------------- | ------------------------------------ |
-| Docker Version   | Docker version 24.0.0, build 98fdcd7 |
-| Operating System | 22.04.4 LTS (Jammy Jellyfish)        |
+| Item             | Version                                |
+| ---------------- | -------------------------------------- |
+| Docker Version   | Docker version 20.10.24, build 297e128 |
+| Operating System | Sugon OS 8.9                           |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/kimi-linear-48b-a3b-instruct-nvidia-tree_0.5.0_3.5-gems_5.0.2-vllm_0.13.0-plugin_0.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.158.01:2605110300
+docker pull harbor.baai.ac.cn/external-cooperation/kimi-linear-48b-a3b-instruct-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607011028
 ```
 
 ### Download Open-source Model Weights
 
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Kimi-Linear-48B-A3B-Instruct-nvidia-FlagOS --local_dir /data/Kimi-Linear-48B-A3B-Instruct-nvidia-FlagOS
+modelscope download --model FlagRelease/Kimi-Linear-48B-A3B-Instruct-hygon-FlagOS --local_dir /data/Kimi-Linear-48B-A3B-Instruct-hygon-FlagOS
 ```
 
 ### Start the Container
 
 ```bash
-docker run -itd --name=flagos --gpus=all --network=host -v /data:/data harbor.baai.ac.cn/external-cooperation/kimi-linear-48b-a3b-instruct-nvidia-tree_0.5.0_3.5-gems_5.0.2-vllm_0.13.0-plugin_0.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda12.8-gpu_nvidia003-arc_amd64-driver_570.158.01:2605110300 sleep infinity
+docker run \
+  --name flagos \
+  --network=host \
+  --ipc=host \
+  --device=/dev/kfd \
+  --device=/dev/mkfd \
+  --device=/dev/dri \
+  -v /opt/hyhal:/opt/hyhal \
+  -v /data:/data \
+  --group-add video \
+  --cap-add=SYS_PTRACE \
+  --security-opt seccomp=unconfined \
+  -itd \
+  harbor.baai.ac.cn/external-cooperation/kimi-linear-48b-a3b-instruct-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607011028 \
+  sleep infinity
 
 docker exec -it flagos  bash
-
 ```
 
 ### Start the Server
 
 ```bash
+#建议按实际卡号调整
 export VLLM_PLUGINS=fl
 export TRITON_ALL_BLOCKS_PARALLEL=1
-nohup vllm serve \
---model /data/Kimi-Linear-48B-A3B-Instruct-nvidia-FlagOS \
---served-model-name kimi-linear-48b-a3b-instruct \
+export USE_FLAGGEMS=1
+export HIP_VISIBLE_DEVICES=2,3
+export VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax"
+
+ulimit -n 2048 && nohup vllm serve \
+--model /data/Kimi-Linear-48B-A3B-Instruct-hygon-FlagOS \
+--served-model-name kimi-linear-48b-a3b-instruct-flagos \
 --host 0.0.0.0 \
 --port 8000 \
+--gpu-memory-utilization 0.90 \
 --trust-remote-code \
 --tensor-parallel-size 2 \
---enforce-eager \
-> kimi-flagos.log 2>&1 &
-
+> kimi_flagos.log 2>&1 &
 ```
 
 ## Service Invocation
@@ -94,7 +111,7 @@ nohup vllm serve \
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "kimi-linear-48b-a3b-instruct",
+    "model": "kimi-linear-48b-a3b-instruct-flagos",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -148,7 +165,7 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  FlagEval is a comprehensive evaluation system and open platform for large models launched in 2023. It aims to establish scientific, fair, and open benchmarks, methodologies, and tools to help researchers assess model and training algorithm performance. It features:
 
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
- - **Industry-Grade Use Cases**: Has completed horizontal evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
+ - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
 
 # Contributing
 
@@ -162,5 +179,4 @@ We warmly welcome global developers to join us:
 # License
 
 The model weights are derived from moonshotai/Kimi-Linear-48B-A3B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
-
 
