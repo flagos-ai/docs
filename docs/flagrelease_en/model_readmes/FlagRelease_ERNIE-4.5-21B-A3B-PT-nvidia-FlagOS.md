@@ -1,11 +1,8 @@
 ---
-frameworks:
-- ""
+license: apache-2.0
 language:
 - zh
 - en
-license: apache-2.0
-tasks: []
 ---
 # Introduction
 The advanced capabilities of the ERNIE 4.5 models, particularly the MoE-based A47B and A3B series, are underpinned by several key technical innovations:
@@ -73,7 +70,6 @@ docker exec -it flagos bash
 export VLLM_PLUGINS=fl
 export TRITON_ALL_BLOCKS_PARALLEL=1
 export USE_FLAGGEMS=1
-
 vllm serve \
   --model /data/models/ERNIE-4.5-21B-A3B-PT-nvidia-FlagOS \
   --tensor-parallel-size 1 \
