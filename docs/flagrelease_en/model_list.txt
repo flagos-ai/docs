@@ -97,6 +97,7 @@ FlagRelease/MiniCPM-o-4.5-metax-FlagOS
 FlagRelease/MiniCPM-o-4.5-nvidia-FlagOS
 FlagRelease/MiniCPM-o-4.5-zhenwu-FlagOS
 FlagRelease/MiniCPM4-8B-mthreads-FlagOS
+FlagRelease/MiniCPM4.1-8B-mthreads-FlagOS
 FlagRelease/MiniCPM5-1B-Armv9-FlagOS
 FlagRelease/MiniCPM5-1B-ascend-FlagOS
 FlagRelease/MiniCPM5-1B-hygon-FlagOS
@@ -125,6 +126,8 @@ FlagRelease/MiniMax-M3-nvidia-FlagOS
 FlagRelease/MiniMax-M3-zhenwu-FlagOS
 FlagRelease/Moonlight-16B-A3B-hygon-FlagOS
 FlagRelease/Moonlight-16B-A3B-nvidia-FlagOS
+FlagRelease/Phi-3-medium-128k-instruct-metax-FlagOS
+FlagRelease/Phi-3-mini-128k-instruct-iluvatar-FlagOS
 FlagRelease/Phi-3.5-MoE-instruct-hygon-FlagOS
 FlagRelease/Phi-3.5-MoE-instruct-nvidia-FlagOS
 FlagRelease/Phi-3.5-mini-instruct-FlagOS
@@ -196,7 +199,6 @@ FlagRelease/aya-23-8B-hygon-FlagOS
 FlagRelease/deepseek-r1-1.5b-nvidia-FlagOS
 FlagRelease/farm_molecular_representation-hygon-FlagOS
 FlagRelease/farm_molecular_representation-nvidia-FlagOS
-FlagRelease/gemma-1.1-7b-it-metax-FlagOS
 FlagRelease/gpt-oss-120b-FlagOS
 FlagRelease/grok-2-FlagOS
 FlagRelease/llama-3-Korean-Bllossom-8B-hygon-FlagOS
