@@ -3,16 +3,16 @@
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Nvidia** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Phi-3.5-mini-instruct-FlagOS-Origin | Phi-3.5-mini-instruct-FlagOS-FlagOS |
-|--------------|-------------------------------------|-------------------------------------|
-| GPQA_Diamond | 26.0 | 24.0 |
+| Metrics      | Qwen2.5-Coder-7B-Instruct-metax-FlagOS-Origin | Qwen2.5-Coder-7B-Instruct-metax-FlagOS-FlagOS |
+|--------------|-----------------------------------------------|-----------------------------------------------|
+| GPQA_Diamond | 0 | 38.0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,29 +21,29 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 24.0.0 |
-| Operating System | Ubuntu 24.04.3 LTS (Noble Numbat) |
+| Docker Version   | 29.4.0 |
+| Operating System | Ubuntu 22.04.3 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-project/phi-3.5-mini-instruct-nvidia003-gems5.0.2-tree0.6.0-cxnone-plugin0.0.0-vllm0.20.2-cp312-pt211-cu130-x64-570.158.01:202607161715-v5
+docker pull harbor.baai.ac.cn/flagrelease-project/qwen2.5-coder-7b-instruct-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607230542-v3
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Phi-3.5-mini-instruct-FlagOS --local_dir /data/Phi-3.5-mini-instruct-FlagOS
+modelscope download --model FlagRelease/Qwen2.5-Coder-7B-Instruct-metax-FlagOS --local_dir /data/Qwen2.5-Coder-7B-Instruct-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -itd --name flagos --gpus=all --network=host -v /data:/data harbor.baai.ac.cn/flagrelease-project/phi-3.5-mini-instruct-nvidia003-gems5.0.2-tree0.6.0-cxnone-plugin0.0.0-vllm0.20.2-cp312-pt211-cu130-x64-570.158.01:202607161715-v5
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g --group-add video --ulimit memlock=-1 --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri --device=/dev/mxcd -v /data:/data harbor.baai.ac.cn/flagrelease-project/qwen2.5-coder-7b-instruct-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607230542-v3 sleep infinity
 ```
 ### Start the Server
 ```bash
-vllm serve /data/Phi-3.5-mini-instruct-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Phi-3.5-mini-instruct --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code
+VLLM_PLUGINS=fl vllm serve /data/Qwen2.5-Coder-7B-Instruct-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Qwen2.5-Coder-7B-Instruct --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code
 ```
 
 ## Service Invocation
@@ -52,7 +52,7 @@ vllm serve /data/Phi-3.5-mini-instruct-FlagOS --host 0.0.0.0 --port 8000 --serve
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Phi-3.5-mini-instruct",
+    "model": "Qwen2.5-Coder-7B-Instruct",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -105,4 +105,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from LLM-Research/Phi-3.5-mini-instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Qwen/Qwen2.5-Coder-7B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
