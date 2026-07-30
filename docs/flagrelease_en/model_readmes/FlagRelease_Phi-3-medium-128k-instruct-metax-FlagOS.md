@@ -10,9 +10,9 @@
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | phi-4-metax-FlagOS-Origin | phi-4-metax-FlagOS-FlagOS |
-|--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 62.0 | 68.0 |
+| Metrics      | Phi-3-medium-128k-instruct-metax-FlagOS-Origin | Phi-3-medium-128k-instruct-metax-FlagOS-FlagOS |
+|--------------|------------------------------------------------|------------------------------------------------|
+| GPQA_Diamond | 0 | 40.0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -28,22 +28,22 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/phi-4-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607291930-v2
+docker pull harbor.baai.ac.cn/flagrelease-public/phi-3-medium-128k-instruct-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607291448-v2
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/phi-4-metax-FlagOS --local_dir /data/phi-4-FlagOS
+modelscope download --model FlagRelease/Phi-3-medium-128k-instruct-metax-FlagOS --local_dir /data/Phi-3-medium-128k-instruct-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g --group-add video --ulimit memlock=-1 --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri --device=/dev/mxcd -v /data:/data harbor.baai.ac.cn/flagrelease-public/phi-4-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607291930-v2 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g --group-add video --ulimit memlock=-1 --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri --device=/dev/mxcd -v /data:/data harbor.baai.ac.cn/flagrelease-public/phi-3-medium-128k-instruct-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607291448-v2 sleep infinity
 ```
 ### Start the Server
 ```bash
-vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi-4 --tensor-parallel-size 1 --max-model-len 16384 --trust-remote-code
+vllm serve /data/Phi-3-medium-128k-instruct-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Phi-3-medium-128k-instruct --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code
 ```
 
 ## Service Invocation
@@ -52,7 +52,7 @@ vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
+    "model": "Phi-3-medium-128k-instruct",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -105,4 +105,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from microsoft/phi-4 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from microsoft/Phi-3-medium-128k-instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt

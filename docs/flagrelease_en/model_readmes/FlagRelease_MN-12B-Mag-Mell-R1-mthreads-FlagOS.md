@@ -3,16 +3,16 @@
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Metax** container image supporting deployment within minutes
+- Released **FlagOS-Mthreads** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | phi-4-metax-FlagOS-Origin | phi-4-metax-FlagOS-FlagOS |
-|--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 62.0 | 68.0 |
+| Metrics      | MN-12B-Mag-Mell-R1-mthreads-FlagOS-Origin | MN-12B-Mag-Mell-R1-mthreads-FlagOS-FlagOS |
+|--------------|-------------------------------------------|-------------------------------------------|
+| GPQA_Diamond | 0 | 28.57 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,29 +21,31 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 29.4.0 |
-| Operating System | Ubuntu 22.04.3 LTS (Jammy Jellyfish) |
+| Docker Version   | 24.0.7
+24.0.7
+22.04.1 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/phi-4-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607291930-v2
+docker pull harbor.baai.ac.cn/flagrelease-public/mn-12b-mag-mell-r1-mthreads001-gems5.3.0-tree0.6.1-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt27-musa43-x64-3.3.6-server:202607300814-v2
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/phi-4-metax-FlagOS --local_dir /data/phi-4-FlagOS
+modelscope download --model FlagRelease/MN-12B-Mag-Mell-R1-mthreads-FlagOS --local_dir /data/MN-12B-Mag-Mell-R1-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g --group-add video --ulimit memlock=-1 --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri --device=/dev/mxcd -v /data:/data harbor.baai.ac.cn/flagrelease-public/phi-4-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202607291930-v2 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=16g --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --tmpfs /tmp:exec -e MTHREADS_VISIBLE_DEVICES=all -e MTHREADS_DRIVER_CAPABILITIES=all -v /data:/data harbor.baai.ac.cn/flagrelease-public/mn-12b-mag-mell-r1-mthreads001-gems5.3.0-tree0.6.1-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt27-musa43-x64-3.3.6-server:202607300814-v2 sleep infinity
 ```
 ### Start the Server
 ```bash
-vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi-4 --tensor-parallel-size 1 --max-model-len 16384 --trust-remote-code
+vllm serve /data/MN-12B-Mag-Mell-R1-FlagOS --host 0.0.0.0 --port 8000 --served-model-name MN-12B-Mag-Mell-R1 --tensor-parallel-size 1 --max-model-len 32768 --enforce-eager --trust-remote-code
 ```
 
 ## Service Invocation
@@ -52,7 +54,7 @@ vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
+    "model": "MN-12B-Mag-Mell-R1",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -105,4 +107,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from microsoft/phi-4 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from inflatebot/MN-12B-Mag-Mell-R1 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
