@@ -18,67 +18,66 @@ The advanced capabilities of the ERNIE 4.5 models, particularly the MoE-based A4
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | ERNIE-4.5-21B-A3B-PT-Nvidia-Origin | ERNIE-4.5-21B-A3B-PT-Hygon-FlagOS |
+| Metrics      | ERNIE-4.5-21B-A3B-PT-Nvidia-Origin | ERNIE-4.5-21B-A3B-PT-Metax-FlagOS |
 |--------------|--------------------------------|--------------------------------------|
-| aime | 0.3667 | 0.4 |
-| gpqa_generative_cot | 0.5713 | 0.5831 |
-| mmlu_pro | 0.6644 | 0.6618 |
-| musr_generative | 0.6296 | 0.6495 |
-| livebench_new | 0.5563 | 0.5537 |
+| aime         | 0.3667                         | 0.3333                                  |
+| gpqa_generative_cot         | 0.5713                         | 0.5763                               |
+| musr_generative         | 0.6296                         | 0.6495                               |
+| mmlu_pro     | 0.6644                         | 0.6577                               |
+| livebench_new    | 0.5563                         | 0.5645                               |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.5, build 55c4c88 |
-| Operating System | 22.04.4 LTS (Jammy Jellyfish) |
+| Docker Version   | Docker Version 28.0.4, build b8034c0 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291650
+docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-metax-tree_0.5.1_metax3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_c550-arc_x86_64-driver_3.3.12:2606171358
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS --local_dir /data/models/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS
+modelscope download --model FlagRelease/ERNIE-4.5-21B-A3B-PT-metax-FlagOS --local_dir /data/ERNIE-4.5-21B-A3B-PT-metax-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name flagos \
-  --network=host \
-  --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
+docker run -it \
   --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
-  -v /data/models:/data/models \
+  --device=/dev/mxcd \
   --group-add video \
-  --cap-add=SYS_PTRACE \
+  --name flagos \
+  --device=/dev/mem \
+  --network=host \
   --security-opt seccomp=unconfined \
-  -itd \
-  harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291650 \
-  sleep infinity
+  --security-opt apparmor=unconfined \
+  --shm-size '32gb' \
+  --ulimit memlock=-1 \
+  -v /usr/local/:/usr/local/ \
+  -v /data:/data \
+  harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-metax-tree_0.5.1_metax3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_c550-arc_x86_64-driver_3.3.12:2606171358
 docker exec -it flagos bash
 ```
 ### Start the Server
 ```bash
-nohup env GEMS_VENDOR=hygon \
+nohup env VLLM_FL_FLAGOS_BLACKLIST=masked_fill,masked_fill_,add,mm,sub \
         VLLM_PLUGINS=fl \
         USE_FLAGGEMS=1 \
-        vllm serve --model /data/models/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS \
+        vllm serve --model /data/ERNIE-4.5-21B-A3B-PT-metax-FlagOS \
         --tensor-parallel-size 1 \
         --enforce-eager \
         --served-model-name ernie-4.5-21b-a3b-pt-flagos \

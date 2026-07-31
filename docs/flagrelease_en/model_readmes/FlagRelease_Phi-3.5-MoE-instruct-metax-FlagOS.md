@@ -8,98 +8,102 @@ license: apache-2.0
 tasks: []
 ---
 # Introduction
-AI21-Jamba-1.5-Mini is an open-source large language model released by AI21. This release completes adaptation and validation on the Nvidia platform and is published based on the FlagOS software stack.
+Phi-3.5-MoE is a lightweight, state-of-the-art open model built upon datasets used for Phi-3 - synthetic data and filtered publicly available documents - with a focus on very high-quality, reasoning dense data. The model supports multilingual and comes with 128K context length (in tokens). The model underwent a rigorous enhancement process, incorporating supervised fine-tuning, proximal policy optimization, and direct preference optimization to ensure precise instruction adherence and robust safety measures.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
+
 # Evaluation Results
 ## Benchmark Result
-| Metrics                         | AI21-Jamba-1.5-Mini-Nvidia-Origin | AI21-Jamba-1.5-Mini-Hygon-FlagOS |
-|---------------------------------|-----------------------------------|----------------------------------|
-| GPQA_Diamond                    | 0.177                             | 0.222                            |
-| GPQA_Generative_CoT             | 0.218                             | 0.223                            |
-| LiveBench_New                   | 0.275                             | 0.267                            |
-| MUSR_Generative                 | 0.290                             | 0.300                            |
-| MMLU_Pro                        | 0.401                             | 0.406                            |
-
-
+| Metrics             | Phi-3.5-MoE-instruct-Nvidia-Origin | Phi-3.5-MoE-instruct-Metax-FlagOS |
+|---------------------|--------------------------------|--------------------------------------|
+|        aime         | 0.0334                         | 0.0667                               |
+| gpqa_generative_cot | 0.3171                         | 0.3213                               |
+|      mmlu_pro       | 0.5336                         | 0.5299                               |
+|   musr_generative   | 0.5040                         | 0.5119                               |
+|    livebench_new    | 0.2863                         | 0.2769                               |
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 28.0.4 |
+| Operating System | Ubuntu 22.04.4 LTS |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451
+docker pull harbor.baai.ac.cn/external-cooperation/phi-3.5-moe-instruct-metax-tree_0.5.1-gems_0.5.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0.devmetax3.3.0.2_cu116_pcp_maca3.3.0.15-gpu_metax3.3.12_arc_x86_64-driver_3.3.12_count8:26061536
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download \
-  --model FlagRelease/AI21-Jamba-1.5-Mini-hygon-FlagOS \
-  --local_dir /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS
+modelscope download --model FlagRelease/Phi-3.5-MoE-instruct-metax-FlagOS --local_dir /data/Phi-3.5-MoE-instruct-metax-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name ai21-jamba-hygon \
-  --network=host \
-  --privileged=true \
-  --shm-size=16g \
-  -v /data/models:/data/models \
-  -v /opt/hyhal:/opt/hyhal:ro \
-  -itd \
-  harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451 \
-  sleep infinity
-
-docker exec -it ai21-jamba-hygon bash
-
+docker run -itd --name=Phi-3.5-MoE-instruct-metax-FlagOS --privileged --network=host -v /data:/data harbor.baai.ac.cn/external-cooperation/phi-3.5-moe-instruct-metax-tree_0.5.1-gems_0.5.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0.devmetax3.3.0.2_cu116_pcp_maca3.3.0.15-gpu_metax3.3.12_arc_x86_64-driver_3.3.12_count8:26061536 sleep infinity
+docker exec -it Phi-3.5-MoE-instruct-metax-FlagOS /bin/bash
 ```
 ### Start the Server
 ```bash
-nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  TRITON_ALL_BLOCKS_PARALLEL=1 \
-  vllm serve \
-  --model /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS \
-  --tensor-parallel-size 2 \
+export VLLM_PLUGINS=fl && \
+export TRITON_ALL_BLOCKS_PARALLEL=1 && \
+export USE_FLAGGEMS=1 && \
+export VLLM_FL_FLAGOS_WHITELIST=arange,argmax,lt,rand_like,zero_,true_divide_,layer_norm,where_self_out,to_copy,cos,exponential_,repeat,true_divide,lt_scalar,pow_scalar,where_self,embedding,bitwise_not,max,bitwise_and_tensor,bitwise_or_tensor,full,cumsum_out,le,scatter,min,index_select,neg,zeros,reciprocal,mean,std,sin && \
+nohup vllm serve /data/Phi-3.5-MoE-instruct-metax-FlagOS \
+  --served-model-name phi-3.5-moe-instruct-metax-flagos \
+  --host 0.0.0.0 \
+  --port 8230 \
+  --trust-remote-code \
   --enforce-eager \
-  --max-cudagraph-capture-size 0 \
-  --served-model-name ai21_flagos \
-  --port 8131 \
-  --gpu-memory-utilization 0.85 \
-  > /workspace/ai21-flagos.log 2>&1 &
+  --tensor-parallel-size 2 \
+  --gpu-memory-utilization 0.9 \
+  --max-model-len 8192 \
+  > Phi-3.5-MoE.log 2>&1 &
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8131/v1/chat/completions \
+curl http://localhost:8230/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "ai21_flagos",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你好"
-      }
-    ]
+    "model": "phi-3.5-moe-instruct-metax-flagos",
+    "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
+
+### AnythingLLM Integration Guide
+
+#### 1. Download & Install
+
+- Visit the official site: https://anythingllm.com/
+- Choose the appropriate version for your OS (Windows/macOS/Linux)
+- Follow the installation wizard to complete the setup
+
+#### 2. Configuration
+
+- Launch AnythingLLM
+- Open settings (bottom left, fourth tab)
+- Configure core LLM parameters
+- Click "Save Settings" to apply changes
+
+#### 3. Model Interaction
+
+- After model loading is complete:
+- Click **"New Conversation"**
+- Enter your question (e.g., “Explain the basics of quantum computing”)
+- Click the send button to get a response
 
 # Technical Overview
 **FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
@@ -118,6 +122,7 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
 
+
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -126,6 +131,9 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
+
 # License
-The model weights are derived from AI-ModelScope/AI21-Jamba-1.5-Mini and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from LLM-Research/Phi-3.5-MoE-instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+
+
 

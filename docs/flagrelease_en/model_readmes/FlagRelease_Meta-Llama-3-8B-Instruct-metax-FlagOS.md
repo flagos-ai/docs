@@ -8,91 +8,77 @@ license: apache-2.0
 tasks: []
 ---
 # Introduction
-The advanced capabilities of the ERNIE 4.5 models, particularly the MoE-based A47B and A3B series, are underpinned by several key technical innovations.
-
-1. **Multimodal Heterogeneous MoE Pre-Training:** The models are jointly trained on both textual and visual modalities to better capture the nuances of multimodal information and improve performance on tasks involving text understanding and generation, image understanding, and cross-modal reasoning. To achieve this without one modality hindering the learning of another, a *heterogeneous MoE structure* was designed, incorporating *modality-isolated routing*, *router orthogonal loss*, and *multimodal token-balanced loss*. These architectural choices ensure that both modalities are effectively represented, allowing for mutual reinforcement during training.
-
-2. **Scaling-Efficient Infrastructure:** A novel heterogeneous hybrid parallelism and hierarchical load balancing strategy is introduced for efficient training of ERNIE 4.5 models. By utilizing intra-node expert parallelism, memory-efficient pipeline scheduling, FP8 mixed-precision training, and fine-grained recomputation methods, high pre-training throughput is achieved. For inference, a *multi-expert parallel collaboration* method and a *convolutional code quantization* algorithm are employed to achieve 4-bit/2-bit lossless quantization. Furthermore, PD disaggregation with dynamic role switching is introduced for effective resource utilization, enhancing inference performance for ERNIE 4.5 MoE models. Built on [PaddlePaddle](GitHub - PaddlePaddle/Paddle: PArallel Distributed Deep LEarning: Machine Learning Framework from In), ERNIE 4.5 delivers high-performance inference across a wide range of hardware platforms.
-
-3. **Modality-Specific Post-Training:** To meet the diverse requirements of real-world applications, variants of the pre-trained model are fine-tuned for specific modalities. The LLMs are optimized for general-purpose language understanding and generation, while the VLMs focus on vision-language understanding and support both thinking and non-thinking modes. Each model employs a combination of *Supervised Fine-tuning (SFT)*, *Direct Preference Optimization (DPO)*, or a modified reinforcement learning method named *Unified Preference Optimization (UPO)* during post-training.
+Meta developed and released the Meta Llama 3 family of Large Language Models (LLMs), a suite of generative text models available in pre-trained and instruction-tuned variants with parameter sizes of 8B and 70B. The instruction-tuned Llama 3 models are optimized for dialogue scenarios and outperform many existing open-source chat models on mainstream industry benchmarks. Additionally, great emphasis was placed on enhancing model helpfulness and safety throughout the development process.
+Model Developer: Meta
+Variants: Llama 3 comes in two parameter sizes (8B and 70B), with both pre-trained and instruction-tuned releases available.
+Input: The model only accepts text inputs.
+Output: The model generates only text and code.
+Model Architecture: Llama 3 is an autoregressive language model built on an optimized Transformer architecture. Its instruction-tuned variants leverage Supervised Fine-Tuning (SFT) and Reinforcement Learning from Human Feedback (RLHF) to align outputs with human preferences regarding helpfulness and safety.
 
 ### Integrated Deployment
-- Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Out-of-the-box inference scripts with pre-configured hardware and software parameters	
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
-- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
+- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | ERNIE-4.5-21B-A3B-PT-Nvidia-Origin | ERNIE-4.5-21B-A3B-PT-Hygon-FlagOS |
+| Metrics      | Meta-Llama-3-8B-Instruct-Nvidia-Origin | Meta-Llama-3-8B-Instruct-Metax-FlagOS |
 |--------------|--------------------------------|--------------------------------------|
-| aime | 0.3667 | 0.4 |
-| gpqa_generative_cot | 0.5713 | 0.5831 |
-| mmlu_pro | 0.6644 | 0.6618 |
-| musr_generative | 0.6296 | 0.6495 |
-| livebench_new | 0.5563 | 0.5537 |
-
+| musr_generative    |              0.4524                   |                   0.4392                |
+| mmlu_pro           |              0.2174                   |                   0.2207                |
+| aime               |                 0                     |                      0                  |
+| livebench_new      |              0.2835                   |                   0.2847                |
+| gpqa_generative_cot|              0.3154                   |                   0.307                |
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.5, build 55c4c88 |
-| Operating System | 22.04.4 LTS (Jammy Jellyfish) |
+| Docker Version   | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
-## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291650
+docker pull harbor.baai.ac.cn/external-cooperation/meta-llama-3-8b-instruct-metax-tree_0.5.1_metax3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_c550-arc_x86_64-driver_3.3.12:2607280858
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS --local_dir /data/models/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS
+modelscope download --model FlagRelease/Meta-Llama-3-8B-Instruct-metax-FlagOS --local_dir /data/models/Meta-Llama-3-8B-Instruct-metax-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name flagos \
+docker run -itd \
+  --name=Meta-Llama-3-8B-Instruct-metax-FlagOS \
+  --privileged \
   --network=host \
-  --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
-  --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
-  -v /data/models:/data/models \
-  --group-add video \
-  --cap-add=SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -itd \
-  harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-hygon-tree_0.5.0_hcu3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291650 \
+  -v /data:/data \
+harbor.baai.ac.cn/external-cooperation/meta-llama-3-8b-instruct-metax-tree_0.5.1_metax3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_c550-arc_x86_64-driver_3.3.12:2607280858 \
   sleep infinity
-docker exec -it flagos bash
+
+docker exec -it Meta-Llama-3-8B-Instruct-metax-FlagOS bash
 ```
 ### Start the Server
 ```bash
-nohup env GEMS_VENDOR=hygon \
-        VLLM_PLUGINS=fl \
-        USE_FLAGGEMS=1 \
-        vllm serve --model /data/models/ERNIE-4.5-21B-A3B-PT-hygon-FlagOS \
-        --tensor-parallel-size 1 \
-        --enforce-eager \
-        --served-model-name ernie-4.5-21b-a3b-pt-flagos \
-        --port 8000 \
-        > serve.log 2>&1 &
+export VLLM_PLUGINS=fl 
+export TRITON_ALL_BLOCKS_PARALLEL=1 
+export USE_FLAGGEMS=1
+export VLLM_FL_FLAGOS_WHITELIST="ones, zeros, arange_start, true_divide_, cos, sin, reciprocal, true_divide, cumsum_out, copy_, full, lt, scatter, index"
+nohup vllm serve /data/models/Meta-Llama-3-8B-Instruct-metax-FlagOS --served-model-name Meta-Llama-3-8B-Instruct-metax-FlagOS --port 8989 --enforce-eager > Llama-3-8B-fl.log 2>&1 &
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8000/v1/chat/completions \
+curl http://localhost:8989/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "ernie-4.5-21b-a3b-pt-flagos",
+    "model": "Meta-Llama-3-8B-Instruct-metax-FlagOS",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -145,5 +131,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from PaddlePaddle/ERNIE-4.5-21B-A3B-PT and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
-
+The model weights are derived from LLM-Research/Meta-Llama-3-8B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt

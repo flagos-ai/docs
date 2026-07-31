@@ -81,36 +81,21 @@ docker exec -it Phi-3.5-MoE-instruct-nvidia-flagOS /bin/bash
 ```bash
 
 export VLLM_PLUGINS=fl
-
 export TRITON_ALL_BLOCKS_PARALLEL=1
-
 export USE_FLAGGEMS=1
-
 export CUDA_VISIBLE_DEVICES=3
 
-export VLLM_FL_FLAGOS_WHITELIST="min,mean,arange,max,gather,silu_and_mul,moe_sum,moe_align_block_size,softmax,rand_like,where_self_out,where_self,argmax,true_divide_,true_divide,sort,bitwise_not,embedding,cos,sin,std,reciprocal,lt,ge_scalar,abs"
-
-ulimit -n 2048 && nohup vllm serve \
-
---model /data/models/Phi-3.5-MoE-instruct-nvidia-FlagOS \
-
---served-model-name phi-3.5-moe-instruct-nvidia-flagos \
-
---host 0.0.0.0 \
-
---port 6679 \
-
---max-model-len 10000 \
-
---gpu-memory-utilization 0.95 \
-
---trust-remote-code \
-
---tensor-parallel-size 1 \
-
---enforce-eager \
-
-> phi-3.5_flagos.log 2>&1 &
+ulimit -n 2048 && nohup env VLLM_FL_FLAGOS_WHITELIST="min,mean,arange,max,gather,silu_and_mul,moe_sum,moe_align_block_size,softmax,rand_like,where_self_out,where_self,argmax,true_divide_,true_divide,sort,bitwise_not,embedding,cos,sin,std,reciprocal,lt,ge_scalar,abs" VLLM_USE_MODELSCOPE=true vllm serve \
+  --model /data/models/Phi-3.5-MoE-instruct-nvidia-FlagOS \
+  --served-model-name phi-3.5-moe-instruct-nvidia-flagos \
+  --host 0.0.0.0 \
+  --port 6679 \
+  --max-model-len 10000 \
+  --gpu-memory-utilization 0.95 \
+  --trust-remote-code \
+  --tensor-parallel-size 1 \
+  --enforce-eager \
+  > phi-3.5_flagos.log 2>&1 &
 
 ```
 

@@ -8,99 +8,107 @@ license: apache-2.0
 tasks: []
 ---
 # Introduction
-AI21-Jamba-1.5-Mini is an open-source large language model released by AI21. This release completes adaptation and validation on the Nvidia platform and is published based on the FlagOS software stack.
-
+ERNIE-4.5-0.3B-PT is a lightweight foundational LLM from Baidu Wenxin series.This release is fully adapted to Muxi C550 chip with FlagOS acceleration stack.Precompiled Triton cache, FlagGems operator logs and 4k context benchmark data are embedded in the model folder.It supports out-of-the-box vLLM inference via vLLM-plugin-FL, with obvious throughput improvement compared with native implementation on Muxi hardware.
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics                         | AI21-Jamba-1.5-Mini-Nvidia-Origin | AI21-Jamba-1.5-Mini-Hygon-FlagOS |
-|---------------------------------|-----------------------------------|----------------------------------|
-| GPQA_Diamond                    | 0.177                             | 0.222                            |
-| GPQA_Generative_CoT             | 0.218                             | 0.223                            |
-| LiveBench_New                   | 0.275                             | 0.267                            |
-| MUSR_Generative                 | 0.290                             | 0.300                            |
-| MMLU_Pro                        | 0.401                             | 0.406                            |
-
+|        Metrics      | ERNIE-4.5-0.3B-PT-Nvidia-Origin | ERNIE-4.5-0.3B-PT-Metax-FlagOS |
+|---------------------|---------------------------------|--------------------------------|
+| musr_generative     |  0.377                          | 0.3717                         |
+| mmlu_pro            |  0.1737                         | 0.1758                         |
+| gpqa_generative_cot |  0.25                           | 0.2424                         |
+| livebench_new       |  0.1495                         | 0.1456                         |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451
+docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-0.3b-pt-muxi-tree_0.5.1-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12-torch_2.8.0-pcp_maca3.3.0.15-gpu_c550-arc_amd64-driver_3.3.12:2606161504
+
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download \
-  --model FlagRelease/AI21-Jamba-1.5-Mini-hygon-FlagOS \
-  --local_dir /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS
+modelscope download --model FlagRelease/ERNIE-4.5-0.3B-PT-metax-FlagOS --local_dir /data/ERNIE-4.5-0.3B-PT-metax-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name ai21-jamba-hygon \
-  --network=host \
-  --privileged=true \
-  --shm-size=16g \
-  -v /data/models:/data/models \
-  -v /opt/hyhal:/opt/hyhal:ro \
-  -itd \
-  harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451 \
-  sleep infinity
-
-docker exec -it ai21-jamba-hygon bash
-
+   docker run -d \ 
+   --name ernie-4.5-0.3b-flagos \ 
+   --privileged \ 
+   --net=host \ 
+   --ipc=host \ 
+   -v /usr/local/models:/usr/local/models \ 
+   -v /usr/local/dev:/usr/local/dev \
+   -v /data:/data \
+   harbor.baai.ac.cn/external-cooperation/ernie-4.5-0.3b-pt-muxi-tree_0.5.1-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12-torch_2.8.0-pcp_maca3.3.0.15-gpu_c550-arc_amd64-driver_3.3.12:2606161504 \ 
+   sleep infinity
+docker exec -it ernie-4.5-0.3b-flagos /bin/bash
 ```
 ### Start the Server
 ```bash
-nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  TRITON_ALL_BLOCKS_PARALLEL=1 \
-  vllm serve \
-  --model /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS \
-  --tensor-parallel-size 2 \
+export VLLM_PLUGINS=fl
+export TRITON_ALL_BLOCKS_PARALLEL=1
+export VLLM_USE_MODELSCOPE=true
+
+ulimit -n 2048 && nohup env VLLM_FL_FLAGOS_BLACKLIST="masked_fill,masked_fill_,mm,sort,sort_stable,cumsum,cumsum_out,gather,exponential_,arange_start,index" vllm serve /data/ERNIE-4.5-0.3B-PT-metax-FlagOS \
+  --served-model-name ernie-4.5-0.3b-flagos \
+  --port 9010 \
+  --tensor-parallel-size 1 \
   --enforce-eager \
-  --max-cudagraph-capture-size 0 \
-  --served-model-name ai21_flagos \
-  --port 8131 \
-  --gpu-memory-utilization 0.85 \
-  > /workspace/ai21-flagos.log 2>&1 &
+  --trust-remote-code \
+  > ernie_flagos.log 2>&1 &
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8131/v1/chat/completions \
+curl http://localhost:9010/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "ai21_flagos",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你好"
-      }
-    ]
+    "model": "ernie-4.5-0.3b-flagos",
+    "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
 
+### AnythingLLM Integration Guide
+
+#### 1. Download & Install
+
+- Visit the official site: https://anythingllm.com/
+- Choose the appropriate version for your OS (Windows/macOS/Linux)
+- Follow the installation wizard to complete the setup
+
+#### 2. Configuration
+
+- Launch AnythingLLM
+- Open settings (bottom left, fourth tab)
+- Configure core LLM parameters
+- Click "Save Settings" to apply changes
+
+#### 3. Model Interaction
+
+- After model loading is complete:
+- Click **"New Conversation"**
+- Enter your question (e.g., “Explain the basics of quantum computing”)
+- Click the send button to get a response
 # Technical Overview
 **FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
@@ -127,5 +135,5 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from AI-ModelScope/AI21-Jamba-1.5-Mini and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from PaddlePaddle/ERNIE-4.5-0.3B-PT and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
 

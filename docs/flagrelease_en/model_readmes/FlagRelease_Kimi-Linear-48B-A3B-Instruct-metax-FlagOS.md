@@ -8,99 +8,112 @@ license: apache-2.0
 tasks: []
 ---
 # Introduction
-AI21-Jamba-1.5-Mini is an open-source large language model released by AI21. This release completes adaptation and validation on the Nvidia platform and is published based on the FlagOS software stack.
+Kimi-Linear-48B-A3B-Instruct is a high-efficiency large language model developed by MoonshotAI. Built with an innovative hybrid linear attention architecture and equipped with 48B total parameters, it is specially optimized for long-context comprehension, multi-turn dialogue and complex reasoning scenarios, supporting an ultra-long context window up to 1 million tokens.
+
+Adopting a 3:1 structural ratio of Kimi Delta Attention and global MLA, this model greatly cuts down KV cache occupancy and improves inference throughput while maintaining strong comprehensive capability. It achieves outstanding results on multiple authoritative benchmarks, natively compatible with Transformers and vLLM frameworks, and can be quickly deployed for long document parsing, knowledge question answering and industrial intelligent conversation services.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics                         | AI21-Jamba-1.5-Mini-Nvidia-Origin | AI21-Jamba-1.5-Mini-Hygon-FlagOS |
-|---------------------------------|-----------------------------------|----------------------------------|
-| GPQA_Diamond                    | 0.177                             | 0.222                            |
-| GPQA_Generative_CoT             | 0.218                             | 0.223                            |
-| LiveBench_New                   | 0.275                             | 0.267                            |
-| MUSR_Generative                 | 0.290                             | 0.300                            |
-| MMLU_Pro                        | 0.401                             | 0.406                            |
-
+| Metrics             | Kimi-Linear-48B-A3B-Instruct-Nvidia-Origin | Kimi-Linear-48B-A3B-Instruct-Metax-FlagOS |
+| ------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
+| aime                | 0.4667                                                   | 0.4620                                                   |
+| musr_generative     | 0.5926                                                   | 0.5542                                                   |
+| mmlu_pro            | 0.515                                                    | 0.4784                                                   |
+| gpqa_generative_cot | 0.4295                                                   | 0.3985                                                   |
+| livebench_new       | 0.5438                                                   | 0.5231                                                   |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451
+docker pull harbor.baai.ac.cn/external-cooperation/kimi-linear-48b-a3b-instruct-metax-tree_0.5.1_metax3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0_metax3.3.0.2_cu128-pcp_cuda12.8-gpu_metax_c550-arc_amd64-driver_3.3.12:2606081508
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download \
-  --model FlagRelease/AI21-Jamba-1.5-Mini-hygon-FlagOS \
-  --local_dir /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS
+modelscope download --model FlagRelease/Kimi-Linear-48B-A3B-Instruct-metax-FlagOS --local_dir /data/Kimi-Linear-48B-A3B-Instruct-metax-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name ai21-jamba-hygon \
+docker run -itd \
+  --name=flagos \
+  --privileged \
   --network=host \
-  --privileged=true \
-  --shm-size=16g \
-  -v /data/models:/data/models \
-  -v /opt/hyhal:/opt/hyhal:ro \
-  -itd \
-  harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451 \
+  -v /data:/data \
+  harbor.baai.ac.cn/external-cooperation/kimi-linear-48b-a3b-instruct-metax-tree_0.5.1_metax3.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.11-torch_2.8.0_metax3.3.0.2_cu128-pcp_cuda12.8-gpu_metax_c550-arc_amd64-driver_3.3.12:2606081508 \
   sleep infinity
-
-docker exec -it ai21-jamba-hygon bash
-
+docker exec -it flagos  bash
 ```
 ### Start the Server
 ```bash
-nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  TRITON_ALL_BLOCKS_PARALLEL=1 \
-  vllm serve \
-  --model /data/models/AI21-Jamba-1.5-Mini-hygon-FlagOS \
-  --tensor-parallel-size 2 \
-  --enforce-eager \
-  --max-cudagraph-capture-size 0 \
-  --served-model-name ai21_flagos \
-  --port 8131 \
-  --gpu-memory-utilization 0.85 \
-  > /workspace/ai21-flagos.log 2>&1 &
+export VLLM_PLUGINS=fl
+export TRITON_ALL_BLOCKS_PARALLEL=1
+export USE_FLAGGEMS=1
+export CUDA_VISIBLE_DEVICES=0,1
+
+export VLLM_FL_FLAGOS_BLACKLIST="sort,mm,mul,masked_fill_"
+
+ulimit -n 2048 && nohup vllm serve \
+--model /data/Kimi-Linear-48B-A3B-Instruct-metax-FlagOS \
+--served-model-name kimi-linear-48b-a3b-instruct \
+--host 0.0.0.0 \
+--port 8000 \
+--trust-remote-code \
+--tensor-parallel-size 2 \
+--enforce-eager \
+> kimi_flagos.log 2>&1 &
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8131/v1/chat/completions \
+curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "ai21_flagos",
-    "messages": [
-      {
-        "role": "user",
-        "content": "你好"
-      }
-    ]
+    "model": "kimi-linear-48b-a3b-instruct",
+    "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
 
+### AnythingLLM Integration Guide
+
+#### 1. Download & Install
+
+- Visit the official site: https://anythingllm.com/
+- Choose the appropriate version for your OS (Windows/macOS/Linux)
+- Follow the installation wizard to complete the setup
+
+#### 2. Configuration
+
+- Launch AnythingLLM
+- Open settings (bottom left, fourth tab)
+- Configure core LLM parameters
+- Click "Save Settings" to apply changes
+
+#### 3. Model Interaction
+
+- After model loading is complete:
+- Click **"New Conversation"**
+- Enter your question (e.g., “Explain the basics of quantum computing”)
+- Click the send button to get a response
 # Technical Overview
 **FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
@@ -127,5 +140,5 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from AI-ModelScope/AI21-Jamba-1.5-Mini and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from moonshotai/Kimi-Linear-48B-A3B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
 
