@@ -10,9 +10,9 @@
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | phi-4-hygon-FlagOS-Origin | phi-4-hygon-FlagOS-FlagOS |
-|--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 0 | 70.0 |
+| Metrics      | Qwen3-30B-A3B-Thinking-2507-hygon-FlagOS-Origin | Qwen3-30B-A3B-Thinking-2507-hygon-FlagOS-FlagOS |
+|--------------|-------------------------------------------------|-------------------------------------------------|
+| GPQA_Diamond | 0 | 72.0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,31 +21,29 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 28.2.2
-28.2.2
-22.04.1 |
+| Docker Version   | 24.0.0 |
 | Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3
+docker pull harbor.baai.ac.cn/flagrelease-public/qwen3-30b-a3b-thinking-2507-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-6.3.30-v1.4.1a:202607310518-v4
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/phi-4-hygon-FlagOS --local_dir /data/phi-4-FlagOS
+modelscope download --model FlagRelease/Qwen3-30B-A3B-Thinking-2507-hygon-FlagOS --local_dir /data/Qwen3-30B-A3B-Thinking-2507-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-public/qwen3-30b-a3b-thinking-2507-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-6.3.30-v1.4.1a:202607310518-v4 sleep infinity
 ```
 ### Start the Server
 ```bash
-VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi-4 --tensor-parallel-size 1 --max-model-len 16384 --trust-remote-code
+VLLM_PLUGINS=fl vllm serve /data/Qwen3-30B-A3B-Thinking-2507-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Qwen3-30B-A3B-Thinking-2507 --tensor-parallel-size 2 --max-model-len 32768 --trust-remote-code --reasoning-parser qwen3
 ```
 
 ## Service Invocation
@@ -54,7 +52,7 @@ VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --serve
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
+    "model": "Qwen3-30B-A3B-Thinking-2507",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -107,4 +105,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from microsoft/phi-4 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Qwen/Qwen3-30B-A3B-Thinking-2507 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt

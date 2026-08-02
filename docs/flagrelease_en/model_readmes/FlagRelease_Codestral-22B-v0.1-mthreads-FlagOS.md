@@ -3,16 +3,16 @@
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Mthreads** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | phi-4-hygon-FlagOS-Origin | phi-4-hygon-FlagOS-FlagOS |
-|--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 0 | 70.0 |
+| Metrics      | Codestral-22B-v0.1-mthreads-FlagOS-Origin | Codestral-22B-v0.1-mthreads-FlagOS-FlagOS |
+|--------------|-------------------------------------------|-------------------------------------------|
+| GPQA_Diamond | 0 | 0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,31 +21,29 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 28.2.2
-28.2.2
-22.04.1 |
+| Docker Version   | 24.0.9 |
 | Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3
+docker pull harbor.baai.ac.cn/flagrelease-public/codestral-22b-v0.1-mthreads001-gems5.3.0-tree0.6.1-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt27-musa43-x64-3.3.5-server:202608020650-v2
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/phi-4-hygon-FlagOS --local_dir /data/phi-4-FlagOS
+modelscope download --model FlagRelease/Codestral-22B-v0.1-mthreads-FlagOS --local_dir /data/Codestral-22B-v0.1-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=16g --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --tmpfs /tmp:exec -e MTHREADS_VISIBLE_DEVICES=all -e MTHREADS_DRIVER_CAPABILITIES=all -v /data:/data harbor.baai.ac.cn/flagrelease-public/codestral-22b-v0.1-mthreads001-gems5.3.0-tree0.6.1-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt27-musa43-x64-3.3.5-server:202608020650-v2 sleep infinity
 ```
 ### Start the Server
 ```bash
-VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi-4 --tensor-parallel-size 1 --max-model-len 16384 --trust-remote-code
+vllm serve /data/Codestral-22B-v0.1-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Codestral-22B-v0.1 --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code --enforce-eager
 ```
 
 ## Service Invocation
@@ -54,7 +52,7 @@ VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --serve
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
+    "model": "Codestral-22B-v0.1",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -107,4 +105,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from microsoft/phi-4 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from mistralai/Codestral-22B-v0.1 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt

@@ -3,16 +3,16 @@
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | phi-4-hygon-FlagOS-Origin | phi-4-hygon-FlagOS-FlagOS |
-|--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 0 | 70.0 |
+| Metrics      | MiroThinker-v1.5-30B-metax-FlagOS-Origin | MiroThinker-v1.5-30B-metax-FlagOS-FlagOS |
+|--------------|------------------------------------------|------------------------------------------|
+| GPQA_Diamond | 0 | 34.0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,31 +21,29 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 28.2.2
-28.2.2
-22.04.1 |
-| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
+| Docker Version   | 29.4.0 |
+| Operating System | Ubuntu 22.04.3 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3
+docker pull harbor.baai.ac.cn/flagrelease-public/mirothinker-v1.5-30b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202608020156-v4
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/phi-4-hygon-FlagOS --local_dir /data/phi-4-FlagOS
+modelscope download --model FlagRelease/MiroThinker-v1.5-30B-metax-FlagOS --local_dir /data/MiroThinker-v1.5-30B-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g --group-add video --ulimit memlock=-1 --security-opt seccomp=unconfined --security-opt apparmor=unconfined --device=/dev/dri --device=/dev/mxcd -v /data:/data harbor.baai.ac.cn/flagrelease-public/mirothinker-v1.5-30b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.3.12:202608020156-v4 sleep infinity
 ```
 ### Start the Server
 ```bash
-VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi-4 --tensor-parallel-size 1 --max-model-len 16384 --trust-remote-code
+VLLM_PLUGINS=fl vllm serve /data/MiroThinker-v1.5-30B-FlagOS --host 0.0.0.0 --port 8000 --served-model-name MiroThinker-v1.5-30B --tensor-parallel-size 2 --max-model-len 32768 --trust-remote-code
 ```
 
 ## Service Invocation
@@ -54,7 +52,7 @@ VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --serve
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
+    "model": "MiroThinker-v1.5-30B",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -107,4 +105,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from microsoft/phi-4 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from miromind-ai/MiroThinker-v1.5-30B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
