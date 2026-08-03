@@ -40,7 +40,7 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607101038
+docker pull harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451
 ```
 
 ### Download Open-source Model Weights
@@ -61,7 +61,7 @@ docker run \
   -v /data/models:/data/models \
   -v /opt/hyhal:/opt/hyhal:ro \
   -itd \
-  harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607101038 \
+  harbor.baai.ac.cn/external-cooperation/ai21-jamba-1.5-mini-hygon-tree_0.5.0-gems_5.0.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607291451 \
   sleep infinity
 
 docker exec -it ai21-jamba-hygon bash

@@ -85,14 +85,12 @@ docker exec -it flagos  bash
 ### Start the Server
 
 ```bash
-#建议按实际卡号调整
 export VLLM_PLUGINS=fl
 export TRITON_ALL_BLOCKS_PARALLEL=1
 export USE_FLAGGEMS=1
 export HIP_VISIBLE_DEVICES=2,3
-export VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax"
 
-ulimit -n 2048 && nohup vllm serve \
+ulimit -n 2048 && nohup env VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" vllm serve \
 --model /data/Kimi-Linear-48B-A3B-Instruct-hygon-FlagOS \
 --served-model-name kimi-linear-48b-a3b-instruct-flagos \
 --host 0.0.0.0 \
