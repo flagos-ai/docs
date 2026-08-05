@@ -1,100 +1,85 @@
 ---
-license: apache-2.0
+frameworks:
+- ""
 language:
 - zh
 - en
+license: apache-2.0
+tasks: []
 ---
-
 # Introduction
-We introduce our first-generation reasoning models, DeepSeek-R1-Zero and DeepSeek-R1. DeepSeek-R1-Zero is trained via large-scale reinforcement learning (RL) without supervised fine-tuning (SFT) as an initial stage, and it delivers outstanding reasoning capabilities. Through RL training, DeepSeek-R1-Zero naturally exhibits numerous powerful and intriguing reasoning behaviors.
-
-Nevertheless, DeepSeek-R1-Zero suffers from issues such as endless repetition, poor readability, and mixed-language outputs. To address these flaws and further boost reasoning performance, we developed DeepSeek-R1, which incorporates cold-start data prior to the RL phase. DeepSeek-R1 achieves performance comparable to OpenAI o1 on mathematical, coding, and reasoning tasks.
-
-To support the research community, we have open-sourced DeepSeek-R1-Zero, DeepSeek-R1, as well as six dense models distilled from DeepSeek-R1 based on the Llama and Qwen architectures. DeepSeek-R1-Distill-Qwen-32B outperforms OpenAI o1-mini across a wide range of benchmarks, setting a new state-of-the-art record among dense models.
-
+Seed-OSS is a series of open-source large language models developed by ByteDance's Seed Team, designed for powerful long-context, reasoning, agent and general capabilities, and versatile developer-friendly features. Although trained with only 12T tokens, Seed-OSS achieves excellent performance on several popular open benchmarks.
+We release this series of models to the open-source community under the Apache-2.0 license.
+Key Features
+    Flexible Control of Thinking Budget: Allowing users to flexibly adjust the reasoning length as needed. This capability of dynamically controlling the reasoning length enhances inference efficiency in practical application scenarios.
+    Enhanced Reasoning Capability: Specifically optimized for reasoning tasks while maintaining balanced and excellent general capabilities.
+Agentic Intelligence: Performs exceptionally well in agentic tasks such as tool-using and issue resolving.
+    Research-Friendly: Given that the inclusion of synthetic instruction data in pre-training may affect the post-training research, we released pre-trained models both with and without instruction data, providing the research community with more diverse options.
+    Native Long Context: Trained with up-to-512K long context natively.
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Metax** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Hygon-FlagOS |
-|--------------|--------------------------------|--------------------------------------|
-| musr_generative       | 0.3320                                     | 0.3475                                      |
-| mmlu_pro              | 0.1747                                     | 0.1781                                      |
-| aime                  | 0                                          | 0                                           |
-| livebench_new         | 0.1261                                     | 0.1229                                      |
-| gpqa_generative_cot   | 0.0866                                     | 0.0914                                    |
-
+| Metrics             | Seed-OSS-36B-Instruct-Nvidia-Origin | Seed-OSS-36B-Instruct-Metax-FlagOS  |
+|---------------------|-------------------------------------|-------------------------------------|
+| gpqa_generative_cot |  0.6149                             |  0.6007                             |
+| aime                |  0.6667                             |  0.6333                             |
+| musr_generative     |  0.5115                             |  0.5058                             |
+| livebench_new       |  0.4167                             |  0.4008                             |
+| mmlu_pro            |  0.4886                             |  0.4803                             |
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833
+docker pull harbor.baai.ac.cn/external-cooperation/seed-oss-36b-instruct-metax-tree_0.5.1-metax3.0-gems_0.5.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-2.8.0-metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax-arc_amd64-driver_3.3.12:2606101436
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS --local_dir /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS
+modelscope download --model FlagRelease/Seed-OSS-36B-Instruct-metax-FlagOS --local_dir /data/Seed-OSS-36B-Instruct-metax-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --network=host \
-  --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
-  --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
-  -v /data/models:/data/models \
-  --group-add video \
-  --cap-add=SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -itd \
-harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833 \
-sleep infinity
-docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS bash
+docker run -itd \
+      --name=seed-oss-36b-flagos \
+      --privileged \
+      --network=host \
+      -v /data/Seed-OSS-36B-Instruct-metax-FlagOS:/data/Seed-OSS-36B-Instruct-metax-FlagOS \
+      harbor.baai.ac.cn/external-cooperation/seed-oss-36b-instruct-metax-tree_0.5.1-metax3.0-gems_0.5.2-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-2.8.0-metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax-arc_amd64-driver_3.3.12:2606101436 \
+      sleep infinity
+docker exec -it seed-oss-36b-flagos /bin/bash
 ```
 ### Start the Server
 ```bash
-ulimit -n 2048 && nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  USE_FLAGGEMS=1 \
-  VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" \
-  vllm serve \
-  --model /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --host 0.0.0.0 \
-  --port 46840 \
-  --gpu-memory-utilization 0.90 \
-  --trust-remote-code \
-  --tensor-parallel-size 2 \
-  --enforce-eager \
-  > DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS.log 2>&1 &
-  ```
+export VLLM_PLUGINS=fl
+export TRITON_ALL_BLOCKS_PARALLEL=1
+export USE_FLAGGEMS=1
+export VLLM_FL_FLAGOS_BLACKLIST="sort,masked_fill_,mm,mul,addmm"
+nohup vllm serve --model /data/Seed-OSS-36B-Instruct-metax-FlagOS/ --served-model-name seed-oss-36b-flagos --port 8000 --tensor-parallel-size 2 --trust-remote-code --enforce-eager  --max-model-len 8192 >eager-seed-oss-gems.log 2>&1 &
+```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:46840/v1/chat/completions \
+curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS",
+    "model": "seed-oss-36b-flagos",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -147,4 +132,5 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from unsloth/Seed-OSS-36B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+

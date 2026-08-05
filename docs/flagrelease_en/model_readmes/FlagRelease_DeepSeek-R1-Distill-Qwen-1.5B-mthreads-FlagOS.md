@@ -1,18 +1,23 @@
+---
+frameworks:
+- ""
+tasks: []
+---
 # Introduction
 新模型介绍，待定....
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Mthreads** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | phi-4-hygon-FlagOS-Origin | phi-4-hygon-FlagOS-FlagOS |
-|--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 0 | 70.0 |
+| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-mthreads-FlagOS-Origin | DeepSeek-R1-Distill-Qwen-1.5B-mthreads-FlagOS-FlagOS |
+|--------------|------------------------------------------------------|------------------------------------------------------|
+| GPQA_Diamond | 0 | 0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,8 +26,8 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 28.2.2
-28.2.2
+| Docker Version   | 24.0.7
+24.0.7
 22.04.1 |
 | Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
@@ -30,22 +35,22 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3
+docker pull harbor.baai.ac.cn/flagrelease-public/deepseek-r1-distill-qwen-1.5b-mthreads001-gems5.0.0-treenone-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt27-musa43-x64-3.3.6-server:202607132258-v2
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/phi-4-hygon-FlagOS --local_dir /data/phi-4-FlagOS
+modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-mthreads-FlagOS --local_dir /data/DeepSeek-R1-Distill-Qwen-1.5B-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=16g --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --tmpfs /tmp:exec -e MTHREADS_VISIBLE_DEVICES=all -e MTHREADS_DRIVER_CAPABILITIES=all -v /data:/data harbor.baai.ac.cn/flagrelease-public/musa_gems_tree:2607081834 sleep infinity
 ```
 ### Start the Server
 ```bash
-VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi-4 --tensor-parallel-size 1 --max-model-len 16384 --trust-remote-code
+vllm serve /data/DeepSeek-R1-Distill-Qwen-1.5B-FlagOS --host 0.0.0.0 --port 8000 --served-model-name DeepSeek-R1-Distill-Qwen-1.5B --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code --enforce-eager
 ```
 
 ## Service Invocation
@@ -54,7 +59,7 @@ VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --serve
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
+    "model": "DeepSeek-R1-Distill-Qwen-1.5B",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -107,4 +112,5 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from microsoft/phi-4 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+

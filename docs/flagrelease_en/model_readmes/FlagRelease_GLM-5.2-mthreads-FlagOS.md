@@ -63,10 +63,8 @@ docker run -itd \
 docker exec -it flagos bash
 ```
 ### Start the Server
-In Rank 0
+in rank 0
 ```bash
-# ====================== Rank 0 节点操作 ======================
-## Step 1: 加载虚拟环境并配置分布式通信、性能调试环境变量
 source /root/.virtualenvs/sglang-0.5.6/bin/activate
 export TORCH_MCCL_ASYNC_ERROR_HANDLING=0
 export MCCL_SOCKET_IFNAME=bond0
@@ -81,9 +79,7 @@ export TRITON_CACHE_DIR=/root/triton_cache/
 export SGLANG_FL_FLAGOS_BLACKLIST=unique,sort,count_nonzero,cumsum,mm
 export MUSA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
 
-## Step 2: 后台启动SGLang推理服务（Rank0，流水线分片0）
-# nohup后台运行，日志输出至/tmp/serve_glm_pp0.log，&放置后台
-nohup python3 -m sglang.launch_server \
+python3 -m sglang.launch_server \
     --model-path /data/GLM-5.2 \
     --tp-size 8 --pp-size 2 --nnodes 2 \
     --node-rank 0 \
@@ -97,24 +93,10 @@ nohup python3 -m sglang.launch_server \
     --chunked-prefill-size 2048 \
     --mem-fraction-static 0.85 \
     --trust-remote-code \
-    --watchdog-timeout 3600 \
-    > /tmp/serve_glm_pp0.log 2>&1 &
-
-## Step 3: 实时跟踪Rank0启动日志，观察就绪状态
-# 持续打印日志，出现就绪字段代表Rank0初始化完成
-tail -f /tmp/serve_glm_pp0.log
-
-# 就绪标识日志：[2026-xx-xx xx:xx:xx] The server is fired up and ready to roll!
-# 完整集群初始化耗时约3~5分钟
-# 重要提示：Rank0启动后会阻塞等待Rank1节点建立分布式连接，打印Init torch distributed begin属于正常现象，此时去远端执行Rank1脚本即可
+    --watchdog-timeout 3600
 ```
-In Rank 1
+in rank 1
 ```bash
-# ====================== Rank 1 远端节点(10.1.15.176)操作 ======================
-## Step 1: 进入推理容器，加载虚拟环境、统一分布式环境变量
-# 进入运行sglang的容器
-docker exec -it flagos bash
-# 激活和Rank0完全一致的虚拟环境
 source /root/.virtualenvs/sglang-0.5.6/bin/activate
 export TORCH_MCCL_ASYNC_ERROR_HANDLING=0
 export MCCL_SOCKET_IFNAME=bond0
@@ -129,8 +111,7 @@ export TRITON_CACHE_DIR=/root/triton_cache/
 export SGLANG_FL_FLAGOS_BLACKLIST=unique,sort,count_nonzero,cumsum,mm
 export MUSA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
 
-## Step 2: 后台启动SGLang推理服务（Rank1，流水线分片1）
-nohup python3 -m sglang.launch_server \
+python3 -m sglang.launch_server \
     --model-path /data/GLM-5.2 \
     --tp-size 8 --pp-size 2 --nnodes 2 \
     --node-rank 1 \
@@ -144,10 +125,7 @@ nohup python3 -m sglang.launch_server \
     --chunked-prefill-size 2048 \
     --mem-fraction-static 0.85 \
     --trust-remote-code \
-    --watchdog-timeout 3600 \
-    > /tmp/serve_glm_pp1.log 2>&1 &
-
-
+    --watchdog-timeout 3600
 ```
 
 ## Service Invocation
@@ -157,7 +135,7 @@ curl http://localhost:30000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "glm-5.2",
-    "messages": [{"role": "user", "content": "你好"}]
+    "messages": [{"role": "user", "content": "hi"}]
   }'
 ```
 

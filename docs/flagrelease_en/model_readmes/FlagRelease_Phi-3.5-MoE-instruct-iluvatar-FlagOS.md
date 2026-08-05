@@ -1,100 +1,85 @@
 ---
-license: apache-2.0
+frameworks:
+- ""
 language:
 - zh
 - en
+license: apache-2.0
+tasks: []
 ---
-
 # Introduction
-We introduce our first-generation reasoning models, DeepSeek-R1-Zero and DeepSeek-R1. DeepSeek-R1-Zero is trained via large-scale reinforcement learning (RL) without supervised fine-tuning (SFT) as an initial stage, and it delivers outstanding reasoning capabilities. Through RL training, DeepSeek-R1-Zero naturally exhibits numerous powerful and intriguing reasoning behaviors.
-
-Nevertheless, DeepSeek-R1-Zero suffers from issues such as endless repetition, poor readability, and mixed-language outputs. To address these flaws and further boost reasoning performance, we developed DeepSeek-R1, which incorporates cold-start data prior to the RL phase. DeepSeek-R1 achieves performance comparable to OpenAI o1 on mathematical, coding, and reasoning tasks.
-
-To support the research community, we have open-sourced DeepSeek-R1-Zero, DeepSeek-R1, as well as six dense models distilled from DeepSeek-R1 based on the Llama and Qwen architectures. DeepSeek-R1-Distill-Qwen-32B outperforms OpenAI o1-mini across a wide range of benchmarks, setting a new state-of-the-art record among dense models.
+Phi-3.5-MoE is a lightweight, state-of-the-art open model built upon datasets used for Phi-3 - synthetic data and filtered publicly available documents - with a focus on very high-quality, reasoning dense data. The model supports multilingual and comes with 128K context length (in tokens). The model underwent a rigorous enhancement process, incorporating supervised fine-tuning, proximal policy optimization, and direct preference optimization to ensure precise instruction adherence and robust safety measures.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Iluvatar** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
+
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Hygon-FlagOS |
-|--------------|--------------------------------|--------------------------------------|
-| musr_generative       | 0.3320                                     | 0.3475                                      |
-| mmlu_pro              | 0.1747                                     | 0.1781                                      |
-| aime                  | 0                                          | 0                                           |
-| livebench_new         | 0.1261                                     | 0.1229                                      |
-| gpqa_generative_cot   | 0.0866                                     | 0.0914                                    |
+| Metrics             | Phi-3.5-MoE-instruct-Nvidia-Origin | Phi-3.5-MoE-instruct-Iluvatar-FlagOS |
+|---------------------|--------------------------------|--------------------------------------|
+|        aime         | 0.0334                         | 0.0334                               |
+| gpqa_generative_cot | 0.3171                         | 0.3381                               |
+|      mmlu_pro       | 0.5336                         | 0.5357                               |
+|   musr_generative   | 0.5040                         | 0.5079                               |
+|    livebench_new    | 0.2863                         | 0.2697                               |
+
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | docker_28.1.1 |
+| Operating System | ubuntu_22.04 |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833
+docker pull harbor.baai.ac.cn/external-cooperation/phi-3.5-moe-instruct-iluvatar-tree_0.5.1_iluvatar3.1-gems_5.0.2-vllm_0.13.0_cu102-plugin_0.1.1-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_cuda10.2-gpu_biv150-arc_amd64-driver_4.4.0:2606231110
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS --local_dir /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS
+modelscope download --model FlagRelease/Phi-3.5-MoE-instruct-iluvatar-FlagOS --local_dir /data/Phi-3.5-MoE-instruct-iluvatar-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --network=host \
-  --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
-  --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
-  -v /data/models:/data/models \
-  --group-add video \
-  --cap-add=SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -itd \
-harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833 \
-sleep infinity
-docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS bash
+docker run --name Phi-3.5-MoE-instruct-iluvatar-FlagOS -itd --shm-size="32g" -v /data:/data -v /mnt/op/vllm-plugin-fl:/data/models -v /dev:/dev --privileged --cap-add=ALL --pid=host --net=host -w /workspace harbor.baai.ac.cn/external-cooperation/phi-3.5-moe-instruct-iluvatar-tree_0.5.1_iluvatar3.1-gems_5.0.2-vllm_0.13.0_cu102-plugin_0.1.1-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_cuda10.2-gpu_biv150-arc_amd64-driver_4.4.0:2606231110
+docker exec -it Phi-3.5-MoE-instruct-iluvatar-FlagOS bash
 ```
 ### Start the Server
 ```bash
-ulimit -n 2048 && nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  USE_FLAGGEMS=1 \
-  VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" \
-  vllm serve \
-  --model /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
+export VLLM_PLUGINS=fl && \
+export TRITON_ALL_BLOCKS_PARALLEL=1 && \
+export USE_FLAGGEMS=1 && \
+export VLLM_FL_FLAGOS_WHITELIST=masked_fill_,masked_fill,zeros,zero_,arange,min,true_divide,pow_scalar,mean,std,to_copy,cos,sin,fill_scalar_,full,ge_scalar,lt_scalar,bitwise_and_tensor,bitwise_or_tensor,bitwise_not,embedding,layer_norm,index_select,repeat,neg,index,rand_like,argmax,where_self,where_self_out,true_divide_,cumsum_out,le,lt,reciprocal,scatter,exponential_,moe_align_block_size,moe_sum && \
+nohup vllm serve /data/Phi-3.5-MoE-instruct-iluvatar-FlagOS \
+  --served-model-name phi-3.5-moe-instruct-flagos \
   --host 0.0.0.0 \
-  --port 46840 \
-  --gpu-memory-utilization 0.90 \
+  --port 8230 \
   --trust-remote-code \
-  --tensor-parallel-size 2 \
   --enforce-eager \
-  > DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS.log 2>&1 &
-  ```
+  --tensor-parallel-size 2 \
+  --gpu-memory-utilization 0.9 \
+  --max-model-len 8192 \
+  > Phi-3.5-MoE.log 2>&1 &
+```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:46840/v1/chat/completions \
+curl http://localhost:8230/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS",
+    "model": "phi-3.5-moe-instruct-flagos",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -121,6 +106,7 @@ curl http://localhost:46840/v1/chat/completions \
 - Click **"New Conversation"**
 - Enter your question (e.g., “Explain the basics of quantum computing”)
 - Click the send button to get a response
+
 # Technical Overview
 **FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
@@ -138,6 +124,7 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
 
+
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -146,5 +133,7 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
+
 # License
-The model weights are derived from deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from LLM-Research/Phi-3.5-MoE-instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+
