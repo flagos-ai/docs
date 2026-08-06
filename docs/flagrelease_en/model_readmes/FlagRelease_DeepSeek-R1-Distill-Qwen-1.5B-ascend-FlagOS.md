@@ -1,8 +1,11 @@
 ---
-license: apache-2.0
+frameworks:
+- ""
 language:
 - zh
 - en
+license: apache-2.0
+tasks: []
 ---
 
 # Introduction
@@ -13,80 +16,51 @@ Nevertheless, DeepSeek-R1-Zero suffers from issues such as endless repetition, p
 To support the research community, we have open-sourced DeepSeek-R1-Zero, DeepSeek-R1, as well as six dense models distilled from DeepSeek-R1 based on the Llama and Qwen architectures. DeepSeek-R1-Distill-Qwen-32B outperforms OpenAI o1-mini across a wide range of benchmarks, setting a new state-of-the-art record among dense models.
 
 ### Integrated Deployment
-- Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Out-of-the-box inference scripts with pre-configured hardware and software parameters	
+- Released **FlagOS-Ascend** container image supporting deployment within minutes
 ### Consistency Validation
-- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
+- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Hygon-FlagOS |
+| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Ascend-FlagOS |
 |--------------|--------------------------------|--------------------------------------|
-| musr_generative       | 0.3320                                     | 0.3475                                      |
-| mmlu_pro              | 0.1747                                     | 0.1781                                      |
-| aime                  | 0                                          | 0                                           |
-| livebench_new         | 0.1261                                     | 0.1229                                      |
-| gpqa_generative_cot   | 0.0866                                     | 0.0914                                    |
-
+| musr_generative | 0.3294 | 0.3135 |
+| mmlu_pro | 0.1371 | 0.1415 |
+| aime | 0.000 | 0.000 |
+| livebench_new | 0.0949 | 0.0944 |
+| gpqa_generative_cot | 0.0646 | 0.0654 |
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 20.10.8, build 3967b7d |
+| Operating System | Linux 5.10.0-216.0.0.115.oe2203sp4.aarch64 |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833
+docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-huawei-tree_0.5.0_ascend3.2-gems_5.0.2-vllm_0.13.0_empty-plugin_0.1.1-cx_none-python_3.12.3-torch_2.8.0-cuda12.9-gpu_metax-arc_amd64-driver_3.3.12:2607172049
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS --local_dir /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS
+modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-ascend-FlagOS --local_dir /data/vllm-plugin-fl/DeepSeek-R1-Distill-Qwen-1.5B
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --network=host \
-  --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
-  --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
-  -v /data/models:/data/models \
-  --group-add video \
-  --cap-add=SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -itd \
-harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833 \
-sleep infinity
-docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS bash
+docker run -itd --name flagos --network host --privileged --shm-size=16g -v /data:/data -v /usr/local/dcmi:/usr/local/dcmi:ro -v /usr/local/Ascend/driver:/usr/local/Ascend/driver:ro -v /usr/local/sbin/npu-smi:/usr/local/sbin/npu-smi:ro -v /etc/ascend_install.info:/etc/ascend_install.info:ro --device=/dev/davinci0 --device=/dev/davinci1 --device=/dev/davinci2 --device=/dev/davinci3 --device=/dev/davinci4 --device=/dev/davinci5 --device=/dev/davinci6 --device=/dev/davinci7 --device=/dev/davinci_manager --device=/dev/devmm_svm --device=/dev/hisi_hdc harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-huawei-tree_0.5.0_ascend3.2-gems_5.0.2-vllm_0.13.0_empty-plugin_0.1.1-cx_none-python_3.12.3-torch_2.8.0-cuda12.9-gpu_metax-arc_amd64-driver_3.3.12:2607172049 sleep infinity
+docker exec -it flagos bash
 ```
 ### Start the Server
 ```bash
-ulimit -n 2048 && nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  USE_FLAGGEMS=1 \
-  VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" \
-  vllm serve \
-  --model /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --host 0.0.0.0 \
-  --port 46840 \
-  --gpu-memory-utilization 0.90 \
-  --trust-remote-code \
-  --tensor-parallel-size 2 \
-  --enforce-eager \
-  > DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS.log 2>&1 &
-  ```
+ASCEND_RT_VISIBLE_DEVICES=0 TRITON_ALL_BLOCKS_PARALLEL=1 VLLM_PLUGINS=fl USE_FLAGGEMS=1 VLLM_FL_FLAGOS_WHITELIST=masked_fill_,sin,cos,where_self,pow_scalar,index,arange_start vllm serve --model /data/vllm-plugin-fl/DeepSeek-R1-Distill-Qwen-1.5B --served-model-name DeepSeek-R1-Distill-Qwen-1.5B --port 46840 --enforce-eager
+```
 
 ## Service Invocation
 ### Invocation Script
@@ -94,7 +68,7 @@ ulimit -n 2048 && nohup env \
 curl http://localhost:46840/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS",
+    "model": "DeepSeek-R1-Distill-Qwen-1.5B",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -148,3 +122,4 @@ We warmly welcome global developers to join us:
 4. Expand hardware adaptation support
 # License
 The model weights are derived from deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+

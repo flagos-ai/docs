@@ -1,10 +1,12 @@
 ---
-license: apache-2.0
+frameworks:
+- ""
 language:
 - zh
 - en
+license: apache-2.0
+tasks: []
 ---
-
 # Introduction
 We introduce our first-generation reasoning models, DeepSeek-R1-Zero and DeepSeek-R1. DeepSeek-R1-Zero is trained via large-scale reinforcement learning (RL) without supervised fine-tuning (SFT) as an initial stage, and it delivers outstanding reasoning capabilities. Through RL training, DeepSeek-R1-Zero naturally exhibits numerous powerful and intriguing reasoning behaviors.
 
@@ -14,87 +16,59 @@ To support the research community, we have open-sourced DeepSeek-R1-Zero, DeepSe
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Iluvatar** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Hygon-FlagOS |
+| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Iluvatar-FlagOS |
 |--------------|--------------------------------|--------------------------------------|
-| musr_generative       | 0.3320                                     | 0.3475                                      |
-| mmlu_pro              | 0.1747                                     | 0.1781                                      |
-| aime                  | 0                                          | 0                                           |
-| livebench_new         | 0.1261                                     | 0.1229                                      |
-| gpqa_generative_cot   | 0.0866                                     | 0.0914                                    |
-
+| musr_generative | 0.3320 | 0.3475 |
+| mmlu_pro | 0.1747 | 0.1781 |
+| aime | 0 | 0 |
+| livebench_new | 0.1261 | 0.1229 |
+| gpqa_generative_cot | 0.0866 | 0.0914 |
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 20.10.25, build 20.10.25-0ubuntu1~20.04.1 |
+| Operating System | Ubuntu 24.04.2 LTS (Noble Numbat) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833
+docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-iluvatar-tree_0.5.1_iluvatar3.1-gems_5.0.2-vllm_0.13.0_cu102-plugin_0.1.1-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_cuda10.2-gpu_biv150-arc_amd64-driver_4.4.0:2606251110
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS --local_dir /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS
+modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-iluvatar-FlagOS --local_dir /data/DeepSeek-R1-Distill-Qwen-1.5B-iluvatar-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --network=host \
-  --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
-  --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
-  -v /data/models:/data/models \
-  --group-add video \
-  --cap-add=SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -itd \
-harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833 \
-sleep infinity
-docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS bash
+docker run -it --name flagos --network=host --privileged=true --shm-size=16g -v /data:/data -itd harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-iluvatar-tree_0.5.1_iluvatar3.1-gems_5.0.2-vllm_0.13.0_cu102-plugin_0.1.1-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_cuda10.2-gpu_biv150-arc_amd64-driver_4.4.0:2606251110 bash
+docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-iluvatar-FlagOS bash
 ```
 ### Start the Server
 ```bash
-ulimit -n 2048 && nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  USE_FLAGGEMS=1 \
-  VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" \
-  vllm serve \
-  --model /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --host 0.0.0.0 \
-  --port 46840 \
-  --gpu-memory-utilization 0.90 \
-  --trust-remote-code \
-  --tensor-parallel-size 2 \
-  --enforce-eager \
-  > DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS.log 2>&1 &
-  ```
+CUDA_VISIBLE_DEVICES=0 VLLM_PLUGINS=fl USE_FLAGGEMS=1 VLLM_FL_FLAGOS_WHITELIST=max,index,argmax,where_self,where_self_out,gather,lt,lt_scalar,le,scatter,arange_start,ones,full,fill_scalar_,rand_like,zeros,zero_,exponential_,cat,to_copy vllm serve --model /data/DeepSeek-R1-Distill-Qwen-1.5B-iluvatar-FlagOS --served-model-name DeepSeek-R1-Distill-Qwen-1.5B --port 8000 --enforce-eager
+
+```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:46840/v1/chat/completions \
+curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS",
+    "model": "DeepSeek-R1-Distill-Qwen-1.5B",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```

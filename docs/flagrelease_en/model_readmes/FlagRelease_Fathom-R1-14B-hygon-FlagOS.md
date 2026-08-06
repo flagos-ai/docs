@@ -10,9 +10,9 @@
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | phi-4-hygon-FlagOS-Origin | phi-4-hygon-FlagOS-FlagOS |
-|--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 0 | 70.0 |
+| Metrics      | Fathom-R1-14B-hygon-FlagOS-Origin | Fathom-R1-14B-hygon-FlagOS-FlagOS |
+|--------------|-----------------------------------|-----------------------------------|
+| GPQA_Diamond | 0 | 64.0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -30,23 +30,26 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3
+docker pull harbor.baai.ac.cn/flagrelease-project/fathom-r1-14b-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202608040640-v3fix
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/phi-4-hygon-FlagOS --local_dir /data/phi-4-FlagOS
+modelscope download --model FlagRelease/Fathom-R1-14B-hygon-FlagOS --local_dir /data/Fathom-R1-14B-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/phi-4-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202607301157-v3 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/fathom-r1-14b-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-none:202608040640-v3fix sleep infinity
 ```
 ### Start the Server
 ```bash
-VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --served-model-name phi-4 --tensor-parallel-size 1 --max-model-len 16384 --trust-remote-code
+docker exec -it flagos bash
+source /opt/dtk/env.sh
+vllm serve /data/Fathom-R1-14B-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Fathom-R1-14B --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code --reasoning-parser deepseek_r1
 ```
+> The FlagOS operator configuration (`USE_FLAGGEMS=1`, `VLLM_PLUGINS=fl`, `VLLM_FL_PREFER_ENABLED=true`, and the qualified `VLLM_FL_FLAGOS_WHITELIST` operator set) is baked into the image as environment variables, so no extra environment setup is required. `source /opt/dtk/env.sh` is required before `vllm serve` to load the Hygon DTK runtime libraries.
 
 ## Service Invocation
 ### Invocation Script
@@ -54,7 +57,7 @@ VLLM_PLUGINS=fl vllm serve /data/phi-4-FlagOS --host 0.0.0.0 --port 8000 --serve
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "phi-4",
+    "model": "Fathom-R1-14B",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -107,4 +110,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from microsoft/phi-4 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from FractalAIResearch/Fathom-R1-14B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
