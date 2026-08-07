@@ -55,83 +55,25 @@ vllm serve /data/Qwen3.5-35B-A3B/ -tp 8 --served-model-name qwen --enforce-eager
 
 ## Service Invocation
 ### Invocation Script
-Input: text
-```python
-from openai import OpenAI
-# Set OpenAI's API key and API base to use vLLM's API server.
-openai_api_key = "EMPTY"
-openai_api_base = "http://localhost:8010/v1"
- 
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-                )
- 
-response = client.chat.completions.create(
-        model="qwen",
-        messages=[
-            {"role": "user", "content": "Give me a short introduction to large language models."},
-            ],
-        max_tokens=20,
-        #max_tokens=1024,
-        temperature=0.7,
-        top_p=0.8,
-        presence_penalty=1.5,
-        extra_body={
+```bash
+curl http://localhost:8010/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "qwen",
+        "messages": [
+            {"role": "user", "content": "Give me a short introduction to large language models."}
+        ],
+        "max_tokens": 20,
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "presence_penalty": 1.5,
+        "stream": true,
+        "extra_body": {
             "top_k": 20,
-            "chat_template_kwargs": {"enable_thinking": False},
-            },
-        stream=True,
-        )
-
-for chunk in response:
-    if chunk.choices and chunk.choices[0].delta.content:
-        print(chunk.choices[0].delta.content, end="", flush=True)
+            "chat_template_kwargs": {"enable_thinking": false}
+        }
+    }'
 ```
-Input: image
-```python
-from openai import OpenAI
-# Configured by environment variables
-openai_api_key = "EMPTY"
-openai_api_base = "http://localhost:8010/v1"
-client = OpenAI(
-    api_key=openai_api_key,
-    base_url=openai_api_base,
-                )
-messages = [
-    {
-        "role": "user",
-        "content": [
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": "https://qianwen-res.oss-accelerate.aliyuncs.com/Qwen3.5/demo/CI_Demo/mathv-1327.jpg"
-                }
-            },
-            {
-                "type": "text",
-                "text": "The centres of the four illustrated circles are in the corners of the square. The two big circles touch each other and also the two little circles. With which factor do you have to multiply the radii of the little circles to obtain the radius of the big circles?\nChoices:\n(A) $\\frac{2}{9}$\n(B) $\\sqrt{5}$\n(C) $0.8 \\cdot \\pi$\n(D) 2.5\n(E) $1+\\sqrt{2}$"
-            }
-        ]
-    }
-]
-response = client.chat.completions.create(
-    model="qwen",
-    messages=messages,
-    max_tokens=60,
-    temperature=1.0,
-    top_p=0.95,
-    presence_penalty=1.5,
-    extra_body={
-        "top_k": 20,
-    }, 
-    stream=False,
-)
-
-if response.choices and response.choices[0].message.content:
-    print(response.choices[0].message.content)
-```
-
 ### AnythingLLM Integration Guide
 
 #### 1. Download & Install

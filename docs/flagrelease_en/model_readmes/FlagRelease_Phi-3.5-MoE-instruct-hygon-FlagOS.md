@@ -58,8 +58,7 @@ docker exec -it phi-3.5-moe-instruct-hygon-flagos /bin/bash
 export VLLM_PLUGINS=fl && \
 export TRITON_ALL_BLOCKS_PARALLEL=1 && \
 export USE_FLAGGEMS=1 && \
-export VLLM_FL_FLAGOS_WHITELIST=zero_,zeros,arange,reciprocal,cos,sin,ge_scalar,lt_scalar,bitwise_and_tensor,bitwise_or_tensor,bitwise_not,embedding,index,rand_like,full,argmax,where_self,where_self_out,lt,cumsum_out,le,scatter,to_copy && \
-nohup vllm serve /data/Phi-3.5-MoE-instruct-hygon-FlagOS \
+ulimit -n 2048 && nohup env VLLM_FL_FLAGOS_WHITELIST="zero_,zeros,arange,reciprocal,cos,sin,ge_scalar,lt_scalar,bitwise_and_tensor,bitwise_or_tensor,bitwise_not,embedding,index,rand_like,full,argmax,where_self,where_self_out,lt,cumsum_out,le,scatter,to_copy" vllm serve /data/Phi-3.5-MoE-instruct-hygon-FlagOS \
   --served-model-name phi-3.5-moe-instruct-hygon-flagos \
   --host 0.0.0.0 \
   --port 8230 \
