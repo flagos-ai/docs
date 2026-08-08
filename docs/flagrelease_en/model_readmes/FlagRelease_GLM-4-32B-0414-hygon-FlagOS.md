@@ -1,76 +1,62 @@
----
-language:
-- zh
-- en
-license: apache-2.0
----
 # Introduction
-On May 25, ModelBest officially released and open-sourced the next-generation edge-side foundational language model, MiniCPM5-1B. With only 1B parameters, the model achieved a score of 17.9 on the AA-Index leaderboard, surpassing all open-source foundation models under 4B parameters, including Qwen3.5-2B (16.3 points). This continues the “Density Law” proposed by ModelBest — the intelligence density of large models roughly doubles every 3.5 months. The Base version was pretrained using ForgeTrain, ModelBest’s self-developed AI training framework, which is the world’s first production-grade training framework fully written by AI. After INT4 quantization, the model weights are only 0.5 GB, enabling it to run on over 90% of terminal devices, including smartphones and web browsers. Official support has already been provided for mainstream inference frameworks such as vLLM, SGLang, and llama.cpp.
+
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Armv9** container image supporting deployment within minutes
+- Released **FlagOS-Hygon** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | MiniCPM5-1B-Nvidia-Origin | MiniCPM5-1B-Armv9-BF16-FlagOS | MiniCPM5-1B-Armv9-INT8(W8A8-dyn)-FlagOS|
-|--------------|--------------------------------------|--------------------------------------|--|
-| truthfulqa_mc1 | 0.3293 | 0.2656 | 0.2815|
-| winogrande | 0.5484 | 0.5627 | 0.5525|
-| commonsense_qa | 0.3473 | 0.4267 | 0.4316|
+| Metrics      | GLM-4-32B-0414-hygon-FlagOS-Origin | GLM-4-32B-0414-hygon-FlagOS-FlagOS |
+|--------------|------------------------------------|------------------------------------|
+| GPQA_Diamond | 0 | 56.57 |
+| ERQA | - | - |
+| Aime24 | - | - |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 24.0.7|
-| Operating System | Ubuntu 22.04.5 LTS (Noble Numbat) |
+| Docker Version   | 28.2.2
+28.2.2
+22.04.1 |
+| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-minicpm5-armv9-tree_0.5.0-gems_5.0.2-vllm_none-plugin_none-cx_none-python_3.11.2-torch_2.10.0_cpu-pcp_none-gpu_cpu-arc_arm64-driver_none:202605261758
+docker pull harbor.baai.ac.cn/flagrelease-project/glm-4-32b-0414-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-6.3.28-v1.3.0b:202608081124-v3
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/MiniCPM5-1B-Armv9-FlagOS --local_dir /data/MiniCPM5-1B
+modelscope download --model FlagRelease/GLM-4-32B-0414-hygon-FlagOS --local_dir /data/GLM-4-32B-0414-FlagOS
 ```
 
 ### Start the Container
 ```bash
-#Container Startup
-sudo docker run --init --detach --net=host --user 0 --ipc=host \
-           -v /data:/data --security-opt=seccomp=unconfined \
-           --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
-           --shm-size=8G \
-           --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-minicpm5-armv9-tree_0.5.0-gems_5.0.2-vllm_none-plugin_none-cx_none-python_3.11.2-torch_2.10.0_cpu-pcp_none-gpu_cpu-arc_arm64-driver_none:202605261758 sleep infinity
-sudo docker exec -it flagos /bin/bash
-``` 
+docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data harbor.baai.ac.cn/flagrelease-project/glm-4-32b-0414-hygon001-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp310-pt210-dtknone-x64-6.3.28-v1.3.0b:202608081124-v3 sleep infinity
+```
+### Start the Server
+```bash
+VLLM_PLUGINS=fl vllm serve /data/GLM-4-32B-0414-FlagOS --host 0.0.0.0 --port 8000 --served-model-name GLM-4-32B-0414 --tensor-parallel-size 2 --max-model-len 32768 --trust-remote-code
+```
 
 ## Service Invocation
 ### Invocation Script
-BF16 inference
 ```bash
-python /root/run_inference.py \
-    --model /data/MiniCPM5-1B \
-    --dtype bf16 \
-    --prompt "Introduce yourself briefly." \
-    --max-new-tokens 128
-```
-INT8 inference (W8A8-dynamic)
-```bash
-python /root/run_inference.py \
-    --model /data/MiniCPM5-1B \
-    --dtype int8 \
-    --prompt "Introduce yourself briefly." \
-    --max-new-tokens 128
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "GLM-4-32B-0414",
+    "messages": [{"role": "user", "content": "你好"}]
+  }'
 ```
 
 
@@ -121,5 +107,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from OpenBMB/MiniCPM5-1B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
-
+The model weights are derived from zai-org/GLM-4-32B-0414 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
