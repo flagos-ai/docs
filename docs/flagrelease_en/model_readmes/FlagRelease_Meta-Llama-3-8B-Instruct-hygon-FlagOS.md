@@ -73,11 +73,11 @@ docker exec -it llama-3-8b-flagos /bin/bash
 ```
 ### Start the Server
 ```bash
-export VLLM_PLUGINS=fl 
-export TRITON_ALL_BLOCKS_PARALLEL=1 
+export VLLM_PLUGINS=fl
+export TRITON_ALL_BLOCKS_PARALLEL=1
 export USE_FLAGGEMS=1
-export VLLM_FL_FLAGOS_WHITELIST="softmax,rms_norm,add,sub,gather,masked_fill_,cumsum,cumsum_out,lt,lt_scalar,where_self,where_self_out,sum_dim,arange_start,zero_,zeros,ones,full,rand_like,index,reciprocal,cos,sin,cat,to_copy,argmax,le,scatter"
-nohup vllm serve /data/models/Meta-Llama-3-8B-Instruct-hygon-FlagOS \
+
+ulimit -n 2048 && nohup env VLLM_FL_FLAGOS_WHITELIST="softmax,rms_norm,add,sub,gather,masked_fill_,cumsum,cumsum_out,lt,lt_scalar,where_self,where_self_out,sum_dim,arange_start,zero_,zeros,ones,full,rand_like,index,reciprocal,cos,sin,cat,to_copy,argmax,le,scatter" VLLM_USE_MODELSCOPE=true vllm serve /data/models/Meta-Llama-3-8B-Instruct-hygon-FlagOS \
   --served-model-name llama-3-8b-flagos \
   --port 8000 \
   --max-num-batched-tokens 2048 \
@@ -144,5 +144,6 @@ We warmly welcome global developers to join us:
 4. Expand hardware adaptation support
 # License
 The model weights are derived from LLM-Research/Meta-Llama-3-8B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+
 
 

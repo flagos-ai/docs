@@ -74,6 +74,7 @@ docker exec -it flagos  bash
 ```bash
 export VLLM_PLUGINS=fl
 export TRITON_ALL_BLOCKS_PARALLEL=1
+export VLLM_FL_FLAGOS_WHITELIST="zeros,ones,sub,masked_fill_,rand_like,argmax,sort,sort_stable,cumsum,lt,softmax,cumsum_out,le,where_self_out,resolve_conj,resolve_neg,cat,bmm_out,add,scatter,bitwise_not,full,gather,true_divide_,sigmoid"
 nohup vllm serve \
 --model /data/Kimi-Linear-48B-A3B-Instruct-nvidia-FlagOS \
 --served-model-name kimi-linear-48b-a3b-instruct \
@@ -162,5 +163,6 @@ We warmly welcome global developers to join us:
 # License
 
 The model weights are derived from moonshotai/Kimi-Linear-48B-A3B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+
 
 

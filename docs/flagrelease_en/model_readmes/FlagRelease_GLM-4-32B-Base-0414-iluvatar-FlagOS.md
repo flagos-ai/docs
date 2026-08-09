@@ -15,77 +15,81 @@ Finally, GLM-Z1-9B-0414 is a surprise. We employed all the aforementioned techni
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Nvidia** container image supporting deployment within minutes
+- Released **FlagOS-Iluvatar** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | GLM-4-32B-Base-0414-Nvidia-Origin | GLM-4-32B-Base-0414-Nvidia-FlagOS |
+| Metrics      | GLM-4-32B-Base-0414-Nvidia-Origin | GLM-4-32B-Base-0414-Iluvatar-FlagOS |
 |--------------|--------------------------------|--------------------------------------|
-| mmlu | 0.7718 | 0.7716 |
-| cmmlu | 0.8328 | 0.8325 |
-| gsm8k | 0.8643 | 0.8613 |
-| leaderboard_bbh | 0.6556 | 0.6579 |
-| hellaswag | 0.6481 | 0.6480 |
-| truthfulqa_mc1 | 0.328 | 0.3293 |
-| winogrande | 0.7916 | 0.7916 |
-| commonsense_qa | 0.7731 | 0.7731 |
-| piqa | 0.8199 | 0.8194 |
+| mmlu | 0.7710 | 0.7720 |
+| cmmlu | 0.8325 | 0.8326 |
+| gsm8k | 0.8719 | 0.8582 |
+| leaderboard_bbh | 0.6574 | 0.6551 |
+| hellaswag | 0.6469 | 0.6472 |
+| truthfulqa_mc1 | 0.3268 | 0.3293 |
+| winogrande | 0.7908 | 0.7901 |
+| commonsense_qa | 0.7715 | 0.7699 |
+| piqa | 0.8194 | 0.8183 |
 | openbookqa | 0.368 | 0.368 |
-| boolq | 0.8798 | 0.8786 |
-| arc_easy | 0.8552 | 0.8552 |
-| arc_challenge | 0.5922 | 0.5913 |
-| minerva_math_algebra | 0.6790 | 0.7035 |
-| ceval-valid | 0.8113 | 0.8105 |
-| pubmedqa | 0.788 | 0.788 |
-| medqa_4options | 0.7337 | 0.7321 |
+| boolq | 0.8801 | 0.881 |
+| arc_easy | 0.8561 | 0.8548 |
+| arc_challenge | 0.5922 | 0.593 |
+| minerva_math_algebra | 0.6731 | 0.6799 |
+| ceval-valid | 0.8076 | 0.812 |
+| pubmedqa | 0.788 | 0.786 |
+| medqa_4options | 0.729 | 0.7282 |
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 29.4.3, build 055a478 |
-| Operating System | 22.04.5 LTS (Jammy Jellyfish) |
+| Docker Version   | Docker version 28.1.1, build 4eba377 |
+| Operating System | 22.04.4 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/glm-4-32b-base-0414-nvidia-tree_0.5.0-gems_0.5.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.133.20:2607301248
+docker pull harbor.baai.ac.cn/external-cooperation/glm-4-32b-base-0414-iluvatar-tree_0.5.1_iluvatar3.1-gems_5.0.2-vllm_0.13.0_cu102-plugin_0.1.1-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_corex-4.4.0-gpu_biv150-arc_x86_64-driver_4.4.0:2606231452
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/GLM-4-32B-Base-0414-nvidia-FlagOS --local_dir /data/models/GLM-4-32B-Base-0414-nvidia-FlagOS
+modelscope download --model FlagRelease/GLM-4-32B-Base-0414-iluvatar-FlagOS --local_dir /data/models/GLM-4-32B-Base-0414-iluvatar-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -itd \
-  --name=flagos \
-  --gpus all \
-  --network host \
-  --ipc host \
-  --privileged=true \
-  --shm-size=32G \
+docker run --name flagos -itd \
+  --shm-size="32g" \
+  -v /usr/src:/usr/src \
   -v /data/models:/data/models \
-  harbor.baai.ac.cn/external-cooperation/glm-4-32b-base-0414-nvidia-tree_0.5.0-gems_0.5.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.133.20:2607301248
-  sleep infinity
+  -v /lib/modules:/lib/modules \
+  -v /dev:/dev \
+  --privileged \
+  --cap-add=ALL \
+  --pid=host \
+  --net=host \
+  -w /workspace \
+  harbor.baai.ac.cn/external-cooperation/glm-4-32b-base-0414-iluvatar-tree_0.5.1_iluvatar3.1-gems_5.0.2-vllm_0.13.0_cu102-plugin_0.1.1-cx_none-python_3.10.18-torch_2.7.1_corex.4.4.0-pcp_corex-4.4.0-gpu_biv150-arc_x86_64-driver_4.4.0:2606231452
 docker exec -it flagos bash
 ```
 ### Start the Server
 ```bash
-nohup env VLLM_PLUGINS=fl USE_FLAGGEMS=1 \
-  VLLM_FL_FLAGOS_BLACKLIST=mul,to_copy,cat,silu_and_mul,sub,cos,rms_norm,fill_scalar_,sort,attention_backend \
-  vllm serve --model /data/models/GLM-4-32B-Base-0414-nvidia-FlagOS \
-  --tensor-parallel-size 4 \
-  --served-model-name glm-4-32b-base-0414-flagos \
-  --port 8000 \
-  > serve.log 2>&1 &
+nohup env VLLM_FL_FLAGOS_BLACKLIST=mul,mm,sort,sub,cos,to_copy,cat,copy_,full,embedding,where_self,where_self_out,reciprocal,lt,zeros,index,fill_scalar_,ones,gather \
+        VLLM_PLUGINS=fl \
+        USE_FLAGGEMS=1 \
+        vllm serve \
+        --model /data/models/GLM-4-32B-Base-0414-iluvatar-FlagOS \
+        --tensor-parallel-size 4 \
+        --enforce-eager \
+        --served-model-name glm-4-32b-base-0414-flagos \
+        --port 8000 > serve.log 2>&1 &
 ```
 
 ## Service Invocation
@@ -132,6 +136,20 @@ Flagscale is a comprehensive toolkit designed to supportthe entire lifecycle of 
 vllm-plugin-fl is a vLLM plugin built on the FlagOS unified multi-chip backend, to help flagscale support multi-chip on vllm framework.
 ## **FlagCX**
 FlagCX is a scalable and adaptive cross-chip communication library. It serves as a platform where developers, researchers, and AI engineers can collaborate on various projects, contribute to the development of cutting-edge AI solutions, and share their work with the global community.
+
+## **FlagEval Evaluation Framework**
+ FlagEval is a comprehensive evaluation system and open platform for large models launched in 2023. It aims to establish scientific, fair, and open benchmarks, methodologies, and tools to help researchers assess model and training algorithm performance. It features:
+ - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
+ - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
+
+# Contributing
+
+We warmly welcome global developers to join us:
+
+1. Submit Issues to report problems
+2. Create Pull Requests to contribute code
+3. Improve technical documentation
+4. Expand hardware adaptation support
 # License
 The model weights are derived from ZhipuAI/GLM-4-32B-Base-0414 and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
 

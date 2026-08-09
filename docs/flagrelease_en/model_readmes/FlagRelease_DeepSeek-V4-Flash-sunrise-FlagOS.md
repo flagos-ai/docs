@@ -40,20 +40,56 @@ modelscope download --model FlagRelease/DeepSeek-V4-Flash-sunrise-FlagOS --local
 ```bash
 docker run -it --privileged --network host --name flagos -v /lib64/libtang.so:/lib64/libtang.so -v /lib64/libtang.so.0:/lib64/libtang.so.0 -v /usr/local/tangrt:/usr/local/tangrt -v /usr/local/pccl:/usr/local/pccl -v /data:/data harbor.baai.ac.cn/flagrelease-public/flagrelease-deepseek-v4-flash-sunrise:2604301503 /bin/bash
 ```
+### Start the Server
+in node 0
+```bash
+export NCCL_SOCKET_IFNAME=eth0
+export NCCL_IB_DISABLE=1
+export USE_FLAGGEMS=1
+export USE_OGROUPS_COMM=1
+
+torchrun --nnodes=2 --nproc_per_node=8 --node_rank=0 \
+  --master_addr=<master_ip> --master_port=29500 generate.py \
+  --ckpt-path /path/to/model_bf16_mp16 \
+  --config config_from_bf16.json \
+  --input-file prompt.txt \
+  --max-new-tokens 64
+```
+in node 1
+```bash
+export NCCL_SOCKET_IFNAME=eth0
+export NCCL_IB_DISABLE=1
+export USE_FLAGGEMS=1
+export USE_OGROUPS_COMM=1
+
+torchrun --nnodes=2 --nproc_per_node=8 --node_rank=1 \
+  --master_addr=<master_ip> --master_port=29500 generate.py \
+  --ckpt-path /path/to/model_bf16_mp16 \
+  --config config_from_bf16.json \
+  --input-file prompt.txt \
+  --max-new-tokens 64
+```
 
 ## Service Invocation
 ### Invocation Script
+in node 0
 ```bash
-# You need to run the following commands on two machines with the node IDs node0 and node1
 conda activate torch_env
 cd ./workspace/
 source env.sh
 cd ./code
-# In node0
 bash run_node_0.sh
-# In node1
+```
+
+in node 1
+```bash
+conda activate torch_env
+cd ./workspace/
+source env.sh
+cd ./code
 bash run_node_1.sh
 ```
+
 
 ## Using FlagOS Source Code for Installation and Deployment
 

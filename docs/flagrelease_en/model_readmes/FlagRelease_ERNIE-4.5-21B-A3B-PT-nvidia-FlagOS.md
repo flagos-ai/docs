@@ -1,11 +1,8 @@
 ---
-frameworks:
-- ""
+license: apache-2.0
 language:
 - zh
 - en
-license: apache-2.0
-tasks: []
 ---
 # Introduction
 The advanced capabilities of the ERNIE 4.5 models, particularly the MoE-based A47B and A3B series, are underpinned by several key technical innovations:
@@ -45,7 +42,7 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:2605111355
+docker pull harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:2607301330
 ```
 
 ### Download Open-source Model Weights
@@ -64,8 +61,7 @@ docker run \
   --gpus all \
   -v /data/models:/data/models \
   -itd \
-  harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:2605111355 \
-  sleep infinity
+  harbor.baai.ac.cn/external-cooperation/ernie-4.5-21b-a3b-pt-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.12.3-torch_2.9.0_cu128-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:2607301330  sleep infinity
 docker exec -it flagos bash
 ```
 ### Start the Server
@@ -73,7 +69,6 @@ docker exec -it flagos bash
 export VLLM_PLUGINS=fl
 export TRITON_ALL_BLOCKS_PARALLEL=1
 export USE_FLAGGEMS=1
-
 vllm serve \
   --model /data/models/ERNIE-4.5-21B-A3B-PT-nvidia-FlagOS \
   --tensor-parallel-size 1 \
