@@ -54,34 +54,39 @@ modelscope download --model FlagRelease/GLM-5.2-zhenwu-FlagOS --local_dir /data/
 ```
 
 ### Start the Server
+in node 0
 ```bash
-export NCCL_ALGO=Ring              # 跨机用 Ring 算法更稳定
-export NCCL_MIN_NCHANNELS=16       # 增加并行通道数（默认8）
-export NCCL_NTHREADS=512           # NCCL 线程数
-export NCCL_IB_GID_INDEX=3         # RoCE 网络优化
+export NCCL_ALGO=Ring
+export NCCL_MIN_NCHANNELS=16
+export NCCL_NTHREADS=512
+export NCCL_IB_GID_INDEX=3
 export NCCL_SOCKET_IFNAME=eth0
 
-# In node 0
-VLLM_RPC_TIMEOUT=3000 NCCL_DEBUG=INFO VLLM_PLUGINS=fl nohup vllm serve /data/GLM-5.2 \
---served-model-name "glm5.2" --host 0.0.0.0 --port 8000 \
---tensor-parallel-size 32 \
---nnodes 2 --node-rank 0 \
---master-addr 10.11.0.3 --master-port 29500 \
---trust-remote-code --enforce-eager \
---max-model-len 32768 --gpu-memory-utilization 0.95 \
---max-num-batched-tokens 8192 \
-> glm5_2.log 2>&1 &
+VLLM_RPC_TIMEOUT=3000 NCCL_DEBUG=INFO VLLM_PLUGINS=fl vllm serve /data/GLM-5.2 \
+    --served-model-name "glm5.2" --host 0.0.0.0 --port 8000 \
+    --tensor-parallel-size 32 \
+    --nnodes 2 --node-rank 0 \
+    --master-addr 10.11.0.3 --master-port 29500 \
+    --trust-remote-code --enforce-eager \
+    --max-model-len 32768 --gpu-memory-utilization 0.95 \
+    --max-num-batched-tokens 8192
+```
+in node 1
+```bash
+export NCCL_ALGO=Ring
+export NCCL_MIN_NCHANNELS=16
+export NCCL_NTHREADS=512
+export NCCL_IB_GID_INDEX=3
+export NCCL_SOCKET_IFNAME=eth0
 
-# In node 1
-VLLM_RPC_TIMEOUT=3000 NCCL_DEBUG=INFO VLLM_PLUGINS=fl nohup vllm serve /data/GLM-5.2 \
---served-model-name "glm5.2" --host 0.0.0.0 --port 8000 \
---tensor-parallel-size 32 \
---nnodes 2 --node-rank 1 \
---master-addr 10.11.0.3 --master-port 29500 \
---trust-remote-code --enforce-eager --headless \
---max-model-len 32768 --gpu-memory-utilization 0.95 \
---max-num-batched-tokens 8192 \
-> glm5_2-2.log 2>&1 &
+VLLM_RPC_TIMEOUT=3000 NCCL_DEBUG=INFO VLLM_PLUGINS=fl vllm serve /data/GLM-5.2 \
+    --served-model-name "glm5.2" --host 0.0.0.0 --port 8000 \
+    --tensor-parallel-size 32 \
+    --nnodes 2 --node-rank 1 \
+    --master-addr 10.11.0.3 --master-port 29500 \
+    --trust-remote-code --enforce-eager --headless \
+    --max-model-len 32768 --gpu-memory-utilization 0.95 \
+    --max-num-batched-tokens 8192
 ```
 
 ## Service Invocation
@@ -91,7 +96,7 @@ curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "glm5.2",
-    "messages": [{"role": "user", "content": "你好"}]
+    "messages": [{"role": "user", "content": "hi"}]
   }'
 ```
 

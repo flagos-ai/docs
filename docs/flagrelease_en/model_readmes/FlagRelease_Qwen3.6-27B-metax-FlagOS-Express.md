@@ -76,7 +76,7 @@ export FLAGGEMS_VENDOR=metax
 export CUDA_VISIBLE_DEVICES=6,7
 export VLLM_FL_FLAGOS_WHITELIST=cat,cos,cumsum,fill,full,gather,gt,le,lt,max,mul,sin,softmax,to,where,zeros,zeros_like
 export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
-vllm serve /data/models/Qwen3.6-27B/ \
+vllm serve  /data/Qwen3.6-27B \
     --tensor-parallel-size 2 --port 8000 --trust-remote-code --dtype bfloat16 \
     --served-model-name qwen36-27b \
     --max-num-batched-tokens 16384

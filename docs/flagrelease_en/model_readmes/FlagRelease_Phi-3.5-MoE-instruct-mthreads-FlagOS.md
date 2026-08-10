@@ -1,100 +1,101 @@
 ---
-license: apache-2.0
-language:
-- zh
-- en
+frameworks:
+- ""
+tags:
+- flagOS
+- mthreads
+tasks: []
 ---
 
 # Introduction
-We introduce our first-generation reasoning models, DeepSeek-R1-Zero and DeepSeek-R1. DeepSeek-R1-Zero is trained via large-scale reinforcement learning (RL) without supervised fine-tuning (SFT) as an initial stage, and it delivers outstanding reasoning capabilities. Through RL training, DeepSeek-R1-Zero naturally exhibits numerous powerful and intriguing reasoning behaviors.
-
-Nevertheless, DeepSeek-R1-Zero suffers from issues such as endless repetition, poor readability, and mixed-language outputs. To address these flaws and further boost reasoning performance, we developed DeepSeek-R1, which incorporates cold-start data prior to the RL phase. DeepSeek-R1 achieves performance comparable to OpenAI o1 on mathematical, coding, and reasoning tasks.
-
-To support the research community, we have open-sourced DeepSeek-R1-Zero, DeepSeek-R1, as well as six dense models distilled from DeepSeek-R1 based on the Llama and Qwen architectures. DeepSeek-R1-Distill-Qwen-32B outperforms OpenAI o1-mini across a wide range of benchmarks, setting a new state-of-the-art record among dense models.
+Phi-3.5-MoE is a lightweight, state-of-the-art open model built upon datasets used for Phi-3 - synthetic data and filtered publicly available documents - with a focus on very high-quality, reasoning dense data. The model supports multilingual and comes with 128K context length (in tokens). The model underwent a rigorous enhancement process, incorporating supervised fine-tuning, proximal policy optimization, and direct preference optimization to ensure precise instruction adherence and robust safety measures.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Mthreads** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Hygon-FlagOS |
-|--------------|--------------------------------|--------------------------------------|
-| musr_generative       | 0.3320                                     | 0.3475                                      |
-| mmlu_pro              | 0.1747                                     | 0.1781                                      |
-| aime                  | 0                                          | 0                                           |
-| livebench_new         | 0.1261                                     | 0.1229                                      |
-| gpqa_generative_cot   | 0.0866                                     | 0.0914                                    |
-
+| Metrics             | Phi-3.5-MoE-instruct-Nvidia-Origin | Phi-3.5-MoE-instruct-Mthreads-FlagOS |
+|---------------------|------------------------------------|--------------------------------------|
+|        aime         | 0.0334                             | 0                                    |
+| gpqa_generative_cot | 0.3171                             | 0.3263                               |
+|      mmlu_pro       | 0.5336                             | 0.5320                               |
+|   musr_generative   | 0.5040                             | 0.5132                               |
+|    livebench_new    | 0.2863                             | 0.2863                               |
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 24.0.9, build 2936816 |
+| Operating System | 22.04.4 LTS (Jammy) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833
+docker pull harbor.baai.ac.cn/external-cooperation/phi-3.5-moe-instruct-mthreads-tree_0.5.1_mthreads3.2-gems_5.0.2-vllm_0.13.1.dev44_g3d4cc4bc7.d20260310.musa-plugin_0.1.1-cx_0.8.0-python_3.10.12-torch_2.7.1-pcp_musa4.3.5-mtt_s5000-arc_x86_64-driver_3.3.5:2608061810
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS --local_dir /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS
+modelscope download --model FlagRelease/Phi-3.5-MoE-instruct-mthreads-FlagOS --local_dir /data/Phi-3.5-MoE-instruct-mthreads-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --network=host \
-  --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
-  --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
-  -v /data/models:/data/models \
-  --group-add video \
-  --cap-add=SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -itd \
-harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833 \
+docker run -itd \
+--name=phi-3.5-moe-instruct-mthreads-flagos \
+--network=host \
+--pid=host \
+--ipc=host \
+--shm-size=80g \
+-v /data:/data \
+-v /dev:/dev \
+-w /workspace \
+-e LD_LIBRARY_PATH=/opt/musa/lib \
+-v /usr/bin/mthreads-gmi:/usr/bin/mthreads-gmi:ro \
+-e MTHREADS_VISIBLE_DEVICES=all \
+harbor.baai.ac.cn/external-cooperation/phi-3.5-moe-instruct-mthreads-tree_0.5.1_mthreads3.2-gems_5.0.2-vllm_0.13.1.dev44_g3d4cc4bc7.d20260310.musa-plugin_0.1.1-cx_0.8.0-python_3.10.12-torch_2.7.1-pcp_musa4.3.5-mtt_s5000-arc_x86_64-driver_3.3.5:2608061810 \
 sleep infinity
-docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS bash
+
+docker exec -it phi-3.5-moe-instruct-mthreads-flagos bash
+
 ```
 ### Start the Server
 ```bash
-ulimit -n 2048 && nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  USE_FLAGGEMS=1 \
-  VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" \
-  vllm serve \
-  --model /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
+export MUSA_VISIBLE_DEVICES=4,5
+export VLLM_MUSA_ENABLE_MOE_MATE=1
+export VLLM_MUSA_ENABLE_MOE_TRITON=1
+export VLLM_PLUGINS=fl
+export TRITON_ALL_BLOCKS_PARALLEL=1
+export USE_FLAGGEMS=1
+export VLLM_FL_FLAGOS_WHITELIST=zero_,arange,true_divide,reciprocal,cos,sin,to_copy,fill_scalar_,embedding,index_select,zeros,index,rand_like,full,argmax,lt_scalar,where_self,where_self_out,lt,cumsum_out,le,scatter,pow_scalar,mul,exponential_,moe_sum,moe_align_block_size
+nohup vllm serve /data/Phi-3.5-MoE-instruct-mthreads-FlagOS \
+  --served-model-name phi-3.5-moe-instruct-mthreads-flagos \
   --host 0.0.0.0 \
-  --port 46840 \
-  --gpu-memory-utilization 0.90 \
+  --port 8230 \
   --trust-remote-code \
-  --tensor-parallel-size 2 \
   --enforce-eager \
-  > DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS.log 2>&1 &
-  ```
+  --tensor-parallel-size 2 \
+  --gpu-memory-utilization 0.9 \
+  --max-model-len 30000 \
+  > Phi-3.5-MoE.log 2>&1 &
+
+```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:46840/v1/chat/completions \
+curl http://localhost:8230/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS",
+    "model": "phi-3.5-moe-instruct-mthreads-flagos",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -147,4 +148,5 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from LLM-Research/Phi-3.5-MoE-instruct-mthreads-FlagOS and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+
