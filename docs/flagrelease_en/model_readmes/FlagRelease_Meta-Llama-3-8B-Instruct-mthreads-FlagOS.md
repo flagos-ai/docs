@@ -1,100 +1,95 @@
 ---
-license: apache-2.0
+frameworks:
+- ""
 language:
 - zh
 - en
+license: apache-2.0
+tasks: []
 ---
-
 # Introduction
-We introduce our first-generation reasoning models, DeepSeek-R1-Zero and DeepSeek-R1. DeepSeek-R1-Zero is trained via large-scale reinforcement learning (RL) without supervised fine-tuning (SFT) as an initial stage, and it delivers outstanding reasoning capabilities. Through RL training, DeepSeek-R1-Zero naturally exhibits numerous powerful and intriguing reasoning behaviors.
-
-Nevertheless, DeepSeek-R1-Zero suffers from issues such as endless repetition, poor readability, and mixed-language outputs. To address these flaws and further boost reasoning performance, we developed DeepSeek-R1, which incorporates cold-start data prior to the RL phase. DeepSeek-R1 achieves performance comparable to OpenAI o1 on mathematical, coding, and reasoning tasks.
-
-To support the research community, we have open-sourced DeepSeek-R1-Zero, DeepSeek-R1, as well as six dense models distilled from DeepSeek-R1 based on the Llama and Qwen architectures. DeepSeek-R1-Distill-Qwen-32B outperforms OpenAI o1-mini across a wide range of benchmarks, setting a new state-of-the-art record among dense models.
+Meta developed and released the Meta Llama 3 family of Large Language Models (LLMs), a suite of generative text models available in pre-trained and instruction-tuned variants with parameter sizes of 8B and 70B. The instruction-tuned Llama 3 models are optimized for dialogue scenarios and outperform many existing open-source chat models on mainstream industry benchmarks. Additionally, great emphasis was placed on enhancing model helpfulness and safety throughout the development process.
+Model Developer: Meta
+Variants: Llama 3 comes in two parameter sizes (8B and 70B), with both pre-trained and instruction-tuned releases available.
+Input: The model only accepts text inputs.
+Output: The model generates only text and code.
+Model Architecture: Llama 3 is an autoregressive language model built on an optimized Transformer architecture. Its instruction-tuned variants leverage Supervised Fine-Tuning (SFT) and Reinforcement Learning from Human Feedback (RLHF) to align outputs with human preferences regarding helpfulness and safety.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters
-- Released **FlagOS-Hygon** container image supporting deployment within minutes
+- Released **FlagOS-Mthreads** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | DeepSeek-R1-Distill-Qwen-1.5B-Nvidia-Origin | DeepSeek-R1-Distill-Qwen-1.5B-Hygon-FlagOS |
-|--------------|--------------------------------|--------------------------------------|
-| musr_generative       | 0.3320                                     | 0.3475                                      |
-| mmlu_pro              | 0.1747                                     | 0.1781                                      |
-| aime                  | 0                                          | 0                                           |
-| livebench_new         | 0.1261                                     | 0.1229                                      |
-| gpqa_generative_cot   | 0.0866                                     | 0.0914                                    |
-
+| Metrics      | Meta-Llama-3-8B-Instruct-Nvidia-Origin | Meta-Llama-3-8B-Instruct-Mthreads-FlagOS |
+|--------------------|----------------------------------------|------------------------------------------|
+| musr_generative    |              0.4524                    |                0.4484                    |
+| mmlu_pro           |              0.204                     |                0.2279                    |
+| aime               |                 0                      |                     0                    |
+| livebench_new      |              0.2835                    |                 0.2795                   |
+| gpqa_generative_cot|              0.3154                    |                0.3003                    |
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 20.10.24, build 297e128 |
-| Operating System | Sugon OS 8.9 |
+| Docker Version   | Docker version 27.5.1, build 9f9e405 |
+| Operating System | 22.04.4 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833
+docker pull harbor.baai.ac.cn/external-cooperation/meta_llama_3_8b_instruct-mthreads-tree_0.5.1-gems_5.0.2_vllm_0.13.0_plugin_0.1.0_cx_none_python_3.10.12_torch_2.7.1_pcp_musa_4.3.5_mtt_s5000_x86_64_driver_2.3.2:2608051949
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS --local_dir /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS
+modelscope download --model FlagRelease/Meta-Llama-3-8B-Instruct-mthreads-FlagOS --local_dir /data/models/Meta-Llama-3-8B-Instruct-mthreads-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run \
-  --name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
+docker run -itd \
+  --name=Meta-Llama-3-8B-Instruct-mthreads-FlagOS \
   --network=host \
+  --pid=host \
   --ipc=host \
-  --device=/dev/kfd \
-  --device=/dev/mkfd \
-  --device=/dev/dri \
-  -v /opt/hyhal:/opt/hyhal \
+  --shm-size=80g \
   -v /data/models:/data/models \
-  --group-add video \
-  --cap-add=SYS_PTRACE \
-  --security-opt seccomp=unconfined \
-  -itd \
-harbor.baai.ac.cn/external-cooperation/deepseek-r1-distill-qwen-1.5b-hygon-tree_0.5.0_hcu3.0-gems_0.4.1rc0-vllm_0.13.0-plugin_0.1.1-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-pcp_hygon-dpu_hygon-x86_64-driver_1.11.0:2607091833 \
-sleep infinity
-docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS bash
+  -v /dev:/dev \
+  -v /usr/bin/mthreads-gmi:/usr/bin/mthreads-gmi:ro \
+  -e LD_LIBRARY_PATH=/opt/musa/lib \
+  -e MTHREADS_VISIBLE_DEVICES=all \
+  harbor.baai.ac.cn/external-cooperation/meta_llama_3_8b_instruct-mthreads-tree_0.5.1-gems_5.0.2_vllm_0.13.0_plugin_0.1.0_cx_none_python_3.10.12_torch_2.7.1_pcp_musa_4.3.5_mtt_s5000_x86_64_driver_2.3.2:2608051949 \
+  sleep infinity
+
+docker exec -it Meta-Llama-3-8B-Instruct-mthreads-FlagOS bash
 ```
 ### Start the Server
 ```bash
-ulimit -n 2048 && nohup env \
-  HIP_VISIBLE_DEVICES=0,1 \
-  VLLM_PLUGINS=fl \
-  USE_FLAGGEMS=1 \
-  VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" \
-  vllm serve \
-  --model /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
-  --host 0.0.0.0 \
-  --port 46840 \
-  --gpu-memory-utilization 0.90 \
-  --trust-remote-code \
-  --tensor-parallel-size 2 \
+export VLLM_PLUGINS=fl
+export TRITON_ALL_BLOCKS_PARALLEL=1 
+export USE_FLAGGEMS=1
+nohup vllm serve /data/models/Meta-Llama-3-8B-Instruct-mthreads-FlagOS \
+  --served-model-name Meta-Llama-3-8B-Instruct-mthreads-FlagOS \
+  --port 8888 \
+  --max-num-batched-tokens 2048 \
   --enforce-eager \
-  > DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS.log 2>&1 &
-  ```
+  > serve.log 2>&1 &
+```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:46840/v1/chat/completions \
+curl http://localhost:8888/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS",
+    "model": "Meta-Llama-3-8B-Instruct-mthreads-FlagOS",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -147,4 +142,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from LLM-Research/Meta-Llama-3-8B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
