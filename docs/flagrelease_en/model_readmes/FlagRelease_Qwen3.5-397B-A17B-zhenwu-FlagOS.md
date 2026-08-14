@@ -42,28 +42,23 @@ Environment Setup
 This model requires 1 machine with 16 GPUs. Please follow this link to apply for 1 machine resource.
 link：https://help.aliyun.com/zh/pai/user-guide
 
-### Download FlagOS Image
-
 The image for this task is exported from Alibaba Cloud PAI and can be used on Alibaba Cloud EAS and DSW, both of which are container‑based resource services. 
 For detailed instructions on how to use this image, please contact the PAI platform support team. The task released by BAAI is developed based on the container environment launched via the PAI platform.
 
-
+### Download FlagOS Image
 ```bash
 docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-pp-release-model_qwen3.5-397b-a17b-tree_none-gems_5.0.1rc0-scale_none-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.22:202603182010
 ```
 
 ### Download Open-source Model Weights
-
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.5-397B-A17B-zhenwu-FlagOS --local_dir /mnt/model
-
+modelscope download --model FlagRelease/Qwen3.5-397B-A17B-zhenwu-FlagOS --local_dir /data/model
 ```
 
-### Serve and use Qwen3.5-397B-A17B with vllm
-
+### Start the Server
 ```bash
-VLLM_USE_DEEP_GEMM=0 VLLM_FL_FLAGOS_WHITELIST="cos,sin,lt,le,ones,zeros,zeros_like,rand_like,sigmoid,full,pow,exponential_,clamp,arange,gelu,reciprocal,add,sub,mul_,normal_,layer_norm,cumsum_out,softmax,softmax,cumsum,gather,pad" vllm serve /mnt/model/ \
+VLLM_USE_DEEP_GEMM=0 VLLM_FL_FLAGOS_WHITELIST="cos,sin,lt,le,ones,zeros,zeros_like,rand_like,sigmoid,full,pow,exponential_,clamp,arange,gelu,reciprocal,add,sub,mul_,normal_,layer_norm,cumsum_out,softmax,softmax,cumsum,gather,pad" vllm serve /data/model/ \
     --host 0.0.0.0 \
     --port 8129 \
     --served-model-name qwen35 \
@@ -74,15 +69,12 @@ VLLM_USE_DEEP_GEMM=0 VLLM_FL_FLAGOS_WHITELIST="cos,sin,lt,le,ones,zeros,zeros_li
     --max-num-batched-tokens 32000 \
     --reasoning-parser qwen3 \
     --trust-remote-code
-
 ```
 
 ## Service Invocation
-
-### CURL-based Invocation Script
-
+### Invocation Script
 ```bash
-curl http://<server_ip>:8129/v1/chat/completions \
+curl http://localhost:8129/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "qwen35",

@@ -56,16 +56,16 @@ sudo docker exec -it flagos /bin/bash
 
 ## Service Invocation
 ### Invocation Script
-
+BF16 inference
 ```bash
-# BF16 inference
 python /root/run_inference.py \
     --model /data/MiniCPM5-1B \
     --dtype bf16 \
     --prompt "Introduce yourself briefly." \
     --max-new-tokens 128
-
-# INT8 inference (W8A8-dynamic)
+```
+INT8 inference (W8A8-dynamic)
+```bash
 python /root/run_inference.py \
     --model /data/MiniCPM5-1B \
     --dtype int8 \
