@@ -46,44 +46,36 @@ pip install modelscope
 modelscope download --model FlagRelease/Qwen3.5-35B-A3B-FlagOS --local_dir /data/Qwen3.5-35B-A3B
 ```
 
-### Start the inference service
+### Start the Container
 ```bash
-# Container Startup
 docker run --init --detach --net=host --user 0 --ipc=host \
-           -v /data:/data --security-opt=seccomp=unconfined \
-           --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
-           --shm-size=512G --gpus all \
-           -e USE_FLAGOS=1 \
-           --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3.5-35b-a3b-tree_0.4.0-3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.10.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:2603031500 sleep infinity
-
+    -v /data:/data --security-opt=seccomp=unconfined \
+    --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
+    --shm-size=512G --gpus all \
+    -e USE_FLAGOS=1 \
+    --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-nvidia-release-model_qwen3.5-35b-a3b-tree_0.4.0-3.5-gems_4.2.1rc0-scale_none-cx_none-python_3.12.3-torch_2.10.0-pcp_cuda13.1-gpu_nvidia003-arc_amd64-driver_570.158.01:2603031500 sleep infinity
 docker exec -it flagos bash
 ```
-### Serve
+### Start the Server
 ```bash
 vllm serve /data/Qwen3.5-35B-A3B --port 9010 --served-model-name qwen35-flagos --tensor-parallel-size 1 --max-num-batched-tokens 16384 --max-num-seqs 2048 --reasoning-parser qwen3
 ```
 
 ## Service Invocation
-
-### API-based Invocation Script
+### Invocation Script
 ```bash
-import openai
-openai.api_key = "EMPTY"
-openai.base_url = "http://<server_ip>:9010/v1/"
-model = "qwen35-flagos"
-messages = [
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "What's the weather like today?"}
-]
-response = openai.chat.completions.create(
-    model=model,
-    messages=messages,
-    temperature=0.7,
-    top_p=0.95,
-    stream=False,
-)
-for item in response:
-    print(item)
+curl http://<server_ip>:9010/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "qwen35-flagos",
+        "messages": [
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "What's the weather like today?"}
+        ],
+        "temperature": 0.7,
+        "top_p": 0.95,
+        "stream": false
+    }'
 
 ```
 
