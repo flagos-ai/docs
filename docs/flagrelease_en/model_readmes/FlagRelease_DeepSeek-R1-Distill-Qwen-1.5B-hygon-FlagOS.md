@@ -71,16 +71,21 @@ docker exec -it DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS bash
 ```
 ### Start the Server
 ```bash
-export HIP_VISIBLE_DEVICES=0
-export VLLM_PLUGINS=fl
-export USE_FLAGGEMS=1
-export VLLM_FL_FLAGOS_WHITELIST=softmax,rms_norm,add,sub,gather,masked_fill_,cumsum_out,lt,lt_scalar,where_self,where_self_out,arange_start,zero_,zeros,ones,full,rand_like,index,reciprocal,cos,sin,cat,to_copy,argmax,le,scatter
-
-vllm serve \
+ulimit -n 2048 && nohup env \
+  HIP_VISIBLE_DEVICES=0,1 \
+  VLLM_PLUGINS=fl \
+  USE_FLAGGEMS=1 \
+  VLLM_FL_FLAGOS_WHITELIST="arange_start,lt,where_self_out,argmax,zeros_like,bitwise_or_tensor,scatter,rsub_scalar,ones,cumsum,bitwise_and_tensor,resolve_neg,lt_scalar,sum_dim,add,diff,index,le,masked_fill,where_self,bitwise_not,gather,mul,zero_,nonzero,resolve_conj,cumsum_out,gt_scalar,softmax_out,softmax" \
+  vllm serve \
   --model /data/models/DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
   --served-model-name DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS \
+  --host 0.0.0.0 \
   --port 46840 \
-  --enforce-eager
+  --gpu-memory-utilization 0.90 \
+  --trust-remote-code \
+  --tensor-parallel-size 2 \
+  --enforce-eager \
+  > DeepSeek-R1-Distill-Qwen-1.5B-hygon-FlagOS.log 2>&1 &
   ```
 
 ## Service Invocation

@@ -1,6 +1,4 @@
 ---
-base_model:
-- ""
 frameworks:
 - ""
 ---
@@ -67,48 +65,48 @@ Accuracy Difference between USE_FLAGGEMS=1 on Zhenwu and launch vllm server dire
 | FlagGems                        | Version: 4.2.1rc0                        |
 | vllm & vllm-plugin-fl           | Version: 0.13.0 + vllm_fl 0.0.0                        |
 
-## Download FlagOS Image
 
+
+## Operation Steps
+The image for this task is exported from Alibaba Cloud PAI and can be used on Alibaba Cloud EAS and DSW, both of which are container‑based resource services. For detailed instructions on how to use this image, please contact the PAI platform support team. The task released by BAAI is developed based on the container environment launched via the PAI platform.
+
+### Download FlagOS Image
 ```bash
-docker pull baai-cp-registry.cn-wulanchabu.cr.aliyuncs.com/flagos/flagos:vllm-plugin-fl
+docker pull harbor.baai.ac.cn/flagrelease-public/minicpm-0-4.5-zhenwu:202608071022
 ```
 
-## Download Open-source Model Weights
-
+### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/MiniCPM-o-4.5-zhenwu-FlagOS --local_dir /share/MiniCPMO45
+modelscope download --model FlagRelease/MiniCPM-o-4.5-zhenwu-FlagOS --local_dir /data/MiniCPMO45
 ```
 
-## Start the Container
-
+### Start the Container
 ```bash
-#Container Startup
 docker run --init --detach --net=host --user 0 --ipc=host \
-           -v /share:/share --security-opt=seccomp=unconfined \
-           --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
-           --shm-size=512G --gpus all \
-           --name flagos baai-cp-registry.cn-wulanchabu.cr.aliyuncs.com/flagos/flagos:vllm-plugin-fl
-docker exec -it flagos bash
+    -v /data:/data --security-opt=seccomp=unconfined \
+    --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
+    --shm-size=512G --gpus all \
+    --name flagos harbor.baai.ac.cn/flagrelease-public/minicpm-0-4.5-zhenwu:202608071022
+docker exec -it flagos /bin/bash
 ```
 
-## Serve and use MiniCPM-o-4.5 with vllm
-
-Notes: you can refers to https://github.com/vllm-project/vllm to know how to use vllm
-
-You can use 
-
+### Start the Server
 ```bash
-vllm serve /share/MiniCPMO45 --trust-remote-code
+USE_FLAGGEMS=1 vllm serve /data/MiniCPMO45 --trust-remote-code --served-model-name MiniCPMO45
 ```
-to launch server without FlagOS, and use
 
+## Service Invocation
+### Invocation Script
 ```bash
-USE_FLAGGEMS=1 vllm serve /share/MiniCPMO45 --trust-remote-code
+curl http://localhost:8000/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "MiniCPMO45",
+        "messages": [{"role": "user", "content": "hi!"}]
+    }'
 ```
-to launch server with FlagOS.
 
-After that, you can do whatever you want with the vllm's server at 0.0.0.0:8000!
 
 # Contributing
 
@@ -120,6 +118,5 @@ We warmly welcome global developers to join us:
 4. Expand hardware adaptation support
 
 # License
-
 The weight files are from https://github.com/OpenBMB/MiniCPM-o, open source with apache2.0 licensehttps://www.apache.org/licenses/LICENSE-2.0.txt.
 
