@@ -56,33 +56,37 @@ docker run -dit \
 docker exec -it flagos bash
 ```
 ### Start the Server
+in node 0
 ```bash
 export SGLANG_FL_FLAGOS_BLACKLIST=cumsum,index_put,nonzero,nonzero_numpy,sort,mm,topk,isin
 export MUSA_LAUNCH_BLOCKING=1
 export MCCL_TIMEOUT=14400
 export TORCH_COMPILE_DISABLE=1
 
-# in node1
-SGLANG_FL_DISPATCH_LOG=/tmp/flaggems_dispatch.log nohup python -m sglang.launch_server \
+SGLANG_FL_DISPATCH_LOG=/tmp/flaggems_dispatch.log python -m sglang.launch_server \
 --model-path /data/MiniMax-M3 \
 --tp-size 8 --pp-size 2 \
 --nnodes 2 --node-rank 0 \
---dist-init-addr <node1_ip>:29500 \
+--dist-init-addr <node0_ip>:29500 \
 --host 0.0.0.0 --port 30000 \
 --page-size 1 --disable-cuda-graph --disable-piecewise-cuda-graph \
---trust-remote-code --watchdog-timeout 3600 --mem-fraction-static 0.75 --max-running-requests 1 \
-> minimax3.log 2>&1 &
+--trust-remote-code --watchdog-timeout 3600 --mem-fraction-static 0.75 --max-running-requests 1
+```
+in node 1
+```bash
+export SGLANG_FL_FLAGOS_BLACKLIST=cumsum,index_put,nonzero,nonzero_numpy,sort,mm,topk,isin
+export MUSA_LAUNCH_BLOCKING=1
+export MCCL_TIMEOUT=14400
+export TORCH_COMPILE_DISABLE=1
 
-# in node2
-SGLANG_FL_DISPATCH_LOG=/tmp/flaggems_dispatch.log nohup python -m sglang.launch_server \
+SGLANG_FL_DISPATCH_LOG=/tmp/flaggems_dispatch.log python -m sglang.launch_server \
 --model-path /data/MiniMax-M3 \
 --tp-size 8 --pp-size 2 \
 --nnodes 2 --node-rank 1 \
---dist-init-addr <node1_ip>:29500 \
+--dist-init-addr <node0_ip>:29500 \
 --host 0.0.0.0 --port 30000 \
 --page-size 1 --disable-cuda-graph --disable-piecewise-cuda-graph \
---trust-remote-code --watchdog-timeout 3600 --mem-fraction-static 0.75 --max-running-requests 1 \
-> minimax3.log 2>&1 &
+--trust-remote-code --watchdog-timeout 3600 --mem-fraction-static 0.75 --max-running-requests 1
 ```
 
 ## Service Invocation
@@ -92,7 +96,7 @@ curl http://localhost:30000/v1/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "Minimax",
-    "prompt": "中国的首都是？",
+    "prompt": "hi",
     "max_tokens": 32,
     "temperature": 0
   }'

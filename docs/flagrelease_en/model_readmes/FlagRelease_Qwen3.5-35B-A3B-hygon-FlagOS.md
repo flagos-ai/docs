@@ -60,23 +60,18 @@ VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=3600 GEMS_VENDOR="hygon" vllm serve /data/Qwe
 
 ## Service Invocation
 ### Invocation Script
-```python
-from openai import OpenAI
-
-client = OpenAI(
-    api_key="EMPTY", 
-    base_url="http://localhost:8000/v1"
-)
-
-response = client.chat.completions.create(
-    model="Qwen3.5-35B-A3B-Flagos",
-    messages=[
-        {"role": "user", "content": "你是谁？"}
+```bash
+curl http://localhost:8000/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+    "model": "Qwen3.5-35B-A3B-Flagos",
+    "messages": [
+        {"role": "user", "content": "hi"}
     ],
-    temperature=0.7,
-    max_tokens=512
-)
-print(response.choices[0].message.content)
+    "temperature": 0.7,
+    "max_tokens": 512,
+    "stream": false
+    }'
 
 ```
 

@@ -52,22 +52,19 @@ docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
-# Enter the inference-related directory
 cd /workspace/hy3_env
-# Set environment variables, need to execute every time entering the container
 source test_env.sh
-# Run the inference serve script on 8 machines
 bash ./hy3_server.sh
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8000/v1/chat/completions \
+curl http://localhost:<port>/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "flagOS",
-    "messages": [{"role": "user", "content": "你好"}]
+    "messages": [{"role": "user", "content": "hi"}]
   }'
 ```
 
