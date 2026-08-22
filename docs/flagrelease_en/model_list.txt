@@ -95,7 +95,9 @@ FlagRelease/Hy3-tsingmicro-FlagOS
 FlagRelease/Hy3-zhenwu-FlagOS
 FlagRelease/Kimi-K2-Instruct-FlagOS
 FlagRelease/Kimi-K2-Thinking-FlagOS
+FlagRelease/Kimi-Linear-48B-A3B-Instruct-ascend-FlagOS
 FlagRelease/Kimi-Linear-48B-A3B-Instruct-hygon-FlagOS
+FlagRelease/Kimi-Linear-48B-A3B-Instruct-iluvatar-FlagOS
 FlagRelease/Kimi-Linear-48B-A3B-Instruct-metax-FlagOS
 FlagRelease/Kimi-Linear-48B-A3B-Instruct-mthreads-FlagOS
 FlagRelease/Kimi-Linear-48B-A3B-Instruct-nvidia-FlagOS
@@ -221,6 +223,7 @@ FlagRelease/Qwen3.8-27B-BF16-tsingmicro-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-zhenwu-FlagOS-Express
 FlagRelease/Qwen3.8-27B-FP8-mthreads-FlagOS
 FlagRelease/Qwen3.8-27B-W4A8-arm-FlagOS-Express
+FlagRelease/Ring-lite-distill-preview-FlagOS
 FlagRelease/RoboBrain-X0
 FlagRelease/RoboBrain-X0-Preview-FlagOS
 FlagRelease/RoboBrain-X0-Preview-ascend-FlagOS
@@ -241,12 +244,12 @@ FlagRelease/Seed-OSS-36B-Instruct-metax-FlagOS
 FlagRelease/Seed-OSS-36B-Instruct-mthreads-FlagOS
 FlagRelease/Seed-OSS-36B-Instruct-nvidia-FlagOS
 FlagRelease/TeleChat3-36B-Thinking-mthreads-FlagOS
+FlagRelease/TeleChat4-29B-BF16-kunlunxin-FlagOS
 FlagRelease/ZCK-Qwen3-8B-metax-FlagOS
 FlagRelease/ZCK-Qwen3-8B-nvidia-FlagOS
 FlagRelease/deepseek-r1-1.5b-nvidia-FlagOS
 FlagRelease/farm_molecular_representation-hygon-FlagOS
 FlagRelease/farm_molecular_representation-nvidia-FlagOS
-FlagRelease/gemma-3-4B-T1-it-hygon-FlagOS
 FlagRelease/gpt-oss-120b-FlagOS
 FlagRelease/grok-2-FlagOS
 FlagRelease/materials.smi-ted-hygon-FlagOS
