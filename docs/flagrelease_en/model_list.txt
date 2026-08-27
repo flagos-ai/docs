@@ -235,6 +235,14 @@ FlagRelease/Qwen3.8-27B-BF16-tsingmicro-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-zhenwu-FlagOS-Express
 FlagRelease/Qwen3.8-27B-FP8-mthreads-FlagOS
 FlagRelease/Qwen3.8-27B-W4A8-arm-FlagOS-Express
+FlagRelease/Qwen3.8-Flash-Next-BF16-ascend-FlagOS
+FlagRelease/Qwen3.8-Flash-Next-BF16-hygon-FlagOS
+FlagRelease/Qwen3.8-Flash-Next-BF16-iluvatar-FlagOS
+FlagRelease/Qwen3.8-Flash-Next-BF16-kunlunxin-FlagOS
+FlagRelease/Qwen3.8-Flash-Next-BF16-metax-FlagOS
+FlagRelease/Qwen3.8-Flash-Next-BF16-mthreads-FlagOS
+FlagRelease/Qwen3.8-Flash-Next-BF16-nvidia-FlagOS
+FlagRelease/Qwen3.8-Flash-Next-BF16-zhenwu-FlagOS
 FlagRelease/RoboBrain-X0
 FlagRelease/RoboBrain-X0-Preview-FlagOS
 FlagRelease/RoboBrain-X0-Preview-ascend-FlagOS
