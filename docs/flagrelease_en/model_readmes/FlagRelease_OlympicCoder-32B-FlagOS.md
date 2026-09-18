@@ -3,16 +3,16 @@
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Ascend** container image supporting deployment within minutes
+- Released **FlagOS-Nvidia** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Seed-OSS-36B-Instruct-ascend-FlagOS-Origin | Seed-OSS-36B-Instruct-ascend-FlagOS-FlagOS |
-|--------------|--------------------------------------------|--------------------------------------------|
-| GPQA_Diamond | 73.33 | 63.33 |
+| Metrics      | OlympicCoder-32B-nvidia-FlagOS-Origin | OlympicCoder-32B-nvidia-FlagOS-FlagOS |
+|--------------|---------------------------------------|---------------------------------------|
+| GPQA_Diamond | 0 | 0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -21,29 +21,31 @@ Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | 20.10.8 |
-| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
+| Docker Version   | 28.2.2
+28.2.2
+22.04.1 |
+| Operating System | Ubuntu 24.04.3 LTS (Noble Numbat) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/seed-oss-36b-instruct-ascend001-gems5.3.4-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp311-ptnpu210-cann90-a64-25.5.0:202609151021-v2
+docker pull harbor.baai.ac.cn/flagrelease-project/olympiccoder-32b-nvidia003-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.24.0-cp312-pt211-cu130-x64-570.158.01:202609112044-v3
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Seed-OSS-36B-Instruct-ascend-FlagOS --local_dir /data/Seed-OSS-36B-Instruct-FlagOS
+modelscope download --model FlagRelease/OlympicCoder-32B-nvidia-FlagOS --local_dir /data/OlympicCoder-32B-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g -v /usr/local/Ascend/driver:/usr/local/Ascend/driver -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi -v /usr/local/dcmi:/usr/local/dcmi -v /usr/local/sbin:/usr/local/sbin -v /etc/ascend_install.info:/etc/ascend_install.info -v /data:/data -e PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256 harbor.baai.ac.cn/flagrelease-public/seed-oss-36b-instruct-ascend001-gems5.3.4-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp311-ptnpu210-cann90-a64-25.5.0:202609151021-v2 sleep infinity
+docker run -itd --name flagos --gpus=all --network=host -v /data:/data harbor.baai.ac.cn/flagrelease-project/olympiccoder-32b-nvidia003-gems5.4.0-tree0.6.0-cxnone-plugin0.2.0-vllm0.24.0-cp312-pt211-cu130-x64-570.158.01:202609112044-v3
 ```
 ### Start the Server
 ```bash
-VLLM_PLUGINS=fl vllm serve /data/Seed-OSS-36B-Instruct-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Seed-OSS-36B-Instruct --tensor-parallel-size 2 --max-model-len 32768 --trust-remote-code
+VLLM_PLUGINS=fl vllm serve /data/OlympicCoder-32B-FlagOS --host 0.0.0.0 --port 8000 --served-model-name OlympicCoder-32B --tensor-parallel-size 1 --max-model-len 32768 --trust-remote-code
 ```
 
 ## Service Invocation
@@ -52,7 +54,7 @@ VLLM_PLUGINS=fl vllm serve /data/Seed-OSS-36B-Instruct-FlagOS --host 0.0.0.0 --p
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Seed-OSS-36B-Instruct",
+    "model": "OlympicCoder-32B",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -105,4 +107,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from ByteDance-Seed/Seed-OSS-36B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from open-r1/OlympicCoder-32B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
