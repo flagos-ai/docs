@@ -10,9 +10,9 @@
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Seed-OSS-36B-Instruct-ascend-FlagOS-Origin | Seed-OSS-36B-Instruct-ascend-FlagOS-FlagOS |
-|--------------|--------------------------------------------|--------------------------------------------|
-| GPQA_Diamond | 73.33 | 63.33 |
+| Metrics      | Qwen2.5-Coder-7B-Instruct-ascend-FlagOS-Origin | Qwen2.5-Coder-7B-Instruct-ascend-FlagOS-FlagOS |
+|--------------|------------------------------------------------|------------------------------------------------|
+| GPQA_Diamond | 38.0 | 32.0 |
 | ERQA | - | - |
 | Aime24 | - | - |
 
@@ -28,22 +28,27 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/seed-oss-36b-instruct-ascend001-gems5.3.4-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp311-ptnpu210-cann90-a64-25.5.0:202609151021-v2
+docker pull harbor.baai.ac.cn/flagrelease-project/qwen2.5-coder-7b-instruct-ascend001-gems5.3.4-tree0.6.0-cxnone-plugin0.2.0-vllm-ascend0.20.2-cp311-ptnpu210-cann90-a64-25.5.0:202608261757-v3-hotfix3
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Seed-OSS-36B-Instruct-ascend-FlagOS --local_dir /data/Seed-OSS-36B-Instruct-FlagOS
+modelscope download --model FlagRelease/Qwen2.5-Coder-7B-Instruct-ascend-FlagOS --local_dir /data/Qwen2.5-Coder-7B-Instruct-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g -v /usr/local/Ascend/driver:/usr/local/Ascend/driver -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi -v /usr/local/dcmi:/usr/local/dcmi -v /usr/local/sbin:/usr/local/sbin -v /etc/ascend_install.info:/etc/ascend_install.info -v /data:/data -e PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256 harbor.baai.ac.cn/flagrelease-public/seed-oss-36b-instruct-ascend001-gems5.3.4-tree0.6.0-cxnone-plugin0.2.0-vllm0.20.2-cp311-ptnpu210-cann90-a64-25.5.0:202609151021-v2 sleep infinity
+docker run -d --name flagos --net=host --ipc=host --privileged --shm-size=64g -v /usr/local/Ascend/driver:/usr/local/Ascend/driver -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi -v /usr/local/dcmi:/usr/local/dcmi -v /usr/local/sbin:/usr/local/sbin -v /etc/ascend_install.info:/etc/ascend_install.info -v /data:/data -e PYTORCH_NPU_ALLOC_CONF=max_split_size_mb:256 harbor.baai.ac.cn/flagrelease-project/qwen2.5-coder-7b-instruct-ascend001-gems5.3.4-tree0.6.0-cxnone-plugin0.2.0-vllm-ascend0.20.2-cp311-ptnpu210-cann90-a64-25.5.0:202608261757-v3-hotfix3 sleep infinity
 ```
 ### Start the Server
 ```bash
-VLLM_PLUGINS=fl vllm serve /data/Seed-OSS-36B-Instruct-FlagOS --host 0.0.0.0 --port 8000 --served-model-name Seed-OSS-36B-Instruct --tensor-parallel-size 2 --max-model-len 32768 --trust-remote-code
+VLLM_PLUGINS=fl vllm serve /data/Qwen2.5-Coder-7B-Instruct-FlagOS \
+--host 0.0.0.0 --port 8000 \
+--tensor-parallel-size 1 \
+--served-model-name Qwen2.5-Coder-7B-Instruct \
+--trust-remote-code \
+--max-model-len 32768
 ```
 
 ## Service Invocation
@@ -52,7 +57,7 @@ VLLM_PLUGINS=fl vllm serve /data/Seed-OSS-36B-Instruct-FlagOS --host 0.0.0.0 --p
 curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "Seed-OSS-36B-Instruct",
+    "model": "Qwen2.5-Coder-7B-Instruct",
     "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
@@ -105,4 +110,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from ByteDance-Seed/Seed-OSS-36B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Qwen/Qwen2.5-Coder-7B-Instruct and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
