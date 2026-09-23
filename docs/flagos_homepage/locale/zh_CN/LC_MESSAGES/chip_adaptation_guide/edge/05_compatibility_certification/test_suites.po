@@ -1,0 +1,263 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:07+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/test_suites_edge.md:2
+msgid "Test Suites"
+msgstr "测试套件详情"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/test_suites_edge.md:4
+msgid "CTS (Compatibility Test Suite) - Compatibility Test Suite"
+msgstr "CTS（Compatibility Test Suite）— 兼容性测试套件"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "**Test domain**"
+msgstr "**测试域**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "**Coverage**"
+msgstr "**覆盖内容**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "**Pass standard**"
+msgstr "**通过标准**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Compiler compatibility"
+msgstr "编译器兼容性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "FlagTree compilation and FLIR IR mapping correctness"
+msgstr "FlagTree 编译 + FLIR IR 映射正确性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "100%"
+msgstr "100%"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Operator compatibility"
+msgstr "算子兼容性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "FlagGems core operator correctness"
+msgstr "FlagGems 核心算子功能正确性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid ">=95%"
+msgstr "≥95%"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Communication compatibility (not required for edge chips)"
+msgstr "通信兼容性（端侧芯片不需适配）"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "FlagCX collective communication correctness"
+msgstr "FlagCX 集合通信功能正确性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Framework compatibility (not required for edge chips)"
+msgstr "框架兼容性（端侧芯片不需适配）"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Basic FlagScale training and inference workflow"
+msgstr "FlagScale 训练/推理基本流程"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "PyTorch API compatibility"
+msgstr "PyTorch API 兼容性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Correctness of common aten API return values"
+msgstr "常用 aten API 返回值正确性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid ">=90%"
+msgstr "≥90%"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Triton API compatibility"
+msgstr "Triton API 兼容性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Triton language feature support"
+msgstr "Triton 语言特性支持度"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Accuracy consistency"
+msgstr "精度一致性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Comparison with the NVIDIA baseline"
+msgstr "与 NVIDIA 基线对比，关键指标"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:5
+msgid "Deviation <2%"
+msgstr "偏差 <2%"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/test_suites_common.md:2
+msgid "VTS (Verification Test Suite) - Verification Test Suite"
+msgstr "VTS（Verification Test Suite）— 验证测试套件"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Stress test"
+msgstr "压力测试"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Continuous operator execution for 72 hours"
+msgstr "连续 72 小时算子执行"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "No crashes"
+msgstr "无崩溃"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Stability test"
+msgstr "稳定性测试"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "1,000 repeated training and inference runs"
+msgstr "重复 1000 次训练/推理流程"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Consistent results"
+msgstr "结果一致"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Long-duration stability"
+msgstr "长稳测试"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Continuous 24/7 operation"
+msgstr "7×24 持续运行"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "No memory leaks"
+msgstr "无内存泄漏"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Resource monitoring"
+msgstr "资源监控"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "GPU utilization, memory bandwidth, and temperature"
+msgstr "GPU 利用率、内存带宽、温度"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Within vendor specifications"
+msgstr "在厂商规格范围内"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/test_suites_edge.md:19
+msgid "STS (Security Test Suite) - Security Test Suite"
+msgstr "STS（Security Test Suite）— 安全测试套件"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "SBOM scanning"
+msgstr "SBOM 扫描"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Dependency vulnerability scanning"
+msgstr "依赖组件漏洞扫描"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "No high-risk vulnerabilities or CVEs"
+msgstr "无高危/CVE"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Driver security"
+msgstr "驱动安全"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Driver file permission and signature validation"
+msgstr "驱动文件权限、签名验证"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Passed"
+msgstr "通过"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Container security"
+msgstr "容器安全"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Container image scanning"
+msgstr "镜像扫描"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "No high-risk vulnerabilities"
+msgstr "无高危"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Communication encryption (not required for edge chips)"
+msgstr "通信加密（端侧芯片不需适配）"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "FlagCX communication-link encryption validation"
+msgstr "FlagCX 通信链路加密验证"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/test_suites_edge.md:28
+msgid "ITS (Interoperability Test Suite) - Interoperability Test Suite"
+msgstr "ITS（Interoperability Test Suite）— 互操作性测试套件"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Heterogeneous mixed training"
+msgstr "异构混合训练"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Chip and NVIDIA mixed training"
+msgstr "该芯片 + NVIDIA 混合训练"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Efficiency >=81%"
+msgstr "效率 ≥81%"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Heterogeneous mixed inference"
+msgstr "异构混合推理"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Chip and NVIDIA mixed inference"
+msgstr "该芯片 + NVIDIA 混合推理"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Accuracy deviation <2%"
+msgstr "精度偏差 <2%"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Cross-vendor communication (not required for edge chips)"
+msgstr "跨厂商通信（端侧芯片不需适配）"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "FlagCX cross-vendor testing"
+msgstr "FlagCX 跨厂商测试"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Correctness 100%"
+msgstr "正确性 100%"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "Multi-framework compatibility"
+msgstr "多框架兼容"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "FlagScale, vLLM, and SGLang"
+msgstr "FlagScale + vLLM + SGLang"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/test_suites.md:16
+msgid "All passed"
+msgstr "全部通过"

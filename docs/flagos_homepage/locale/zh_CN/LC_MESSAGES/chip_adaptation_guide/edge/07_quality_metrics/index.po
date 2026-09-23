@@ -1,0 +1,155 @@
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:38+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/07_quality_metrics/index.md:2
+msgid "Key Quality Metrics"
+msgstr "关键检验指标"
+
+#: ../../chip_adaptation_guide/_shared/07_quality_metrics/edge.md:2
+#
+msgid ""
+"**Performance-related metrics must remain key acceptance criteria "
+"throughout Stages 3-6.** Stage 3 focuses on operator performance, and "
+"Stage 4 focuses on inference accuracy and end-to-end performance."
+msgstr ""
+"**性能相关指标需作为关键检验项贯穿阶段 3-5：** 阶段 3 关注算子性能，阶段 4 关注推理精度与端到端表现；阶段 5 关注 "
+"FlagRelease 发布与镜像上线结果。"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "**Stage**"
+msgstr "**阶段**"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "**Acceptance criteria**"
+msgstr "**核心检验指标**"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "**Pass standard**"
+msgstr "**通过标准**"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "**Required hardware**"
+msgstr "**涉及硬件**"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Stage 0"
+msgstr "阶段 0"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "MOU signing"
+msgstr "MOU 签署"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Effective after both parties sign or seal"
+msgstr "双方盖章生效"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "N/A"
+msgstr "—"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Stage 1"
+msgstr "阶段 1"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Environment readiness"
+msgstr "环境就绪"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Chip is recognized by the OS and PyTorch can recognize the backend"
+msgstr "芯片被 OS + PyTorch 识别"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "1 development board"
+msgstr "开发板 1 台"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Stage 2"
+msgstr "阶段 2"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Triton kernel compilation pass rate"
+msgstr "Triton kernel 编译通过率"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid ">=95%, CI machine availability >=99%"
+msgstr "≥95%，CI 机器可用性 ≥99%"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "1 CI machine"
+msgstr "CI 1 台"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Stage 3"
+msgstr "阶段 3"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "FlagGems operator test pass rate"
+msgstr "FlagGems 算子测试通过率"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid ">=80%, core operators 100%"
+msgstr "≥80%，核心算子 100%"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "2 CI machines and 1 debug machine"
+msgstr "CI 2 台 + 调试机 1 台"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Stage 4"
+msgstr "阶段 4"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Model accuracy deviation"
+msgstr "模型精度偏差"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+#, python-format
+msgid "<2% relative to the NVIDIA baseline"
+msgstr "<2%（相对 NVIDIA 基线）"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Stage 5"
+msgstr "阶段 5"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "CTS core tests passed"
+msgstr "CTS 核心测试项通过"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "100% passed or waiver approved"
+msgstr "100% 或豁免获批"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "2 CI machines and 2 SVT machines"
+msgstr "CI 2 台 + SVT 2 台"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+#
+msgid "Stage 6"
+msgstr "阶段 6"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "Number of models released through FlagRelease"
+msgstr "FlagRelease 上线模型数"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid ">=10 models"
+msgstr "≥10 个"
+
+#: ../../chip_adaptation_guide/edge/07_quality_metrics/index.md:8
+msgid "1 dedicated FR machine"
+msgstr "FR 专机 1 台"

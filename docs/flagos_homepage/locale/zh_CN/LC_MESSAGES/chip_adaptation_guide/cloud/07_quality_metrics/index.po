@@ -1,0 +1,198 @@
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:38+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/07_quality_metrics/index.md:2
+msgid "Key Quality Metrics"
+msgstr "关键检验指标"
+
+#: ../../chip_adaptation_guide/_shared/07_quality_metrics/cloud.md:2
+#
+msgid ""
+"**Performance-related metrics must remain key acceptance criteria "
+"throughout Stages 3-6.** Stage 3 focuses on operator performance, Stage "
+"4a on communication throughput and linearity, and Stage 4b on "
+"training/inference accuracy and end-to-end performance. Before advanced "
+"cooperation, Day 0, distribution, or showroom plans, the efficiency "
+"target relative to the NVIDIA baseline under equivalent compute must be "
+"confirmed. The exact percentage will be defined later according to the "
+"KT2 requirements."
+msgstr ""
+"**性能相关指标需作为关键检验项贯穿阶段 3-6：** 阶段 3 关注算子性能，阶段 4a 关注通信吞吐与线性度，阶段 4b "
+"关注训练/推理精度与端到端表现；进入高级合作、Day 0、发行版或展厅展示计划前，应额外确认同等算力下相对 NVIDIA 基线的效率指标（X%，待"
+" KT2期 口径确定）。"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "**Stage**"
+msgstr "**阶段**"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "**Acceptance criteria**"
+msgstr "**核心检验指标**"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "**Pass standard**"
+msgstr "**通过标准**"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "**Required hardware**"
+msgstr "**涉及硬件**"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 0"
+msgstr "阶段 0"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "MOU signing"
+msgstr "MOU 签署"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Effective after both parties sign or seal"
+msgstr "双方盖章生效"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "N/A"
+msgstr "—"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 1"
+msgstr "阶段 1"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Environment readiness"
+msgstr "环境就绪"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Chip is recognized by the OS and PyTorch can recognize the backend"
+msgstr "芯片被 OS + PyTorch 识别"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "1 development board"
+msgstr "开发板 1 台"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 2"
+msgstr "阶段 2"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Triton kernel compilation pass rate"
+msgstr "Triton kernel 编译通过率"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid ">=95%, CI machine availability >=99%"
+msgstr "≥95%，CI 机器可用性 ≥99%"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "1 CI machine"
+msgstr "CI 1 台"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 3"
+msgstr "阶段 3"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "FlagGems operator test pass rate"
+msgstr "FlagGems 算子测试通过率"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid ">=80%, core operators 100%"
+msgstr "≥80%，核心算子 100%"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "1 CI machine and 1 debug machine"
+msgstr "CI 1 台 + 调试机 1 台"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 4a"
+msgstr "阶段 4a"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Homogeneous collective communication throughput ratio"
+msgstr "集合通信同构吞吐比"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+#, python-format
+msgid ">=99% of the native library"
+msgstr "≥原生库 99%"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "2-machine multi-card cluster"
+msgstr "2 台多卡集群"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 4b"
+msgstr "阶段 4b"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Model accuracy deviation"
+msgstr "模型精度偏差"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+#, python-format
+msgid "<2% relative to the NVIDIA baseline"
+msgstr "<2%（相对 NVIDIA 基线）"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Reuse Stage 4a devices"
+msgstr "复用 4a 设备"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 5"
+msgstr "阶段 5"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "CTS core tests passed"
+msgstr "CTS 核心测试项通过"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "100% passed or waiver approved"
+msgstr "100% 或豁免获批"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "1 CI machine and 2 SVT machines"
+msgstr "CI 1 台 + SVT 2 台"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Stage 6"
+msgstr "阶段 6"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Number of models released through FlagRelease"
+msgstr "FlagRelease 上线模型数"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid ">=10 models"
+msgstr "≥10 个"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "1 dedicated FR machine"
+msgstr "FR 专机 1 台"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Advanced cooperation"
+msgstr "高级合作"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Equivalent-compute performance comparison"
+msgstr "同等算力性能对标"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+#, python-format
+msgid "Efficiency reaches X% of the NVIDIA equivalent-compute baseline"
+msgstr "运行效率达到 NVIDIA 同等算力基线 X%"
+
+#: ../../chip_adaptation_guide/cloud/07_quality_metrics/index.md:8
+msgid "Multi-card cluster, FR machine, or CI"
+msgstr "多卡集群 / FR 专机 / CI"

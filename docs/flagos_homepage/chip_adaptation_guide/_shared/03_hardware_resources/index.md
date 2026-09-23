@@ -1,0 +1,1 @@
+# Hardware Resource Investment Plan

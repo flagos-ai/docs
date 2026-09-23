@@ -1,0 +1,172 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:1
+msgid ""
+"Stage 7: KernelGen Adaptation, Automatic Operator Generation, and "
+"Operator Competition"
+msgstr "阶段 7：KernelGen 适配、算子自动生成与算子大赛"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:3
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:5
+msgid ""
+"Mainline merge is complete, FlagOS certification has passed, the "
+"FlagRelease image has been released, and the chip compiler, runtime, "
+"profiler, and base operator library are available."
+msgstr "主干合入完成，FlagOS 认证通过，FlagRelease 镜像已发布，芯片编译器 / Runtime / Profiler / 基础算子库可用"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:7
+msgid "**Hardware investment**"
+msgstr "**硬件投入**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:9
+msgid ""
+"At least one dedicated KernelGen machine. Multi-card test environments "
+"are required for multi-card or multi-node optimization. Operator "
+"competitions require a separate evaluation machine or isolated queue."
+msgstr "KernelGen 专用机 ≥1 台；如支持多卡、多节点优化，需提供多卡测试环境；算子大赛需提供独立评测机或隔离队列"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:11
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:13
+msgid "Connect to the KernelGen automatic operator generation platform."
+msgstr "接入 KernelGen 自动算子生成平台"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:14
+msgid ""
+"Configure compilation, runtime, validation, and benchmark environments "
+"for the chip."
+msgstr "配置该芯片的编译、运行、验证、Benchmark 环境"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:15
+msgid "Connect the chip profiler for automatic performance bottleneck analysis."
+msgstr "接入芯片 Profiler，实现性能瓶颈自动分析"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:16
+msgid ""
+"Establish performance baselines for PyTorch, Triton, TLE, and native "
+"libraries."
+msgstr "建立 PyTorch / Triton / TLE / 原生库性能基线"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:17
+msgid ""
+"Prioritize high-frequency LLM operators, including Attention, MoE, "
+"RMSNorm, RoPE, TopK, KV Cache, communication fusion, and others."
+msgstr "优先优化 LLM 高频算子，包括 Attention、MoE、RMSNorm、RoPE、TopK、KV Cache、通信融合等"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:18
+msgid "Automatically generate operators and submit PRs to FlagGems and FlagOS."
+msgstr "自动生成算子并向 FlagGems / FlagOS 提交 PR"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:19
+msgid "Build the chip's KernelGen Skills and optimization knowledge base."
+msgstr "沉淀该芯片的 KernelGen Skills 和优化知识库"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:20
+msgid "Connect to the KernelGenBench multi-chip evaluation leaderboard."
+msgstr "接入 KernelGenBench 多芯片评测榜单"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:21
+msgid "Co-host an operator optimization competition or KernelGen Hackathon."
+msgstr "联合举办算子优化赛 / KernelGen Hackathon"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:22
+msgid ""
+"Include outstanding operators in the FlagRelease image and large-model "
+"T+0 release process."
+msgstr "将优秀算子纳入 FlagRelease 镜像和大模型 T+0 发布流程"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:24
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:26
+msgid ""
+"KernelGen chip adaptation report, operator generation environment, "
+"profiler integration documentation, performance baseline report, "
+"generated-operator PR list, merged-operator list, KernelGen Skills, "
+"KernelGenBench results, operator competition plan, and leaderboard."
+msgstr ""
+"KernelGen 芯片适配报告、算子生成环境、Profiler 接入文档、性能基线报告、生成算子 PR 清单、合入算子清单、KernelGen "
+"Skills、KernelGenBench 结果、算子大赛方案与榜单"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:28
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:30
+msgid ""
+"Complete the automatic generation, compilation, correctness validation, "
+"benchmark, and PR loop."
+msgstr "完成自动生成 → 编译 → 正确性验证 → Benchmark → PR 的闭环"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:31
+msgid "Cover at least 30 high-frequency operators in the first batch."
+msgstr "首批覆盖 ≥30 个高频算子"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:32
+msgid "Produce at least 10 mergeable PRs."
+msgstr "形成 ≥10 个可合入 PR"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:33
+msgid "Merge at least 5 FlagGems or FlagOS operators."
+msgstr "合入 ≥5 个 FlagGems / FlagOS 算子"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:34
+msgid ""
+"Achieve at least 1.1x average speedup for key operators with no "
+"performance regression."
+msgstr "重点算子平均加速 ≥1.1x 且无性能回退"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:35
+msgid "Document at least 20 chip optimization Skills."
+msgstr "沉淀 ≥20 条芯片优化 Skill"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:36
+msgid "Cover at least one official KernelGenBench track."
+msgstr "KernelGenBench 至少覆盖 1 个正式赛道"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:37
+msgid "Deliver at least one joint technical case study."
+msgstr "至少 1 个联合技术案例落地"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:39
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:41
+msgid "6-10 weeks"
+msgstr "6-10 周"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:43
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_07_kernelgen.md:45
+msgid ""
+"KernelGen chip integration specification, operator generation "
+"specification, FlagGems PR specification, KernelGenBench evaluation "
+"specification, profiler integration guide, and operator competition "
+"rules."
+msgstr ""
+"KernelGen 芯片接入规范、算子生成规范、FlagGems PR 规范、KernelGenBench 评测规范、Profiler "
+"接入指南，算子大赛规则文档"

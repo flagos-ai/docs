@@ -12,7 +12,17 @@ sd_hide_title: true
 A unified, open-source system software stack designed for a variety of AI chips
 
 [FlagOS Overview](overview.md){ .flagos-outline-btn }
+[Cloud Chip Adaptation Guide](chip_adaptation_guide/cloud_adaptation_guide_index.md){ .flagos-outline-btn }
+[Edge Chip Adaptation Guide](chip_adaptation_guide/edge_adaptation_guide_index.md){ .flagos-outline-btn }
 :::
+
+```{toctree}
+:maxdepth: 1
+:class: flagos-guide-root-toctree
+
+chip_adaptation_guide/cloud_adaptation_guide_index.md
+chip_adaptation_guide/edge_adaptation_guide_index.md
+```
 
 ## FlagOS Core Libraries
 

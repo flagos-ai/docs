@@ -1,0 +1,142 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:2
+msgid ""
+"Stage 1: Development Board Readiness and Base Environment Adaptation "
+"(Chip-Level)"
+msgstr "阶段 1：开发板就绪与基础环境适配（芯片级）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:4
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:6
+msgid "The MOU has been signed."
+msgstr "MOU 已签署"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:8
+msgid "**Hardware investment**"
+msgstr "**硬件投入**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:10
+msgid ""
+"1 development board or server, with remote access provided by the vendor "
+"to the FlagOS team."
+msgstr "1 台开发板/服务器，厂商提供远程访问权限给 FlagOS 团队"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:12
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:14
+msgid ""
+"Provide the chip development board and select at least one operating "
+"system, preferably Ubuntu."
+msgstr "提供芯片开发板，选择不少于一个操作系统（以 Ubuntu 为首选）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:15
+msgid ""
+"Provide the driver and SDK access method. Open downloads are preferred. "
+"If authorization-only downloads are used, programmatic authentication "
+"must support CI/CD automation."
+msgstr "提供驱动及 SDK 获取方式（推荐开放下载；若仅支持授权下载，需支持 CI/CD 自动化场景下的程序化认证）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:16
+msgid ""
+"Confirm base image compatibility. A neutral image is preferred, followed "
+"by a vendor-provided image."
+msgstr "确认基础镜像兼容性（优先中立镜像，其次厂商提供）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:17
+msgid ""
+"Confirm software compatibility, including kernel, Python, and PyTorch "
+"community version coverage."
+msgstr "确认软件兼容性：内核、Python、PyTorch 社区版本范围覆盖"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:18
+msgid ""
+"Validate the base environment: PyTorch can recognize the target device "
+"backend, and the equivalent device discovery API returns an available "
+"device."
+msgstr "基础环境验证：PyTorch 可识别目标设备后端，等效设备发现接口返回可用"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:20
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:22
+msgid "Environment readiness report and driver/SDK access documentation."
+msgstr "环境就绪确认报告，驱动/SDK 获取方式文档"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:24
+msgid "**FlagOS contacts**"
+msgstr "**FlagOS 方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:26
+msgid "Platform engineering team."
+msgstr "平台工程团队"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:28
+msgid "**Chip company contacts**"
+msgstr "**芯片方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:30
+msgid "Driver and firmware engineers."
+msgstr "驱动/固件工程师"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:32
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:34
+msgid ""
+"The chip can be correctly identified by the OS, for example through lspci"
+" or dmidecode."
+msgstr "芯片可被 OS 正确识别（lspci / dmidecode 等）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:35
+msgid "PyTorch can recognize the chip backend."
+msgstr "PyTorch 可识别芯片后端"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:36
+msgid ""
+"Basic operators, such as matrix multiplication and elementwise "
+"operations, execute correctly."
+msgstr "基础算子（矩阵乘、元素级操作）可正常执行"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:37
+msgid "The driver can be obtained unattended."
+msgstr "驱动可无人值守获取"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:39
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:41
+msgid "1-2 weeks"
+msgstr "1-2 周"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:43
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_01_environment.md:45
+msgid ""
+"Environment configuration guide, driver installation manual, and "
+"compatibility matrix."
+msgstr "环境配置指南、驱动安装手册、兼容性矩阵"

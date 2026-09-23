@@ -1,0 +1,151 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 00:00+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/02_cooperation_model/edge.md:2
+msgid "Cooperation Level Model"
+msgstr "合作分级模型"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Cooperation is divided into three levels: basic, intermediate, and advanced. Chip companies progress through the levels step by step. Given the characteristics of edge chips, no adaptation is required for the FlagCX communication library or the large-model training and inference framework."
+msgstr "合作分为初级、中级、高级三个级别，芯片公司逐级晋升。根据端侧芯片的实际情况，对通信库FlagCX，大模型训推框架无适配要求。"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "**Dimension**"
+msgstr "**维度**"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "**Basic (integration validation)**"
+msgstr "**初级（接入验证）**"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "**Intermediate (deep adaptation)**"
+msgstr "**中级（深度适配）**"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "**Advanced (ecosystem co-building)**"
+msgstr "**高级（生态共建）**"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Positioning"
+msgstr "定位"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Integration validation"
+msgstr "接入验证"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Deep adaptation"
+msgstr "深度适配"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Ecosystem co-building"
+msgstr "生态共建"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Operators"
+msgstr "算子"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Adopt selected high-performance FlagGems operators"
+msgstr "采纳部分 FlagGems 高性能算子"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Fully support the FlagGems Stable operator set and commit to using FlagGems by default"
+msgstr "芯片全面支持 FlagGems 稳定（Stable）算子集合，承诺默认采用 FlagGems"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Co-build FlagGems and generate specialized operators with KernelGen<br>"
+msgstr "参与 FlagGems 共建，KernelGen 算子特化生成<br>"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Compiler"
+msgstr "编译器"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Use the FlagTree compiler and C++ Wrapper"
+msgstr "采用 FlagTree 编译器 + C++ Wrapper"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Optimize with Hints and TLE; use FlagTree as the default compiler"
+msgstr "采用 Hints 机制优化 + TLE，默认使用FlagTree 作为编译器"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Co-build all three Triton TLE implementation layers"
+msgstr "全面共建Triton TLE三层实现路径"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "CI/CD"
+msgstr "CI/CD"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Use the FlagOS CI resource pool for unit tests<br>"
+msgstr "支持使用 FlagOS CI 资源池执行单元测试<br>"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Co-build test cases, upstream code, and provide machine resources. Jointly solve technical issues and complete model adaptation and optimization"
+msgstr "共建测试用例，代码进主线，提供机器资源。共同技术攻关，完成模型适配与优化"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Bring in operating-system and cloud partner communities"
+msgstr "带入操作系统和云合作社区"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Compatibility and security"
+msgstr "兼容性与安全"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Provide base container image materials and download channels for customized third-party dependencies"
+msgstr "提供基础容器镜像物料；提供定制第三方依赖包下载渠道"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Obtain FlagOS certification, promptly update customized packages, and respond immediately to package adaptation issues"
+msgstr "设备获得 FlagOS 认证，及时升级定制软件包；对软件包适配问题承诺第一时间响应"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Share security working-group results and bring them into downstream distributions<br>"
+msgstr "共享安全工作组成果，下游发行版带入<br>"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Open-source community"
+msgstr "开源社区"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Basic member"
+msgstr "初级会员"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Intermediate member, eligible to run for PMC"
+msgstr "中级会员，可竞选 PMC"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Advanced member, with course and case-study coverage"
+msgstr "高级会员，课程/案例覆盖"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Business expansion"
+msgstr "商业拓展"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "—"
+msgstr "—"
+
+#: ../../chip_adaptation_guide/edge/02_cooperation_model/index.md:8
+msgid "Bring in partner clouds and MaaS platforms"
+msgstr "带入合作云、MaaS 平台"
+
+msgid "Bring in upstream and downstream ecosystem communities"
+msgstr "上下游社区生态引入"

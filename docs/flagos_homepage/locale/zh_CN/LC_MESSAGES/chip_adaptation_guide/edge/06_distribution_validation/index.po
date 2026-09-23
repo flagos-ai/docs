@@ -1,0 +1,23 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 00:00+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/index.md:4
+msgid "Distribution Validation System (Draft)"
+msgstr "发行版公司验证体系（草稿）"
+
+msgid "End users obtain FlagOS capabilities through operating-system and AI distributions. Distribution companies must validate chip compatibility in their distributions so that adaptation results move beyond experimental environments into real delivery pipelines."
+msgstr "芯片适配的最终用户通过操作系统发行版和 AI 发行版获取 FlagOS 能力。发行版公司需要在各自发行版中验证芯片兼容性，确保适配成果不仅停留在实验环境，而是进入真实交付链路。"

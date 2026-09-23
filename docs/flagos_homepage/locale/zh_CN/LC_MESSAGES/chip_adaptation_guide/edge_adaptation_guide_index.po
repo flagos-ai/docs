@@ -1,0 +1,27 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 00:00+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/edge_adaptation_guide_index.md:3
+msgid "FlagOS Southbound Chip Adaptation Guide: Edge Chips"
+msgstr "FlagOS 南向芯片适配指南：端侧芯片"
+
+#: ../../chip_adaptation_guide/edge_adaptation_guide_index.md:5
+msgid "This guide is for edge AI chip vendors, FlagOS adaptation engineers, system software developers, and distribution partners. It describes the complete path for integrating edge chips with FlagOS, including cooperation levels, device investment, the base environment, the FlagTree compiler, FlagGems operators, compatibility certification, distribution validation, quality metrics, automation tools, promotion criteria, and risk management."
+msgstr "本手册面向端侧 AI 芯片厂商、FlagOS 适配工程师、系统软件开发者和发行版合作伙伴，介绍端侧芯片接入 FlagOS 的完整路径。内容覆盖合作分级、设备投入、基础环境、FlagTree 编译器、FlagGems 算子、兼容性认证、发行版验证、质量指标、自动化工具、晋升条件和风险管理。"
+
+msgid "Edge adaptation focuses on stable operation on single-node or small-scale devices, resource-constrained environments, driver and firmware coordination, and end-to-end efficiency. Edge adaptation does not require the FlagCX communication library or the FlagScale large-model training and inference framework by default; if a product explicitly supports these capabilities, they can be evaluated separately within the actual cooperation scope."
+msgstr "端侧适配重点关注单机或小规模设备上的稳定运行、资源受限环境、驱动固件协同和端到端效率。端侧适配默认不要求 FlagCX 通信库和 FlagScale 大模型训练推理框架；如具体产品明确支持相关能力，可按实际合作范围另行评估。"

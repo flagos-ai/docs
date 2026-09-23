@@ -1,0 +1,50 @@
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:38+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:2
+msgid "Requirements for promotion from basic to intermediate"
+msgstr "初级到中级的必要条件"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:4
+msgid "The FlagTree chip branch runs stably for at least four weeks"
+msgstr "FlagTree 芯片分支稳定运行 ≥4 周"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:6
+msgid "FlagGems operator test coverage is at least 80%"
+msgstr "FlagGems 算子测试覆盖 ≥80%"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:8
+msgid ""
+"The CI single machine is in the FlagOS resource pool with availability of"
+" at least 99%"
+msgstr "CI 单机已纳入 FlagOS 资源池，可用性 ≥99%"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:10
+#
+msgid "The chip passes Sig repository functional validation."
+msgstr "芯片通过 Sig 仓功能验证"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:12
+msgid "Establish an SBOM scanning mechanism"
+msgstr "建立 SBOM 扫描机制"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:14
+msgid "The driver/SDK can be obtained unattended"
+msgstr "驱动/SDK 可无人值守获取"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_intermediate.md:16
+msgid "Sign and pass legal compliance review"
+msgstr "签署并通过法务合规审查"

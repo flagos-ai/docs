@@ -1,0 +1,106 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:07+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/joint_validation.md:2
+msgid "Joint Validation Process"
+msgstr "发行版联合验证流程"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "**Step**"
+msgstr "**步骤**"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "**Action**"
+msgstr "**动作**"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "**Result**"
+msgstr "**结果**"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "1"
+msgstr "1"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "The chip passes FlagOS CTS"
+msgstr "芯片通过 FlagOS CTS"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "CTS report and certification level"
+msgstr "形成 CTS 报告和认证级别"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "2"
+msgstr "2"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid ""
+"FlagOS sends the chip certification information to the distribution "
+"company"
+msgstr "FlagOS 向发行版公司推送芯片认证信息"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "Certification level, CTS report, and device access method"
+msgstr "包含认证级别、CTS 报告、设备接入方式"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "3"
+msgstr "3"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "OS distribution validation"
+msgstr "OS 发行版验证"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "OS distribution validation report"
+msgstr "生成 OS 发行版验证报告"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "4"
+msgstr "4"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "AI distribution validation"
+msgstr "AI 发行版验证"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "AI distribution validation report"
+msgstr "生成 AI 发行版验证报告"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "5"
+msgstr "5"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "ISV validation (optional)"
+msgstr "ISV 验证（可选）"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "Third-party compatibility declaration"
+msgstr "生成第三方兼容性声明"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "6"
+msgstr "6"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "The distribution lists the chip"
+msgstr "发行版收录芯片"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/joint_validation.md:1
+msgid "Entry in the \"FlagOS Compatible\" list"
+msgstr "进入 “FlagOS Compatible” 列表成员"

@@ -1,0 +1,80 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:07+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/compatibility_declaration.md:2
+msgid "Compatibility Declaration"
+msgstr "发行版兼容性声明"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "**Declaration level**"
+msgstr "**声明等级**"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "**Meaning**"
+msgstr "**含义**"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "**Condition**"
+msgstr "**条件**"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Platinum Partner"
+msgstr "Platinum Partner"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "The chip is fully supported in the distribution."
+msgstr "该芯片在发行版中完全受支持"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Passes Level 1 + Level 2 + Level 3 validation and is an advanced partner."
+msgstr "通过层级 1 + 2 + 3 验证，且为高级合作伙伴"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Certified"
+msgstr "Certified"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "The chip is certified to run normally in the distribution."
+msgstr "该芯片在发行版中经认证可正常运行"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Passes Level 1 + Level 2 validation."
+msgstr "通过层级 1 + 2 验证"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Compatible"
+msgstr "Compatible"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "The chip is verified as compatible in the distribution."
+msgstr "该芯片在发行版中经验证兼容"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Passes at least Level 1 validation."
+msgstr "至少通过层级 1 验证"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Community Support"
+msgstr "Community Support"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Community-driven support without official distribution validation."
+msgstr "社区驱动，发行版未做官方验证"
+
+#: ../../chip_adaptation_guide/cloud/06_distribution_validation/compatibility_declaration.md:1
+msgid "Only FlagOS CTS has passed."
+msgstr "仅通过 FlagOS CTS"

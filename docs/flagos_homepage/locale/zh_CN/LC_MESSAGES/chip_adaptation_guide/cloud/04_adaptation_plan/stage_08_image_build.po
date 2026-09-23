@@ -1,0 +1,55 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_08_image_build.md:1
+msgid "Stage 8: Image Build"
+msgstr "阶段 8：Image 构建"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_08_image_build.md:3
+msgid ""
+"Image builds are divided into three levels: base image, runtime image, "
+"and application image."
+msgstr "镜像的构建分为三个层级：base image、runtime image、application image。"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_08_image_build.md:5
+msgid "Follow these documentation guides:"
+msgstr "可遵循以下文档指引："
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_08_image_build.md:7
+msgid ""
+"[Release Info Overview](https://flagos-ai.github.io/release-"
+"info/overview/)"
+msgstr "[Release Info 概览](https://flagos-ai.github.io/release-info/overview/)"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_08_image_build.md:8
+msgid ""
+"[Release Info Onboarding Guide](https://flagos-ai.github.io/release-"
+"info/contribution/onboarding/)"
+msgstr ""
+"[Release Info Onboarding 指南](https://flagos-ai.github.io/release-"
+"info/contribution/onboarding/)"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_08_image_build.md:10
+msgid ""
+"If you would like to join, submit an issue in the [release-info "
+"repository](https://github.com/flagos-ai/release-info/issues)."
+msgstr ""
+"如有意向加入，可在 [release-info 仓库提交 issue](https://github.com/flagos-ai/release-"
+"info/issues)。"
+
+#~ msgid "Image Build (Stage 8)"
+#~ msgstr "Image 构建（阶段 8）"

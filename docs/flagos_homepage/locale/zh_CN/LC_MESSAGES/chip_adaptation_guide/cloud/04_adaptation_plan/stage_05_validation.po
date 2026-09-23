@@ -1,0 +1,138 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:2
+msgid ""
+"Stage 5: End-to-End Validation and Legal Compliance (Intermediate Closing"
+" Gate)"
+msgstr "阶段 5：全流程验证与法务合规（中级收尾关卡）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:4
+msgid ""
+"For cloud chip adaptation, this page corresponds to Stage 5. This stage "
+"follows Stage 4a/4b communication and training/inference framework "
+"adaptation. It focuses on validating CI/CD, system validation testing, "
+"CTS compatibility certification, and legal compliance."
+msgstr ""
+"云端芯片适配中，本页对应阶段 5。该阶段承接阶段 4a/4b 的通信与训练推理框架适配结果，重点验证 CI/CD、系统验证测试、CTS "
+"兼容性认证和法务合规。"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:6
+msgid "**Stage ID**"
+msgstr "**阶段标识**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:8
+msgid "Stage 5"
+msgstr "阶段 5"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:10
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:12
+msgid ""
+"Technical adaptation is complete for Stages 2-4, and the CI/CD resource "
+"pool is ready."
+msgstr "技术适配完成（阶段 2-4），CI/CD 资源池就绪"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:14
+msgid "**Hardware investment**"
+msgstr "**硬件投入**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:16
+msgid ""
+"1 CI machine and 2 SVT (system validation testing) machines. SVT machines"
+" must be physically isolated from CI machines."
+msgstr "CI 机 1 台 + SVT（系统验证测试）机 2 台；SVT 与 CI 机物理隔离"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:18
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:20
+msgid "Validate SIG repository functionality."
+msgstr "Sig 仓功能验证"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:21
+msgid "Run DevSecOps automated build, deployment, and validation."
+msgstr "DevSecOps 自动化构建、部署、验证"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:22
+msgid "Validate SBOM scanning."
+msgstr "SBOM 扫描验证"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:23
+msgid "Run FlagOS CTS compatibility certification tests."
+msgstr "运行 FlagOS CTS 兼容性认证测试"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:24
+msgid "Perform legal compliance review."
+msgstr "法务合规审查"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:26
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:28
+msgid ""
+"Functional validation report, SBOM report, CTS test report, and legal "
+"compliance review opinion."
+msgstr "功能验证报告、SBOM 报告、CTS 测试报告、法务合规审查意见书"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:30
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:32
+msgid "SIG repository test cases pass at 100%."
+msgstr "Sig 仓测试用例 100% 通过"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:33
+msgid "All CTS test items pass or have an explicit waiver list."
+msgstr "CTS 测试项全部通过或有明确豁免清单"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:34
+msgid "SBOM scanning reports no critical vulnerabilities."
+msgstr "SBOM 扫描无高危漏洞"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:35
+msgid "Legal review has no unresolved items."
+msgstr "法务审查无未解决项"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:36
+msgid ""
+"CI/CD and SVT end-to-end automation runs for at least seven days without "
+"interruption."
+msgstr "CI/CD + SVT 全流程自动化运行 ≥7 天无中断"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:38
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:40
+msgid "3-4 weeks"
+msgstr "3-4 周"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:42
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_validation_cloud.md:44
+msgid ""
+"SIG repository test specification, CTS specification, SBOM standard, "
+"compliance review checklist, and DevSecOps practice guide."
+msgstr "Sig 仓测试规范、CTS 规范、SBOM 标准、合规审查清单、DevSecOps 实践指南"

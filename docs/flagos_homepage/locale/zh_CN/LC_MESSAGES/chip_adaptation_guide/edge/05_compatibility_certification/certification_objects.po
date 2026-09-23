@@ -1,0 +1,90 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:07+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/certification_objects.md:2
+msgid "Three-Tier Certification Objects"
+msgstr "三层认证对象"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "**Certification tier**"
+msgstr "**认证层级**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "**Certification object**"
+msgstr "**认证对象**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "**Scope**"
+msgstr "**覆盖范围**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "**Benefits and listing**"
+msgstr "**权益/展示**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "Chip certification"
+msgstr "芯片认证"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "Chip and base software stack"
+msgstr "芯片和基础软件栈"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid ""
+"Drivers, SDK, compiler, operators, communication, frameworks, "
+"performance, and security"
+msgstr "驱动、SDK、编译器、算子、通信、框架、性能和安全"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "Chip compatibility certification, adaptation list, and Day 0 candidate"
+msgstr "芯片兼容性认证、适配清单、Day 0 候选"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "System certification"
+msgstr "整机认证"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "Complete server or device"
+msgstr "服务器/设备整机"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid ""
+"Multi-card interconnect, thermal management, long-duration stability, "
+"SVT, resource monitoring, and system stability"
+msgstr "多卡互联、散热、长稳、SVT、资源监控、稳定性"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "System certification and showroom candidate"
+msgstr "整机认证、展厅展示候选"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "Software/cloud-native certification"
+msgstr "软件/云原生认证"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "OS distributions, containers, Kubernetes, and cloud-native platforms"
+msgstr "OS 发行版、容器、Kubernetes、云原生平台"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid ""
+"Images, scheduling, Kubernetes, system integration, security, and "
+"interoperability"
+msgstr "镜像、调度、K8s、系统集成、安全和互操作"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_objects.md:1
+msgid "Distribution plan and cloud-native ecosystem certification"
+msgstr "发行版计划、云原生生态认证"

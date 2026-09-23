@@ -1,0 +1,59 @@
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:38+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:2
+msgid "Promotion from Intermediate to Advanced"
+msgstr "中级 → 高级的必要条件"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:4
+msgid ""
+"If the hardware supports FlagCX, complete the adaptation and maintain it "
+"continuously; the SVT two-machine cluster must remain stable."
+msgstr "如果为支持 FlagCX 的硬件，需适配完成且持续维护，SVT 双机集群稳定"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:6
+msgid "Use the FlagTree compiler by default."
+msgstr "默认启用 FlagTree 编译器"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:8
+msgid "Pass the FlagOS CTS, VTS, and STS certification tests."
+msgstr "通过 FlagOS CTS + VTS + STS 认证测试"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:10
+msgid ""
+"Establish a compatibility matrix for core dependencies such as PyTorch "
+"and Triton."
+msgstr "建立核心依赖（PyTorch、Triton）兼容性矩阵"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:12
+msgid ""
+"Complete the DevSecOps system and close the loop for security incident "
+"response."
+msgstr "完成 DevSecOps 体系，实现安全事件响应闭环"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:14
+msgid "Co-build the FlagGems operator library and contribute code."
+msgstr "参与 FlagGems 算子库共建并贡献代码"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:16
+msgid ""
+"Prepare the dedicated FlagRelease machine and continuously publish model "
+"images."
+msgstr "FlagRelease 专机就绪，模型镜像持续发布"
+
+#: ../../chip_adaptation_guide/_shared/09_promotion_criteria/promotion_to_advanced.md:18
+msgid "Work with operating-system distributions and cloud partner communities."
+msgstr "协作推进，带入操作系统发行版和云合作社区"

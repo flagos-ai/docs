@@ -1,0 +1,147 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:2
+msgid ""
+"Stage 3: Operator Adaptation - FlagGems Coverage (Entry-to-Intermediate "
+"Progression)"
+msgstr "阶段 3：算子适配 — FlagGems 覆盖（初级→中级推进）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:4
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:6
+msgid "The FlagTree branch is available, and the chip Triton backend is stable."
+msgstr "FlagTree 分支可用，芯片 Triton 后端稳定"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:8
+msgid "**Hardware investment**"
+msgstr "**硬件投入**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:10
+msgid "1 CI machine reused from Stage 2 and 1 optional development/debug machine."
+msgstr "CI 机 1 台（复用阶段 2）+ 开发调试机 1 台（可选）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:12
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:14
+msgid ""
+"Confirm that the CI machine is connected to the FlagOS CI/CD resource "
+"pool."
+msgstr "确认 CI 机接入 FlagOS CI/CD 资源池"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:15
+msgid "Run the FlagGems test suite and identify failed or incompatible operators."
+msgstr "运行 FlagGems 测试套件，识别失败/不兼容算子"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:16
+#, python-format
+msgid ""
+"Fix operator compatibility issues, targeting coverage of at least 80% of "
+"core operators."
+msgstr "修复算子兼容性问题，目标覆盖 ≥80% 核心算子"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:17
+msgid ""
+"Use KernelGen to automatically generate missing operators and validate "
+"them on the chip."
+msgstr "利用 KernelGen 自动生成缺失算子，并针对该芯片验证"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:18
+#, python-format
+msgid ""
+"Tune operator performance, targeting at least 80% of the vendor native "
+"operator performance."
+msgstr "算子性能调优，目标达到或超过厂商原生算子性能的 80%"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:19
+msgid "Establish an SBOM scanning mechanism."
+msgstr "建立 SBOM 扫描机制"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:21
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:23
+msgid ""
+"FlagGems operator compatibility report, test coverage data, and SBOM "
+"scanning baseline."
+msgstr "FlagGems 算子兼容性报告，测试覆盖率数据，SBOM 扫描基线"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:25
+msgid "**FlagOS contacts**"
+msgstr "**FlagOS 方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:27
+msgid "FlagGems operator team and KernelGen platform team."
+msgstr "FlagGems 算子团队 + KernelGen 平台团队"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:29
+msgid "**Chip company contacts**"
+msgstr "**芯片方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:31
+msgid "Operator development engineers."
+msgstr "算子开发工程师"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:33
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:35
+msgid "FlagGems operator test pass rate is at least 80%."
+msgstr "FlagGems 算子测试通过率 ≥80%"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:36
+msgid "Core LLM operators pass at 100%."
+msgstr "核心 LLM 算子 100% 通过"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:37
+#, python-format
+msgid "Operator performance reaches at least 80% of vendor native performance."
+msgstr "算子性能 ≥ 厂商原生性能的 80%"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:38
+msgid "The CI test pipeline runs stably for at least two weeks."
+msgstr "CI 测试流水线稳定运行 ≥2 周"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:40
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:42
+msgid "4-8 weeks"
+msgstr "4-8 周"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:44
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_03_flaggems.md:46
+msgid ""
+"[FlagGems operator library specification "
+"(trial)](https://jwolpxeehx.feishu.cn/docx/GawHdXsuRomaQNxpISec30lxnFg)<br>[KernelGen"
+" Wiki](https://docs.flagos.io/projects/kernelgen/en/latest/)"
+msgstr ""
+"[FlagGems算子库规范[试行]](https://jwolpxeehx.feishu.cn/docx/GawHdXsuRomaQNxpISec30lxnFg)<br>[KernelGen"
+" Wiki](https://docs.flagos.io/projects/kernelgen/en/latest/)"
+
+#~ msgid "Stage 3: FlagGems Operator Adaptation"
+#~ msgstr "阶段 3：FlagGems 算子适配"

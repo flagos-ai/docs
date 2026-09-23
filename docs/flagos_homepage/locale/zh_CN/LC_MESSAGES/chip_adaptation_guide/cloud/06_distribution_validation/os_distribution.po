@@ -1,0 +1,84 @@
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 15:50+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:2
+msgid "OS Distribution Validation"
+msgstr "OS 发行版验证"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:4
+msgid "**Validation party**"
+msgstr "**验证方**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:6
+msgid "OS distribution company"
+msgstr "操作系统发行版公司"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:8
+msgid "**Validation scope**"
+msgstr "**验证范围**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:10
+msgid "Driver loading and stability on the target OS kernel version."
+msgstr "芯片驱动在目标 OS 内核版本上的加载和稳定性"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:11
+msgid "Compatibility of core system libraries such as glibc, libstdc++, and OpenMPI."
+msgstr "基础系统库（glibc、libstdc++、OpenMPI 等）兼容性"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:12
+msgid "Docker/containerd runtime operation."
+msgstr "Docker/containerd 容器运行时正常工作"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:13
+msgid "Kernel module signature validation."
+msgstr "内核模块签名验证"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:15
+msgid "**Hardware requirements**"
+msgstr "**硬件要求**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:17
+msgid "One device provided by the chip company or made available for remote access."
+msgstr "芯片公司提供或开放远程访问的 1 台设备"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:19
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:21
+msgid "The driver loads normally on the target kernel, with no errors in dmesg."
+msgstr "驱动在目标内核上加载无异常（dmesg 无 error）"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:22
+msgid "Core LTP test items pass."
+msgstr "LTP 核心测试项通过"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:23
+msgid "The container runtime can pull and run standard images."
+msgstr "容器运行时可拉取并运行标准镜像"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:25
+msgid "**Relationship to certification**"
+msgstr "**与认证的关系**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/os_distribution.md:27
+msgid "After the chip obtains FlagOS Verified certification, it enters the OS distribution validation pipeline."
+msgstr "芯片获得 FlagOS Verified 认证后，进入 OS 发行版验证管道"
+
+
+
+
+

@@ -1,0 +1,84 @@
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 15:50+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:2
+msgid "AI Distribution Validation"
+msgstr "AI 发行版验证"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:4
+msgid "**Validation party**"
+msgstr "**验证方**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:6
+msgid "AI distribution company"
+msgstr "AI 发行版公司"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:8
+msgid "**Validation scope**"
+msgstr "**验证范围**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:10
+msgid "Complete installation and operation of PyTorch on the chip."
+msgstr "PyTorch 在该芯片上的完整安装和运行"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:11
+msgid "Loading and execution of the FlagGems operator library."
+msgstr "FlagGems 算子库加载和执行"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:12
+msgid "End-to-end operation of the Triton compilation pipeline."
+msgstr "Triton 编译流水线端到端工作"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:13
+msgid "Loading and inference of representative models such as Qwen2.5 and Llama3."
+msgstr "代表模型（如 Qwen2.5、Llama3）加载和推理"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:15
+msgid "**Hardware requirements**"
+msgstr "**硬件要求**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:17
+msgid "The dedicated machine provided by the chip company during the FlagRelease stage can be made available for remote use by the AI distribution."
+msgstr "芯片公司在 FlagRelease 阶段提供的专用机可开放给 AI 发行版远程使用"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:19
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:21
+msgid "PyTorch core test cases pass."
+msgstr "PyTorch 核心测试用例通过"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:22
+msgid "The FlagGems operator loading rate reaches 100%."
+msgstr "FlagGems 算子加载率 100%"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:23
+msgid "Triton kernels compile and execute correctly."
+msgstr "Triton kernel 编译和执行正确"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:25
+msgid "**Relationship to certification**"
+msgstr "**与认证的关系**"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/ai_distribution.md:27
+msgid "AI distribution validation is an important reference condition for FlagOS Platinum certification."
+msgstr "AI 发行版验证是 FlagOS Platinum 认证的重要参考条件"
+
+
+
+
+

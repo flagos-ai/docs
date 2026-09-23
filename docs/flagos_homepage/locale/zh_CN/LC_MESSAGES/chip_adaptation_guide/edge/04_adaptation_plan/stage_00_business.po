@@ -1,0 +1,105 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 15:50+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:2
+msgid "Stage 0: Business Kickoff and Contracting"
+msgstr "阶段 0：商务启动与签约"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:4
+msgid "**Goal**"
+msgstr "**目标**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:6
+msgid "Establish the cooperation relationship and clarify the responsibilities of both parties."
+msgstr "确立合作关系，明确双方权责。"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:8
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:10
+msgid "The chip company has a base SDK/driver and can provide a development environment."
+msgstr "芯片公司具备基础 SDK/驱动，可提供开发环境"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:12
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:14
+msgid "Sign an MOU defining the cooperation goals, adaptation scope, and division of responsibilities."
+msgstr "签署 MOU，明确合作目标、适配范围、责任分工"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:15
+msgid "Connect with the FlagOS cooperation manager and assign contacts for both parties."
+msgstr "对接 FlagOS 合作经理，分配双方接口人"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:16
+msgid "Set the initial target level for chip adaptation, usually starting at the intermediate level."
+msgstr "确定芯片适配的初始目标级别（通常从中级起步）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:17
+msgid "Sign the Contributor License Agreement (CLA)."
+msgstr "签署贡献者许可协议（CLA）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:19
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:21
+msgid "Signed MOU and contact list for both parties."
+msgstr "已签署的 MOU 文档，双方接口人通讯录"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:23
+msgid "**FlagOS contacts**"
+msgstr "**FlagOS 方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:25
+msgid "Dedicated cooperation manager and technical architect."
+msgstr "专属合作经理、技术架构师"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:27
+msgid "**Chip company contacts**"
+msgstr "**芯片方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:29
+msgid "Project director and technical lead."
+msgstr "项目总监、技术负责人"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:31
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:33
+msgid "MOU signed and contacts confirmed by both parties."
+msgstr "MOU 签署完成，双方接口人确认"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:35
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:37
+msgid "1-2 weeks"
+msgstr "1-2 周"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:39
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_00_business.md:41
+msgid "MOU template, CLA, and cooperation handbook"
+msgstr "MOU 模板、CLA 协议、合作手册"
+

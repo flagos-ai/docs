@@ -1,0 +1,27 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 00:00+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/index.md:5
+msgid "Adaptation Stages and Execution Plan"
+msgstr "适配阶段与执行计划"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/index.md:9
+msgid "The cloud chip path progresses through six stages from kickoff to advanced adaptation."
+msgstr "芯片从起步到完成高级适配，按六个阶段推进。"
+
+msgid "The edge chip path progresses through the stages from kickoff to advanced adaptation."
+msgstr "芯片从起步到完成高级适配，按阶段推进。"

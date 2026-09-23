@@ -1,0 +1,146 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:2
+msgid ""
+"Stage 5: FlagRelease Release and Commercial Promotion (Intermediate-to-"
+"Advanced Progression)"
+msgstr "阶段 5：FlagRelease 发布与商业推广（中级→高级）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:4
+msgid ""
+"For edge chip adaptation, this page corresponds to Stage 5. Edge "
+"adaptation has no cloud communication or training/inference framework "
+"stage, so after Stage 4 End-to-End Validation and Legal Compliance "
+"passes, it proceeds directly to FlagRelease release, image availability, "
+"and commercial promotion."
+msgstr ""
+"端侧芯片适配中，本页对应阶段 5。端侧不设置云端的通信与训练推理框架阶段，因此在阶段 4 的全流程验证与法务合规通过后，直接进入 "
+"FlagRelease 发布、镜像上线和商业推广。"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:6
+msgid "**Stage ID**"
+msgstr "**阶段标识**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:8
+msgid "Stage 5"
+msgstr "阶段 5"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:10
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:12
+msgid "Mainline merge is complete, and certification tests have passed."
+msgstr "主干合入完成，认证测试通过"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:14
+msgid "**Hardware investment**"
+msgstr "**硬件投入**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:16
+msgid ""
+"1 dedicated FlagRelease machine, configured independently and not shared "
+"with CI or SVT."
+msgstr "FlagRelease 专用机 1 台（独立配置，不与 CI/SVT 混用）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:18
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:20
+msgid "Obtain official FlagOS certification for the device."
+msgstr "设备获得 FlagOS 正式认证"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:21
+msgid "Run model migration and image builds on the FlagRelease platform."
+msgstr "FlagRelease 平台运行模型迁移和镜像构建"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:22
+msgid "Release Docker images for this chip, expanding the release list over time."
+msgstr "发布该芯片的 Docker 镜像（按实际发布清单持续扩展）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:23
+msgid "Join the FlagOS large-model T+0 release plan."
+msgstr "加入 FlagOS 大模型 T+0 发布计划"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:24
+msgid "Integrate with partner cloud and MaaS platforms."
+msgstr "带入合作云平台和 MaaS 平台"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:25
+msgid ""
+"Promote the vendor to intermediate or advanced open-source community "
+"membership."
+msgstr "上升为开源社区中级/高级会员"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:26
+msgid "Prepare joint branding exposure."
+msgstr "联合品牌露出"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:28
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:30
+msgid ""
+"FlagOS certification certificate, FlagRelease image list, and joint "
+"branding plan."
+msgstr "FlagOS 认证证书、FlagRelease 镜像清单、联合品牌方案"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:32
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:34
+msgid "FlagOS compatibility certification is passed."
+msgstr "通过 FlagOS 兼容性认证"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:35
+msgid ""
+"At least 10 chip-adapted model images are published on the FlagRelease "
+"platform."
+msgstr "FlagRelease 平台上线 ≥10 个模型的芯片适配镜像"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:36
+msgid "At least one joint customer case is delivered."
+msgstr "至少 1 个联合客户案例落地"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:37
+msgid "Dedicated FlagRelease machine availability is at least 99%."
+msgstr "FlagRelease 专用机可用性 ≥99%"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:39
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:41
+msgid "4-6 weeks"
+msgstr "4-6 周"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:43
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_05_release_edge.md:45
+msgid ""
+"Certification standard, image release specification, and joint branding "
+"guide<br>[FlagRelease "
+"Wiki](https://docs.flagos.io/projects/FlagRelease/en/latest/)"
+msgstr ""
+"认证标准文档、镜像发布规范、品牌联合指南<br>[FlagRelease "
+"Wiki](https://docs.flagos.io/projects/FlagRelease/en/latest/)"

@@ -103,7 +103,8 @@ extensions = [
     "sphinx_tippy",
     "sphinxcontrib.lightbox2",  # click-to-enlarge / lightbox for images
     "sphinx_tippy",
-    "sphinx_togglebutton"
+    "sphinx_togglebutton",
+    "flagos_page_tags"
 ]
 
 # Check and add actually installed extensions
@@ -600,7 +601,14 @@ release = '1.0.0'
 # release = version
 
 # Exclude patterns - exclude all other project directories
-exclude_patterns = ["_build", "shared", "_includes"]
+exclude_patterns = [
+    "_build",
+    "shared",
+    "_includes",
+    "chip_adaptation_guide/_shared",
+    "chip_adaptation_guide/TODO.md",
+    "chip_adaptation_guide_toctree_backup",
+]
 all_projects = list(multiproject_projects.keys())
 for project in all_projects:
     if project != docset:
@@ -626,6 +634,8 @@ intersphinx_mapping = {
 }
 
 intersphinx_disabled_reftypes = ["*"]
+
+myst_frontmatter_process = "yaml"
 
 myst_enable_extensions = [
     "dollarmath",
@@ -705,6 +715,8 @@ else:
 # Common static paths
 html_static_path = ["_static", f"{docset}/_static"]
 html_css_files = ["custom.css", "homepage.css"]
+if docset == "flagos_homepage":
+    html_css_files.append("guide.css")
 html_js_files = []
 
 # html_logo = "img/logo.png"
@@ -746,15 +758,18 @@ if html_theme == "pydata_sphinx_theme":
         "use_download_button": False,
         "repository_url": "https://github.com/flagos-ai/KernelGen",
         "use_repository_button": True,
-        "secondary_sidebar_items": {},
+        "secondary_sidebar_items": {
+            "**": ["page-toc"],
+            "flagos_homepage/index": [],
+        },
+        "show_toc_level": 2,
         "footer_start": ["copyright"],
         "footer_end": [],
         "show_sphinx": False,
         "navbar_end": ["navbar-icon-links"]
     }
     
-    # Update secondary sidebar items for flagos_homepage
-    html_theme_options["secondary_sidebar_items"]["flagos_homepage/index"] = []
+    # Keep the FlagOS homepage clean while enabling page-local TOC elsewhere.
     
     # html_sidebars is only for PyData Sphinx Theme
     html_sidebars = {}
@@ -856,4 +871,3 @@ extlinks = {
 }
 
 suppress_warnings = ["epub.unknown_project_files"]
-

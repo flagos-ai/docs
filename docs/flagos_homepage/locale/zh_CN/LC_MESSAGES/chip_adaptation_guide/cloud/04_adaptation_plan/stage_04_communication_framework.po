@@ -1,0 +1,228 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:1
+msgid ""
+"Stage 4: Communication and Training/Inference Framework Adaptation "
+"(Intermediate Core)"
+msgstr "阶段 4：通信与训练推理框架适配（中级核心）"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:3
+msgid "Sub-stage 4a: Communication Adaptation - FlagCX"
+msgstr "子阶段 4a：通信适配 — FlagCX"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:5
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:49
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:7
+msgid "Operator coverage reaches the intermediate standard."
+msgstr "算子覆盖率达中级标准"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:9
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:53
+msgid "**Hardware investment**"
+msgstr "**硬件投入**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:11
+msgid ""
+"At least two servers, each with at least four cards, connected through "
+"high-speed interconnect such as IB or RoCE to form a homogeneous cluster."
+msgstr "至少 2 台服务器，每台 ≥4 卡，高速互联（IB/RoCE），构成同构集群"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:13
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:57
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:15
+msgid "Wrap the vendor native communication library as a unified FlagCX adapter."
+msgstr "将厂商原生通信库封装为 FlagCX 统一适配器"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:16
+msgid ""
+"Implement core collective communication operations: allreduce, "
+"reducescatter, allgather, send, and recv."
+msgstr "实现核心集合通信操作：allreduce、reducescatter、allgather、send/recv"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:17
+#, python-format
+msgid ""
+"Validate homogeneous cluster communication performance, targeting at "
+"least 99% of the native library."
+msgstr "验证同构集群通信性能，目标 ≥ 原生库 99% 吞吐"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:18
+msgid ""
+"Validate heterogeneous cluster mixed communication efficiency, targeting "
+"at least 81%."
+msgstr "验证异构集群混合通信效率，目标 ≥81%"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:20
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:65
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:22
+msgid "FlagCX communication adapter and communication performance test report."
+msgstr "FlagCX 通信适配器，通信性能测试报告"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:24
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:69
+msgid "**FlagOS contacts**"
+msgstr "**FlagOS 方接口人**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:26
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:71
+msgid "FlagOS framework R&D team."
+msgstr "FlagOS 框架研发团队"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:28
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:73
+msgid "**Chip company contacts**"
+msgstr "**芯片方接口人**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:30
+msgid "Communication library and network engineers."
+msgstr "通信库/网络工程师"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:32
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:77
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:34
+msgid ""
+"Collective communication executes correctly in single-node multi-card "
+"environments."
+msgstr "集合通信在单机多卡环境正确执行"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:35
+#, python-format
+msgid "Linearity reaches at least 90% on clusters with eight or more nodes."
+msgstr "8 节点以上集群线性度 ≥90%"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:36
+#, python-format
+msgid "Homogeneous cluster throughput reaches at least 99% of the native library."
+msgstr "同构集群吞吐 ≥原生库 99%"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:37
+msgid "Heterogeneous mixed communication efficiency reaches at least 81%."
+msgstr "异构混合效率 ≥81%"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:39
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:83
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:41
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:85
+msgid "3-5 weeks"
+msgstr "3-5 周"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:43
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:87
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:45
+msgid ""
+"[FlagCX vendor adaptation "
+"guide](https://jwolpxeehx.feishu.cn/docx/Vl1NdA8jiohjl6xZV2GcfV6un4d)"
+msgstr ""
+"[FlagCX "
+"厂商适配](https://jwolpxeehx.feishu.cn/docx/Vl1NdA8jiohjl6xZV2GcfV6un4d)"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:47
+msgid "Sub-stage 4b: Training and Inference Adaptation - FlagScale"
+msgstr "子阶段 4b：训练推理适配 — FlagScale"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:51
+msgid "FlagCX communication validation has passed."
+msgstr "FlagCX 通信验证通过"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:55
+msgid "Reuse the two Stage 4a devices, with persistent storage mounted."
+msgstr "复用阶段 4a 的 2 台设备，增加持久化存储挂载"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:59
+msgid "Adapt the Megatron-LM plugin for the training backend."
+msgstr "适配 Megatron-LM 插件（训练后端）"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:60
+msgid "Adapt the vLLM/SGLang plugins for the inference backend."
+msgstr "适配 vLLM/SGLang 插件（推理后端）"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:61
+msgid "Support TP, PP, DP, EP, and other parallel strategies."
+msgstr "支持 TP、PP、DP、EP 等并行策略"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:62
+msgid "Support FP16, BF16, and FP8 mixed-precision training."
+msgstr "支持 FP16/BF16/FP8 混合精度训练"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:63
+msgid "Adapt vllm-plugin-FL and provide multi-chip inference services."
+msgstr "适配 vllm-plugin-FL，实现多芯片推理服务"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:67
+msgid "FlagScale integration report and training/inference validation results."
+msgstr "FlagScale 集成报告，训练/推理验证结果"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:75
+msgid "Framework engineers."
+msgstr "框架工程师"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:79
+msgid "A representative model can complete one iteration."
+msgstr "代表模型可完整训练一个 iteration"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:80
+msgid ""
+"The inference service responds normally end to end, with accuracy "
+"deviation below 2%."
+msgstr "推理服务端到端响应正常，精度偏差 <2%"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:81
+msgid "The distributed training convergence curve matches the NVIDIA baseline."
+msgstr "分布式训练收敛曲线与 NVIDIA 基线一致"
+
+#: ../../chip_adaptation_guide/cloud/04_adaptation_plan/stage_04_communication_framework.md:89
+msgid ""
+"[FlagOS reference "
+"material](https://jwolpxeehx.feishu.cn/docx/IiAXdz9ZWouEi0xqMMCcUUU7nJe)<br"
+">[TransformerEngine-FL plugin mechanism user "
+"guide](https://jwolpxeehx.feishu.cn/docx/HC0mdLIOFoGv0sxyo8XcFloinOd)<br"
+">[vLLM-plugin-FL plugin mechanism user "
+"guide](https://jwolpxeehx.feishu.cn/docx/Oxeyd2WpMo3XTCxqRNMcSCKHngd)<br"
+">[sglang-plugin-FL vendor adaptation development "
+"guide](https://jwolpxeehx.feishu.cn/wiki/ReW9w8Kguihzm3kAu8GcSIjsn34)<br"
+">[veRL-FL adaptation "
+"documentation](https://jwolpxeehx.feishu.cn/docx/WF7Kdd8ploywmlxBETfc0CWonne)"
+msgstr ""
+"[FlagOS "
+"训练全流程](https://jwolpxeehx.feishu.cn/docx/IiAXdz9ZWouEi0xqMMCcUUU7nJe)<br"
+">[TransformerEngine-FL "
+"插件化机制使用手册](https://jwolpxeehx.feishu.cn/docx/HC0mdLIOFoGv0sxyo8XcFloinOd)<br"
+">[vLLM-plugin-FL "
+"插件化机制使用手册](https://jwolpxeehx.feishu.cn/docx/Oxeyd2WpMo3XTCxqRNMcSCKHngd)<br"
+">[sglang-plugin-FL "
+"厂商适配开发指南](https://jwolpxeehx.feishu.cn/wiki/ReW9w8Kguihzm3kAu8GcSIjsn34)<br"
+">[veRL-FL "
+"适配文档](https://jwolpxeehx.feishu.cn/docx/WF7Kdd8ploywmlxBETfc0CWonne)"

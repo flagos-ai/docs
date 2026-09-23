@@ -1,0 +1,367 @@
+/* FlagOS guide pages visual style.
+   Scoped away from the portal homepage, whose article contains #documentation. */
+
+.bd-page-width:not(:has(#documentation)) {
+  --flagos-bg: #ffffff;
+  --flagos-surface: #f7f7f7;
+  --flagos-surface-raised: #ffffff;
+  --flagos-border: rgba(14, 15, 17, 0.14);
+  --flagos-border-soft: rgba(14, 15, 17, 0.08);
+  --flagos-text: #0e0f11;
+  --flagos-muted: #646a73;
+  --flagos-primary: #3752da;
+  --flagos-primary-soft: rgba(55, 82, 218, 0.1);
+  --flagos-code-bg: #f5f6f8;
+  --flagos-radius: 8px;
+  --pst-font-family-base: "Inter var", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --pst-font-family-heading: "Inter var", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --pst-font-family-monospace: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --pst-color-primary: var(--flagos-primary);
+  --pst-color-link: var(--flagos-primary);
+  --pst-color-link-hover: #233ab6;
+  --pst-color-background: var(--flagos-bg);
+  --pst-color-on-background: var(--flagos-surface-raised);
+  --pst-color-surface: var(--flagos-surface);
+  --pst-color-border: var(--flagos-border);
+  --pst-color-text-base: var(--flagos-text);
+  --pst-color-text-muted: var(--flagos-muted);
+  --pst-sidebar-primary: 300px;
+  --pst-sidebar-secondary: 300px;
+  max-width: none;
+  background: var(--flagos-bg);
+  color: var(--flagos-text);
+}
+
+html[data-theme="dark"] .bd-page-width:not(:has(#documentation)) {
+  --flagos-bg: #101216;
+  --flagos-surface: #171a20;
+  --flagos-surface-raised: #13161b;
+  --flagos-border: rgba(255, 255, 255, 0.14);
+  --flagos-border-soft: rgba(255, 255, 255, 0.08);
+  --flagos-text: #eef1f6;
+  --flagos-muted: #a5adba;
+  --flagos-primary: #8ea0ff;
+  --flagos-primary-soft: rgba(142, 160, 255, 0.14);
+  --flagos-code-bg: #191d24;
+  --pst-color-primary: var(--flagos-primary);
+  --pst-color-link: var(--flagos-primary);
+  --pst-color-link-hover: #b4c0ff;
+  --pst-color-background: var(--flagos-bg);
+  --pst-color-on-background: var(--flagos-surface-raised);
+  --pst-color-surface: var(--flagos-surface);
+  --pst-color-border: var(--flagos-border);
+  --pst-color-text-base: var(--flagos-text);
+  --pst-color-text-muted: var(--flagos-muted);
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-container,
+.bd-page-width:not(:has(#documentation)) .bd-main,
+.bd-page-width:not(:has(#documentation)) .bd-content {
+  background: var(--flagos-bg);
+}
+
+@media (min-width: 992px) {
+  .bd-page-width:not(:has(#documentation)) .bd-sidebar-primary {
+    flex-basis: 300px;
+    width: 300px;
+    max-width: 300px;
+  }
+
+  input#pst-primary-sidebar-checkbox:checked ~ .bd-container .bd-page-width:not(:has(#documentation)) .bd-sidebar-primary,
+  .bd-page-width:not(:has(#documentation)) .bd-sidebar-primary.pst-sidebar-hidden {
+    margin-left: -300px;
+  }
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary {
+  background: var(--flagos-surface);
+  border-right: 1px solid var(--flagos-border-soft);
+  padding: 1rem 0.7rem;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .sidebar-primary-items__start,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .sidebar-primary-items__end {
+  border: 0;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .sidebar-primary-item {
+  margin-bottom: 0.25rem;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .toctree-l1 > a,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .toctree-l2 > a,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .toctree-l3 > a,
+.bd-page-width:not(:has(#documentation)) .bd-links .nav-link,
+.bd-page-width:not(:has(#documentation)) .bd-links .navbar-nav li a {
+  min-height: 30px;
+  border-radius: 6px;
+  color: var(--flagos-muted);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  padding: 0.36rem 0.7rem;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .caption,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary p.caption,
+.bd-page-width:not(:has(#documentation)) .bd-links p.caption {
+  margin: 1.05rem 0 0.35rem;
+  padding: 0 0.7rem;
+  color: var(--flagos-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .current > a,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary .active > a,
+.bd-page-width:not(:has(#documentation)) .bd-links .active > .nav-link,
+.bd-page-width:not(:has(#documentation)) .bd-links .nav-link.active {
+  background: var(--flagos-primary-soft);
+  color: var(--flagos-primary);
+  font-weight: 650;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-primary a:hover,
+.bd-page-width:not(:has(#documentation)) .bd-links .nav-link:hover {
+  background: rgba(14, 15, 17, 0.06);
+  color: var(--flagos-text);
+  text-decoration: none;
+}
+
+html[data-theme="dark"] .bd-page-width:not(:has(#documentation)) .bd-sidebar-primary a:hover,
+html[data-theme="dark"] .bd-page-width:not(:has(#documentation)) .bd-links .nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-main .bd-content {
+  flex: 1 1 auto;
+  max-width: none;
+  justify-content: flex-start;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-main .bd-content .bd-article-container {
+  max-width: 1040px;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-main .bd-content .bd-article-container .bd-article {
+  padding: 2rem 2rem 0;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article {
+  color: var(--flagos-text);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article h1 {
+  margin: 0 0 1rem;
+  color: var(--flagos-text);
+  font-size: 2.15rem;
+  font-weight: 720;
+  line-height: 1.15;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article h2 {
+  margin: 2.25rem 0 0.75rem;
+  color: var(--flagos-text);
+  font-size: 1.45rem;
+  font-weight: 680;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article h3 {
+  margin: 1.8rem 0 0.55rem;
+  color: var(--flagos-text);
+  font-size: 1.15rem;
+  font-weight: 680;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article p,
+.bd-page-width:not(:has(#documentation)) .bd-article li {
+  color: var(--flagos-text);
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article p {
+  margin-bottom: 1rem;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article table ol {
+  margin: 0.2rem 0;
+  padding-left: 1.35rem;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article table ol li {
+  margin: 0.15rem 0;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-article a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+  background: var(--flagos-bg);
+  border-left: 1px solid var(--flagos-border-soft);
+  padding: 1.1rem 0.8rem 0 0.85rem;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .onthispage {
+  color: var(--flagos-text);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .sidebar-secondary-items,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .sidebar-secondary__inner,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .sidebar-secondary-item,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary nav.page-toc,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .bd-toc-nav,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .tocsection,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary ul {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .sidebar-secondary-item {
+  border-left: 1px solid var(--flagos-border-soft);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .toc-entry,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .page-toc li {
+  width: 100%;
+  max-width: 100%;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .toc-entry a,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .page-toc a,
+.bd-page-width:not(:has(#documentation)) .bd-page-toc .toc-entry a {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  border-left: 2px solid transparent;
+  color: var(--flagos-muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  margin-left: 0;
+  padding: 0.22rem 0.2rem 0.22rem 0.75rem;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .toc-entry a:hover,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .page-toc a:hover,
+.bd-page-width:not(:has(#documentation)) .bd-page-toc .toc-entry a:hover {
+  color: var(--flagos-text);
+  text-decoration: none;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .toc-entry a.active,
+.bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .page-toc a.active,
+.bd-page-width:not(:has(#documentation)) .bd-page-toc .toc-entry a.active {
+  border-left-color: var(--flagos-primary);
+  color: var(--flagos-primary);
+  font-weight: 650;
+}
+
+.bd-page-width:not(:has(#documentation)) code.literal,
+.bd-page-width:not(:has(#documentation)) .bd-article code {
+  border: 1px solid var(--flagos-border-soft);
+  border-radius: 5px;
+  background: var(--flagos-code-bg);
+  color: var(--flagos-text);
+  padding: 0.08rem 0.3rem;
+}
+
+.bd-page-width:not(:has(#documentation)) pre,
+.bd-page-width:not(:has(#documentation)) div[class*="highlight-"] {
+  border: 1px solid var(--flagos-border-soft);
+  border-radius: var(--flagos-radius);
+  background: var(--flagos-code-bg);
+}
+
+.bd-page-width:not(:has(#documentation)) div[class*="highlight-"] pre {
+  border: 0;
+}
+
+.bd-page-width:not(:has(#documentation)) .admonition {
+  border: 1px solid var(--flagos-border);
+  border-radius: var(--flagos-radius);
+  box-shadow: none;
+}
+
+.bd-page-width:not(:has(#documentation)) .admonition > .admonition-title {
+  border-bottom: 1px solid var(--flagos-border-soft);
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-content table {
+  border: 1px solid var(--flagos-border);
+  border-radius: var(--flagos-radius);
+  overflow: hidden;
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-content table thead {
+  background: var(--flagos-surface);
+}
+
+.bd-page-width:not(:has(#documentation)) .bd-footer-content,
+.bd-page-width:not(:has(#documentation)) .bd-footer-article {
+  border-top-color: var(--flagos-border-soft);
+}
+
+@media (min-width: 1200px) {
+  .bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary {
+    position: fixed;
+    top: calc(var(--pst-header-height, 4rem) + 0.75rem);
+    left: calc(300px + min(1040px, calc(100vw - 300px - 300px - 3rem)) + 1rem);
+    right: auto;
+    height: calc(100vh - var(--pst-header-height, 4rem) - 1.5rem);
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  .bd-page-width:not(:has(#documentation)):has(.bd-sidebar-primary.hide-on-wide) .bd-main {
+    margin-left: 300px;
+  }
+
+  .bd-page-width:not(:has(#documentation)):has(.bd-sidebar-primary.hide-on-wide) .bd-main .bd-content {
+    max-width: calc(1040px + 300px + 1rem);
+  }
+
+  .bd-page-width:not(:has(#documentation)) .bd-main .bd-content .bd-article-container {
+    max-width: 1040px;
+  }
+
+  .bd-page-width:not(:has(#documentation)) .bd-main .bd-content .bd-article-container .bd-article {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (max-width: 1199.98px) {
+  .bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary {
+    width: min(92vw, 520px) !important;
+    min-width: min(92vw, 520px) !important;
+    max-width: 520px !important;
+    padding: 2rem 1.25rem 1rem;
+  }
+
+  .bd-page-width:not(:has(#documentation)) .bd-sidebar-secondary .sidebar-secondary-item {
+    border-left: 1px solid var(--flagos-border-soft);
+  }
+}
+
+@media (max-width: 768px) {
+  .bd-page-width:not(:has(#documentation)) .bd-main .bd-content .bd-article-container .bd-article {
+    padding: 1rem 1rem 0;
+  }
+
+  .bd-page-width:not(:has(#documentation)) .bd-article h1 {
+    font-size: 2rem;
+  }
+}

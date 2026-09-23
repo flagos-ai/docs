@@ -1,0 +1,157 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 18:17+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:2
+msgid ""
+"Stage 2: Compiler Adaptation - FlagTree Branch Integration (Entry-Level "
+"Threshold)"
+msgstr "阶段 2：编译器适配 — FlagTree 分支接入（初级门槛）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:4
+msgid "**Prerequisites**"
+msgstr "**前置条件**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:6
+msgid ""
+"The development board environment is ready, and the chip Triton backend "
+"or compatibility layer is available."
+msgstr "开发板环境就绪，芯片 Triton 后端（或兼容层）可用"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:8
+msgid "**Hardware investment**"
+msgstr "**硬件投入**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:10
+msgid ""
+"Add the Stage 1 device to the FlagOS CI resource pool and keep it online "
+"24/7."
+msgstr "阶段 1 的 1 台设备纳入 FlagOS CI 资源池，要求 7×24 在线"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:12
+msgid "**Activities**"
+msgstr "**执行事项**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:14
+msgid "Create a protected chip branch in the FlagTree repository."
+msgstr "在 FlagTree 仓库中创建芯片受保护分支"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:15
+msgid ""
+"The chip company provides adaptation code or a compatibility layer for "
+"the Triton backend."
+msgstr "芯片公司提供 Triton 后端的适配代码或兼容层"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:16
+msgid ""
+"Integrate a C++ Wrapper if a bridge from Triton IR to the vendor SDK is "
+"required."
+msgstr "集成 C++ Wrapper（若需要桥接 Triton IR 到厂商 SDK）"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:17
+msgid "Complete instruction mapping through the unified FLIR IR layer."
+msgstr "通过 FLIR 统一 IR 层完成指令映射"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:18
+msgid "Configure a basic CI pipeline for automatic builds and compilation tests."
+msgstr "配置基础 CI 流水线：自动构建 + 编译测试"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:20
+msgid "**Deliverables**"
+msgstr "**交付物**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:22
+msgid "Available FlagTree chip branch and running basic CI pipeline."
+msgstr "FlagTree 芯片分支可用，基础 CI 流水线运行"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:24
+msgid "**FlagOS contacts**"
+msgstr "**FlagOS 方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:26
+msgid "FlagTree compiler team."
+msgstr "FlagTree 编译器团队"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:28
+msgid "**Chip company contacts**"
+msgstr "**芯片方接口人**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:30
+msgid "Compiler and toolchain engineers."
+msgstr "编译器/工具链工程师"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:32
+msgid "**Acceptance criteria**"
+msgstr "**检验指标**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:34
+msgid "Triton kernels can be compiled successfully to the chip backend."
+msgstr "Triton kernel 可成功编译到芯片后端"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:35
+msgid "At least 10 basic operators can be compiled and executed correctly."
+msgstr "至少 10 个基础算子可正确编译和执行"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:36
+msgid ""
+"CI build pass rate is at least 95%, and machine availability is at least "
+"99%."
+msgstr "CI 构建通过率 ≥95%，机器可用性 ≥99%"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:38
+msgid "**Estimated duration**"
+msgstr "**预计周期**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:40
+msgid "2-4 weeks"
+msgstr "2-4 周"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:42
+msgid "**Related documents**"
+msgstr "**对应文档**"
+
+#: ../../chip_adaptation_guide/_shared/04_adaptation_plan/stage_02_flagtree.md:44
+msgid ""
+"[FlagTree integration "
+"guide](https://jwolpxeehx.feishu.cn/docx/VIridPa16odD9hxViDLcsD2vnXb): "
+"integration plans for GPGPU and DSA/NPU devices.<br>Triton-TLE: [GitHub "
+"documentation](https://github.com/flagos-ai/FlagTree/wiki/TLE), "
+"[reference NV implementation](https://github.com/flagos-"
+"ai/FlagTree/tree/triton_v3.6.x), [TLE vendor PR "
+"template](https://jwolpxeehx.feishu.cn/file/VIOsbkSYZoI3I5xhxdLcuz8snVg?from=from_copylink),"
+" [TLE raw CUDA integration vendor "
+"example](https://jwolpxeehx.feishu.cn/wiki/Ipvbwa1WYintOwkmNzUchJJun0c).<br>C++"
+" Wrapper: [libtriton_jit documentation](https://github.com/flagos-"
+"ai/libtriton_jit), [sample PR](https://github.com/flagos-"
+"ai/libtriton_jit/pull/12/changes), [C++ Runtime multi-backend and Triton "
+"operator development "
+"sharing](https://jwolpxeehx.feishu.cn/slides/RPkms0jYol2TA7dvbfScjVJWnlu?from=from_copylink)."
+msgstr ""
+"[FlagTree "
+"接入指南](https://jwolpxeehx.feishu.cn/docx/VIridPa16odD9hxViDLcsD2vnXb): 包含 "
+"GPGPU、DSA/NPU 两类设备的接入方案<br>Triton-TLE：[GitHub（说明文档）](https://github.com"
+"/flagos-ai/FlagTree/wiki/TLE) [参考 NV 具体实现的代码](https://github.com/flagos-"
+"ai/FlagTree/tree/triton_v3.6.x) [TLE 厂商 PR "
+"模版](https://jwolpxeehx.feishu.cn/file/VIOsbkSYZoI3I5xhxdLcuz8snVg?from=from_copylink)"
+" [TLE-Raw CUDA "
+"接入-厂商示例说明](https://jwolpxeehx.feishu.cn/wiki/Ipvbwa1WYintOwkmNzUchJJun0c)<br>C++"
+" Wrapper：[libtriton_jit 说明文档](https://github.com/flagos-ai/libtriton_jit)"
+" [寒武纪示例](https://github.com/flagos-ai/libtriton_jit/pull/12/changes) [C++"
+" Runtime 多后端与 Triton "
+"算子开发分享](https://jwolpxeehx.feishu.cn/slides/RPkms0jYol2TA7dvbfScjVJWnlu?from=from_copylink)"
+
+#~ msgid "Stage 2: FlagTree Compiler Integration"
+#~ msgstr "阶段 2：FlagTree 编译器接入"

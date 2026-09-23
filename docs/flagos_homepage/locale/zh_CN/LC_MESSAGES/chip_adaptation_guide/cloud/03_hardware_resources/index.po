@@ -1,0 +1,240 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 15:57+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/03_hardware_resources/index.md:2
+msgid "Hardware Resource Investment Plan"
+msgstr "硬件资源投入计划"
+
+#: ../../chip_adaptation_guide/_shared/03_hardware_resources/cloud.md:2
+msgid "Throughout chip adaptation, the chip company must provide physical devices at each stage to support CI/CD, validation, and release. For the first two batches, two machines are recommended for each batch. KernelGen is expected to use two machines so that operators can be specialized, tested in batches, and used for operator competitions. Single-card, four-card, or eight-card configurations should be confirmed according to the scenario. Additional machines are usually required for Day 0, distribution, cloud-native, or showroom plans. Virtualization can supplement multi-OS validation, but critical validation still requires physical devices."
+msgstr "芯片适配全过程中，芯片公司需按阶段投入物理设备以支撑 CI/CD、验证和发布。资源补充说明：第一批建议 2 台机器，第二批建议 2 台机器；KernelGen 建议 2 台机器，可以批量特化和测试算子，以及支持算子比赛；单卡、4 卡或 8 卡按具体场景确认。进入 Day 0、发行版、云原生或展厅展示计划时，通常需要额外机器。针对多 OS 操作系统验证，虚拟化技术可以作为补充，但关键验证仍需物理设备。"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "**Stage ID**"
+msgstr "**阶段标识**"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "**Stage**"
+msgstr "**阶段**"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "**Required devices**"
+msgstr "**所需设备**"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "**Purpose**"
+msgstr "**用途**"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "**Configuration requirements**"
+msgstr "**配置要求**"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "**Availability timing**"
+msgstr "**投入时间点**"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 1"
+msgstr "阶段 1"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Environment readiness"
+msgstr "环境就绪"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "1 chip development board or server with remote access for the FlagOS team"
+msgstr "芯片开发板/服务器，供 FlagOS 远程访问"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Single-card operation"
+msgstr "单卡可运行，Ubuntu OS，64GB+ 内存"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Ubuntu OS, 64 GB or more memory"
+msgstr "单卡可运行，Ubuntu OS，64GB+ 内存"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Prepare immediately after the Stage 0 MOU is signed"
+msgstr "阶段 0 签署 MOU 后立即准备"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 2"
+msgstr "阶段 2"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "FlagTree compiler integration"
+msgstr "FlagTree 编译器接入"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "1 device added to the CI resource pool"
+msgstr "1 台 → 纳入 CI 资源池"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Compiler build validation and CI pipeline triggers"
+msgstr "编译器构建验证、CI 流水线触发"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Single card, 200 GB or more disk space, network access to the FlagOS CI cluster"
+msgstr "单卡，200GB+ 磁盘，网络可达 FlagOS CI 集群"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Connect to CI when Stage 2 starts"
+msgstr "阶段 2 启动时接入 CI"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 3"
+msgstr "阶段 3"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "FlagGems operator adaptation"
+msgstr "FlagGems 算子适配"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "1 CI machine and 1 debug machine"
+msgstr "CI 1 台 + 调试机 1 台"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Automated CI tests and operator development/debugging"
+msgstr "CI 自动化测试 + 算子开发调试"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "The CI machine must stay reliably online; the vendor may keep the debug machine locally"
+msgstr "CI 机稳定在线，调试机可由厂商保留本地"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Confirm the CI machine SLA when Stage 3 starts"
+msgstr "阶段 3 启动时确认 CI 机 SLA"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 4a"
+msgstr "阶段 4a"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "FlagCX communication adaptation"
+msgstr "FlagCX 通信适配"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "At least 2 machines, each with at least 4 cards"
+msgstr "至少 2 台（每台 ≥4 卡）"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Collective communication tests and multi-node communication validation"
+msgstr "集合通信测试、多机通信验证"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "High-speed interconnect such as IB or RoCE; homogeneous cluster"
+msgstr "高速互联（IB/RoCE），同构集群"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Available when Stage 4a starts"
+msgstr "阶段 4a 启动时到位"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 4b"
+msgstr "阶段 4b"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "FlagScale training and inference"
+msgstr "FlagScale 训练推理"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "At least 2 machines, reused from Stage 4a"
+msgstr "至少 2 台（复用 4a）"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Distributed training and inference service validation"
+msgstr "分布式训练、推理服务验证"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Same as Stage 4a, with persistent storage mounted"
+msgstr "同上，需持久化存储挂载"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Reuse Stage 4a devices"
+msgstr "复用阶段 4a 设备"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 5"
+msgstr "阶段 5"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "End-to-end validation"
+msgstr "全流程验证"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "1 CI machine and 2 SVT machines"
+msgstr "CI 1 台 + SVT 2 台"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Continuous CI regression and system validation testing"
+msgstr "CI 持续回归 + 系统验证测试"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "SVT machines must be isolated from CI machines to avoid interference"
+msgstr "SVT 机需与 CI 机隔离，避免相互干扰"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Available when Stage 5 starts"
+msgstr "阶段 6 启动时到位"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 6"
+msgstr "阶段 6"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "FlagRelease release"
+msgstr "FlagRelease 发布"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "1 dedicated FR machine"
+msgstr "1 台 FR 专机"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Model migration, image builds, and release validation"
+msgstr "模型迁移、镜像构建、发布验证"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Single card or above, 200 GB or more disk space, high-speed network"
+msgstr "单卡及以上，200GB+ 磁盘，高速网络"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Available when Stage 6 starts"
+msgstr "阶段 6 启动时到位"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Stage 7"
+msgstr "阶段 7"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "KernelGen"
+msgstr "KernelGen"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "2 machines"
+msgstr "2 台"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Automatic operator generation, tuning, and operator competitions"
+msgstr "算子自动生成调优，算子比赛"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "Single-card operation with FlagTree compiler and operator development/tuning environments installed"
+msgstr "单卡可运行，安装 FlagTree 编译器等环境，需要提供算子开发和调优的代码和文档等"
+
+#: ../../chip_adaptation_guide/cloud/03_hardware_resources/index.md:8
+msgid "After Stage 2 is complete"
+msgstr "阶段 2 完成"

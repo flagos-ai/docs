@@ -1,0 +1,125 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:07+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/08_tools_and_skills/skill_catalog.md:2
+msgid "Supporting Skills and Automation Tools"
+msgstr "配套 Skill / 自动化工具支持"
+
+#: ../../chip_adaptation_guide/_shared/08_tools_and_skills/skill_catalog.md:4
+msgid ""
+"FlagOS packages multiple adaptation workflow steps as reusable Agent "
+"Skills. Chip companies and their development teams can use them according"
+" to the adaptation stage."
+msgstr "FlagOS 将适配流程的多个步骤封装为可复用的 Agent Skill，芯片公司及其开发团队可按阶段使用。"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "**Skill name**"
+msgstr "**Skill 名称**"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "**Applicable stage**"
+msgstr "**适用阶段**"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "**Function**"
+msgstr "**功能**"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "gpu-container-setup-flagos"
+msgstr "gpu-container-setup-flagos"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Stage 1"
+msgstr "阶段 1"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid ""
+"Automatically detect the GPU vendor, launch a PyTorch container, and "
+"validate the GPU/accelerator card."
+msgstr "自动检测 GPU 厂商，拉起 PyTorch 容器，验证 GPU/加速卡"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "install-stack-flagos"
+msgstr "install-stack-flagos"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Stages 1-2"
+msgstr "阶段 1-2"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Install the full stack: FlagTree, FlagGems, FlagCX, and FlagScale."
+msgstr "全栈安装（FlagTree + FlagGems + FlagCX + FlagScale）"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "kernelgen-flagos"
+msgstr "kernelgen-flagos"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Stage 3"
+msgstr "阶段 3"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Automatically generate and iteratively optimize operators."
+msgstr "算子自动生成与迭代优化"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "model-migrate-flagos"
+msgstr "model-migrate-flagos"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Stage 4b"
+msgstr "阶段 4b"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Backport models from upstream vLLM to vllm-plugin-FL."
+msgstr "从上游 vLLM 回移植模型到 vllm-plugin-FL"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "model-verify-flagos"
+msgstr "model-verify-flagos"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Stage 5"
+msgstr "阶段 5"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Verify the serving stack step by step."
+msgstr "分步验证 serving stack"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "perf-test-flagos"
+msgstr "perf-test-flagos"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Stages 4-5"
+msgstr "阶段 4-5"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Run performance benchmarks."
+msgstr "性能基准测试"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "flagrelease-entrance-flagos"
+msgstr "flagrelease-entrance-flagos"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Stage 6"
+msgstr "阶段 6"
+
+#: ../../chip_adaptation_guide/cloud/08_tools_and_skills/skill_catalog.md:1
+msgid "Orchestrate the complete release pipeline."
+msgstr "完整发布 pipeline 编排"

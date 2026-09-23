@@ -1,0 +1,23 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-20 00:00+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/index.md:4
+msgid "FlagOS Compatibility Certification System"
+msgstr "FlagOS 兼容性认证体系"
+
+msgid "Following the Android CDD/CTS design, FlagOS has established a tiered certification system. Based on further discussion, certification objects are divided into three layers: chips, complete systems, and software/cloud-native platforms, covering different vendor forms and later showroom, policy, and procurement scenarios."
+msgstr "参考 Android CDD/CTS 设计，FlagOS 建立分级认证体系；同时结合会议讨论，认证对象进一步分为芯片、整机、软件/云原生三层，以覆盖不同厂商形态和后续展示、政策、集采场景。"

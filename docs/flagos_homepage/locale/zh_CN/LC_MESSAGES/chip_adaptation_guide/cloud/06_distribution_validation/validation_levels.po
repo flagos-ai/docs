@@ -1,0 +1,32 @@
+# FlagOS chip adaptation guide Chinese translation.
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 15:57+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/validation_levels.md:2
+msgid "Distribution Validation Levels"
+msgstr "发行版验证层级"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/validation_levels.md:4
+msgid "![image7.png](/chip_adaptation_guide/assets/common/distribution_validation-en.png)"
+msgstr "![image7.png](/chip_adaptation_guide/assets/common/distribution_validation.png)"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/validation_levels.md:4
+msgid "image7.png"
+msgstr "image7.png"
+
+#: ../../chip_adaptation_guide/_shared/06_distribution_validation/validation_levels.md:6
+msgid "Figure 6. Distribution validation levels"
+msgstr "图 6  发行版验证层级"

@@ -1,0 +1,41 @@
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-09-21 19:07+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/cloud_adaptation_guide_index.md:1
+msgid "FlagOS Southbound Chip Adaptation Guide: Cloud Chips"
+msgstr "FlagOS 南向芯片适配指南：云端芯片"
+
+#: ../../chip_adaptation_guide/cloud_adaptation_guide_index.md:3
+msgid ""
+"This guide is for cloud AI chip vendors, FlagOS adaptation engineers, "
+"framework developers, and distribution partners. It describes the "
+"complete path for integrating cloud chips with FlagOS, including "
+"cooperation levels, hardware resources, the base environment, compiler "
+"and operator adaptation, communication and training/inference framework "
+"adaptation, compatibility certification, distribution validation, quality"
+" metrics, automation tools, promotion criteria, and risk management."
+msgstr ""
+"本手册面向云端 AI 芯片厂商、FlagOS 适配工程师、框架开发者和发行版合作伙伴，介绍云端芯片接入 FlagOS 的完整路径。"
+"内容覆盖合作分级、硬件资源、基础环境、编译器与算子适配、通信与训练/推理框架适配、兼容性认证、发行版验证、质量指标、"
+"自动化工具、晋升条件和风险管理。"
+
+#: ../../chip_adaptation_guide/cloud_adaptation_guide_index.md:5
+msgid ""
+"Cloud adaptation focuses on multi-card and multi-node operation, cluster "
+"communication, heterogeneous interoperability, and large-model training "
+"and inference."
+msgstr "云端适配重点关注多卡与多节点运行、集群通信、异构互操作以及大模型训练与推理。"

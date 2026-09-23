@@ -1,0 +1,101 @@
+# Generated from English POT and preserved Chinese baseline.
+msgid ""
+msgstr ""
+"Project-Id-Version: FlagOS Documentation \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-21 19:38+0800\n"
+"PO-Revision-Date: 2026-09-20 00:00+0800\n"
+"Last-Translator: FlagOS Community <flagos@baai.ac.cn>\n"
+"Language: zh_CN\n"
+"Language-Team: zh_CN <flagos@baai.ac.cn>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: ../../chip_adaptation_guide/_shared/05_compatibility_certification/certification_levels.md:2
+msgid "Certification Levels"
+msgstr "四级认证等级"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "**Certification level**"
+msgstr "**认证等级**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "**Requirements**"
+msgstr "**要求**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "**Applicable objects**"
+msgstr "**适用对象**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "**Grant conditions**"
+msgstr "**授予条件**"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "FlagOS Ready"
+msgstr "FlagOS Ready"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "Basic compatibility certification"
+msgstr "基础兼容认证"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "All chips entering intermediate cooperation"
+msgstr "进入中级的所有芯片"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "Core CTS test items pass"
+msgstr "CTS 核心测试项通过"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "FlagOS Verified"
+msgstr "FlagOS Verified"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "Functionality, performance, and security"
+msgstr "功能 + 性能 + 安全"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+#
+msgid "Chips that complete intermediate adaptation"
+msgstr "完成中级适配的芯片"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "CTS, VTS, and STS all pass"
+msgstr "CTS + VTS + STS 全部通过"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "FlagOS Interoperable"
+msgstr "FlagOS Interoperable"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "Heterogeneous interoperability certification"
+msgstr "异构互操作认证"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "Chips entering advanced cooperation"
+msgstr "进入高级的芯片"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "CTS, VTS, STS, and ITS all pass"
+msgstr "CTS + VTS + STS + ITS 全部通过"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "FlagOS Platinum"
+msgstr "FlagOS Platinum"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+#
+msgid "Flagship certification"
+msgstr "旗舰级认证"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "T+0 release partners"
+msgstr "T+0 发布合作伙伴"
+
+#: ../../chip_adaptation_guide/edge/05_compatibility_certification/certification_levels.md:1
+msgid "All tests pass and the partner contributes to the community"
+msgstr "全部测试通过 + 社区共建贡献"
