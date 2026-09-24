@@ -1,5 +1,5 @@
 # Introduction
-
+GLM-4-32B-0414 is a 32B language model from the GLM family by zai-org, built on the Glm4 architecture with 61 layers and a hidden size of 6144, and tuned for instruction following and code. This release packages it with the **FlagOS** software stack for Hygon DCU BW1000 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -10,11 +10,9 @@
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | GLM-4-32B-0414-hygon-FlagOS-Origin | GLM-4-32B-0414-hygon-FlagOS-FlagOS |
-|--------------|------------------------------------|------------------------------------|
-| GPQA_Diamond | 0 | 56.57 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| Metrics      | GLM-4-32B-0414-hygon-Origin | GLM-4-32B-0414-hygon-FlagOS |
+|--------------|-----------------------------|-----------------------------|
+| GPQA_Diamond | 55                          | 53.54                       |
 
 # User Guide
 Environment Setup
