@@ -1,4 +1,5 @@
 # Introduction
+DASD-4B-Thinking is a 4B dense reasoning model from Alibaba-Apsara, post-trained from Qwen3-4B-Instruct-2507 and distilled from gpt-oss-120b for long chain-of-thought reasoning, with 36 layers and a hidden size of 2560. This release packages it with the **FlagOS** software stack for Metax MetaX C550 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -11,9 +12,7 @@
 ## Benchmark Result
 | Metrics      | DASD-4B-Thinking-metax-Origin | DASD-4B-Thinking-metax-FlagOS |
 |--------------|-------------------------------|-------------------------------|
-| GPQA_Diamond | 44.0 | 50.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 44                            | 60.42                         |
 
 # User Guide
 Environment Setup

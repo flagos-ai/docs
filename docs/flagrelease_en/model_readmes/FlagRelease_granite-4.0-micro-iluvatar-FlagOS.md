@@ -5,6 +5,7 @@ frameworks:
 - ""
 ---
 # Introduction
+granite-4.0-micro is a compact instruction-tuned model from IBM Granite built on the GraniteMoeHybrid architecture, which combines dense and Mixture-of-Experts layers, with 40 layers and a hidden size of 2560. This release packages it with the **FlagOS** software stack for Iluvatar BI-V200 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -17,9 +18,7 @@ frameworks:
 ## Benchmark Result
 | Metrics      | granite-4.0-micro-iluvatar-Origin | granite-4.0-micro-iluvatar-FlagOS |
 |--------------|-----------------------------------|-----------------------------------|
-| GPQA_Diamond | 30.0 | 28.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 30                                | 28.0                              |
 
 # User Guide
 Environment Setup
