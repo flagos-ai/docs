@@ -10,11 +10,11 @@ Llama-3.3-Nemotron-Super-49B-v1.5 is a large language model from NVIDIA, derived
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Llama-3.3-Nemotron-Super-49B-v1.5-Metax-FlagOS-Origin | Llama-3.3-Nemotron-Super-49B-v1.5-Metax-FlagOS-FlagOS |
-|--------------|---------------------------------------------------------|---------------------------------------------------------|
-| GPQA_Diamond | 76.0 | 76.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| Metrics      | Llama-3.3-Nemotron-Super-49B-v1.5-Metax-Origin | Llama-3.3-Nemotron-Super-49B-v1.5-Metax-FlagOS |
+|--------------|------------------------------------------------|------------------------------------------------|
+| GPQA_Diamond | 76.0                                           | 76.0                                           |
+| ERQA         | -                                              | -                                              |
+| Aime24       | -                                              | -                                              |
 
 # User Guide
 Environment Setup

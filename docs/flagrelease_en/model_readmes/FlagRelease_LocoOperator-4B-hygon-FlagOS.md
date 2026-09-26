@@ -3,6 +3,7 @@ base_model:
 - ""
 ---
 # Introduction
+LocoOperator-4B is a 4B agentic tool-use model from LocoreMind built on the Qwen3 architecture, with 36 layers, a hidden size of 2560, and a 256k-token context window. This release packages it with the **FlagOS** software stack for Hygon DCU BW1000 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -15,9 +16,7 @@ base_model:
 ## Benchmark Result
 | Metrics      | LocoOperator-4B-hygon-Origin | LocoOperator-4B-hygon-FlagOS |
 |--------------|------------------------------|------------------------------|
-| GPQA_Diamond | 52.0 | 58.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 52                           | 54.0                         |
 
 # User Guide
 Environment Setup
