@@ -1,16 +1,8 @@
 # Install TransformerEngine-FL
 
-## Docker Images (Recommended)
+## Docker (Recommended)
 
-TransformerEngine-FL shares the same Docker image with Megatron-LM-FL:
-
-| Platform | Image | Contents |
-|----------|-------|----------|
-| NVIDIA GPU | `harbor.baai.ac.cn/flagos21-release/megatron-lm-fl:v0.2.0-rc2-nvidia` | torch 2.4.0a0, triton 3.0.0, trans-engine 2.14.0 |
-
-```bash
-docker pull harbor.baai.ac.cn/flagos21-release/megatron-lm-fl:v0.2.0-rc2-nvidia
-```
+TransformerEngine-FL runs in a pre-built Docker image shared with Megatron-LM-FL. Go to the [FlagOS main page](https://flagos.io/Home), pick the image for your hardware from the download list in the middle of the page, and follow the on-page instructions to pull the image, enter the container, and start it.
 
 Suitable for 100B+ parameter model pre-training.
 
@@ -32,8 +24,22 @@ git submodule update --init --recursive
 MAX_JOBS=xxx pip install .
 ```
 
-```{note}
-This requires the image from the vendors. 
+## Non-NVIDIA platforms
+
+TransformerEngine-FL v0.3.0 has been validated on MetaX, Hygon, Ascend, and T-Head PPU. Non-NVIDIA builds must skip the CUDA extension:
+
+```bash
+git clone https://github.com/flagos-ai/TransformerEngine-FL.git
+cd TransformerEngine-FL
+git checkout v0.3.0
+git submodule update --init --recursive
+TE_FL_SKIP_CUDA=1 MAX_JOBS=64 pip install -v . --no-build-isolation --root-user-action=ignore
 ```
 
-For an end-to-end training workflow using TransformerEngine-FL, Megatron-LM-FL, and FlagScale, see [End-to-End Use Case: TransformerEngine-FL + Megatron-LM-FL + FlagScale](/e2e-use-case.md).
+```{note}
+`TE_FL_SKIP_CUDA=1` is mandatory on non-NVIDIA platforms — without it the build tries to compile the CUDA kernels and fails.
+```
+
+The FlagOS operator tier (`te_fl_prefer: flagos`) additionally requires FlagTree and FlagGems. See [Multi-Platform Build and Testing](../user_guide/multi-platform-testing.md) for the full procedure.
+
+For an end-to-end training workflow using TransformerEngine-FL, Megatron-LM-FL, and FlagScale, see [End-to-End Use Case: TransformerEngine-FL + Megatron-LM-FL + FlagScale](../user_guide/e2e-use-case.md).

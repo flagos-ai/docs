@@ -1,16 +1,8 @@
 # 安装 TransformerEngine-FL
 
-## Docker 镜像（推荐）
+## Docker（推荐）
 
-TransformerEngine-FL 与 Megatron-LM-FL 共用同一 Docker 镜像：
-
-| 平台 | 镜像 | 内容 |
-|----------|-------|----------|
-| NVIDIA GPU | `harbor.baai.ac.cn/flagos21-release/megatron-lm-fl:v0.2.0-rc2-nvidia` | torch 2.4.0a0, triton 3.0.0, trans-engine 2.14.0 |
-
-```bash
-docker pull harbor.baai.ac.cn/flagos21-release/megatron-lm-fl:v0.2.0-rc2-nvidia
-```
+TransformerEngine-FL 运行在与 Megatron-LM-FL 共用的预构建 Docker 镜像中。打开 [FlagOS 主页面](https://flagos.io/Home)，在页面正中间的下载列表中选择与你的硬件对应的镜像，按页面上的说明拉取镜像、进入容器并启动。
 
 适用于千亿参数模型预训练。
 
@@ -32,8 +24,22 @@ git submodule update --init --recursive
 MAX_JOBS=xxx pip install .
 ```
 
-```{note}
-此方式需要使用厂商提供的镜像。
+## 非 NVIDIA 平台
+
+TransformerEngine-FL v0.3.0 已在沐曦、海光、昇腾与平头哥 PPU 上完成验证。非 NVIDIA 平台构建时必须跳过 CUDA 扩展：
+
+```bash
+git clone https://github.com/flagos-ai/TransformerEngine-FL.git
+cd TransformerEngine-FL
+git checkout v0.3.0
+git submodule update --init --recursive
+TE_FL_SKIP_CUDA=1 MAX_JOBS=64 pip install -v . --no-build-isolation --root-user-action=ignore
 ```
 
-有关使用 TransformerEngine-FL、Megatron-LM-FL 和 FlagScale 的端到端训练工作流，请参见[端到端用例：TransformerEngine-FL + Megatron-LM-FL + FlagScale](/e2e-use-case.md)。
+```{note}
+非 NVIDIA 平台必须加 `TE_FL_SKIP_CUDA=1`——不加会尝试编译 CUDA kernel 并失败。
+```
+
+FlagOS 算子层（`te_fl_prefer: flagos`）还需要 FlagTree 与 FlagGems。完整流程请参见[多平台构建与测试](../user_guide/multi-platform-testing.md)。
+
+有关使用 TransformerEngine-FL、Megatron-LM-FL 和 FlagScale 的端到端训练工作流，请参见[端到端用例：TransformerEngine-FL + Megatron-LM-FL + FlagScale](../user_guide/e2e-use-case.md)。

@@ -6,32 +6,12 @@
 
 ## 1. Docker 环境
 
-### FlagOS 发版镜像（v0.2.0-rc2，推荐）
+打开 [FlagOS 主页面](https://flagos.io/Home)，在页面正中间的下载列表中选择与你的硬件对应的镜像，按页面上的说明拉取镜像、进入容器并启动。
+
+进入容器后，安装 FlashAttention：
 
 ```bash
-docker pull harbor.baai.ac.cn/flagos21-release/megatron-lm-fl:v0.2.0-rc2-nvidia
-```
-
-内含 torch 2.4.0a0, triton 3.0.0, trans-engine 2.14.0。适用于千亿参数模型预训练。
-
-### CUDA（NVIDIA）
-
-```bash
-docker pull harbor.baai.ac.cn/flagscale/flagscale-train:dev-cu128-py3.12-20260319182856
-docker run -itd --gpus all --shm-size=500g --name <name> harbor.baai.ac.cn/flagscale/flagscale-train:dev-cu128-py3.12-20260319182856 /bin/bash
-docker exec -it <name> /bin/bash
-conda activate flagscale-train
 pip install flash-attn==2.8.3 --no-build-isolation
-pip install upgrade wandb tensorboard
-```
-
-### MetaX
-
-```bash
-docker pull harbor.baai.ac.cn/flagscale/megatron-lm-with-te:202603231839
-docker run -itd --gpus all --shm-size=500g --name <name> --ulimit nofile=65535:65535 --device=/dev/dri --device=/dev/mxcd harbor.baai.ac.cn/flagscale/megatron-lm-with-te:202603231839
-docker exec -it <name> /bin/bash
-conda activate base
 ```
 
 ## 2. 准备 FlagScale
@@ -66,7 +46,7 @@ git checkout <release-tag>
 git submodule update --init --recursive
 MAX_JOBS=64 pip install -v . --no-build-isolation --root-user-action=ignore
 
-# MetaX 环境（镜像：harbor.baai.ac.cn/flagscale/megatron-lm-with-te:202603231839）：
+# 沐曦平台：
 TE_FL_SKIP_CUDA=1 MAX_JOBS=64 pip install -v . --no-build-isolation --root-user-action=ignore
 ```
 
@@ -167,4 +147,4 @@ python run.py \
 - 所有训练测试需要 4 个 GPU
 - 标记为**可选**的参数可根据您的设置进行调整
 - 训练日志写入：`./logs/host_0_localhost.output`
-- 对于 MetaX，安装 TransformerEngine-FL 前设置 `TE_FL_SKIP_CUDA=1`
+- 沐曦平台安装 TransformerEngine-FL 前需设置 `TE_FL_SKIP_CUDA=1`

@@ -6,4 +6,5 @@
 :maxdepth: 2
 
 override-usage.md
+multi-platform-training.md
 ```

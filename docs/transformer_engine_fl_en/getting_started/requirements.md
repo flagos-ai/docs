@@ -9,7 +9,11 @@
 | KunlunXin | Baidu Kunlun chip support with flash attention |
 | Iluvatar | Iluvatar Corex GPU support with full op set |
 | MUSA | Moore Threads S-series GPU support |
+| NPU | Ascend NPU support, requires `transformer_engine_npu` |
 | ENFLAME | ENFLAME chip vendor support with flash attention and operator registration |
+| Tsingmicro | Tsingmicro TXDA support |
+
+Training with TransformerEngine-FL has been validated end to end on MetaX, Hygon, Ascend, and T-Head PPU. See [Multi-Platform Build and Testing](../user_guide/multi-platform-testing.md) for the build flags and the procedure.
 
 ## Operating system
 

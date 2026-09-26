@@ -6,32 +6,12 @@ This guide walks through an end-to-end training workflow using TransformerEngine
 
 ## 1. Docker Environment
 
-### FlagOS Release Image (v0.2.0-rc2, Recommended)
+Go to the [FlagOS main page](https://flagos.io/Home), pick the image for your hardware from the download list in the middle of the page, and follow the on-page instructions to pull the image, enter the container, and start it.
+
+After entering the container, install FlashAttention:
 
 ```bash
-docker pull harbor.baai.ac.cn/flagos21-release/megatron-lm-fl:v0.2.0-rc2-nvidia
-```
-
-Includes torch 2.4.0a0, triton 3.0.0, trans-engine 2.14.0. Suitable for 100B+ parameter model pre-training.
-
-### CUDA (NVIDIA)
-
-```bash
-docker pull harbor.baai.ac.cn/flagscale/flagscale-train:dev-cu128-py3.12-20260319182856
-docker run -itd --gpus all --shm-size=500g --name <name> harbor.baai.ac.cn/flagscale/flagscale-train:dev-cu128-py3.12-20260319182856 /bin/bash
-docker exec -it <name> /bin/bash
-conda activate flagscale-train
 pip install flash-attn==2.8.3 --no-build-isolation
-pip install upgrade wandb tensorboard
-```
-
-### MetaX
-
-```bash
-docker pull harbor.baai.ac.cn/flagscale/megatron-lm-with-te:202603231839
-docker run -itd --gpus all --shm-size=500g --name <name> --ulimit nofile=65535:65535 --device=/dev/dri --device=/dev/mxcd harbor.baai.ac.cn/flagscale/megatron-lm-with-te:202603231839
-docker exec -it <name> /bin/bash
-conda activate base
 ```
 
 ## 2. Prepare FlagScale
@@ -66,7 +46,7 @@ git checkout <release-tag>
 git submodule update --init --recursive
 MAX_JOBS=64 pip install -v . --no-build-isolation --root-user-action=ignore
 
-# In MetaX environment (image: harbor.baai.ac.cn/flagscale/megatron-lm-with-te:202603231839):
+# On MetaX:
 TE_FL_SKIP_CUDA=1 MAX_JOBS=64 pip install -v . --no-build-isolation --root-user-action=ignore
 ```
 
