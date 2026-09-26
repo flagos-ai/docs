@@ -3,6 +3,7 @@ base_model:
 - ""
 ---
 # Introduction
+Jan-v1-4B is a 4B reasoning and tool-use model from janhq, built on the Qwen3 architecture with 36 layers and a hidden size of 2560, and optimized for the Jan App. This release packages it with the **FlagOS** software stack for Iluvatar BI-V200 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -15,9 +16,7 @@ base_model:
 ## Benchmark Result
 | Metrics      | Jan-v1-4B-iluvatar-Origin | Jan-v1-4B-iluvatar-FlagOS |
 |--------------|---------------------------|---------------------------|
-| GPQA_Diamond | 64.0 | 67.35 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 64                        | 67.35                     |
 
 # User Guide
 Environment Setup
