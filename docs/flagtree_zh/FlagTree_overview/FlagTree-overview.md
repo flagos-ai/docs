@@ -6,6 +6,5 @@ FlagTree 是一个面向多种 AI 芯片的开源统一编译器。FlagTree 致�
 
 features.md
 compilation_architecture/compilation-architecture.md
-workflow.md
 
 ```

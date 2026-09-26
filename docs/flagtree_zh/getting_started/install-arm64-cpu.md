@@ -1,3 +1,5 @@
+[<a href="../../../flagtree_en/getting_started/install-arm64-cpu.html">英文版</a>|中文版]
+
 # 在 Arm64 CPU 上安装
 
 在 Arm64 CPU 上安装 FlagTree 之前，请阅读以下注意事项：

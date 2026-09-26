@@ -8,6 +8,6 @@
 requirements.md
 install.md
 run-inference-task.md
-example-qwen2.5-bv150.md
+adaptation-gate.md
 
 ```

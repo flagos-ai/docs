@@ -11,6 +11,7 @@ Getting Started
 ::::{grid} 1 2 2 3
 :gutter: 1 1 1 2
 
+
 :::{grid-item-card} {octicon}`browser;1.5em;sd-mr-1` Overview
 :link: overview/overview
 :link-type: doc
@@ -41,11 +42,11 @@ Guides you how to dispatch operators between FlagGems, vendor-specific, and PyTo
 [Learn more »](dispatch_user_guide/dispatch-user-guide.md)
 :::
 
-:::{grid-item-card} {octicon}`broadcast;1.5em;sd-mr-1` User Guide
+:::{grid-item-card} {octicon}`code;1.5em;sd-mr-1` API Reference
 :link: reference/dispatch-api-reference
 :link-type: doc
 
-Guides you how to dispatch operators between FlagGems, vendor-specific, and PyTorch.
+Lists the dispatch API for calling operators, managing policy, and discovering plugins.
 
 +++
 [Learn more »](reference/dispatch-api-reference.md)

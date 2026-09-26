@@ -18,6 +18,8 @@ TLE-Lite、TLE-Struct 和 TLE-Raw 是编译器语言，位于 AI 生态系统的
 
 Hints、TLE-Lite 和 TLE-Struct 最终将通过 FLIR（即 FlagTree IR）lowering 到 LLVM（低级虚拟机）IR（中间表示），而 TLE-Raw 将通过相应语言的编译管线（如厂商的私有编译器）lowering 到 LLVM IR。最终，它们将被链接在一起，共同生成一个完整的内核，供运行时加载和执行。
 
+跨卡/跨节点的底层通信也按层级划分：TLE-Lite 和 TLE-Struct 的分布式原语通过 FlagCX 完成跨设备通信；TLE-Raw 更底层，与 Raw 处于同一级别，通过 NVSHMEM 直接提供设备端通信接口，且 NVSHMEM 仅用于 NVIDIA 卡。
+
 下图展示了 TLE-Raw 与现有 DSL（TileLang 和 cuTile）以及必要的库和工具（PyCUDA 和 MLIR Pybind）的兼容性，以及其在 AI 生态系统中的位置。
 
 ![alt text](../../assets/images/tle-raw.png)
@@ -59,3 +61,56 @@ Hints、TLE-Lite 和 TLE-Struct 最终将通过 FLIR（即 FlagTree IR）lowerin
 - 扩展 TLE
   - 新的 API 应遵循既定的模式：添加带有语义验证的 Python 表面操作 → 暴露必要的 builder 钩子 → 创建和扩展方言操作 → 添加 lowering Pass 并为后端注册。
   - 将布局和作用域抽象集中在 `types.py` 中，以便在不触及用户代码的情况下切换未来的硬件（例如张量内存），并在 `Passes.td` 中记录任何新的 Pass。
+## 可选的 GPU CommonIR Lowering
+
+默认的 NVIDIA 构建保留原生 TLE GPU Lowering 路径。显式开启 CommonIR 后，前端先将结构化 buffer 操作保留为 CommonIR TileIR，再转换为原生 TTGIR：
+
+```{code-block} text
+tle.gpu.* -> tile.* / !tile.buf -> CommonIRToTTGIR -> 原生 TTGIR
+```
+
+该路径显式表达前端 buffer 语义，不改变 NVIDIA 后端最终接收的 IR 约定。`CommonIRToTTGIR` pass 必须在进入后续 TTGIR 管线前，消除全部 `tile.*`、`!tile.buf` 以及临时的 buffer-to-memdesc 桥接。
+
+此路径在构建时选择，默认关闭，目前只支持默认 NVIDIA 后端。将官方 [FLIR](https://github.com/flagos-ai/flir) `main` 分支的兼容版本放到 `third_party/flir`，然后构建 FlagTree：
+
+```{code-block} bash
+git clone https://github.com/flagos-ai/flir.git third_party/flir
+FLAGTREE_COMMON_IR=1 python -m pip install -e . --no-build-isolation
+```
+
+环境变量 `FLAGTREE_COMMON_IR` 设置内部 CMake 变量 `FLAGTREE_COMMON_IR_ENABLED`。开启时，C++ 构建定义 `__FLAGTREE_COMMON_IR__`，向 Python 暴露一个统一的能力查询接口，并仅在此构建中注册 CommonIR dialect 和 conversion pass。不要同时设置 `FLAGTREE_BACKEND`。在原生路径和 CommonIR 路径之间切换需要重新构建 FlagTree，这不是逐 kernel 的运行时选项。
+
+支持的 GPU buffer 形式如下：
+
+|TLE / 前端形式|CommonIR 形式|原生 TTGIR 结果|
+|---|---|---|
+|`tle.gpu.alloc`（SMEM；CommonIR 不支持 alias）|`tile.alloc` / `!tile.buf<..., #shared>`|`ttg.local_alloc` / `!ttg.memdesc`|
+|`tle.gpu.copy`（整个 buffer 的指针拷贝）|`tile.copy`|同步或异步 TTGIR 拷贝操作|
+|`buf.load()`|`tile.to_tensor`|`ttg.local_load`|
+|`buf.store(value)`|`tile.store_tensor`|`ttg.local_store`|
+|buffered-tensor 的 slot / view|`tile.subview`|memdesc subview|
+|本地 buffer 上的 `tle.gpu.local_ptr`|临时的 `!tile.buf` 到 `!ttg.memdesc` 桥接|已有 TLE local-pointer 操作|
+|`tle.gpu.wgmma` 的共享内存操作数，包括转置|buffer-to-memdesc 桥接|已有 descriptor view 和 WGMMA Lowering|
+
+`buf` 是 `tle.gpu.buffered_tensor`，其 `load()` / `store(value)` 方法在原生与 CommonIR 构建中使用相同写法。原生构建通过 `tle.gpu.local_ptr` 和 `tl.load` / `tl.store` 实现；CommonIR 构建保留整个 buffer 的 TileIR 操作，直到 conversion 阶段。原实验接口 `tle.gpu.to_tensor(buf)` / `tle.gpu.store_tensor(value, buf)` 改用这两个方法，不保留旧名称别名。
+
+TMA descriptor 拷贝经过 buffer-to-memdesc 桥接后，保留已有 TMA 操作。GM 到 shared 的 TMA 拷贝还会保留用户提供的完成屏障和预期字节数，屏障参数校验沿用原生路径。
+
+CommonIR 构建目前会对下列形式给出明确的前端错误，而不是静默绕过 CommonIR：
+
+- 带 alias 的 `tle.gpu.alloc` buffer；
+- 带 mask 的 `tle.gpu.copy`，或在 GM 到 shared 的 TMA 拷贝之外使用完成屏障；
+- remote-buffer `tle.gpu.local_ptr`；
+- 普通指针拷贝携带 offsets（应改为对指针操作数本身添加偏移）。
+
+构建完成后，可运行以下针对性检查：
+
+```{code-block} bash
+python -m pytest -q test/CommonIR/test_gpu_semantics.py
+python -m pytest -q test/CommonIR/test_gpu_wgmma_bridge.py python/test/tle/integration/test_tle_tma_copy.py
+python -m pytest -q python/test/tle/unit/test_tle_whitelist.py
+python -m pytest -q python/test/tle/unit/test_tle_gpu_buffer_access.py
+lit -sv --filter='gpu-tileir' build/cmake.*/test
+```
+
+lit 用例同时检查中间 TileIR 约定，以及最终 TTGIR 中不存在 CommonIR 操作或未消除的桥接 cast。

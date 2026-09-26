@@ -118,6 +118,57 @@ TLE-Raw 通过 LLVM 内联路径支持 CUDA 内核集成。在 CUDA 侧集成 TL
  ![alt text](../assets/images/cuda-side.PNG)
 
 
+### 使用 NVSHMEM 进行多卡通信
+
+NVSHMEM 是 NVIDIA 提供的 PGAS（Partitioned Global Address Space）通信库，为多卡/多节点程序提供统一地址空间：每张 GPU 上的一块内存（对称内存）既可以被本卡访问，也可以被其他 GPU 直接访问，因此跨卡通信可以用普通的 load/store 或 put/get 语义表达，而不必显式编写点对点收发逻辑。它提供主机端与设备端两套 API，设备端接口可在 kernel 内部直接调用，常用于 all-gather、all-reduce、GEMM + 通信融合等场景。NVSHMEM 仅用于 NVIDIA 卡；TLE-Lite 和 TLE-Struct 的分布式原语走的是 FlagCX，不使用 NVSHMEM。
+
+`@dialect` 在 CUDA 集成的基础上新增 `library` 与 `compiler` 参数，用于把 NVSHMEM 设备端接口直接内联进 TLE-Raw kernel：
+
+```{code-block} python
+@dialect(
+    name="cuda",
+    library="nvshmem",
+    compiler="clang",
+    file=(Path(__file__).parent / "simple-shift-device.cu"),
+    extern_func_name="simple_shift",
+)
+def simple_shift(*args, **kwargs):
+    ...
+```
+
+- `library="nvshmem"`：启用 NVSHMEM 设备端 bitcode 链接（`libnvshmem_device.bc`，NVSHMEM 3.7 及以上按 SM 拆分时自动选择对应 `.bc`），并在 kernel 上注册 NVSHMEM cumodule init hook，使设备端 NVSHMEM 调用可以正常初始化。
+- `compiler="clang"`：使用 clang 以 `--cuda-device-only` 编译 `file` 指定的 `.cu` 源文件。
+- `file` / `extern_func_name`：与 CUDA 集成一致，分别指定设备端源文件与其中的函数符号。
+
+调用方式与 CUDA 集成相同，通过 `tle_raw.call` 从 Triton kernel 中调用：
+
+```{code-block} python
+@triton.jit
+def simple_shift_kernel(destination_ptr):
+    tle_raw.call(simple_shift, [destination_ptr])
+```
+
+NVSHMEM 相关的 host 侧准备工作由 `triton.experimental.tle.raw.nvshmem.utils` 提供：
+
+- `init_torch_distributed()` / `init_nvshmem_by_torch_pg(common, group)`：基于 PyTorch 进程组初始化 torch.distributed 与 NVSHMEM。
+- `load_host(source)` / `load_common_host(source=None)`：编译并加载 host 侧 `.cu`（含 `nvshmem.h`、`nvshmemx.h`），返回可直接调用其中 `extern "C"` 函数的库对象。
+- `tensor_from_pointer(pointer, shape, dtype, device)`：在 CUDA 显存上创建非拥有的 Torch tensor 视图。
+- `copy_on_stream(dst_ptr, src_ptr, nbytes, stream)`、`set_signal_cuda_ptr(signal_ptr, signal, stream)`：流上的拷贝与 signal 指针设置。
+- `print_perf(...)` / `print_perf_mean(...)`：按 rank 汇总打印性能数据。
+- `enable_nvshmem_device_bc(enabled=True)` / `is_nvshmem_device_bc_enabled()` / `get_nvshmem_extern_libs(arch=None)`：设备端 bitcode 链接开关与外部库查询（`library="nvshmem"` 会自动开启）。
+
+使用前需要满足：
+
+- 设置 `NVSHMEM_HOME` 环境变量（或通过 `triton.knobs.nvidia.nvshmem_home` 指定），用于解析 `libnvshmem_host.so` 与设备端 bitcode。
+- 示例面向 sm90 及以上架构，且要求 `world_size >= 2`；多卡启动时通过 `RANK`、`LOCAL_RANK`、`WORLD_SIZE`、`LOCAL_WORLD_SIZE` 传入拓扑。
+
+完整示例见 `python/tutorials/tle/raw/nvshmem/`：
+
+- `01-simple-shift`：最小的 NVSHMEM 设备端 put 示例，演示 dialect 声明与 host/device 两侧的配合。
+- `02-allgather-gemm`：基于 NVSHMEM 的 all-gather GEMM（含 benchmark）。
+- `03-gemm-allreduce`：基于 NVSHMEM multimem 的 GEMM + all-reduce。
+- `04-cuda-ipc-allreduce`：基于 CUDA IPC 的 all-reduce（含 benchmark），使用不带 `library="nvshmem"` 的 CUDA 方言。
+
 ### 处理流程
 
 #### 前端: CUDA-LLVM 集成到 Triton 前端和运行时

@@ -59,7 +59,7 @@ export VLLM_FL_CONFIG=/path/to/vllm_fl_dispatch.yaml
 
 ### 配置文件示例
 
-```{code-block}yaml
+```{code-block} yaml
 # vllm_fl_dispatch.yaml
 
 # 首选后端类型：flagos、vendor 或 reference
@@ -128,6 +128,7 @@ op_backends:
     - reference
 ```
 
+(environment-variables)=
 ## 环境变量
 
 环境变量可以覆盖平台配置中的特定项。如果未设置，则使用平台配置文件中的值。
@@ -147,6 +148,7 @@ op_backends:
 | `VLLM_FL_PREFER` | `flagos` | 首选后端：`flagos`、`vendor`、`reference` |
 | `VLLM_FL_STRICT` | `0` | 严格模式：`1` = 出错即失败，`0` = 尝试回退 |
 | `VLLM_FL_PER_OP` | （无） | 每个算子的顺序：`op1=a\|b\|c;op2=x\|y` |
+| `VLLM_FL_HOPPER_LONG_CONTEXT_OPT` | `0` | 在 NVIDIA Hopper 上，将 attention 路由到 FA3，将 `mm`/`mm_out` 路由到原生 CUDA |
 | `VLLM_FL_ALLOW_VENDORS` | （无） | 厂商白名单，逗号分隔 |
 | `VLLM_FL_DENY_VENDORS` | （无） | 厂商黑名单，逗号分隔 |
 
@@ -157,8 +159,9 @@ op_backends:
 | `USE_FLAGGEMS` | `true` | 启用/禁用 FlagGems |
 | `VLLM_FL_FLAGOS_WHITELIST` | （无） | FlagGems 算子白名单（与黑名单互斥） |
 | `VLLM_FL_FLAGOS_BLACKLIST` | （无） | FlagGems 算子黑名单（与白名单互斥） |
+| `VLLM_FL_FLAGOS_BLACKLIST_APPEND` | （无） | 在已选定的平台或显式黑名单基础上追加排除项；白名单生效时忽略此项 |
 
-**优先级**：`WHITELIST` > `BLACKLIST`（环境变量）> `flagos_blacklist`（配置文件）
+**优先级**：`WHITELIST` > （`BLACKLIST` 环境变量或平台 `flagos_blacklist`） + `BLACKLIST_APPEND`
 
 ### OOT 算子控制
 
@@ -203,11 +206,17 @@ export VLLM_FL_PREFER=vendor
 # 覆盖 FlagGems 黑名单（覆盖配置文件黑名单）
 export VLLM_FL_FLAGOS_BLACKLIST="mm,to_copy,zeros"
 
+# 保留平台默认配置并追加一条部署相关的排除项
+export VLLM_FL_FLAGOS_BLACKLIST_APPEND="linear"
+
 # 改用白名单（完全忽略任何黑名单）
 export VLLM_FL_FLAGOS_WHITELIST="silu_and_mul,rms_norm"
 
 # 指定每个算子的顺序
 export VLLM_FL_PER_OP="rms_norm=vendor|flagos|reference"
+
+# 为 A/B 对比启用 NVIDIA Hopper 长上下文路由
+export VLLM_FL_HOPPER_LONG_CONTEXT_OPT=1
 
 # 使用完全自定义的配置文件
 export VLLM_FL_CONFIG=/path/to/my_config.yaml
@@ -237,6 +246,7 @@ WHITELIST（环境变量）──▶ 完全覆盖黑名单
 - 白名单和黑名单环境变量互斥（同时设置会报错）
 - 如果设置了白名单，则完全忽略任何黑名单（环境变量或配置）
 - 环境变量黑名单覆盖配置文件黑名单（不合并）
+- `VLLM_FL_FLAGOS_BLACKLIST_APPEND` 保留已选定的平台黑名单或显式黑名单，并在其基础上追加部署相关的排除项
 ```
 
 #### 示例：组合环境变量
@@ -283,12 +293,18 @@ Op 'rms_norm' fallback to 'reference.torch' (kind=reference, vendor=None)
 
 ## 平台特定配置
 
-系统自动检测硬件并从 `config/` 目录加载相应的配置文件：
+系统根据 vLLM 平台的 `vendor_name` 检测硬件平台，并从 `config/` 目录加载相应的配置文件。每份平台配置都设置了首选后端、每个算子的后端顺序，以及 FlagGems/OOT 黑名单。
 
-| 平台 | 配置文件 | 自动检测 |
-|----------|-------------|----------------|
-| Ascend NPU | `config/ascend.yaml` | `torch.npu.is_available()` |
-| NVIDIA GPU | `config/cuda.yaml` | `torch.cuda.is_available()` |
+| 平台 | 配置文件 | 平台 | 配置文件 |
+|----------|-------------|----------|-------------|
+| Ascend NPU | `config/ascend.yaml` | 摩尔线程（MUSA） | `config/musa.yaml` |
+| NVIDIA GPU | `config/nvidia.yaml` | 沐曦（MACA） | `config/metax.yaml` |
+| NVIDIA Hopper（可选开启） | `config/nvidia_hopper.yaml` | 昆仑芯 | `config/kunlunxin.yaml` |
+| 天数智芯 | `config/iluvatar.yaml` | T-Head PPU | `config/thead.yaml` |
+| 海光 DCU | `config/hygon.yaml` | 曦望 | `config/sunrise.yaml` |
+| 燧原（GCU） | `config/enflame.yaml` | 阿里 PPU | `config/ptg.yaml` |
+
+当设置了 `VLLM_FL_HOPPER_LONG_CONTEXT_OPT=1` 且设备算力为 9.x 时，会选择 `nvidia_hopper.yaml` 而不是 `nvidia.yaml`。
 
 您可以使用 `VLLM_FL_PLATFORM` 环境变量强制指定平台：
 
@@ -305,10 +321,22 @@ export VLLM_FL_PLATFORM=cuda    # 强制使用 CUDA 配置
 
 | 算子 | 说明 | FlagGems | Reference | Vendor |
 |----------|-------------|----------|-----------|--------|
+| `dynamic_per_token_quant_int8` | 对称动态 per-token INT8 量化（兼容 vLLM） | ✓ | ✓ | - |
 | `silu_and_mul` | SiLU 激活 + 逐元素乘法 | ✓ | ✓ | ✓ |
+| `gelu_and_mul` | GELU 激活 + 逐元素乘法 | ✓ | ✓ | ✓ |
 | `rms_norm` | RMS 归一化 | ✓ | ✓ | ✓ |
 | `rotary_embedding` | 旋转位置编码 | ✓ | ✓ | ✓ |
-| `attention_backend` | 注意力后端类路径 | ✓ | - | ✓ |
+| `attention_backend` | 注意力后端类路径 | ✓ | ✓ | ✓ |
+| `topk_softmax` | MoE top-k 路由 + softmax | ✓ | ✓ | ✓ |
+| `grouped_topk` | MoE 分组 top-k 路由 | ✓ | ✓ | ✓ |
+| `moe_align_block_size` | MoE token 对齐与 block size 计算 | ✓ | ✓ | ✓ |
+| `moe_sum` | MoE 专家输出归约 | ✓ | ✓ | ✓ |
+| `invoke_fused_moe_triton_kernel` | Fused MoE Triton kernel 调用 | ✓ | ✓ | ✓ |
+| `chunk_gated_delta_rule_fwd` | Gated delta rule 前向（prefill 路径，线性注意力） | - | - | ✓ |
+| `fused_recurrent_gated_delta_rule_fwd` | Gated delta rule 前向（decode 路径，线性注意力） | - | - | ✓ |
+| `causal_conv1d_fn` | 因果一维卷积（prefill 路径，Mamba 类模型） | - | - | ✓ |
+| `causal_conv1d_update` | 因果一维卷积（decode 路径，Mamba 类模型） | - | - | ✓ |
+| `fused_gdn_gating` | 融合 gated delta network 门控 | - | - | ✓ |
 
 ### 后端优先级
 

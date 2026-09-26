@@ -41,11 +41,11 @@
 [了解更多 »](dispatch_user_guide/dispatch-user-guide.md)
 :::
 
-:::{grid-item-card} {octicon}`broadcast;1.5em;sd-mr-1` 参考文档
+:::{grid-item-card} {octicon}`code;1.5em;sd-mr-1` 参考文档
 :link: reference/dispatch-api-reference
 :link-type: doc
 
-调度 API 参考文档。
+列出用于调用算子、管理策略和发现插件的调度 API。
 
 +++
 [了解更多 »](reference/dispatch-api-reference.md)

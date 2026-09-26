@@ -2,10 +2,23 @@
 
 本节包含 vllm-plugin-FL 的发布信息。
 
-## v0.2.0
+## v0.3.0
 
 
-vllm-plugin-FL v0.2.0 需要 [vllm v0.20.2](https://github.com/vllm-project/vllm/tree/v0.20.2)。支持的平台：NVIDIA、Hygon DCU。
+vllm-plugin-FL v0.3.0 需要 [vllm v0.24.0](https://github.com/vllm-project/vllm/tree/v0.24.0)。
+
+
+- **新增功能**
+
+  - 支持 vLLM 0.24.0，包括官方 vLLM 0.24 CUDA stable-ABI wheel；FlagCX connector 的兼容范围扩展至 vLLM 0.20–0.24。
+  - 面向 vLLM 0.24.0 升级的厂商后端：沐曦 MetaX C550、摩尔线程 MUSA（MTT S5000）、天数智芯 Iluvatar BI-V150、T-Head（PPU）attention 后端与 empty mode、曦望 Sunrise attention 后端、清微智能 TXDA 以及海光工作流。
+  - 量化推理：W8A8 推理适配 vLLM 0.24；Arm CPU 支持 Qwen packed W4A8 与 GDN。
+  - vLLM 0.24 上的 Qwen3.5 纯文本运行时兼容。
+
+## v0.2.2
+
+
+vllm-plugin-FL v0.2.2 需要 [vllm v0.20.2](https://github.com/vllm-project/vllm/tree/v0.20.2)。支持的平台：NVIDIA、Hygon DCU。
 
 - **新增功能**
 

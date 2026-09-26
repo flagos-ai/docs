@@ -178,10 +178,20 @@ export VLLM_FL_LOG_LEVEL=DEBUG
 
 #### 当前厂商后端
 
-| 厂商 | 设备 | 库 | 注意力后端 |
-|--------|--------|---------|-------------------|
-| `cuda` | NVIDIA GPU | `vllm._custom_ops` | -（使用 vLLM 原生） |
-| `ascend` | 华为 NPU | `torch_npu` | `AscendAttentionBackend` |
+| 厂商 | 设备 | 可用性探测 | 注意力后端 |
+|--------|--------|--------------------|-------------------|
+| `cuda` | NVIDIA GPU | FlagGems 厂商探测（排除 CUDA 类设备） | vLLM 原生（`FLASH_ATTN`、`FLASHMLA`、`FLASHMLA_SPARSE`） |
+| `ascend` | 华为 Ascend NPU | `torch.npu.is_available()` | `AscendAttentionBackend`、`AscendMLABackend` |
+| `gcu` | 燧原 GCU | `torch.gcu.is_available()` | `AttentionGCUBackend` |
+| `iluvatar` | 天数智芯 GPU | vLLM 平台厂商 | vLLM 原生（`FLASH_ATTN`、`FLASHMLA`、`TRITON_ATTN`） |
+| `kunlunxin` | 昆仑芯 XPU | `import torch_xmlir` + `torch.cuda.is_available()` | `KunlunxinAttentionBackend` |
+| `metax` | 沐曦（MACA） | `torch.cuda.is_available()` | vLLM 原生，配合 FlagGems 时为 `TRITON_ATTN` |
+| `musa` | 摩尔线程（MUSA） | `torch.musa.is_available()` | `TRITON_ATTN`、`TRITON_MLA` |
+| `sunrise` | 曦望 PPU | `torch.ptpu.is_available()` | `AttentionFLBackend` |
+| `thead` | T-Head PPU | `PPU_SDK` 环境变量 | `FLASH_ATTN`（FA3 wheel） |
+| `txda` | 清微智能 TXDA | `torch.txda.is_available()` | `AttentionFLBackend`、`MLAFLBackend`、`TritonAttentionBackend` |
+
+后端上报的厂商名是 `allow_vendors`、`deny_vendors` 以及 `vendor:<name>` 令牌所匹配的值，它不一定等于目录名：沐曦后端的厂商名是 `maca`，燧原后端是 `gcu`，清微智能后端是 `txda`。
 
 参见 `backends/vendor/template/` 获取创建新厂商后端的模板。
 

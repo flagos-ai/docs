@@ -1,6 +1,6 @@
 # Run an inference task
 
-With vLLM and vllm-plugin-FL installed, you can run inference in two ways: offline batched inference (load the model directly in a Python script) or serving inference (start an API server and send requests). Choose the approach that fits your use case.
+With vLLM and vllm-plugin-FL [installed](install.md), you can run inference in two ways: offline batched inference (load the model directly in a Python script) or serving inference (start an API server and send requests). Choose the approach that fits your use case.
 
 ## Run an offline batched inference
 
@@ -8,8 +8,6 @@ Offline batched inference loads the model directly in a Python script and genera
 
 ```python
 from vllm import LLM, SamplingParams
-import torch
-from vllm.config.compilation import CompilationConfig
 
 
 if __name__ == '__main__':
@@ -37,6 +35,7 @@ The following table lists the descriptions of the key parameters.
 | `temperature=0.0` | Makes generation deterministic (greedy decoding). |
 | `max_tokens=10` | Hard limit on output length per prompt. |
 
+(run-a-serving-inference-task)=
 ## Run a serving inference task
 
 Serving inference starts a long-running vLLM API server that keeps the model loaded in memory, accepting requests via OpenAI-compatible HTTP endpoints — ideal for online services and concurrent clients.
@@ -137,3 +136,5 @@ print("Chat response:", chat_response)
 ```
 
 For examples with other models, see the [examples directory](https://github.com/flagos-ai/vllm-plugin-FL/tree/main/examples).
+
+To validate accelerator adaptation or a vLLM plugin upgrade against the served models, run the [adaptation gate](adaptation-gate.md).

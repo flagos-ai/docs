@@ -1,0 +1,305 @@
+name: Deploy Docs Preview
+
+on:
+  # 推送到任意分支时触发：仅增量构建改动子项目（中英成对构建）
+  push:
+  # 手动触发：全量构建全部子项目（可用 projects 指定子集，可写基础名或全名）
+  workflow_dispatch:
+    inputs:
+      projects:
+        description: "手动构建的子项目（空格分隔；可写基础名如 vllm_plugin_fl 或全名 vllm_plugin_fl_zh；留空或 all = 全部）"
+        required: false
+        default: "all"
+
+# 部署到 gh-pages 分支需要写仓库内容的权限
+permissions:
+  contents: write
+
+# 串行化，避免多个任务同时写 gh-pages 分支
+concurrency:
+  group: "gh-pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # 需要前一次提交以便 git diff 检测改动的子项目
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # 文档构建工具链在 docs/requirements.txt（含 sphinx 及全部扩展）；
+          # 根 requirements.txt 只有 modelscope，缺 sphinx 会导致 sphinx-build: command not found
+          pip install -r docs/requirements.txt
+          # 根 requirements.txt 供个别子项目 autodoc 使用，缺失不应中断文档构建
+          pip install -r requirements.txt || true
+
+      - name: Select subprojects
+        id: select
+        run: |
+          set -euo pipefail
+
+          # conf.py 中定义的全部子项目（白名单）。中英版本都要：_en 与 _zh 成对构建，
+          # 只发布 _en 会导致线上中文站点 404。
+          mapfile -t ALL < <(python - <<'PY' | tr -d '\r'
+          import ast, pathlib
+          src = pathlib.Path("docs/conf.py").read_text(encoding="utf-8")
+          tree = ast.parse(src)
+          for node in ast.walk(tree):
+              if isinstance(node, ast.Assign):
+                  for t in node.targets:
+                      if isinstance(t, ast.Name) and t.id == "multiproject_projects":
+                          for k in node.value.keys:
+                              print(k.value)
+          PY
+          )
+
+          declare -A VALID=()     # 全名 -> 1
+          declare -A BASE_OF=()   # 全名 -> 基础名（去掉 _en/_zh 后缀）
+          ALL_VALID=""
+          for p in "${ALL[@]}"; do
+            case "$p" in
+              # 中英版本都保留，且源目录真实存在（conf.py 里声明但缺目录的会被跳过）
+              *_en|*_zh)
+                if [ -d "docs/$p" ]; then
+                  base="${p%_en}"; base="${base%_zh}"
+                  VALID["$p"]=1
+                  BASE_OF["$p"]="$base"
+                  ALL_VALID="$ALL_VALID $p"
+                else
+                  echo "::warning::Skipping $p: source dir docs/$p not found"
+                fi
+                ;;
+            esac
+          done
+          ALL_VALID=$(echo "$ALL_VALID" | xargs)
+          if [ -z "$ALL_VALID" ]; then
+            echo "::error::No _en/_zh subprojects found in docs/conf.py"
+            exit 1
+          fi
+
+          # 由基础名或全名展开成该基础名的全部语言版本（保证中英同批构建、互相可切换）
+          expand() {
+            local want="$1" base
+            case "$want" in
+              *_en|*_zh) base="${want%_en}"; base="${base%_zh}" ;;
+              *)         base="$want" ;;
+            esac
+            local p out=""
+            for p in $ALL_VALID; do
+              if [ "${BASE_OF[$p]}" = "$base" ]; then out="$out $p"; fi
+            done
+            echo "$out"
+          }
+
+          MODE="incremental"
+          SELECTED=""
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # 手动触发：全量（或按输入过滤到有效的子项目）
+            MODE="full"
+            REQ="${{ github.event.inputs.projects }}"
+            if [ -z "$REQ" ] || [ "$REQ" = "all" ]; then
+              SELECTED="$ALL_VALID"
+            else
+              for p in $REQ; do
+                SELECTED="$SELECTED $(expand "$p")"
+              done
+            fi
+          else
+            # push：从 git diff 提取改动的子项目，只增量构建它们（含其另一种语言版本）
+            BEFORE="${{ github.event.before }}"
+            if [ -z "$BEFORE" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+              BEFORE="HEAD~1"
+            fi
+            CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}" -- 'docs/*' || true)
+            declare -A SEEN=()
+            while IFS= read -r f; do
+              proj=$(echo "$f" | sed -n 's#^docs/\([^/]*\)/.*#\1#p')
+              if [ -n "$proj" ] && [ -n "${VALID[$proj]:-}" ] && [ -z "${SEEN[$proj]:-}" ]; then
+                SEEN[$proj]=1
+                SELECTED="$SELECTED $(expand "$proj")"
+              fi
+            done <<< "$CHANGED"
+          fi
+
+          # 去重
+          SELECTED=$(echo "$SELECTED" | tr ' ' '\n' | awk 'NF && !seen[$0]++' | xargs || true)
+
+          echo "Mode: $MODE"
+          echo "Selected: ${SELECTED:-<none>}"
+          echo "mode=$MODE"          >> "$GITHUB_OUTPUT"
+          echo "projects=$SELECTED"  >> "$GITHUB_OUTPUT"
+          echo "all_valid=$ALL_VALID" >> "$GITHUB_OUTPUT"
+
+      - name: Build selected subprojects
+        run: |
+          set -uo pipefail
+          OUT="docs/_build/html"
+          rm -rf "$OUT"
+          mkdir -p "$OUT"
+
+          TOBUILD="${{ steps.select.outputs.projects }}"
+          OK=""
+          FAIL=""
+          for p in $TOBUILD; do
+            echo "::group::Building $p"
+            if PROJECT="$p" sphinx-build -b html docs "$OUT/$p"; then
+              OK="$OK $p"
+            else
+              FAIL="$FAIL $p"
+              echo "::warning::Build failed for subproject: $p"
+            fi
+            echo "::endgroup::"
+          done
+
+          echo "Built:$OK"
+          echo "Failed:$FAIL"
+          echo "failed=$FAIL" >> "$GITHUB_OUTPUT"
+          # 指定了要构建却全部失败，才让任务失败（push 无改动时 TOBUILD 为空，属正常）
+          if [ -n "$(echo "$TOBUILD" | xargs)" ] && [ -z "$OK" ]; then
+            echo "::error::No subproject built successfully."
+            exit 1
+          fi
+
+      - name: Post-process (landing page, preview banner, language switch)
+        run: |
+          OUT="docs/_build/html"
+          python - "$OUT" "${{ steps.select.outputs.all_valid }}" "${{ steps.select.outputs.failed }}" <<'PY'
+          import sys, pathlib
+
+          root = pathlib.Path(sys.argv[1])
+          all_valid = sys.argv[2].split()
+          failed = set(sys.argv[3].split())
+
+          # ---- 子项目目录分组：基础名 -> {lang: 目录名} ----
+          def split(proj):
+              for suf, lang in (("_en", "en"), ("_zh", "zh")):
+                  if proj.endswith(suf):
+                      return proj[: -len(suf)], lang
+              return None, None
+
+          groups = {}
+          for p in all_valid:
+              base, lang = split(p)
+              if base:
+                  groups.setdefault(base, {})[lang] = p
+
+          # ---- 着陆页：列出全部子项目，中英并排 ----
+          rows = []
+          for base in sorted(groups):
+              links = []
+              for lang, label in (("en", "English"), ("zh", "中文")):
+                  p = groups[base].get(lang)
+                  if not p:
+                      continue
+                  href = "./%s/index.html" % p
+                  if lang in ("en", "zh") and p in failed:
+                      links.append('<a href="%s">%s</a> <em>(build failed)</em>' % (href, label))
+                  else:
+                      links.append('<a href="%s">%s</a>' % (href, label))
+              rows.append("<li><strong>%s</strong> — %s</li>" % (base, " | ".join(links)))
+
+          landing = (
+              '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">'
+              '<title>Docs Preview</title>'
+              '<style>body{font-family:sans-serif;max-width:720px;margin:3rem auto;padding:0 1rem}'
+              'li{margin:.4rem 0}a{margin-right:.4rem}</style>'
+              '</head><body><h1>FlagOS Docs Preview</h1>'
+              '<p>Preview of the documentation site. Each subproject is built in English and Chinese; '
+              'use the language button at the bottom-right of any page to switch.</p><ul>'
+              + "".join(rows) +
+              '</ul></body></html>'
+          )
+          (root / "index.html").write_text(landing, encoding="utf-8")
+
+          # ---- 注入：顶部 PREVIEW 横幅 + 右下角中英切换按钮 ----
+          BAR_H = "36px"
+          banner = (
+              '<!--preview-badge-->'
+              '<div style="position:fixed;top:0;left:0;right:0;height:' + BAR_H + ';'
+              'line-height:' + BAR_H + ';z-index:2147483647;background:#f59e0b;color:#000;'
+              'text-align:center;font:700 15px sans-serif;letter-spacing:.08em;'
+              'box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div>'
+          )
+          # 让页面整体下移，避免横幅遮挡主题顶部导航
+          spacer = ('<!--preview-badge-css--><style>html{scroll-padding-top:' + BAR_H + '}'
+                    'body{padding-top:' + BAR_H + ' !important}</style>')
+          switch_css = (
+              '<!--langswitch-css--><style>'
+              'a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;'
+              'display:inline-block;padding:8px 16px;border-radius:999px;'
+              'background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;'
+              'text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}'
+              'a.langswitch:hover{background:#374151}'
+              '</style>'
+          )
+
+          for f in root.rglob("*.html"):
+              rel = f.relative_to(root)
+              html = f.read_text(encoding="utf-8", errors="ignore")
+              changed = False
+
+              if "<!--preview-badge-->" not in html:
+                  if "</head>" in html:
+                      html = html.replace("</head>", spacer + "</head>", 1)
+                  if "</body>" in html:
+                      html = html.replace("</body>", banner + "</body>", 1)
+                  else:
+                      html = spacer + banner + html
+                  changed = True
+
+              # 语言切换：仅子项目页面（rel.parts[0] 是项目目录）
+              if len(rel.parts) >= 2 and "<!--langswitch-css-->" not in html:
+                  proj = rel.parts[0]
+                  base, lang = split(proj)
+                  if base and lang in ("en", "zh"):
+                      other = "zh" if lang == "en" else "en"
+                      label = "中文" if other == "zh" else "English"
+                      other_proj = groups.get(base, {}).get(other)
+                      target = None
+                      if other_proj:
+                          cand = root / other_proj / pathlib.Path(*rel.parts[1:])
+                          if cand.exists():
+                              target = cand
+                          else:
+                              home = root / other_proj / "index.html"
+                              if home.exists():
+                                  target = home
+                                  label += "（首页）" if other == "zh" else " (home)"
+                      if target is not None:
+                          import os
+                          href = os.path.relpath(target, f.parent).replace(os.sep, "/")
+                          anchor = ('<a class="langswitch" href="%s">%s</a>' % (href, label))
+                          if "</body>" in html:
+                              html = html.replace(
+                                  "</body>", switch_css + anchor + "</body>", 1)
+                          else:
+                              html = switch_css + anchor + html
+                          changed = True
+
+              if changed:
+                  f.write_text(html, encoding="utf-8")
+
+          print("landing page + banner + language switch written under", root)
+          PY
+
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/_build/html
+          publish_branch: gh-pages
+          # 增量：保留其余子项目，只覆盖本次构建的目录
+          # 全量：清空后整站刷新
+          keep_files: ${{ steps.select.outputs.mode == 'incremental' }}

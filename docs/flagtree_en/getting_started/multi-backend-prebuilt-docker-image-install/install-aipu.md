@@ -1,15 +1,14 @@
-[[中文版](./install_aipu_cn.md)|English]
+[<a href="../../../flagtree_zh/getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">中文版</a>|English]
 
-## 💫 ARM China（安谋科技）[aipu](https://github.com/flagos-ai/FlagTree/tree/triton_v3.3.x/third_party/aipu/)
+## 💫 ARM China（安谋科技）[aipu](https://github.com/flagos-ai/FlagTree/tree/triton_v3.3.x/third_party/aipu/)3.3
 
 - Based on Triton 3.3, x64/arm64
 
-### 1. Build and run environment
+### 1. Quick start
 
 #### 1.1 Use the preinstalled image (for the x64 CPU simulation environment)
 
-If you use this preinstalled image, you do not need to perform the later step 1.x.
-If your network connection is available, you also do not need to perform the later step 1.x, because dependencies will be fetched automatically during the build.
+If you use this preinstalled image, you do not need to perform the later installation steps.
 
 ```shell
 # Plan A: docker pull (36.9GB)
@@ -28,12 +27,27 @@ docker run -dit \
     --shm-size 100gb --ulimit memlock=-1 \
     --security-opt seccomp=unconfined --security-opt apparmor=unconfined \
     -v /etc/localtime:/etc/localtime:ro \
-    -v /data:/data -v /home:/home -v /tmp:/tmp \
+    -v /data:/data -v /home:/home \
     -w /root --name ${CONTAINER} ${IMAGE} bash
 docker exec -it ${CONTAINER} /bin/bash
 ```
 
-#### 1.2 Manually download the FlagTree dependencies
+#### 1.2 Source-free Installation
+
+```shell
+# Note: First install PyTorch, then execute the following commands
+python3 -m pip uninstall -y triton  # Repeat the cmd until fully uninstalled
+RES="--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple"
+python3.10 -m pip install flagtree===0.5.0+aipu3.3 $RES
+```
+
+`flagtree` is already installed in the preinstalled image.
+
+### 2. Build from Source
+
+#### 2.1 Manually download the FlagTree dependencies
+
+If your network connection is available, you do not need to download the dependencies which will be fetched automatically during the build.
 
 ```shell
 mkdir -p ~/.flagtree/aipu; cd ~/.flagtree/aipu
@@ -41,10 +55,10 @@ wget https://baai-cp-web.ks3-cn-beijing.ksyuncs.com/trans/llvm-a66376b0-ubuntu-x
 tar zxvf llvm-a66376b0-ubuntu-x64-clang16-lld16_v0.4.0.tar.gz
 ```
 
-#### 1.3 Manually download the Triton dependencies
+#### 2.2 Manually download the Triton dependencies
 
 The Triton dependencies are already downloaded and installed in the preinstalled image.
-If you do not need to build FlagTree or Triton from source, you do not need to download the Triton dependencies.
+If your network connection is available, you do not need to download the dependencies which will be fetched automatically during the build.
 
 ```shell
 cd ${YOUR_CODE_DIR}/FlagTree
@@ -56,24 +70,7 @@ sh python/scripts/unpack_triton_build_deps.sh ./build-deps-triton_3.3.x-linux-x6
 After executing the above script, the original ~/.triton directory will be renamed, and a new ~/.triton directory will be created to store the pre-downloaded packages.
 Note that the script will prompt for manual confirmation during execution.
 
-### 2. Installation Commands
-
-#### 2.1 Source-free Installation
-
-```shell
-# Note: First install PyTorch, then execute the following commands
-python3 -m pip uninstall -y triton  # Repeat the cmd until fully uninstalled
-RES="--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple"
-python3.10 -m pip install flagtree===0.5.0+aipu3.3 $RES
-```
-
-`flagtree` is already installed in the preinstalled image. You can check it with:
-
-```shell
-python3 -m pip show flagtree
-```
-
-#### 2.2 Build from Source
+#### 2.3 Build Commands
 
 Before building, you need to execute `source ~/env_setup.sh`. The content of this script is as follows:
 

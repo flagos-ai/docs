@@ -178,10 +178,20 @@ export VLLM_FL_LOG_LEVEL=DEBUG
 
 #### Current vendor backends
 
-| Vendor | Device | Library | Attention Backend |
-|--------|--------|---------|-------------------|
-| `cuda` | NVIDIA GPU | `vllm._custom_ops` | - (uses vLLM native) |
-| `ascend` | Huawei NPU | `torch_npu` | `AscendAttentionBackend` |
+| Vendor | Device | Availability probe | Attention backend |
+|--------|--------|--------------------|-------------------|
+| `cuda` | NVIDIA GPU | FlagGems vendor detection (excludes CUDA-like devices) | vLLM native (`FLASH_ATTN`, `FLASHMLA`, `FLASHMLA_SPARSE`) |
+| `ascend` | Huawei Ascend NPU | `torch.npu.is_available()` | `AscendAttentionBackend`, `AscendMLABackend` |
+| `gcu` | Enflame GCU | `torch.gcu.is_available()` | `AttentionGCUBackend` |
+| `iluvatar` | Iluvatar GPU | vLLM platform vendor | vLLM native (`FLASH_ATTN`, `FLASHMLA`, `TRITON_ATTN`) |
+| `kunlunxin` | Kunlunxin XPU | `import torch_xmlir` + `torch.cuda.is_available()` | `KunlunxinAttentionBackend` |
+| `metax` | MetaX (MACA) | `torch.cuda.is_available()` | vLLM native, `TRITON_ATTN` with FlagGems |
+| `musa` | Moore Threads (MUSA) | `torch.musa.is_available()` | `TRITON_ATTN`, `TRITON_MLA` |
+| `sunrise` | Sunrise PPU | `torch.ptpu.is_available()` | `AttentionFLBackend` |
+| `thead` | T-Head PPU | `PPU_SDK` environment variable | `FLASH_ATTN` (FA3 wheel) |
+| `txda` | Tsingmicro TXDA | `torch.txda.is_available()` | `AttentionFLBackend`, `MLAFLBackend`, `TritonAttentionBackend` |
+
+The vendor name reported by a backend is what `allow_vendors`, `deny_vendors`, and the `vendor:<name>` tokens match. It is not always the directory name: the MetaX backend is `maca`, the Enflame backend is `gcu`, and the Tsingmicro backend is `txda`.
 
 See `backends/vendor/template/` for a template to create new vendor backends.
 

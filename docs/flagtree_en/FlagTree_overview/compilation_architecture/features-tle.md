@@ -18,6 +18,8 @@ These three compiler languages provide different levels of performance optimizat
 
 Hints, TLE-Lite and TLE-Struct will eventually lower to LLVM (Low Level Virtual Machine) IR (Intermediate Representation) through FLIR (that is, FlagTree IR), while TLE-Raw will lower to LLVM IR through the corresponding compilation pipeline of the language, such as the vendor's private compiler. Finally, they will be linked together to jointly generate a complete kernel for the runtime to load and execute.
 
+Low-level inter-GPU and inter-node communication is also split by level: the distributed primitives of TLE-Lite and TLE-Struct perform cross-device communication through FlagCX, while TLE-Raw is lower level, sitting at the same level as Raw, and provides device-side communication interfaces directly through NVSHMEM, which is used only for NVIDIA GPUs.
+
 The following diagram illustrates the TLE-Raw's compatibility with existing DSLs (TileLang and cuTile) as well as essential libraries and tools (PyCUDA and MLIR Pybind), and also the location in the AI ecosystem.
 
 ![alt text](../../assets/images/tle-raw.png)
@@ -59,3 +61,56 @@ For how to use TLE, see [Use TLE-Lite](/user_guide/use-tle-lite.md), [Use TLE-St
 - Extending TLE
   - New APIs should mirror the established pattern: add Python surface ops with semantic validation → expose necessary builder hooks → create and extend dialect ops → add lowering passes and register them for backends.
   - Centralize layout and scope abstractions in `types.py` to enable toggling future hardware (for example, tensor memory) without touching users' code, and document any new passes in `Passes.td`.
+## Optional GPU CommonIR lowering
+
+The default NVIDIA build keeps the native TLE GPU lowering path. When CommonIR is explicitly enabled, the frontend first keeps structured buffer operations as CommonIR TileIR and then converts them to native TTGIR:
+
+```{code-block} text
+tle.gpu.* -> tile.* / !tile.buf -> CommonIRToTTGIR -> native TTGIR
+```
+
+This path makes frontend buffer semantics explicit without changing the IR contract the NVIDIA backend finally receives. The `CommonIRToTTGIR` pass must eliminate all `tile.*`, `!tile.buf`, and temporary buffer-to-memdesc bridges before entering the subsequent TTGIR pipeline.
+
+This path is selected at build time, is off by default, and currently supports only the default NVIDIA backend. Put a compatible version of the official [FLIR](https://github.com/flagos-ai/flir) `main` branch into `third_party/flir`, then build FlagTree:
+
+```{code-block} bash
+git clone https://github.com/flagos-ai/flir.git third_party/flir
+FLAGTREE_COMMON_IR=1 python -m pip install -e . --no-build-isolation
+```
+
+The `FLAGTREE_COMMON_IR` environment variable sets the internal CMake variable `FLAGTREE_COMMON_IR_ENABLED`. When enabled, the C++ build defines `__FLAGTREE_COMMON_IR__`, exposes a unified capability-query interface to Python, and registers the CommonIR dialect and conversion pass only in this build. Do not set `FLAGTREE_BACKEND` at the same time. Switching between the native and CommonIR paths requires rebuilding FlagTree; it is not a per-kernel runtime option.
+
+The supported GPU buffer forms are as follows:
+
+|TLE / frontend form|CommonIR form|Native TTGIR result|
+|---|---|---|
+|`tle.gpu.alloc` (SMEM; alias is not supported by CommonIR)|`tile.alloc` / `!tile.buf<..., #shared>`|`ttg.local_alloc` / `!ttg.memdesc`|
+|`tle.gpu.copy` (pointer copy of a whole buffer)|`tile.copy`|Synchronous or asynchronous TTGIR copy ops|
+|`buf.load()`|`tile.to_tensor`|`ttg.local_load`|
+|`buf.store(value)`|`tile.store_tensor`|`ttg.local_store`|
+|buffered-tensor slot / view|`tile.subview`|memdesc subview|
+|`tle.gpu.local_ptr` on a local buffer|Temporary `!tile.buf` to `!ttg.memdesc` bridge|Existing TLE local-pointer ops|
+|Shared-memory operands of `tle.gpu.wgmma`, including transposes|buffer-to-memdesc bridge|Existing descriptor views and WGMMA lowering|
+
+`buf` is a `tle.gpu.buffered_tensor`; its `load()` / `store(value)` methods are written identically in native and CommonIR builds. The native build implements them through `tle.gpu.local_ptr` and `tl.load` / `tl.store`; the CommonIR build keeps whole-buffer TileIR operations until the conversion stage. The former experimental interfaces `tle.gpu.to_tensor(buf)` / `tle.gpu.store_tensor(value, buf)` have been replaced by these two methods, with no legacy aliases retained.
+
+TMA descriptor copies keep the existing TMA operations after the buffer-to-memdesc bridge. GM-to-shared TMA copies additionally preserve the user-provided completion barrier and expected byte count, and barrier argument validation follows the native path.
+
+The CommonIR build currently reports explicit frontend errors for the following forms instead of silently bypassing CommonIR:
+
+- `tle.gpu.alloc` buffers with alias;
+- `tle.gpu.copy` with a mask, or completion barriers used outside GM-to-shared TMA copies;
+- remote-buffer `tle.gpu.local_ptr`;
+- ordinary pointer copies carrying offsets (the offset should be added to the pointer operand itself instead).
+
+After building, run the following targeted checks:
+
+```{code-block} bash
+python -m pytest -q test/CommonIR/test_gpu_semantics.py
+python -m pytest -q test/CommonIR/test_gpu_wgmma_bridge.py python/test/tle/integration/test_tle_tma_copy.py
+python -m pytest -q python/test/tle/unit/test_tle_whitelist.py
+python -m pytest -q python/test/tle/unit/test_tle_gpu_buffer_access.py
+lit -sv --filter='gpu-tileir' build/cmake.*/test
+```
+
+The lit cases check both the intermediate TileIR contract and the absence of CommonIR operations or un-eliminated bridge casts in the final TTGIR.

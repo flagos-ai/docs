@@ -1,17 +1,205 @@
-[[中文版](./install_ascend_cn.md)|English]
+[<a href="../../../flagtree_zh/getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">中文版</a>|English]
 
-## 💫 Huawei Ascend（华为昇腾）[ascend](https://github.com/flagos-ai/FlagTree/blob/triton_v3.2.x/third_party/ascend)
+## 💫 Huawei Ascend（华为昇腾）[ascend](https://github.com/flagos-ai/FlagTree/blob/triton_v3.5.x/third_party/ascend)3.5
+
+- Based on Triton 3.5, aarch64
+- Available for 910B, 910C
+
+### 1. Quick start
+
+#### 1.1 Use the image (910B|910C)
+
+```shell
+# 910B Plan A: docker pull (13.3GB)
+IMAGE=harbor.baai.ac.cn/flagtree/flagtree-ascend3.5-910b-py311-cann9.0.0-ubuntu22.04-aarch64:202606-torch2.9.0-base
+docker pull ${IMAGE}
+# 910B Plan B: docker load (4.8GB)
+IMAGE=flagtree-ascend3.5-910b-py311-cann9.0.0-ubuntu22.04-aarch64:202606-torch2.9.0-base
+wget https://baai-cp-web.ks3-cn-beijing.ksyuncs.com/trans/flagtree-ascend3.5-910b-py311-cann9.0.0-ubuntu22.04-aarch64.202606-torch2.9.0-base.tar.gz
+docker load -i flagtree-ascend3.5-910b-py311-cann9.0.0-ubuntu22.04-aarch64.202606-torch2.9.0-base.tar.gz
+```
+
+```shell
+# 910C Plan A: docker pull (19.2GB)
+IMAGE=harbor.baai.ac.cn/flagtree/flagtree-ascend3.5-910c-py311-cann9.0.0-ubuntu22.04-aarch64:202608-torch2.10.0-vllm0.20.2
+docker pull ${IMAGE}
+# 910C Plan B: docker load (6.6GB)
+IMAGE=flagtree-ascend3.5-910c-py311-cann9.0.0-ubuntu22.04-aarch64:202608-torch2.10.0-vllm0.20.2
+wget https://baai-cp-web.ks3-cn-beijing.ksyuncs.com/trans/flagtree-ascend3.5-910c-py311-cann9.0.0-ubuntu22.04-aarch64.202608-torch2.10.0-vllm0.20.2.tar.gz
+docker load -i flagtree-ascend3.5-910c-py311-cann9.0.0-ubuntu22.04-aarch64.202608-torch2.10.0-vllm0.20.2.tar.gz
+```
+
+```shell
+CONTAINER=flagtree-dev-xxx
+docker run -dit -u 0 --user=root \
+    --network=host --pid=host --ipc=host --privileged \
+    -v /usr/local/Ascend/driver:/usr/local/Ascend/driver \
+    -v /usr/local/Ascend/add-ons/:/usr/local/Ascend/add-ons/ \
+    -v /usr/local/sbin/:/usr/local/sbin/ \
+    -v /etc/ascend_install.info:/etc/ascend_install.info \
+    --device=/dev/davinci0 --device=/dev/davinci1 \
+    --device=/dev/davinci2 --device=/dev/davinci3 \
+    --device=/dev/davinci4 --device=/dev/davinci5 \
+    --device=/dev/davinci6 --device=/dev/davinci7 \
+    --device=/dev/davinci_manager --device=/dev/devmm_svm --device=/dev/hisi_hdc \
+    -v /etc/localtime:/etc/localtime:ro \
+    -v /data:/data -v /home:/home \
+    -w /root --name ${CONTAINER} ${IMAGE} bash
+docker exec -it ${CONTAINER} /bin/bash
+```
+
+#### 1.2 Source-free Installation
+
+```shell
+# Note: First install PyTorch, then execute the following commands
+python3 -m pip uninstall -y triton  # Repeat the cmd until fully uninstalled
+RES="--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple"
+python3.11 -m pip install flagtree===0.7.0+ascend3.5 $RES
+```
+
+### 2. Build from Source
+
+#### 2.1 Install CANN
+
+- A2 CANN is already installed in the 910B image. A3 CANN is already installed in the 910C image. 
+- You can register an account at https://www.hiascend.com/developer/download/community/result?module=cann and download the corresponding `cann-ops` for your platform.
+
+```shell
+# cann-toolkit (A2|A3)
+chmod +x Ascend-cann-toolkit_9.0.0_linux-aarch64.run
+./Ascend-cann-toolkit_9.0.0_linux-aarch64.run --install
+# cann-ops for 910B (A2)
+chmod +x Ascend-cann-910b-ops_9.0.0_linux-aarch64.run
+./Ascend-cann-910b-ops_9.0.0_linux-aarch64.run --install
+# cann-ops for 910C (A3)
+chmod +x Ascend-cann-A3-ops_9.0.0_linux-aarch64.run
+./Ascend-cann-A3-ops_9.0.0_linux-aarch64.run --install
+```
+
+#### 2.2 Manually download the FlagTree dependencies
+
+If your network connection is available, you do not need to download the dependencies which will be fetched automatically during the build.
+
+```shell
+mkdir -p ~/.flagtree/ascend; cd ~/.flagtree/ascend
+wget https://baai-cp-web.ks3-cn-beijing.ksyuncs.com/trans/llvm-7d5de303-ubuntu-aarch64-python311-compat_v0.6.0.tar.gz
+tar zxvf llvm-7d5de303-ubuntu-aarch64-python311-compat_v0.6.0.tar.gz
+```
+
+To check out which commit of flir & FlagPrism, please refer to https://github.com/flagos-ai/FlagTree/blob/triton_v3.5.x/python/setup_tools/utils/__init__.py
+
+```shell
+cd ${YOUR_CODE_DIR}/FlagTree/third_party
+git clone https://github.com/flagos-ai/flir.git
+git clone https://github.com/flagos-ai/FlagPrism.git
+```
+
+To check out which commit of AscendNPU-IR, please refer to https://github.com/flagos-ai/FlagTree/blob/triton_v3.5.x/python/setup_tools/utils/ascend.py
+
+```shell
+cd ${YOUR_CODE_DIR}/FlagTree/third_party/ascend
+git clone https://github.com/flagos-ai/FlagTree-AscendNPU-IR.git
+```
+
+#### 2.3 Manually download the Triton dependencies
+
+The Triton dependencies are already downloaded and installed in the image.
+If your network connection is available, you do not need to download the dependencies which will be fetched automatically during the build.
+
+```shell
+cd ${YOUR_CODE_DIR}/FlagTree
+# For Triton 3.5 (aarch64)
+wget https://baai-cp-web.ks3-cn-beijing.ksyuncs.com/trans/build-deps-triton_3.5.x-linux-aarch64.tar.gz
+sh python/scripts/unpack_triton_build_deps.sh ./build-deps-triton_3.5.x-linux-aarch64.tar.gz
+```
+
+After executing the above script, the original ~/.triton directory will be renamed, and a new ~/.triton directory will be created to store the pre-downloaded packages.
+Note that the script will prompt for manual confirmation during execution.
+
+#### 2.4 Build Commands
+
+```shell
+cd ${YOUR_CODE_DIR}/FlagTree
+git checkout -b triton_v3.5.x origin/triton_v3.5.x
+export PATH=~/.flagtree/ascend/llvm-7d5de303-ubuntu-aarch64-python311-compat/bin/:${PATH}  # clang
+export FLAGTREE_BACKEND=ascend
+MAX_JOBS=32 python3 -m pip install . --no-build-isolation -v
+```
+
+### 3. Testing and validation
+
+After installing `flagtree`, you can check it with:
+
+```shell
+python3 -m pip show flagtree
+```
+
+Before testing, you need to execute `source /usr/local/Ascend/ascend-toolkit/set_env.sh`
+
+Refer to [Tests of ascend3.5 backend](https://github.com/flagos-ai/FlagTree/blob/triton_v3.5.x/.github/workflows/ascend3.5-build-and-test.yml)
+
+### 4. Run Qwen vLLM benchmark
+
+#### 4.1 Use the image (910C)
+
+```shell
+IMAGE=harbor.baai.ac.cn/flagtree/flagtree-ascend3.5-910c-py311-cann9.0.0-ubuntu22.04-aarch64:202608-torch2.10.0-vllm0.20.2
+```
+
+#### 4.2 Install FlagOS
+
+Install flagtree as described above.
+
+Install flag_gems and vllm-plugin-fl as follows.
+
+```shell
+git clone https://github.com/flagos-ai/FlagGems.git
+cd FlagGems; git checkout qwen-vllm_for_ascend
+python3 -m pip install --no-build-isolation .
+```
+
+```shell
+git clone https://github.com/flagos-ai/vllm-plugin-FL.git
+cd vllm-plugin-FL
+python3 -m pip install --no-build-isolation .
+```
+
+#### 4.3 Download the model
+
+```shell
+python3 -m modelscope.cli.cli download --model Qwen/Qwen3.6-27B \
+    --local_dir ${MODEL_DIR}/Qwen3.6-27B
+python3 -m modelscope.cli.cli download --model Qwen/Qwen3.6-35B-A3B \
+    --local_dir ${MODEL_DIR}/Qwen3.6-35B-A3B
+```
+
+#### 4.4 Run the benchmark
+
+```shell
+export BENCH_SCRIPT_DIR="${GIT_DIR}/FlagTree/.github/workflows/benchmark/ascend/ascend3.5-qwen3.6"
+cd ${MODEL_DIR}
+bash ${BENCH_SCRIPT_DIR}/start.sh
+bash ${BENCH_SCRIPT_DIR}/test.sh
+bash ${BENCH_SCRIPT_DIR}/perf.sh
+bash ${BENCH_SCRIPT_DIR}/stop.sh
+```
+
+Refer to [Qwen Benchmark of ascend3.5 backend](https://github.com/flagos-ai/FlagTree/tree/triton_v3.5.x/.github/workflows/ascend3.5-qwen-benchmark.yaml)
+
+<!-- legacy generation: previous FlagTree release -->
+
+---
+
+## 💫 Huawei Ascend（华为昇腾）[ascend](https://github.com/flagos-ai/FlagTree/blob/triton_v3.2.x/third_party/ascend)3.2
 
 - Based on Triton 3.2, aarch64
 - Available for 910B, 910C
 
-### 1. Build and run environment
+### 1. Quick start
 
 #### 1.1 Use the preinstalled image (910C)
 
-This preinstalled image is created by executing the later step 1.x based on [Dockerfile-ubuntu22.04-python3.11-ascend](/dockerfiles/Dockerfile-ubuntu22.04-python3.11-ascend) and installing FlagTree.
-If you use this preinstalled image, you do not need to perform the later step 1.x for 910C, and for 910B you only need to perform step 1.2.
-If your network connection is available, you also do not need to perform the later step 1.x, because dependencies will be fetched automatically during the build.
+If you use this preinstalled image, you do not need to perform the later installation steps for 910C, and for 910B you only need to perform step 2.1.
 
 ```shell
 # Plan A: docker pull (26.2GB)
@@ -42,12 +230,25 @@ docker run -dit -u 0 --user=root \
 docker exec -it ${CONTAINER} /bin/bash
 ```
 
-#### 1.2 Install CANN
-
-- Register an account at https://www.hiascend.com/developer/download/community/result?module=cann and download the corresponding `cann-toolkit` and `cann-ops` for your platform
+#### 1.2 Source-free Installation
 
 ```shell
-# cann-toolkit
+# Note: First install PyTorch, then execute the following commands
+python3 -m pip uninstall -y triton  # Repeat the cmd until fully uninstalled
+RES="--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple"
+python3.11 -m pip install flagtree===0.6.0+ascend3.2 $RES
+```
+
+`flagtree` is already installed in the preinstalled image.
+
+### 2. Build from Source
+
+#### 2.1 Install CANN
+
+- A3 CANN is already installed in the 910C image. For 910B, register an account at https://www.hiascend.com/developer/download/community/result?module=cann and download the corresponding `cann-ops` for your platform.
+
+```shell
+# cann-toolkit (A2|A3)
 chmod +x Ascend-cann-toolkit_8.5.0_linux-aarch64.run
 ./Ascend-cann-toolkit_8.5.0_linux-aarch64.run --install
 # cann-ops for 910B (A2)
@@ -58,7 +259,9 @@ chmod +x Ascend-cann-A3-ops_8.5.0_linux-aarch64.run
 ./Ascend-cann-A3-ops_8.5.0_linux-aarch64.run --install
 ```
 
-#### 1.3 Manually download the FlagTree dependencies
+#### 2.2 Manually download the FlagTree dependencies
+
+If your network connection is available, you do not need to download the dependencies which will be fetched automatically during the build.
 
 ```shell
 mkdir -p ~/.flagtree/ascend; cd ~/.flagtree/ascend
@@ -73,10 +276,16 @@ cd flir
 git checkout -b triton_v3.3.x origin/triton_v3.3.x  # For flagtree triton_v3.2.x triton_v3.3.x
 ```
 
-#### 1.4 Manually download the Triton dependencies
+```shell
+cd ${YOUR_CODE_DIR}/FlagTree/third_party/ascend
+git clone https://gitcode.com/Ascend/AscendNPU-IR.git
+git checkout 5a3921f8
+```
+
+#### 2.3 Manually download the Triton dependencies
 
 The Triton dependencies are already downloaded and installed in the preinstalled image.
-If you do not need to build FlagTree or Triton from source, you do not need to download the Triton dependencies.
+If your network connection is available, you do not need to download the dependencies which will be fetched automatically during the build.
 
 ```shell
 cd ${YOUR_CODE_DIR}/FlagTree
@@ -88,24 +297,7 @@ sh python/scripts/unpack_triton_build_deps.sh ./build-deps-triton_3.2.x-linux-aa
 After executing the above script, the original ~/.triton directory will be renamed, and a new ~/.triton directory will be created to store the pre-downloaded packages.
 Note that the script will prompt for manual confirmation during execution.
 
-### 2. Installation Commands
-
-#### 2.1 Source-free Installation
-
-```shell
-# Note: First install PyTorch, then execute the following commands
-python3 -m pip uninstall -y triton  # Repeat the cmd until fully uninstalled
-RES="--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple"
-python3.11 -m pip install flagtree===0.6.0rc1+ascend3.2 $RES
-```
-
-`flagtree` is already installed in the preinstalled image. You can check it with:
-
-```shell
-python3 -m pip show flagtree
-```
-
-#### 2.2 Build from Source
+#### 2.4 Build Commands
 
 ```shell
 cd ${YOUR_CODE_DIR}/FlagTree/python
@@ -116,4 +308,12 @@ MAX_JOBS=32 python3 -m pip install . --no-build-isolation -v
 
 ### 3. Testing and validation
 
-Refer to [Tests of ascend backend](https://github.com/flagos-ai/FlagTree/blob/triton_v3.2.x/.github/workflows/ascend-build-and-test.yml)
+You can check the installed `flagtree` with:
+
+```shell
+python3 -m pip show flagtree
+```
+
+Before testing, you need to execute `source /usr/local/Ascend/ascend-toolkit/set_env.sh`
+
+Refer to [Tests of ascend3.2 backend](https://github.com/flagos-ai/FlagTree/blob/triton_v3.2.x/.github/workflows/ascend-build-and-test.yml)

@@ -6,6 +6,5 @@ FlagTree is an open-source, unified compiler for multiple AI chips. FlagTree is 
 
 features.md
 compilation_architecture/compilation-architecture.md
-workflow.md
 
 ```

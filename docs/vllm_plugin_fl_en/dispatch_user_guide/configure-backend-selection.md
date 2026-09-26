@@ -59,7 +59,7 @@ export VLLM_FL_CONFIG=/path/to/vllm_fl_dispatch.yaml
 
 ### Example configuration file
 
-```{code-block}yaml
+```{code-block} yaml
 # vllm_fl_dispatch.yaml
 
 # Preferred backend type: flagos, vendor, or reference
@@ -128,6 +128,7 @@ op_backends:
     - reference
 ```
 
+(environment-variables)=
 ## Environment variables
 
 Environment variables can override specific items from platform config. If not set, values from platform config file are used.
@@ -147,6 +148,7 @@ Environment variables can override specific items from platform config. If not s
 | `VLLM_FL_PREFER` | `flagos` | Preferred backend: `flagos`, `vendor`, `reference` |
 | `VLLM_FL_STRICT` | `0` | Strict mode: `1` = fail on error, `0` = try fallback |
 | `VLLM_FL_PER_OP` | (none) | Per-operator order: `op1=a\|b\|c;op2=x\|y` |
+| `VLLM_FL_HOPPER_LONG_CONTEXT_OPT` | `0` | On NVIDIA Hopper, route attention to FA3 and `mm`/`mm_out` to native CUDA |
 | `VLLM_FL_ALLOW_VENDORS` | (none) | Vendor whitelist, comma-separated |
 | `VLLM_FL_DENY_VENDORS` | (none) | Vendor blacklist, comma-separated |
 
@@ -157,8 +159,9 @@ Environment variables can override specific items from platform config. If not s
 | `USE_FLAGGEMS` | `true` | Enable/disable FlagGems |
 | `VLLM_FL_FLAGOS_WHITELIST` | (none) | FlagGems ops whitelist (mutually exclusive with blacklist) |
 | `VLLM_FL_FLAGOS_BLACKLIST` | (none) | FlagGems ops blacklist (mutually exclusive with whitelist) |
+| `VLLM_FL_FLAGOS_BLACKLIST_APPEND` | (none) | Append exclusions to the selected platform or explicit blacklist; ignored when a whitelist is active |
 
-**Priority**: `WHITELIST` > `BLACKLIST` (env) > `flagos_blacklist` (config file)
+**Priority**: `WHITELIST` > (`BLACKLIST` env or platform `flagos_blacklist`) + `BLACKLIST_APPEND`
 
 ### OOT Operator Control
 
@@ -203,11 +206,17 @@ export VLLM_FL_PREFER=vendor
 # Override FlagGems blacklist (overrides config file blacklist)
 export VLLM_FL_FLAGOS_BLACKLIST="mm,to_copy,zeros"
 
+# Keep the platform defaults and add one deployment-specific exclusion
+export VLLM_FL_FLAGOS_BLACKLIST_APPEND="linear"
+
 # Use whitelist instead (completely ignores any blacklist)
 export VLLM_FL_FLAGOS_WHITELIST="silu_and_mul,rms_norm"
 
 # Specify per-operator order
 export VLLM_FL_PER_OP="rms_norm=vendor|flagos|reference"
+
+# Opt in to the NVIDIA Hopper long-context routing for an A/B run
+export VLLM_FL_HOPPER_LONG_CONTEXT_OPT=1
 
 # Use completely custom config file
 export VLLM_FL_CONFIG=/path/to/my_config.yaml
@@ -237,6 +246,7 @@ WHITELIST (env) ──▶ Completely overrides blacklist
 - Whitelist and blacklist environment variables are mutually exclusive (error if both set)
 - If whitelist is set, it completely ignores any blacklist (env or config)
 - Environment blacklist overrides config file blacklist (not merged)
+- `VLLM_FL_FLAGOS_BLACKLIST_APPEND` keeps the selected platform or explicit blacklist and adds deployment-specific exclusions on top of it
 ```
 
 #### Example: Combined environment variables
@@ -283,12 +293,18 @@ Op 'rms_norm' fallback to 'reference.torch' (kind=reference, vendor=None)
 
 ## Platform-specific configuration
 
-The system automatically detects hardware and loads the corresponding configuration file from `config/` directory:
+The system detects the hardware platform from the vLLM platform's `vendor_name` and loads the matching configuration file from the `config/` directory. Each platform config sets the preferred backend, the per-operator backend order, and the FlagGems/OOT blacklists.
 
-| Platform | Config File | Auto-Detection |
-|----------|-------------|----------------|
-| Ascend NPU | `config/ascend.yaml` | `torch.npu.is_available()` |
-| NVIDIA GPU | `config/cuda.yaml` | `torch.cuda.is_available()` |
+| Platform | Config File | Platform | Config File |
+|----------|-------------|----------|-------------|
+| Ascend NPU | `config/ascend.yaml` | Moore Threads (MUSA) | `config/musa.yaml` |
+| NVIDIA GPU | `config/nvidia.yaml` | MetaX (MACA) | `config/metax.yaml` |
+| NVIDIA Hopper (opt-in) | `config/nvidia_hopper.yaml` | Kunlunxin | `config/kunlunxin.yaml` |
+| Iluvatar | `config/iluvatar.yaml` | T-Head PPU | `config/thead.yaml` |
+| Hygon DCU | `config/hygon.yaml` | Sunrise | `config/sunrise.yaml` |
+| Enflame (GCU) | `config/enflame.yaml` | Alibaba PPU | `config/ptg.yaml` |
+
+The NVIDIA Hopper config is selected instead of `nvidia.yaml` when `VLLM_FL_HOPPER_LONG_CONTEXT_OPT=1` is set and the device capability is 9.x.
 
 You can force a specific platform using `VLLM_FL_PLATFORM` environment variable:
 
@@ -305,14 +321,26 @@ This reference lists all operators supported by vllm-plugin-FL and their backend
 
 | Operator | Description | FlagGems | Reference | Vendor |
 |----------|-------------|----------|-----------|--------|
+| `dynamic_per_token_quant_int8` | Symmetric dynamic per-token INT8 quantization (vLLM-compatible) | ✓ | ✓ | - |
 | `silu_and_mul` | SiLU activation + element-wise multiplication | ✓ | ✓ | ✓ |
+| `gelu_and_mul` | GELU activation + element-wise multiplication | ✓ | ✓ | ✓ |
 | `rms_norm` | RMS normalization | ✓ | ✓ | ✓ |
 | `rotary_embedding` | Rotary position embedding | ✓ | ✓ | ✓ |
-| `attention_backend` | Attention backend class path | ✓ | - | ✓ |
+| `attention_backend` | Attention backend class path | ✓ | ✓ | ✓ |
+| `topk_softmax` | MoE top-k routing with softmax | ✓ | ✓ | ✓ |
+| `grouped_topk` | Grouped top-k routing for MoE | ✓ | ✓ | ✓ |
+| `moe_align_block_size` | MoE token alignment and block-size computation | ✓ | ✓ | ✓ |
+| `moe_sum` | MoE expert output reduction | ✓ | ✓ | ✓ |
+| `invoke_fused_moe_triton_kernel` | Fused MoE Triton kernel invocation | ✓ | ✓ | ✓ |
+| `chunk_gated_delta_rule_fwd` | Gated delta rule forward, prefill path (linear attention) | - | - | ✓ |
+| `fused_recurrent_gated_delta_rule_fwd` | Gated delta rule forward, decode path (linear attention) | - | - | ✓ |
+| `causal_conv1d_fn` | Causal 1D convolution, prefill path (Mamba-style models) | - | - | ✓ |
+| `causal_conv1d_update` | Causal 1D convolution, decode path (Mamba-style models) | - | - | ✓ |
+| `fused_gdn_gating` | Fused gated delta network gating | - | - | ✓ |
 
 ### Backend priorities
 
-The dispatch system selects operators based on the following priority hierarchy，Priority values are spaced by 50 to allow future insertion of intermediate priorities.
+The dispatch system selects operators based on the following priority hierarchy. Priority values are spaced by 50 to allow future insertion of intermediate priorities.
 
 1. **FlagGems** (DEFAULT) — Priority 150
 2. **Vendor-specific** — Priority 100

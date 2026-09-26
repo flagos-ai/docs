@@ -118,6 +118,57 @@ Basic flow: use clang to translate CUDA code into LLVM IR, then apply the existi
  ![alt text](../assets/images/cuda-side.PNG)
 
 
+### Multi-GPU communication with NVSHMEM
+
+NVSHMEM is NVIDIA's PGAS (Partitioned Global Address Space) communication library for multi-GPU and multi-node programs. It gives every rank a unified address space: a region of memory on each GPU (symmetric memory) is reachable both from the local GPU and directly from other GPUs, so cross-GPU communication can be expressed with ordinary load/store or put/get semantics instead of hand-written point-to-point send/receive logic. It provides both host-side and device-side APIs, and the device-side interfaces can be called from inside a kernel, which makes it a natural fit for all-gather, all-reduce, and fused GEMM-plus-communication patterns. NVSHMEM is used only for NVIDIA GPUs; the distributed primitives of TLE-Lite and TLE-Struct use FlagCX instead of NVSHMEM.
+
+On top of the CUDA integration, `@dialect` adds the `library` and `compiler` parameters so that NVSHMEM device-side interfaces can be inlined directly into a TLE-Raw kernel:
+
+```{code-block} python
+@dialect(
+    name="cuda",
+    library="nvshmem",
+    compiler="clang",
+    file=(Path(__file__).parent / "simple-shift-device.cu"),
+    extern_func_name="simple_shift",
+)
+def simple_shift(*args, **kwargs):
+    ...
+```
+
+- `library="nvshmem"`: enables linking of the NVSHMEM device bitcode (`libnvshmem_device.bc`; for NVSHMEM 3.7 and later with per-SM bitcode the matching `.bc` is selected automatically) and registers the NVSHMEM cumodule init hook on the kernel so that device-side NVSHMEM calls initialize correctly.
+- `compiler="clang"`: compiles the `.cu` source given by `file` with clang using `--cuda-device-only`.
+- `file` / `extern_func_name`: the same as in the CUDA integration — the device-side source file and the function symbol inside it.
+
+Calling follows the CUDA integration, using `tle_raw.call` from a Triton kernel:
+
+```{code-block} python
+@triton.jit
+def simple_shift_kernel(destination_ptr):
+    tle_raw.call(simple_shift, [destination_ptr])
+```
+
+The NVSHMEM-related host-side setup is provided by `triton.experimental.tle.raw.nvshmem.utils`:
+
+- `init_torch_distributed()` / `init_nvshmem_by_torch_pg(common, group)`: initialize torch.distributed and NVSHMEM from a PyTorch process group.
+- `load_host(source)` / `load_common_host(source=None)`: compile and load a host-side `.cu` (with `nvshmem.h` and `nvshmemx.h`) and return a library object whose `extern "C"` functions can be called directly.
+- `tensor_from_pointer(pointer, shape, dtype, device)`: create a non-owning Torch tensor view over CUDA memory.
+- `copy_on_stream(dst_ptr, src_ptr, nbytes, stream)` and `set_signal_cuda_ptr(signal_ptr, signal, stream)`: on-stream copies and signal pointer setup.
+- `print_perf(...)` / `print_perf_mean(...)`: aggregate and print performance data per rank.
+- `enable_nvshmem_device_bc(enabled=True)` / `is_nvshmem_device_bc_enabled()` / `get_nvshmem_extern_libs(arch=None)`: device bitcode linking switch and external-library query (`library="nvshmem"` enables it automatically).
+
+Prerequisites:
+
+- Set the `NVSHMEM_HOME` environment variable (or `triton.knobs.nvidia.nvshmem_home`) so that `libnvshmem_host.so` and the device bitcode can be resolved.
+- The examples target sm90 and newer and require `world_size >= 2`; multi-GPU launches pass the topology through `RANK`, `LOCAL_RANK`, `WORLD_SIZE`, and `LOCAL_WORLD_SIZE`.
+
+Full examples are in `python/tutorials/tle/raw/nvshmem/`:
+
+- `01-simple-shift`: the minimal NVSHMEM device-side put example, showing the dialect declaration and how host and device sides cooperate.
+- `02-allgather-gemm`: all-gather GEMM over NVSHMEM (with a benchmark).
+- `03-gemm-allreduce`: GEMM plus all-reduce over NVSHMEM multimem.
+- `04-cuda-ipc-allreduce`: all-reduce over CUDA IPC (with a benchmark), using the CUDA dialect without `library="nvshmem"`.
+
 ### Processing flow
 
 #### Frontend: CUDA-LLVM integration into Triton frontend and runtime

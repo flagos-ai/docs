@@ -2,8 +2,22 @@
 
 This section includes the Megatron-LM-FL release information.
 
-## v0.2.0
+## v0.3.0
 
+Megatron-LM-FL v0.3.0 synchronizes with upstream Megatron-LM v0.18.2 and requires Python >= 3.12.
+
+- **Added Features**
+
+  - New platform backends: Enflame, KunlunXin, and MUSA.
+  - DSA structure support for the `GLM5` / `GLM5.1` / `GLM5.2` model family.
+  - Chunked cross-entropy to reduce memory usage.
+  - Ascend native integration of the MegatronAdaptor module.
+
+- **Improved Features**
+
+  - Override mechanism upgrade.
+
+## v0.2.0
 
 - **Added Features**
 
@@ -16,9 +30,6 @@ This section includes the Megatron-LM-FL release information.
   - Multi-Vendor Plugin Dispatch — Extended the `@override` decorator system with runtime vendor selection via `MG_FL_PREFER` environment variable. Four-level fallback: preferred vendor → default vendor → sole vendor → None.
 
   - Core 0.17.0 Upgrade — Synchronized with upstream Megatron-LM Core 0.17.0, preserving FlagScale-specific patches including Engram DDP buffer separation, hetero pipeline support, `qk_layernorm_hidden_dim` support, and `cur_platform` abstraction.
-
-  - CI/CD Enhancements — Multi-platform unit and functional tests (CUDA + MetaX), Qwen3 benchmark gate with A100 golden values, pylint >= 9.0 lint gate, and coverage reporting to FlagCICD platform.
-
 
 ## v0.1.0
 

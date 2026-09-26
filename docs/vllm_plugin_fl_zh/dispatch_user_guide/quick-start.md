@@ -15,7 +15,7 @@ result = fn(x, residual, weight, epsilon)
 
 ## 使用管理器
 
-```{code-block}python
+```{code-block} python
 from vllm_fl.dispatch import get_default_manager
 
 manager = get_default_manager()
@@ -28,4 +28,4 @@ result = fn(query, key, cos, sin, position_ids)
 result = manager.call("silu_and_mul", x)
 ```
 
-API 说明请参见 [调度 API 参考](<../reference/Dispatch API reference>)。
+API 说明请参见 [调度 API 参考](../reference/dispatch-api-reference.md)。

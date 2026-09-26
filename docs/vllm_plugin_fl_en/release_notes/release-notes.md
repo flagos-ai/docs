@@ -2,10 +2,23 @@
 
 This section includes the vllm-plugin-FL release information.
 
-## v0.2.0
+## v0.3.0
 
 
-vllm-plugin-FL v0.2.0 requires [vllm v0.20.2](https://github.com/vllm-project/vllm/tree/v0.20.2). Supported platforms: NVIDIA, Hygon DCU.
+vllm-plugin-FL v0.3.0 requires [vllm v0.24.0](https://github.com/vllm-project/vllm/tree/v0.24.0).
+
+
+- **Added Features**
+
+  - Support for vLLM 0.24.0, including the official vLLM 0.24 CUDA stable-ABI wheels; the FlagCX connector now covers vLLM 0.20-0.24.
+  - Vendor backends upgraded to vLLM 0.24.0: MetaX C550, Moore Threads MUSA (MTT S5000), Iluvatar BI-V150, T-Head (PPU) attention backend and empty mode, Sunrise attention backend, Tsingmicro TXDA, and the Hygon workflow.
+  - Quantization inference: W8A8 adapted to vLLM 0.24, plus Arm CPU support for Qwen packed W4A8 and GDN.
+  - Qwen3.5 text-only runtime compatibility on vLLM 0.24.
+
+## v0.2.2
+
+
+vllm-plugin-FL v0.2.2 requires [vllm v0.20.2](https://github.com/vllm-project/vllm/tree/v0.20.2). Supported platforms: NVIDIA, Hygon DCU.
 
 - **Added Features**
 
