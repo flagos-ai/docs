@@ -1,4 +1,5 @@
 # Introduction
+Phi-3-vision-128k-instruct is a lightweight multimodal instruction-tuned model from Microsoft in the Phi-3 family that handles text and vision, built on the Phi3VForCausalLM architecture with 32 layers and a hidden size of 3072. This release packages it with the **FlagOS** software stack for Metax MetaX C550 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -11,9 +12,7 @@
 ## Benchmark Result
 | Metrics      | Phi-3-vision-128k-instruct-metax-Origin | Phi-3-vision-128k-instruct-metax-FlagOS |
 |--------------|-----------------------------------------|-----------------------------------------|
-| GPQA_Diamond | 25.0 | 32.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 25                                      | 30.0                                    |
 
 # User Guide
 Environment Setup

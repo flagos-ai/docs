@@ -12,11 +12,9 @@ Llama-3.1-Nemotron-70B-Instruct-HF is a large language model from NVIDIA, derive
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Llama-3.1-Nemotron-70B-Instruct-HF-Metax-FlagOS-Origin | Llama-3.1-Nemotron-70B-Instruct-HF-Metax-FlagOS-FlagOS |
-|--------------|----------------------------------------------------------|----------------------------------------------------------|
-| GPQA_Diamond | 52.0 | 44.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| Metrics      | Llama-3.1-Nemotron-70B-Instruct-HF-Metax-Origin | Llama-3.1-Nemotron-70B-Instruct-HF-Metax-FlagOS |
+|--------------|-------------------------------------------------|-------------------------------------------------|
+| GPQA_Diamond | 52                                              | 50                                              |
 
 # User Guide
 Environment Setup

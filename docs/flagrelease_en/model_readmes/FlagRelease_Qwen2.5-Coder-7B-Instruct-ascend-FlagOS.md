@@ -1,5 +1,5 @@
 # Introduction
-
+Qwen2.5-Coder-7B-Instruct is a 7B code-specific instruction-tuned model from the Qwen2.5-Coder series, built on the Qwen2ForCausalLM architecture with 28 layers and a hidden size of 3584. This release packages it with the **FlagOS** software stack for Ascend 910C accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -10,11 +10,9 @@
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Qwen2.5-Coder-7B-Instruct-ascend-FlagOS-Origin | Qwen2.5-Coder-7B-Instruct-ascend-FlagOS-FlagOS |
-|--------------|------------------------------------------------|------------------------------------------------|
-| GPQA_Diamond | 38.0 | 32.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| Metrics      | Qwen2.5-Coder-7B-Instruct-ascend-Origin | Qwen2.5-Coder-7B-Instruct-ascend-FlagOS |
+|--------------|-----------------------------------------|-----------------------------------------|
+| GPQA_Diamond | 27                                      | 34.0                                    |
 
 # User Guide
 Environment Setup

@@ -3,6 +3,7 @@ base_model:
 - ""
 ---
 # Introduction
+granite-4.0-micro is a compact instruction-tuned model from IBM Granite built on the GraniteMoeHybrid architecture, which combines dense and Mixture-of-Experts layers, with 40 layers and a hidden size of 2560. This release packages it with the **FlagOS** software stack for Hygon DCU BW1000 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -15,9 +16,7 @@ base_model:
 ## Benchmark Result
 | Metrics      | granite-4.0-micro-hygon-Origin | granite-4.0-micro-hygon-FlagOS |
 |--------------|--------------------------------|--------------------------------|
-| GPQA_Diamond | 30.0 | 26.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 30                             | 32.0                           |
 
 # User Guide
 Environment Setup

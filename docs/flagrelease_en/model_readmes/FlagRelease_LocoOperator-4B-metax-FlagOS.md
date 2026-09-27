@@ -1,4 +1,5 @@
 # Introduction
+LocoOperator-4B is a 4B agentic tool-use model from LocoreMind built on the Qwen3 architecture, with 36 layers, a hidden size of 2560, and a 256k-token context window. This release packages it with the **FlagOS** software stack for Metax MetaX C550 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -11,9 +12,7 @@
 ## Benchmark Result
 | Metrics      | LocoOperator-4B-metax-Origin | LocoOperator-4B-metax-FlagOS |
 |--------------|------------------------------|------------------------------|
-| GPQA_Diamond | 52.0 | 58.0 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 52                           | 50                           |
 
 # User Guide
 Environment Setup

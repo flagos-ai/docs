@@ -3,6 +3,7 @@ base_model:
 - ""
 ---
 # Introduction
+DASD-4B-Thinking is a 4B dense reasoning model from Alibaba-Apsara, post-trained from Qwen3-4B-Instruct-2507 and distilled from gpt-oss-120b for long chain-of-thought reasoning, with 36 layers and a hidden size of 2560. This release packages it with the **FlagOS** software stack for Iluvatar BI-V200 accelerators, delivering an out-of-the-box, containerized deployment.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
@@ -15,9 +16,7 @@ base_model:
 ## Benchmark Result
 | Metrics      | DASD-4B-Thinking-iluvatar-Origin | DASD-4B-Thinking-iluvatar-FlagOS |
 |--------------|----------------------------------|----------------------------------|
-| GPQA_Diamond | 44.0 | 66.67 |
-| ERQA | - | - |
-| Aime24 | - | - |
+| GPQA_Diamond | 44                               | 66.67                            |
 
 # User Guide
 Environment Setup
