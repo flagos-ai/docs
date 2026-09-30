@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"#rotaryembedding-oot-sglang\"]": "<h3 class=\"tippy-header\" style=\"margin-top: 0;\">1. \u8df3\u8fc7 RotaryEmbedding \u7684 OOT \u8c03\u5ea6\uff08\u56de\u9000\u5230 SGLang \u539f\u751f\u8def\u5f84\uff09<a class=\"headerlink\" href=\"#rotaryembedding-oot-sglang\" title=\"Link to this heading\">#</a></h3><p>\u9884\u671f\u8c03\u5ea6\u65e5\u5fd7\uff1a\u4ec5\u51fa\u73b0 SiluAndMul \u548c RMSNorm\uff0c\u4e0d\u51fa\u73b0 RotaryEmbedding\u3002</p>", "a[href=\"debugg-and-diagonostics.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u8c03\u8bd5\u4e0e\u8bca\u65ad<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><p>\u672c\u8282\u4ecb\u7ecd\u7b97\u5b50\u8c03\u5ea6\u7684\u8bca\u65ad\u65b9\u6cd5\u3002</p>", "a[href=\"#yaml\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u901a\u8fc7 YAML \u914d\u7f6e\u6587\u4ef6\u8fdb\u884c\u8c03\u5ea6<a class=\"headerlink\" href=\"#yaml\" title=\"Link to this heading\">#</a></h1><p>\u63d2\u4ef6\u5728 <code class=\"docutils literal notranslate\"><span class=\"pre\">sglang_fl/dispatch/config/</span></code> \u4e0b\u63d0\u4f9b\u5e73\u53f0 YAML \u9ed8\u8ba4\u914d\u7f6e\u3002\u53ef\u7528\u7684\u5e73\u53f0\u6587\u4ef6\u5305\u62ec <code class=\"docutils literal notranslate\"><span class=\"pre\">ascend.yaml</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">gcu.yaml</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">hygon.yaml</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">iluvatar.yaml</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">kunlunxin.yaml</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">musa.yaml</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">nvidia.yaml</span></code> \u548c <code class=\"docutils literal notranslate\"><span class=\"pre\">tsingmicro.yaml</span></code>\u3002\u8fd9\u4e9b\u6587\u4ef6\u63d0\u4f9b\u9ed8\u8ba4\u8c03\u5ea6\u7b56\u7565\uff1b\u5b83\u4eec\u4e0d\u662f\u5382\u5546\u9a8c\u8bc1\u77e9\u9635\u3002</p><p>\u5f53\u60a8\u9700\u8981\u8986\u76d6\u5e73\u53f0\u9ed8\u8ba4\u503c\u65f6\uff0c\u8bf7\u521b\u5efa\u663e\u5f0f YAML \u6587\u4ef6\uff1a</p>", "a[href=\"#rmsnorm-vendor-flagos\"]": "<h3 class=\"tippy-header\" style=\"margin-top: 0;\">2. \u5f3a\u5236 RMSNorm \u4f7f\u7528 vendor \u540e\u7aef\uff0c\u5176\u4ed6\u4f7f\u7528 flagos<a class=\"headerlink\" href=\"#rmsnorm-vendor-flagos\" title=\"Link to this heading\">#</a></h3><p>\u9884\u671f\u8c03\u5ea6\u65e5\u5fd7\uff1a\u6839\u636e\u5f53\u524d\u5e73\u53f0\u548c\u5382\u5546\u8fc7\u6ee4\u5668\uff0c\u9009\u62e9\u7b2c\u4e00\u4e2a\u53ef\u7528\u4e14\u88ab\u5141\u8bb8\u7684\u540e\u7aef\u3002</p>", "a[href=\"#id1\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u914d\u7f6e\u5b57\u6bb5<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h2>", "a[href=\"#id2\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u5e38\u7528\u914d\u7f6e\u65b9\u6848<a class=\"headerlink\" href=\"#id2\" title=\"Link to this heading\">#</a></h2><p>\u6bcf\u4e2a\u65b9\u6848\u5c55\u793a\u4e00\u4e2a YAML \u914d\u7f6e\u548c\u9884\u671f\u7684\u8c03\u5ea6\u7ed3\u679c\u3002\u4f7f\u7528<a class=\"reference internal\" href=\"debugg-and-diagonostics.html\"><span class=\"std std-doc\">\u8c03\u5ea6\u65e5\u5fd7</span></a>\u8fdb\u884c\u9a8c\u8bc1\u3002</p>", "a[href=\"#pytorch-reference\"]": "<h3 class=\"tippy-header\" style=\"margin-top: 0;\">3. \u6240\u6709\u7b97\u5b50\u4f7f\u7528\u7eaf PyTorch reference\uff08\u9002\u7528\u4e8e\u7cbe\u5ea6\u8c03\u8bd5\uff09<a class=\"headerlink\" href=\"#pytorch-reference\" title=\"Link to this heading\">#</a></h3><p>\u9884\u671f\u8c03\u5ea6\u65e5\u5fd7\uff1a\u5728\u53ef\u7528\u65f6\u9009\u62e9 reference \u5b9e\u73b0\u3002</p>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

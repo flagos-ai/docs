@@ -1,0 +1,804 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="调试与诊断" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="dispatch_user_guide/debugg-and-diagonostics.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本节介绍算子调度的诊断方法。 策略与后端解析: 调度采用基于策略的方式，而不是固定的 flagos &gt; vendor &gt; reference 链。当算子未使用预期实现时，请检查有效配置和后端可用性： 检查 SGLANG_FL_PREFER 、 SGLANG_FL_PER_OP 、 SGLANG_FL_ALLOW_VENDORS 、 SGLANG_FL_DENY_VENDORS 和 SGLANG_FL_STRICT 等环境变量覆盖项。, 检查 SGLANG_FL_CONFIG 以及 sglang_fl/dispatch/config/ 下检测到的平台 YAML。, 如果需要额外..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="本节介绍算子调度的诊断方法。 策略与后端解析: 调度采用基于策略的方式，而不是固定的 flagos &gt; vendor &gt; reference 链。当算子未使用预期实现时，请检查有效配置和后端可用性： 检查 SGLANG_FL_PREFER 、 SGLANG_FL_PER_OP 、 SGLANG_FL_ALLOW_VENDORS 、 SGLANG_FL_DENY_VENDORS 和 SGLANG_FL_STRICT 等环境变量覆盖项。, 检查 SGLANG_FL_CONFIG 以及 sglang_fl/dispatch/config/ 下检测到的平台 YAML。, 如果需要额外..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>调试与诊断 &#8212; sglang-Plugin-FL 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/dispatch_user_guide/debugg-and-diagonostics.ffeac8c6-db69-44a2-a5b2-424880975def.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'dispatch_user_guide/debugg-and-diagonostics';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/dispatch_user_guide/debugg-and-diagonostics.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="厂商集成" href="vendor-integration.html" />
+    <link rel="prev" title="通过环境变量进行调度" href="dispatch-through-environment-variables.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="sglang-Plugin-FL 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="sglang-Plugin-FL 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    sglang-plugin-FL 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">sglang-plugin-FL 概述</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">功能特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/how-plugin-works.html">插件工作原理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/project-structure.html">项目结构</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">快速入门</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">安装 sglang-plugin-FL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/quick-run-inference-task.html">快速运行推理任务</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="dispatch-user-guide.html">算子调度用户指南</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dispatch-through-yaml-file.html">通过 YAML 配置文件进行调度</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dispatch-through-environment-variables.html">通过环境变量进行调度</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">调试与诊断</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vendor-integration.html">厂商集成</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/dispatch-reference-and-example.html">环境变量参考与示例</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/dispatch_user_guide/debugg-and-diagonostics.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>调试与诊断</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">策略与后端解析</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagcx">分布式与 FlagCX 诊断</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">调度日志</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aten">ATen 替换日志</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">通过精度二分法排查数值精度问题</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">常见问题</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>调试与诊断<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>本节介绍算子调度的诊断方法。</p>
+<!-- NEW in v0.2.0 -->
+<section id="id2">
+<h2>策略与后端解析<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>调度采用基于策略的方式，而不是固定的 <code class="docutils literal notranslate"><span class="pre">flagos</span> <span class="pre">&gt;</span> <span class="pre">vendor</span> <span class="pre">&gt;</span> <span class="pre">reference</span></code> 链。当算子未使用预期实现时，请检查有效配置和后端可用性：</p>
+<ol class="arabic simple">
+<li><p>检查 <code class="docutils literal notranslate"><span class="pre">SGLANG_FL_PREFER</span></code>、<code class="docutils literal notranslate"><span class="pre">SGLANG_FL_PER_OP</span></code>、<code class="docutils literal notranslate"><span class="pre">SGLANG_FL_ALLOW_VENDORS</span></code>、<code class="docutils literal notranslate"><span class="pre">SGLANG_FL_DENY_VENDORS</span></code> 和 <code class="docutils literal notranslate"><span class="pre">SGLANG_FL_STRICT</span></code> 等环境变量覆盖项。</p></li>
+<li><p>检查 <code class="docutils literal notranslate"><span class="pre">SGLANG_FL_CONFIG</span></code> 以及 <code class="docutils literal notranslate"><span class="pre">sglang_fl/dispatch/config/</span></code> 下检测到的平台 YAML。</p></li>
+<li><p>如果需要额外的策略诊断，请启用 <code class="docutils literal notranslate"><span class="pre">SGLANG_FL_DISPATCH_DEBUG=[TODO:</span> <span class="pre">needs</span> <span class="pre">confirmation]</span></code>。</p></li>
+<li><p>确认所选后端的运行时和设备在目标镜像中可用。</p></li>
+</ol>
+<p>严格模式下，如果首选或显式排序的后端不可用，系统会报错而不是回退。未启用严格模式时，调度会过滤不可用或不允许的候选项，并选择下一个允许的实现。</p>
+</section>
+<section id="flagcx">
+<h2>分布式与 FlagCX 诊断<a class="headerlink" href="#flagcx" title="Link to this heading">#</a></h2>
+<p>对于分布式通信故障，请检查所选的 <code class="docutils literal notranslate"><span class="pre">SGLANG_FL_DIST_BACKEND</span></code>、预期使用 FlagCX 时的 <code class="docutils literal notranslate"><span class="pre">FLAGCX_PATH</span></code>、设备可见性、网络配置以及张量并行 / 流水线并行设置。平台特定的框架、镜像和网络设备前置条件记录在<a class="reference external" href="https://flagos.io/resourcedownload?lang=en">集中式厂商 / 框架 / 镜像选择页面</a>中。</p>
+<!-- END NEW -->
+</section>
+<section id="id3">
+<h2>调度日志<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>查看每个融合算子解析到哪个后端（在服务器启动时写入）：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">dispatch</span><span class="o">.</span><span class="n">log</span>
+<span class="n">SGLANG_FL_DISPATCH_LOG</span><span class="o">=/</span><span class="n">tmp</span><span class="o">/</span><span class="n">dispatch</span><span class="o">.</span><span class="n">log</span> \
+  <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sglang</span><span class="o">.</span><span class="n">launch_server</span> \
+    <span class="o">--</span><span class="n">model</span><span class="o">-</span><span class="n">path</span> <span class="n">Qwen</span><span class="o">/</span><span class="n">Qwen2</span><span class="mf">.5</span><span class="o">-</span><span class="mf">0.5</span><span class="n">B</span><span class="o">-</span><span class="n">Instruct</span> \
+    <span class="o">--</span><span class="n">port</span> <span class="mi">30000</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">piecewise</span><span class="o">-</span><span class="n">cuda</span><span class="o">-</span><span class="n">graph</span>
+
+<span class="n">sort</span> <span class="o">-</span><span class="n">u</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">dispatch</span><span class="o">.</span><span class="n">log</span>
+<span class="c1"># [OOT-DISPATCH] SiluAndMul → flagos(flagos)</span>
+<span class="c1"># [OOT-DISPATCH] RMSNorm → flagos(flagos)</span>
+<span class="c1"># [OOT-DISPATCH] RotaryEmbedding → flagos(flagos)</span>
+</pre></div>
+</div>
+</section>
+<section id="aten">
+<h2>ATen 替换日志<a class="headerlink" href="#aten" title="Link to this heading">#</a></h2>
+<p>记录哪些 PyTorch ATen 算子被 FlagGems 替换：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rm</span> <span class="o">-</span><span class="n">f</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">gems_aten</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">SGLANG_FLAGGEMS_RECORD</span><span class="o">=</span><span class="mi">1</span> <span class="n">SGLANG_FLAGGEMS_LOG_PATH</span><span class="o">=/</span><span class="n">tmp</span><span class="o">/</span><span class="n">gems_aten</span><span class="o">.</span><span class="n">txt</span> \
+  <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sglang</span><span class="o">.</span><span class="n">launch_server</span> \
+    <span class="o">--</span><span class="n">model</span><span class="o">-</span><span class="n">path</span> <span class="n">Qwen</span><span class="o">/</span><span class="n">Qwen2</span><span class="mf">.5</span><span class="o">-</span><span class="mf">0.5</span><span class="n">B</span><span class="o">-</span><span class="n">Instruct</span> \
+    <span class="o">--</span><span class="n">port</span> <span class="mi">30000</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">piecewise</span><span class="o">-</span><span class="n">cuda</span><span class="o">-</span><span class="n">graph</span>
+
+<span class="c1"># 首次推理请求后：</span>
+<span class="n">sort</span> <span class="o">-</span><span class="n">u</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">gems_aten</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>日志使用 <code class="docutils literal notranslate"><span class="pre">_AtenOnlyFilter</span></code> 仅记录 <code class="docutils literal notranslate"><span class="pre">flag_gems.ops.*</span></code> 命名空间调用，排除第二层实现触发的内部 FlagGems 调用。</p>
+</div>
+</section>
+<section id="id4">
+<h2>通过精度二分法排查数值精度问题<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>当出现数值差异时，隔离出导致问题的层。如果输出在第 N 步发散但第 N-1 步正常，则问题层 / 算子被定位。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 第 1 步：禁用所有——确认原生 SGLang 正常工作</span>
+<span class="n">SGLANG_PLUGINS</span><span class="o">=</span><span class="s2">"__none__"</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sglang</span><span class="o">.</span><span class="n">launch_server</span> \
+    <span class="o">--</span><span class="n">model</span><span class="o">-</span><span class="n">path</span> <span class="n">Qwen</span><span class="o">/</span><span class="n">Qwen2</span><span class="mf">.5</span><span class="o">-</span><span class="mf">0.5</span><span class="n">B</span><span class="o">-</span><span class="n">Instruct</span> \
+    <span class="o">--</span><span class="n">port</span> <span class="mi">30000</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">piecewise</span><span class="o">-</span><span class="n">cuda</span><span class="o">-</span><span class="n">graph</span>
+
+<span class="c1"># 第 2 步：仅启用第二层（融合算子），禁用 ATen 替换</span>
+<span class="n">USE_FLAGGEMS</span><span class="o">=</span><span class="mi">0</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sglang</span><span class="o">.</span><span class="n">launch_server</span> \
+    <span class="o">--</span><span class="n">model</span><span class="o">-</span><span class="n">path</span> <span class="n">Qwen</span><span class="o">/</span><span class="n">Qwen2</span><span class="mf">.5</span><span class="o">-</span><span class="mf">0.5</span><span class="n">B</span><span class="o">-</span><span class="n">Instruct</span> \
+    <span class="o">--</span><span class="n">port</span> <span class="mi">30000</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">piecewise</span><span class="o">-</span><span class="n">cuda</span><span class="o">-</span><span class="n">graph</span>
+
+<span class="c1"># 第 3 步：逐算子隔离——仅 SiluAndMul 使用 flagos，RMSNorm 使用 reference</span>
+<span class="n">USE_FLAGGEMS</span><span class="o">=</span><span class="mi">0</span> \
+<span class="n">SGLANG_FL_PER_OP</span><span class="o">=</span><span class="s2">"silu_and_mul=flagos;rms_norm=reference"</span> \
+    <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sglang</span><span class="o">.</span><span class="n">launch_server</span> \
+    <span class="o">--</span><span class="n">model</span><span class="o">-</span><span class="n">path</span> <span class="n">Qwen</span><span class="o">/</span><span class="n">Qwen2</span><span class="mf">.5</span><span class="o">-</span><span class="mf">0.5</span><span class="n">B</span><span class="o">-</span><span class="n">Instruct</span> \
+    <span class="o">--</span><span class="n">port</span> <span class="mi">30000</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">piecewise</span><span class="o">-</span><span class="n">cuda</span><span class="o">-</span><span class="n">graph</span>
+
+<span class="c1"># 第 4 步：禁用第二层，仅 ATen 替换激活</span>
+<span class="n">SGLANG_FL_OOT_ENABLED</span><span class="o">=</span><span class="mi">0</span> <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sglang</span><span class="o">.</span><span class="n">launch_server</span> \
+    <span class="o">--</span><span class="n">model</span><span class="o">-</span><span class="n">path</span> <span class="n">Qwen</span><span class="o">/</span><span class="n">Qwen2</span><span class="mf">.5</span><span class="o">-</span><span class="mf">0.5</span><span class="n">B</span><span class="o">-</span><span class="n">Instruct</span> \
+    <span class="o">--</span><span class="n">port</span> <span class="mi">30000</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">piecewise</span><span class="o">-</span><span class="n">cuda</span><span class="o">-</span><span class="n">graph</span>
+
+<span class="c1"># 第 5 步：通过白名单逐步启用 ATen 算子</span>
+<span class="n">SGLANG_FL_OOT_ENABLED</span><span class="o">=</span><span class="mi">0</span> <span class="n">SGLANG_FL_FLAGOS_WHITELIST</span><span class="o">=</span><span class="n">rms_norm</span><span class="p">,</span><span class="n">silu</span> \
+    <span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">sglang</span><span class="o">.</span><span class="n">launch_server</span> \
+    <span class="o">--</span><span class="n">model</span><span class="o">-</span><span class="n">path</span> <span class="n">Qwen</span><span class="o">/</span><span class="n">Qwen2</span><span class="mf">.5</span><span class="o">-</span><span class="mf">0.5</span><span class="n">B</span><span class="o">-</span><span class="n">Instruct</span> \
+    <span class="o">--</span><span class="n">port</span> <span class="mi">30000</span> <span class="o">--</span><span class="n">disable</span><span class="o">-</span><span class="n">piecewise</span><span class="o">-</span><span class="n">cuda</span><span class="o">-</span><span class="n">graph</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>常见问题<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>症状</p></th>
+<th class="head text-left"><p>原因与解决方案</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">dispatch.log</span></code> 为空</p></td>
+<td class="text-left"><p>插件未加载——检查 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">show</span> <span class="pre">sglang_fl</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">gems_aten.txt</span></code> 为空</p></td>
+<td class="text-left"><p>设置了 <code class="docutils literal notranslate"><span class="pre">USE_FLAGGEMS=0</span></code>，或 <code class="docutils literal notranslate"><span class="pre">SGLANG_FL_FLAGOS_WHITELIST</span></code> 排除了该算子</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>非 NVIDIA 设备上报 <code class="docutils literal notranslate"><span class="pre">forward_cuda</span></code> 错误</p></td>
+<td class="text-left"><p>某算子缺少 OOT 注册——注册它或添加到白名单</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">sgl_kernel</span></code></p></td>
+<td class="text-left"><p>非 CUDA 环境下正常——OOT 调度会绕过 <code class="docutils literal notranslate"><span class="pre">forward_cuda</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">tp&gt;1</span></code> 启动时卡住</p></td>
+<td class="text-left"><p>检查 GPU 数量、NCCL 环境变量、模型 TP 兼容性</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>引擎启动时 OOM</p></td>
+<td class="text-left"><p>降低 <code class="docutils literal notranslate"><span class="pre">--mem-fraction-static</span></code>（默认 0.5）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="dispatch-through-environment-variables.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">通过环境变量进行调度</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="vendor-integration.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">厂商集成</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">策略与后端解析</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagcx">分布式与 FlagCX 诊断</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">调度日志</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aten">ATen 替换日志</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">通过精度二分法排查数值精度问题</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">常见问题</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../sglang_plugin_fl_en/dispatch_user_guide/debugg-and-diagonostics.html">English</a></body>
+</html>
