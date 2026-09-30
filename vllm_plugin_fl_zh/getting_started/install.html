@@ -1,0 +1,846 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="安装运行推理任务所需的软件" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/install.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="从 Docker 镜像安装: vllm-plugin-FL 通过预构建的 Docker 镜像安装。受支持的版本与硬件平台见 要求 。 选择镜像. 打开 FlagOS 主页面 ，点击页面正中间的 下载 ，选择与你的硬件对应的 Docker 镜像。 在容器内安装各组件. 请选择与 vLLM 版本匹配的分支，分支与 vLLM 版本必须成对使用：,, vllm-plugin-FL 分支, 社区 vLLM 版本,,, release/0.2, v0.20.2,, main, v0.24.0,,,, 2.1 安装 vLLM 对于 NVIDIA GPU，从官方 v0.24.0 版本安装 vLLM（如果..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="从 Docker 镜像安装: vllm-plugin-FL 通过预构建的 Docker 镜像安装。受支持的版本与硬件平台见 要求 。 选择镜像. 打开 FlagOS 主页面 ，点击页面正中间的 下载 ，选择与你的硬件对应的 Docker 镜像。 在容器内安装各组件. 请选择与 vLLM 版本匹配的分支，分支与 vLLM 版本必须成对使用：,, vllm-plugin-FL 分支, 社区 vLLM 版本,,, release/0.2, v0.20.2,, main, v0.24.0,,,, 2.1 安装 vLLM 对于 NVIDIA GPU，从官方 v0.24.0 版本安装 vLLM（如果..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>安装运行推理任务所需的软件 &#8212; VLLM-Plugin-FL 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/install.2b6b290e-e5e0-4c02-97f6-6fedae21148d.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/install';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/install.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="运行推理任务" href="run-inference-task.html" />
+    <link rel="prev" title="要求" href="requirements.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="VLLM-Plugin-FL 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="VLLM-Plugin-FL 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    vllm-plugin-FL 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">vllm-plugin-FL 概览</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/operator-dispatch-mechanism.html">算子调度机制</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="getting-started.html">快速入门</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">要求</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">安装运行推理任务所需的软件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run-inference-task.html">运行推理任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adaptation-gate.html">适配门禁测试</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dispatch_user_guide/dispatch-user-guide.html">算子调度用户指南</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/quick-start.html">快速开始</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-backend-selection.html">配置后端选择</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-policy.html">策略上下文管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/add-ops-and-vendors.html">添加新算子和厂商后端</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考文档</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/dispatch-api-reference.html">调度 API 参考</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/install.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>安装运行推理任务所需的软件</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">从 Docker 镜像安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend">华为 Ascend 额外设置</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda">CUDA 额外设置</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">使用 CUDA 通信库</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">使用原生 CUDA 算子</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">调度算子</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>安装运行推理任务所需的软件<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<section id="docker">
+<h2>从 Docker 镜像安装<a class="headerlink" href="#docker" title="Link to this heading">#</a></h2>
+<p>vllm-plugin-FL 通过预构建的 Docker 镜像安装。受支持的版本与硬件平台见<a class="reference internal" href="requirements.html"><span class="std std-doc">要求</span></a>。</p>
+<ol class="arabic simple">
+<li><p>选择镜像</p></li>
+</ol>
+<p>打开 <a class="reference external" href="https://flagos.io/Home">FlagOS 主页面</a>，点击页面正中间的 <strong>下载</strong>，选择与你的硬件对应的 Docker 镜像。</p>
+<ol class="arabic simple" start="2">
+<li><p>在容器内安装各组件</p></li>
+</ol>
+<p id="version-compatibility">请选择与 vLLM 版本匹配的分支，分支与 vLLM 版本必须成对使用：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>vllm-plugin-FL 分支</p></th>
+<th class="head"><p>社区 vLLM 版本</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">release/0.2</span></code></p></td>
+<td><p><a class="reference external" href="https://github.com/vllm-project/vllm/tree/v0.20.2">v0.20.2</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">main</span></code></p></td>
+<td><p><a class="reference external" href="https://github.com/vllm-project/vllm/tree/v0.24.0">v0.24.0</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>2.1 安装 vLLM</p>
+<p>对于 <strong>NVIDIA</strong> GPU，从官方 <a class="reference external" href="https://github.com/vllm-project/vllm/tree/v0.24.0">v0.24.0</a> 版本安装 vLLM（如果已安装正确版本则可选）：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">vllm</span><span class="o">==</span><span class="m">0</span>.24.0
+</pre></div>
+</div>
+<p>对于 <strong>非 NVIDIA</strong> 芯片，使用 <code class="docutils literal notranslate"><span class="pre">empty</span></code> 设备目标从源码安装 vLLM：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v0.24.0<span class="w"> </span>https://github.com/vllm-project/vllm.git
+<span class="nb">cd</span><span class="w"> </span>vllm
+<span class="nv">VLLM_TARGET_DEVICE</span><span class="o">=</span>empty<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>--no-build-isolation<span class="w"> </span>--no-deps<span class="w"> </span>.
+</pre></div>
+</div>
+<p>若使用 vLLM 0.20.2，请将上述两条命令中的 <code class="docutils literal notranslate"><span class="pre">v0.24.0</span></code> 替换为 <code class="docutils literal notranslate"><span class="pre">v0.20.2</span></code>（见<a class="reference internal" href="#version-compatibility"><span class="std std-ref">版本兼容性</span></a>）。</p>
+<p>2.2 安装 vllm-plugin-FL</p>
+<p>克隆仓库，分支需与 vLLM 版本匹配（见<a class="reference internal" href="#version-compatibility"><span class="std std-ref">版本兼容性</span></a>）：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>main<span class="w"> </span>https://github.com/flagos-ai/vllm-plugin-FL
+<span class="nb">cd</span><span class="w"> </span>vllm-plugin-FL
+<span class="c1"># 若使用 vLLM 0.20.2，请改用：git clone -b release/0.2 https://github.com/flagos-ai/vllm-plugin-FL</span>
+</pre></div>
+</div>
+<p>安装。默认情况下，vllm-plugin-FL 以纯 Python 包形式安装：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>.
+<span class="c1"># 或可编辑安装</span>
+pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>对于 CUDA 类设备（包括使用 PyTorch CUDA dispatch key 的 CUDA 与 HIP/ROCm 环境），安装时设置 <code class="docutils literal notranslate"><span class="pre">VLLM_VENDOR=cuda</span></code> 以编译并安装插件原生扩展：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">VLLM_VENDOR</span><span class="o">=</span>cuda<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>.
+<span class="c1"># 或可编辑安装</span>
+<span class="nv">VLLM_VENDOR</span><span class="o">=</span>cuda<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>该步骤会构建并安装 <code class="docutils literal notranslate"><span class="pre">vllm_fl._C</span></code>，为部分 graph/自定义算子路径提供原生 C++ 支持，尤其适用于以 <code class="docutils literal notranslate"><span class="pre">VLLM_TARGET_DEVICE=empty</span></code> 安装 vLLM 的场景。若不设置 <code class="docutils literal notranslate"><span class="pre">VLLM_VENDOR</span></code>，vllm-plugin-FL 将以纯 Python 插件形式安装，跳过原生扩展。</p>
+<p>2.3 安装 <a class="reference external" href="https://flagos-ai.github.io/FlagGems/getting-started/install/">FlagGems</a></p>
+<p>安装构建依赖</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>scikit-build-core<span class="o">==</span><span class="m">0</span>.11<span class="w"> </span>pybind11<span class="w"> </span>ninja<span class="w"> </span>cmake
+</pre></div>
+</div>
+<p>安装 FlagGems：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v5.3.4<span class="w"> </span>https://github.com/flagos-ai/FlagGems
+<span class="nb">cd</span><span class="w"> </span>FlagGems
+pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>.
+<span class="c1"># 或可编辑安装</span>
+pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>在 Sunrise 平台上，依赖 FlagGems <a class="reference external" href="https://github.com/flagos-ai/FlagGems/pull/2949">PR #2949</a>。
+在 Hygon 平台上，依赖 FlagGems <a class="reference external" href="https://github.com/flagos-ai/FlagGems/pull/3477">PR #3477</a>。</p>
+</div>
+<p>2.4 （可选）安装 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/blob/main/docs/getting_started.md#build-and-installation">FlagCX</a></p>
+<p>克隆仓库：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>-b<span class="w"> </span>v0.13.0<span class="w"> </span>https://github.com/flagos-ai/FlagCX.git
+<span class="nb">cd</span><span class="w"> </span>FlagCX
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+</pre></div>
+</div>
+<p>使用不同标志构建库以适配不同平台：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nv">USE_NVIDIA</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>设置环境变量：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
+</pre></div>
+</div>
+<p>安装 FlagCX：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>plugin/torch/
+<span class="nv">FLAGCX_ADAPTOR</span><span class="o">=[</span>xxx<span class="o">]</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--no-build-isolation
+<span class="c1"># 或可编辑安装</span>
+<span class="nv">FLAGCX_ADAPTOR</span><span class="o">=[</span>xxx<span class="o">]</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--no-build-isolation
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>[xxx] 应根据当前平台选择，例如 nvidia、ascend 等。</p>
+</div>
+<p>如果当前环境中有多个插件，可以通过 VLLM_PLUGINS=‘fl’ 选择使用 vllm-plugin-fl。</p>
+<section id="ascend">
+<span id="additional-setup-for-huawei-ascend"></span><h3>华为 Ascend 额外设置<a class="headerlink" href="#ascend" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>安装 <a class="reference external" href="https://resource.flagos.net">FlagTree</a></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">RES</span><span class="o">=</span><span class="s2">"--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple --trusted-host=https://resource.flagos.net"</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">flagtree</span><span class="o">==</span><span class="m">0</span>.7.0+ascend3.5<span class="w"> </span><span class="nv">$RES</span>
+</pre></div>
+</div>
+<p>其他芯片请使用对应的 FlagTree 构建（例如 <code class="docutils literal notranslate"><span class="pre">flagtree==0.7.0+iluvatar3.6</span></code>、<code class="docutils literal notranslate"><span class="pre">flagtree==0.7.0+metax3.6</span></code>）。</p>
+</li>
+<li><p>设置必需的环境变量</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TRITON_ALL_BLOCKS_PARALLEL</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>启用 eager 执行</p>
+<p>Ascend 需要 eager 执行。在 <code class="docutils literal notranslate"><span class="pre">LLM</span></code> 构造函数中添加 <code class="docutils literal notranslate"><span class="pre">enforce_eager=True</span></code> 或在命令行中传递 <code class="docutils literal notranslate"><span class="pre">--enforce-eager</span></code>。</p>
+</li>
+</ol>
+</section>
+<section id="cuda">
+<h3>CUDA 额外设置<a class="headerlink" href="#cuda" title="Link to this heading">#</a></h3>
+<p>本节说明如何通过设置环境变量使用 CUDA 运行推理任务。</p>
+<p>算子调度环境变量请参见 <a class="reference internal" href="../dispatch_user_guide/configure-backend-selection.html#environment-variables"><span class="std std-ref">环境变量</span></a>。</p>
+<section id="id2">
+<h4>使用 CUDA 通信库<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">unset</span><span class="w"> </span>FLAGCX_PATH
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4>使用原生 CUDA 算子<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<p>如果您想使用原始的 CUDA 算子，可以设置以下环境变量。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">USE_FLAGGEMS</span><span class="o">=</span><span class="m">0</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h3>调度算子<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>如果需要，您也可以调度算子。</p>
+<p>概念相关信息请参见 <a class="reference internal" href="../overview/overview.html"><span class="std std-doc">vllm-plugin-FL 概览</span></a>。
+配置相关信息请参见 <a class="reference internal" href="../dispatch_user_guide/dispatch-user-guide.html"><span class="std std-doc">算子调度用户指南</span></a>。</p>
+<p>安装和可选的算子调度配置完成后，您可以继续<a class="reference internal" href="run-inference-task.html"><span class="std std-doc">运行推理任务</span></a>。</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="requirements.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">要求</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="run-inference-task.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">运行推理任务</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">从 Docker 镜像安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend">华为 Ascend 额外设置</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda">CUDA 额外设置</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">使用 CUDA 通信库</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">使用原生 CUDA 算子</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">调度算子</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../vllm_plugin_fl_en/getting_started/install.html">English</a></body>
+</html>

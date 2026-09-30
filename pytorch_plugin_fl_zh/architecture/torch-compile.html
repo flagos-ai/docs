@@ -1,0 +1,829 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="torch.compile 集成" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="architecture/torch-compile.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="flagos 设备支持 torch.compile ，可实现自动内核融合并降低调度开销。计算图始终留在 flagos 设备上：不存在设备往返，也没有图边界处的拷贝。 快速开始: 编译模式： mode 与 options 会展开为仅作用于该次编译的 Inductor 配置补丁。该后端始终关闭 CUDA graphs，因此以 CUDA graphs 为主要手段的 mode=&quot;reduce-overhead&quot; 在这里效果有限。 FlagTree 编译: FlagTree 是 Triton 的分支，其编译器面向多种厂商后端。它的集成方式是在 安装期替换 ，这是理解它的关键： ..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="flagos 设备支持 torch.compile ，可实现自动内核融合并降低调度开销。计算图始终留在 flagos 设备上：不存在设备往返，也没有图边界处的拷贝。 快速开始: 编译模式： mode 与 options 会展开为仅作用于该次编译的 Inductor 配置补丁。该后端始终关闭 CUDA graphs，因此以 CUDA graphs 为主要手段的 mode=&quot;reduce-overhead&quot; 在这里效果有限。 FlagTree 编译: FlagTree 是 Triton 的分支，其编译器面向多种厂商后端。它的集成方式是在 安装期替换 ，这是理解它的关键： ..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>torch.compile 集成 &#8212; PyTorch-Plugin-FL 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/architecture/torch-compile.01f0f4d0-9b0f-46eb-ab2d-1bb8db3934d4.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'architecture/torch-compile';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/architecture/torch-compile.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="兼容性与平台支持" href="../reference/compatibility.html" />
+    <link rel="prev" title="Profiler 集成" href="profiler.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="PyTorch-Plugin-FL 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="PyTorch-Plugin-FL 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    PyTorch-Plugin-FL
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">PyTorch-Plugin-FL 概览</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">功能特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/architecture.html">架构</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/features.html">功能特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/architecture.html">架构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distributed.html">分布式集合通信</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profiler.html">Profiler 集成</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">torch.compile 集成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/compatibility.html">兼容性与平台支持</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/environment-variables.html">环境变量</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/architecture/torch-compile.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>torch.compile 集成</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">快速开始</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree">FlagTree 编译</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">后端内部组成</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">平台差异</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">性能</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">环境变量</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">故障排查</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="torch-compile">
+<h1>torch.compile 集成<a class="headerlink" href="#torch-compile" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">flagos</span></code> 设备支持 <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code>，可实现自动内核融合并降低调度开销。计算图始终留在 <code class="docutils literal notranslate"><span class="pre">flagos</span></code> 设备上：不存在设备往返，也没有图边界处的拷贝。</p>
+<section id="id1">
+<h2>快速开始<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch_fl</span>  <span class="c1"># MetaX 与 Ascend 上必须先导入</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span>
+<span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">"flagos:0"</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">"flagos"</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"flagos:0"</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># 自动使用融合后的内核</span>
+</pre></div>
+</div>
+<p>编译模式：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">"flagos"</span><span class="p">)</span>                       <span class="c1"># 默认</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">"flagos"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"max-autotune"</span><span class="p">)</span>   <span class="c1"># 编译更久，运行更快</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">"flagos"</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s2">"max_autotune"</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">mode</span></code> 与 <code class="docutils literal notranslate"><span class="pre">options</span></code> 会展开为仅作用于该次编译的 Inductor 配置补丁。该后端始终关闭 CUDA graphs，因此以 CUDA graphs 为主要手段的 <code class="docutils literal notranslate"><span class="pre">mode=&quot;reduce-overhead&quot;</span></code> 在这里效果有限。</p>
+</section>
+<section id="flagtree">
+<h2>FlagTree 编译<a class="headerlink" href="#flagtree" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/flagos-ai/FlagTree">FlagTree</a> 是 Triton 的分支，其编译器面向多种厂商后端。它的集成方式是在<strong>安装期替换</strong>，这是理解它的关键：</p>
+<ul class="simple">
+<li><p>它的 wheel 名为 <code class="docutils literal notranslate"><span class="pre">flagtree</span></code>，但安装的模块是 <code class="docutils literal notranslate"><span class="pre">triton</span></code>。</p></li>
+<li><p>安装它会卸载官方 <code class="docutils literal notranslate"><span class="pre">triton</span></code> 并取而代之。</p></li>
+<li><p>因此 Inductor 自身的 <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">triton</span></code> 在安装后就已经指向 FlagTree，PyTorch-Plugin-FL 不需要对 <code class="docutils literal notranslate"><span class="pre">sys.modules</span></code> 做任何补丁。</p></li>
+</ul>
+<p>后端编译器在 FlagTree 构建期通过 <code class="docutils literal notranslate"><span class="pre">FLAGTREE_BACKEND</span></code> 选择（NVIDIA 与 AMD 不设置），而不是运行期：同一份 Triton 内核代码为不同厂商后端编译。<code class="docutils literal notranslate"><span class="pre">is_flagtree_active()</span></code> 用于检测 FlagTree 构建，<code class="docutils literal notranslate"><span class="pre">FLAGOS_USE_FLAGTREE=1</span></code> 断言当前 Triton 必须是 FlagTree —— 不满足时直接报错，而不是静默使用官方 Triton 编译。</p>
+<p>由于安装 FlagTree 会移除既有 <code class="docutils literal notranslate"><span class="pre">triton</span></code>，在 <code class="docutils literal notranslate"><span class="pre">triton</span></code> 已被 FlagGems 使用的机器上应将其构建到独立的虚拟环境中。FlagTree 0.6.2 及之后的 wheel 还会安装真实的 <code class="docutils literal notranslate"><span class="pre">flagtree</span></code> 包（FlagPrism 调试器/profiler 的宿主）；访问 FlagTree 仍然通过 <code class="docutils literal notranslate"><span class="pre">triton</span></code>。</p>
+</section>
+<section id="id2">
+<h2>后端内部组成<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>组件</p></th>
+<th class="head"><p>职责</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">torch_fl/compile/inductor_backend.py</span></code></p></td>
+<td><p>向 <code class="docutils literal notranslate"><span class="pre">torch._dynamo</span></code> 注册 <code class="docutils literal notranslate"><span class="pre">flagos</span></code> 后端，并接入 Inductor 的设备接口</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">torch_fl/compile/device_interface.py</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">flagos</span></code> 设备的 Inductor GPU 设备注册</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">torch_fl/flagos/meta.py</span></code></p></td>
+<td><p>meta 内核，使追踪阶段能为缺少默认 meta 实现的算子推断输出形状</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">torch_fl/compile/flagtree_shim.py</span></code></p></td>
+<td><p>FlagTree 检测（<code class="docutils literal notranslate"><span class="pre">is_flagtree_active</span></code>、<code class="docutils literal notranslate"><span class="pre">require_flagtree</span></code>），不做导入补丁</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">torch_fl/compile/platform_profile.py</span></code></p></td>
+<td><p>各平台代码生成 profile 与厂商绕过措施</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">torch_fl/compile/triton_*.py</span></code></p></td>
+<td><p>Triton 集成守卫：64 位索引、字节 load、libdevice、资源上限</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">torch_fl/compile/flagtree_ascend_policy.py</span></code></p></td>
+<td><p>FlagTree 策略注册表上的 Ascend 后端策略，从 <code class="docutils literal notranslate"><span class="pre">torch.flagos</span></code> 而非 <code class="docutils literal notranslate"><span class="pre">torch_npu</span></code> 取答案</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id3">
+<h2>平台差异<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Ascend</strong> — 通过 FlagTree 的 Ascend 后端编译；插件自有的 <code class="docutils literal notranslate"><span class="pre">flagos</span></code> 策略从自身运行时回答 FlagTree 的策略名称，并强制 <code class="docutils literal notranslate"><span class="pre">TRITON_ENABLE_TASKQUEUE=false</span></code>（任务队列仅 <code class="docutils literal notranslate"><span class="pre">torch_npu</span></code> 支持）。未纳入 CI。</p></li>
+<li><p><strong>PPU</strong> — FlagTree 在异步 Inductor worker 中选取编译提示时会初始化 CUDA，可能在父进程已初始化 PPU context 后失败，因此 PPU 的 FlagTree 默认串行编译。仅在验证上游修复或刻意选择其他 worker 配置时才显式设置 <code class="docutils literal notranslate"><span class="pre">TORCHINDUCTOR_COMPILE_THREADS</span></code>。</p></li>
+<li><p><strong>MetaX</strong> — <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code> 已在 CUDA boxing 模式下使用厂商 Triton 与 FlagTree main 验证。</p></li>
+<li><p><strong>燧原 GCU</strong> — 64 位代码生成守卫把「不支持 64 位」的失败转换为指名算子的可操作错误，见故障排查。</p></li>
+<li><p><strong>地平线 BPU</strong> — 编译是唯一的加速路径：<code class="docutils literal notranslate"><span class="pre">torch.compile(backend=&quot;bpu&quot;)</span></code> 追踪计算图，经 hbdk4 编译为 <code class="docutils literal notranslate"><span class="pre">.hbm</span></code> 产物并在 BPU 上执行，默认插入 int8 量化。</p></li>
+<li><p><strong>CUDA</strong> — <code class="docutils literal notranslate"><span class="pre">flagos</span></code> 已注册为一等 Inductor GPU 设备。CUDA 的 CI 任务中没有 <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code> 步骤，该路径由集成测试而非 CI 覆盖。</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>性能<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>融合收益已做正确性验证（<code class="docutils literal notranslate"><span class="pre">tests/integration/test_compile.py</span></code>）；与 CUDA 上官方 Inductor 的收益对比基准测试仍待开展。从结构上看两者应当接近 —— 相同的融合 pass、相同的 Triton 代码生成、因为计算图留在 flagos 而不存在每次调用的拷贝 —— 但这是预期而非实测结论。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>tests/perf/bench_compile.py<span class="w"> </span>--model<span class="o">=</span>mlp<span class="w"> </span>--batch-size<span class="o">=</span><span class="m">64</span>
+python<span class="w"> </span>tests/perf/bench_compile.py<span class="w"> </span>--model<span class="o">=</span>transformer<span class="w"> </span>--compare-cuda
+<span class="nv">FLAGOS_USE_FLAGTREE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>python<span class="w"> </span>tests/perf/bench_compile.py
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h2>环境变量<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>作用</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_USE_FLAGTREE</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>要求当前 Triton 为 FlagTree（断言，不切换）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_COMPILE_FALLBACK_EAGER</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>编译出错时回退到 eager</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_TILEOPS_*</span></code></p></td>
+<td><p>见参考</p></td>
+<td><p>TileOps/TileLang 的 L2 层级、实例缓存容量与缓存开关</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>路由相关变量（<code class="docutils literal notranslate"><span class="pre">FLAGOS_BACKEND_CONFIG</span></code>、<code class="docutils literal notranslate"><span class="pre">FLAGOS_OP_&lt;op&gt;</span></code>、<code class="docutils literal notranslate"><span class="pre">FLAGOS_FORCE_BACKEND</span></code>）同样作用于编译后的内核，因为编译出的计算图走同一张路由表。</p>
+</section>
+<section id="id6">
+<h2>故障排查<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>现象</p></th>
+<th class="head"><p>原因与处理</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>图捕获或代码生成阶段报错</p></td>
+<td><p>设置 <code class="docutils literal notranslate"><span class="pre">FLAGOS_COMPILE_FALLBACK_EAGER=1</span></code> 回退到 eager；检查是否存在不支持的算子（动态形状、自定义算子）以及缺失的 meta 实现</p></td>
+</tr>
+<tr class="row-odd"><td><p>GCU 上出现 <code class="docutils literal notranslate"><span class="pre">InductorError:</span> <span class="pre">...</span> <span class="pre">has</span> <span class="pre">no</span> <span class="pre">64-bit</span> <span class="pre">support</span></code></p></td>
+<td><p>64 位代码生成守卫拒绝了在不支持 64 位索引的后端上需要 64 位索引的内核形状；缩小张量/索引规模，或让该算子留在原有路由上</p></td>
+</tr>
+<tr class="row-even"><td><p>相比 eager 没有加速</p></td>
+<td><p>确认计算图确实编译成功（<code class="docutils literal notranslate"><span class="pre">TORCH_LOGS=inductor</span></code>），检查 Triton 自动调优是否仍在进行，并确认工作负载不是启动开销受限</p></td>
+</tr>
+<tr class="row-odd"><td><p>FlagTree 未生效</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_USE_FLAGTREE=1</span></code> 在官方 Triton 下会报错；检查 <code class="docutils literal notranslate"><span class="pre">is_flagtree_active()</span></code> 并重新安装 FlagTree，它必须替换 <code class="docutils literal notranslate"><span class="pre">triton</span></code> 模块</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">torch.compile</span></code> 不可用</p></td>
+<td><p>后端在 <code class="docutils literal notranslate"><span class="pre">torch._dynamo</span></code> 可导入时注册；检查 PyTorch 版本，并确认编译前已执行 <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">torch_fl</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>tests/integration/test_compile.py<span class="w"> </span>-v<span class="w"> </span>--tb<span class="o">=</span>short
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="profiler.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Profiler 集成</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/compatibility.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">兼容性与平台支持</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">快速开始</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree">FlagTree 编译</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">后端内部组成</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">平台差异</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">性能</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">环境变量</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">故障排查</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../pytorch_plugin_fl_en/architecture/torch-compile.html">English</a></body>
+</html>

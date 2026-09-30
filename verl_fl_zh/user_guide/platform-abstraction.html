@@ -1,0 +1,883 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="平台抽象与多芯片训练" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/platform-abstraction.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="verl-FL 用平台抽象层替代了上游 verl 中硬编码的 torch.cuda 调用，并集成 FlagOS 训练引擎，使同一份 RL 后训练脚本可运行在 NVIDIA、华为昇腾、沐曦 MetaX（MACA）、摩尔线程 MUSA 与 CPU 上。本页介绍该抽象层、引擎插件以及已验证的端到端流程。 平台抽象层: 抽象层位于 verl/plugin/platform/ ，采用策略模式： PlatformBase 定义了 16 个设备无关方法，涵盖设备分配、内存管理、流操作与分布式初始化。业务逻辑调用平台 API，而不再直接调用 torch.cuda.* 。 通过 VERL_PLATFORM..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="verl-FL 用平台抽象层替代了上游 verl 中硬编码的 torch.cuda 调用，并集成 FlagOS 训练引擎，使同一份 RL 后训练脚本可运行在 NVIDIA、华为昇腾、沐曦 MetaX（MACA）、摩尔线程 MUSA 与 CPU 上。本页介绍该抽象层、引擎插件以及已验证的端到端流程。 平台抽象层: 抽象层位于 verl/plugin/platform/ ，采用策略模式： PlatformBase 定义了 16 个设备无关方法，涵盖设备分配、内存管理、流操作与分布式初始化。业务逻辑调用平台 API，而不再直接调用 torch.cuda.* 。 通过 VERL_PLATFORM..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>平台抽象与多芯片训练 &#8212; verl-FL 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/platform-abstraction.2ea92968-281c-4401-9bfc-dedaedbe1db7.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/platform-abstraction';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/platform-abstraction.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="参考资料" href="../references/reference.html" />
+    <link rel="prev" title="verl-FL 用户指南" href="user-guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="verl-FL 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="verl-FL 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    verl-FL 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">verl-FL 概述</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">verl-FL 快速开始</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">环境要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">快速安装</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="user-guide.html">verl-FL 用户指南</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">平台抽象与多芯片训练</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考资料</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references/reference.html">参考资料</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/platform-abstraction.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>平台抽象与多芯片训练</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">平台抽象层</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">引擎插件架构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagcx">基于 FlagCX 的异构训练</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">环境要求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ray">第一步 —— 启动 Ray 集群</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grpo">第二步 —— 启动异构 GRPO 训练</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">（可选）先验证 FlagCX 跨节点通信</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">验证通过的表现</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">新增后端</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>平台抽象与多芯片训练<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>verl-FL 用平台抽象层替代了上游 verl 中硬编码的 <code class="docutils literal notranslate"><span class="pre">torch.cuda</span></code> 调用，并集成 FlagOS 训练引擎，使同一份 RL 后训练脚本可运行在 NVIDIA、华为昇腾、沐曦 MetaX（MACA）、摩尔线程 MUSA 与 CPU 上。本页介绍该抽象层、引擎插件以及已验证的端到端流程。</p>
+<section id="id2">
+<h2>平台抽象层<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>抽象层位于 <code class="docutils literal notranslate"><span class="pre">verl/plugin/platform/</span></code>，采用策略模式：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>verl/plugin/platform/
+├── __init__.py
+├── platform_base.py        # PlatformBase 抽象基类（16 个设备无关方法）
+├── platform_cuda.py        # CUDA + FlagCX 自动检测
+├── platform_metax.py       # 沐曦 MetaX MACA
+├── platform_npu.py         # 昇腾 NPU
+├── platform_musa.py        # 摩尔线程 MUSA + FlagCX
+├── platform_cpu.py         # CPU 回退
+├── platform_manager.py     # 单例，支持 VERL_PLATFORM 环境变量覆盖
+└── README.md               # 新增后端的指南
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">PlatformBase</span></code> 定义了 16 个设备无关方法，涵盖设备分配、内存管理、流操作与分布式初始化。业务逻辑调用平台 API，而不再直接调用 <code class="docutils literal notranslate"><span class="pre">torch.cuda.*</span></code>。</p>
+<p>通过 <code class="docutils literal notranslate"><span class="pre">VERL_PLATFORM</span></code> 环境变量在运行时选择平台；不设置时会在启动阶段自动检测。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">VERL_PLATFORM</span><span class="o">=</span>metax<span class="w">     </span><span class="c1"># 沐曦 MetaX</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VERL_PLATFORM</span><span class="o">=</span>npu<span class="w">       </span><span class="c1"># 昇腾 NPU</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VERL_PLATFORM</span><span class="o">=</span>musa<span class="w">      </span><span class="c1"># 摩尔线程 MUSA</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VERL_PLATFORM</span><span class="o">=</span>cpu<span class="w">       </span><span class="c1"># CPU（测试用）</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h2>引擎插件架构<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>训练引擎可按设备插拔注册：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>verl/plugin/engine/
+├── __init__.py             # 引擎注册表
+├── fsdp_fl/
+│   ├── __init__.py
+│   └── transformer_impl.py # 基于 TE-FL 的 FSDP 引擎
+└── megatron_fl/
+    └── __init__.py         # 基于 Megatron-LM-FL 的引擎
+</pre></div>
+</div>
+<p>FlagOS 引擎通过引擎设备与厂商选择，与平台相互独立：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">VERL_ENGINE_DEVICE</span><span class="o">=</span>flagos
+<span class="nb">export</span><span class="w"> </span><span class="nv">VERL_ENGINE_VENDOR</span><span class="o">=</span>flagos
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>FSDP 引擎</strong> —— 基于 TransformerEngine-FL，支持 fp8 与多后端算子调度。</p></li>
+<li><p><strong>Megatron 引擎</strong> —— 基于 Megatron-LM-FL，面向大规模分布式训练。</p></li>
+</ul>
+</section>
+<section id="flagcx">
+<h2>基于 FlagCX 的异构训练<a class="headerlink" href="#flagcx" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/flagos-ai/FlagCX">FlagCX</a> 是统一的跨厂商通信后端。它允许同一集群混用加速器：NVIDIA 节点运行 actor/critic（FSDP），摩尔线程 MUSA 节点运行 rollout（vLLM），权重同步与设备隔离通过 Ray 运行时上下文完成。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>┌─────────────────────────┐              ┌─────────────────────────┐
+│  NVIDIA 节点            │              │  MUSA 节点              │
+│  (Actor / Critic)       │◄── FlagCX ──►│  (Rollout / vLLM)       │
+│  FSDP + NCCL            │              │  torch_musa             │
+└─────────────────────────┘              └─────────────────────────┘
+</pre></div>
+</div>
+<section id="id4">
+<h3>环境要求<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>NVIDIA 节点：</strong> 基础镜像 <code class="docutils literal notranslate"><span class="pre">nvidia/cuda:12.9.1-devel-ubuntu22.04</span></code>，Python 3.10；需安装 torch 2.9.0+cu129、vLLM 0.12.0、vllm-plugin-FL、TransformerEngine-FL、Megatron-LM-FL、FlagCX、Ray 与 verl-FL。</p></li>
+<li><p><strong>MUSA 节点：</strong> 基础镜像 <code class="docutils literal notranslate"><span class="pre">registry.mthreads.com/presale/devtech/vllm_plugin_fix:20260327hg</span></code>（已含 <code class="docutils literal notranslate"><span class="pre">torch_musa</span></code>、MUSA 工具链与 vllm-plugin-FL），Python 3.10；需安装 FlagCX、Ray 与 verl-FL。</p></li>
+<li><p><strong>两个节点：</strong> Python 3.10，跨节点通信需要 InfiniBand。模型：Qwen3-0.6B。数据集：GSM8K（<code class="docutils literal notranslate"><span class="pre">train.parquet</span></code> / <code class="docutils literal notranslate"><span class="pre">test.parquet</span></code>）。</p></li>
+</ul>
+</section>
+<section id="ray">
+<h3>第一步 —— 启动 Ray 集群<a class="headerlink" href="#ray" title="Link to this heading">#</a></h3>
+<p>在 MUSA 节点（head，承载 rollout）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">RAY_EXPERIMENTAL_NOSET_MUSA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MUSA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3,4,5,6,7
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCCL_NET_GDR_LEVEL</span><span class="o">=</span><span class="m">2</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MCCL_IB_HCA</span><span class="o">=</span>mlx5_bond_0
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_PATH</span><span class="o">=</span>/workspace/FlagCX
+<span class="nb">export</span><span class="w"> </span><span class="nv">USE_FLAGCX</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_IB_HCA</span><span class="o">=</span>mlx5
+
+<span class="c1"># 如未安装 RDMA 依赖</span>
+apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>rdma-core<span class="w"> </span>libibverbs1<span class="w"> </span>libibverbs-dev<span class="w"> </span>ibverbs-utils
+
+ray<span class="w"> </span>start<span class="w"> </span>--head<span class="w"> </span>--port<span class="o">=</span><span class="m">6379</span><span class="w"> </span>--node-ip-address<span class="o">=</span>&lt;MUSA_NODE_IP&gt;<span class="w"> </span>--num-gpus<span class="o">=</span><span class="m">8</span>
+</pre></div>
+</div>
+<p>在 NVIDIA 节点（worker，承载 actor/critic）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_PATH</span><span class="o">=</span>/workspace/FlagCX
+<span class="nb">export</span><span class="w"> </span><span class="nv">USE_FLAGCX</span><span class="o">=</span><span class="m">1</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_LOG_LEVEL</span><span class="o">=</span>DEBUG
+
+ray<span class="w"> </span>start<span class="w"> </span>--address<span class="o">=</span><span class="s1">'&lt;MUSA_NODE_IP&gt;:6379'</span><span class="w"> </span>--node-ip-address<span class="o">=</span>&lt;NVIDIA_NODE_IP&gt;<span class="w"> </span>--num-gpus<span class="o">=</span><span class="m">8</span>
+</pre></div>
+</div>
+</section>
+<section id="grpo">
+<h3>第二步 —— 启动异构 GRPO 训练<a class="headerlink" href="#grpo" title="Link to this heading">#</a></h3>
+<p>将 <code class="docutils literal notranslate"><span class="pre">config/one_step_off_ppo_trainer.yaml</span></code> 中的数据与模型路径改为本地路径：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">train_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path/to/gsm8k/train.parquet&gt;</span>
+<span class="w">  </span><span class="nt">val_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path/to/gsm8k/test.parquet&gt;</span>
+
+<span class="nt">actor_rollout_ref</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">model</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;path/to/Qwen3-0.6B&gt;</span>
+</pre></div>
+</div>
+<p>然后在 NVIDIA（worker）节点上运行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">TORCH_COMPILE_DISABLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">RAY_DEDUP_LOGS</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">HYDRA_FULL_ERROR</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">FLAGCX_PATH</span><span class="o">=</span>/workspace/FlagCX<span class="w"> </span><span class="nv">USE_FLAGCX</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">FLAGCX_LOG_LEVEL</span><span class="o">=</span>DEBUG<span class="w"> </span><span class="se">\</span>
+<span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3,4,5,6,7<span class="w"> </span><span class="nv">RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+python3<span class="w"> </span>-m<span class="w"> </span>recipe.one_step_off_policy.main_ppo<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config-path<span class="o">=</span>config<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--config-name<span class="o">=</span><span class="s1">'one_step_off_ppo_trainer.yaml'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.actor.strategy<span class="o">=</span>fsdp2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu<span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.actor.ppo_mini_batch_size<span class="o">=</span><span class="m">64</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.rollout.name<span class="o">=</span><span class="s2">"vllm"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu<span class="o">=</span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.rollout.tensor_model_parallel_size<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>+actor_rollout_ref.rollout.enable_sleep_mode<span class="o">=</span>False<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.rollout.free_cache_engine<span class="o">=</span>False<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.rollout.calculate_log_probs<span class="o">=</span>True<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>+actor_rollout_ref.model.override_config.attn_implementation<span class="o">=</span>eager<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>critic.strategy<span class="o">=</span>fsdp2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>actor_rollout_ref.hybrid_engine<span class="o">=</span>False<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>trainer.nnodes<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>trainer.logger<span class="o">=</span><span class="s1">'["console"]'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>trainer.n_gpus_per_node<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rollout.nnodes<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rollout.n_gpus_per_node<span class="o">=</span><span class="m">8</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>onestep_hetero.log
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>（可选）先验证 FlagCX 跨节点通信<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>在完整训练之前，可以先不借助 Ray 与 verl-FL，仅验证两个节点能否通过 FlagCX 通信。在 MUSA 节点（rank 0）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG</span><span class="o">=</span>INFO
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG_SUBSYS</span><span class="o">=</span>ALL
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_SOCKET_IFNAME</span><span class="o">=</span>&lt;MUSA_IB_IFNAME&gt;<span class="w">   </span><span class="c1"># 例如 bond0，用 `ip a` 查看</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MUSA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3,4,5,6,7
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_IB_HCA</span><span class="o">=</span>mlx5
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_ENABLE_TOPO_DETECT</span><span class="o">=</span>TRUE
+
+torchrun<span class="w"> </span>--nproc_per_node<span class="w"> </span><span class="m">8</span><span class="w"> </span>--nnodes<span class="o">=</span><span class="m">2</span><span class="w"> </span>--node_rank<span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--master_addr<span class="o">=</span>&lt;MUSA_NODE_IP&gt;<span class="w"> </span>--master_port<span class="o">=</span><span class="m">8122</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>example.py
+</pre></div>
+</div>
+<p>在 NVIDIA 节点（rank 1）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG</span><span class="o">=</span>INFO
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG_SUBSYS</span><span class="o">=</span>ALL
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_SOCKET_IFNAME</span><span class="o">=</span>&lt;NVIDIA_IB_IFNAME&gt;<span class="w">   </span><span class="c1"># 例如 ens22f0，用 `ip a` 查看</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1,2,3,4,5,6,7
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_IB_HCA</span><span class="o">=</span>mlx5
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_ENABLE_TOPO_DETECT</span><span class="o">=</span>TRUE
+
+torchrun<span class="w"> </span>--nproc_per_node<span class="w"> </span><span class="m">8</span><span class="w"> </span>--nnodes<span class="o">=</span><span class="m">2</span><span class="w"> </span>--node_rank<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--master_addr<span class="o">=</span>&lt;MUSA_NODE_IP&gt;<span class="w"> </span>--master_port<span class="o">=</span><span class="m">8122</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>example.py
+</pre></div>
+</div>
+<p>两侧输出的 allreduce 结果一致，且 <code class="docutils literal notranslate"><span class="pre">example.py</span></code>（来自 FlagCX 仓库）无报错退出。</p>
+</section>
+</section>
+<section id="id6">
+<h2>验证通过的表现<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>范围</p></th>
+<th class="head"><p>预期结果</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NVIDIA 端到端 GRPO 训练</p></td>
+<td><p>全部通过，训练收敛</p></td>
+</tr>
+<tr class="row-odd"><td><p>沐曦 MetaX（MACA）端到端 GRPO 训练</p></td>
+<td><p>全部通过，训练收敛</p></td>
+</tr>
+<tr class="row-even"><td><p>MUSA 异构（NVIDIA actor/critic + MUSA rollout）</p></td>
+<td><p>FlagCX 跨节点通信建立、训练不崩溃：<code class="docutils literal notranslate"><span class="pre">critic/score/mean</span></code> 全程大于 0，<code class="docutils literal notranslate"><span class="pre">rollout_corr/log_ppl_diff</span></code> 小于 0.005（训练与 rollout 的 PPL 保持一致，例如第 1 步 <code class="docutils literal notranslate"><span class="pre">training_log_ppl</span></code> 约 0.76、<code class="docutils literal notranslate"><span class="pre">rollout_log_ppl</span></code> 约 0.76）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id7">
+<h2>新增后端<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">verl/plugin/platform/</span></code> 下实现继承 <code class="docutils literal notranslate"><span class="pre">PlatformBase</span></code> 的平台类。</p></li>
+<li><p>在平台管理器中注册，使 <code class="docutils literal notranslate"><span class="pre">VERL_PLATFORM</span></code> 与自动检测能够找到它。</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">verl/plugin/engine/</span></code> 下补充对应的 FSDP 和/或 Megatron 引擎。</p></li>
+<li><p>将业务逻辑中遗留的硬件特定调用替换为平台 API。</p></li>
+</ol>
+<p>带完整注释的模板见仓库中的 <code class="docutils literal notranslate"><span class="pre">verl/plugin/platform/README.md</span></code>。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="user-guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">verl-FL 用户指南</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../references/reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">参考资料</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">平台抽象层</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">引擎插件架构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagcx">基于 FlagCX 的异构训练</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">环境要求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ray">第一步 —— 启动 Ray 集群</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grpo">第二步 —— 启动异构 GRPO 训练</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">（可选）先验证 FlagCX 跨节点通信</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">验证通过的表现</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">新增后端</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../verl_fl_en/user_guide/platform-abstraction.html">English</a></body>
+</html>

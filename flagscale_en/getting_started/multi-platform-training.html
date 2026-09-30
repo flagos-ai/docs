@@ -1,0 +1,997 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Multi-Platform Training and Testing" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/multi-platform-training.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="FlagScale has no hardware requirements of its own — it orchestrates training through the FlagOS plugins. This guide shows how to drive an end-to-end training job on four non-NVIDIA platforms (MetaX, Hygon, Ascend, T-Head PPU) with the plugin stack underneath. Platform-specific plugin installation..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="FlagScale has no hardware requirements of its own — it orchestrates training through the FlagOS plugins. This guide shows how to drive an end-to-end training job on four non-NVIDIA platforms (MetaX, Hygon, Ascend, T-Head PPU) with the plugin stack underneath. Platform-specific plugin installation..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Multi-Platform Training and Testing &#8212; FlagScale Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/multi-platform-training.9869ad8e-1555-46c1-8eaa-25594834c8f8.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/multi-platform-training';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/multi-platform-training.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="User Guide" href="user-guide.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagScale Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagScale Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagScale Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v210.html">FlagScale v2.1.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v200.html">FlagScale v2.0.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v100.html">FlagScale v1.0.0 Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagScale_overview/FlagScale-overview.html">FlagScale Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagScale_overview/features.html">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FlagScale_overview/workflow.html">Workflow</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="getting-started.html">Getting Started</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">Install FlagScale</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="user-guide.html">User Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Multi-Platform Training and Testing</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/multi-platform-training.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Multi-Platform Training and Testing</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#component-versions-used">1. Component versions used</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-environment-variables">2. Platform environment variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-flagscale">3. Install FlagScale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-the-training-task">4. Configure the training task</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experiment-level-yaml">4.1 Experiment-level YAML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-level-yaml">4.2 Task-level YAML</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-training-test">5. Run the training test</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-output">Expected output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-on-the-flagos-operator-stack">6. Run on the FlagOS operator stack</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-issues-and-workarounds">7. Known issues and workarounds</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metax">7.1 MetaX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hygon">7.2 Hygon</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend">7.3 Ascend</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#t-head-ppu">7.4 T-Head PPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">8. Notes</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="multi-platform-training-and-testing">
+<h1>Multi-Platform Training and Testing<a class="headerlink" href="#multi-platform-training-and-testing" title="Link to this heading">#</a></h1>
+<p>FlagScale has no hardware requirements of its own — it orchestrates training through the FlagOS plugins. This guide shows how to drive an end-to-end training job on four non-NVIDIA platforms (MetaX, Hygon, Ascend, T-Head PPU) with the plugin stack underneath.</p>
+<p>Platform-specific plugin installation is documented in the plugin guides:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/flagos-ai/Megatron-LM-FL">Megatron-LM-FL</a> — training engine</p></li>
+<li><p><a class="reference external" href="https://github.com/flagos-ai/TransformerEngine-FL">TransformerEngine-FL</a> — transformer operator layer</p></li>
+</ul>
+<hr class="docutils" />
+<section id="component-versions-used">
+<h2>1. Component versions used<a class="headerlink" href="#component-versions-used" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Version</p></th>
+<th class="head"><p>Repository</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FlagScale</p></td>
+<td><p>v2.1.0</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagScale">flagos-ai/FlagScale</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Megatron-LM-FL</p></td>
+<td><p>v0.3.0</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/Megatron-LM-FL">flagos-ai/Megatron-LM-FL</a></p></td>
+</tr>
+<tr class="row-even"><td><p>TransformerEngine-FL</p></td>
+<td><p>v0.3.0</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/TransformerEngine-FL">flagos-ai/TransformerEngine-FL</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>FlagTree</p></td>
+<td><p>0.7.0</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagTree">flagos-ai/FlagTree</a></p></td>
+</tr>
+<tr class="row-even"><td><p>FlagGems</p></td>
+<td><p>v5.4.0</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagGems">flagos-ai/FlagGems</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All five components above are required together for the FlagOS 2.2 stack.</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="platform-environment-variables">
+<h2>2. Platform environment variables<a class="headerlink" href="#platform-environment-variables" title="Link to this heading">#</a></h2>
+<p>FlagScale passes device visibility through the experiment-level YAML <code class="docutils literal notranslate"><span class="pre">envs</span></code> block. Each platform uses a different variable name.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>Device check</p></th>
+<th class="head"><p>Visible-devices env</p></th>
+<th class="head"><p>FlagTree backend</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MetaX</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mx-smi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MACA_VISIBLE_DEVICES</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">metax</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Hygon</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hy-smi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HIP_VISIBLE_DEVICES</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">hcu</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Ascend</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">npu-smi</span> <span class="pre">info</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ASCEND_RT_VISIBLE_DEVICES</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ascend</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>T-Head PPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ppu-smi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ppu</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">CUDA_DEVICE_MAX_CONNECTIONS:</span> <span class="pre">1</span></code> must stay in the config even on non-CUDA platforms — the training engine’s argument validation still requires it when multi-card parallelism is enabled.</p>
+</div>
+<p>T-Head PPU keeps the <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code> name; there is no <code class="docutils literal notranslate"><span class="pre">PPU_VISIBLE_DEVICES</span></code>.</p>
+</section>
+<hr class="docutils" />
+<section id="install-flagscale">
+<h2>3. Install FlagScale<a class="headerlink" href="#install-flagscale" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/workspace/FlagScale
+git<span class="w"> </span>checkout<span class="w"> </span>v2.1.0
+pip<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--no-build-isolation
+</pre></div>
+</div>
+<p>Verify, then install the logging dependencies used by the training runs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>flagscale
+pip<span class="w"> </span>install<span class="w"> </span>wandb<span class="w"> </span>aiohttp
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="configure-the-training-task">
+<h2>4. Configure the training task<a class="headerlink" href="#configure-the-training-task" title="Link to this heading">#</a></h2>
+<section id="experiment-level-yaml">
+<h3>4.1 Experiment-level YAML<a class="headerlink" href="#experiment-level-yaml" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">examples/qwen3/conf/train.yaml</span></code> selects the task-level config and defines the runner environment:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0_6b</span>
+
+<span class="nt">experiment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">exp_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Qwen3-06b-Train</span>
+<span class="w">  </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">42</span>
+<span class="w">  </span><span class="nt">save_steps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span>
+<span class="w">  </span><span class="nt">load</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">exp_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xxx</span>
+<span class="w">  </span><span class="nt">ckpt_format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">torch</span>
+<span class="w">  </span><span class="nt">task</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">train</span>
+<span class="w">    </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">megatron</span>
+<span class="w">    </span><span class="nt">entrypoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flagscale/train/megatron/train_gpt.py</span>
+<span class="w">  </span><span class="nt">cmds</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">before_start</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ulimit -n 1048576 &amp;&amp; source /root/miniconda3/bin/activate flagscale-train</span>
+<span class="w">  </span><span class="nt">envs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">LOGLEVEL</span><span class="p">:</span><span class="w"> </span><span class="s">"INFO"</span>
+<span class="w">    </span><span class="nt">CUDA_VISIBLE_DEVICES</span><span class="p">:</span><span class="w"> </span><span class="s">"0,1,2,3,4,5,6,7"</span>
+<span class="w">    </span><span class="nt">CUDA_DEVICE_MAX_CONNECTIONS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">    </span><span class="nt">MACA_VISIBLE_DEVICES</span><span class="p">:</span><span class="w"> </span><span class="s">"0,1,2,3,4,5,6,7"</span><span class="w">   </span><span class="c1"># replace per platform</span>
+
+<span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+</pre></div>
+</div>
+<p>Replace the last line with the platform variable from section 2:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p>Replace with</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MetaX</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MACA_VISIBLE_DEVICES:</span> <span class="pre">&quot;0,1,2,3,4,5,6,7&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Hygon</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">HIP_VISIBLE_DEVICES:</span> <span class="pre">&quot;0,1,2,3,4,5,6,7&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Ascend</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ASCEND_RT_VISIBLE_DEVICES:</span> <span class="pre">&quot;0,1,2,3&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>T-Head PPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES:</span> <span class="pre">&quot;8,9,10,11,12,13,14,15&quot;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="task-level-yaml">
+<h3>4.2 Task-level YAML<a class="headerlink" href="#task-level-yaml" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">examples/qwen3/conf/train/0_6b.yaml</span></code> carries the model, dataset, and optimizer settings:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">micro_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">global_batch_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">32</span><span class="w">          </span><span class="c1"># reduced from 2048 to shorten the test</span>
+<span class="nt">eval_iters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">eval_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="nt">train_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">244141056</span>
+
+<span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">lr_scheduler</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">lr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0e-3</span>
+<span class="w">    </span><span class="nt">min_lr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.0e-4</span>
+<span class="w">    </span><span class="nt">lr_warmup_samples</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2048</span><span class="w">     </span><span class="c1"># reduced from 2048000</span>
+<span class="w">    </span><span class="nt">lr_decay_style</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cosine</span>
+
+<span class="nt">data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">data_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/workspace/FlagScale/data/enron_emails_demo_text_document_qwen</span>
+<span class="w">  </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">no_mmap_bin_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">tokenizer_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QwenTokenizerFS</span>
+<span class="w">    </span><span class="nt">tokenizer_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/workspace/FlagScale/qwentokenizer</span>
+<span class="w">    </span><span class="nt">vocab_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">151936</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="run-the-training-test">
+<h2>5. Run the training test<a class="headerlink" href="#run-the-training-test" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/workspace/FlagScale
+flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/train.yaml
+</pre></div>
+</div>
+<p>Monitor device utilization in a second shell:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mx-smi<span class="w">            </span><span class="c1"># MetaX</span>
+npu-smi<span class="w"> </span>info<span class="w">      </span><span class="c1"># Ascend</span>
+ppu-smi<span class="w">           </span><span class="c1"># T-Head PPU</span>
+</pre></div>
+</div>
+<p>Stop the job:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>--stop
+</pre></div>
+</div>
+<section id="expected-output">
+<h3>Expected output<a class="headerlink" href="#expected-output" title="Link to this heading">#</a></h3>
+<p>A healthy Ascend single-card run:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[default0]: [2026-09-11 12:06:52.987995] iteration        3/ 7629408 | consumed samples:           96 | elapsed time per iteration (ms): 24379.9 | throughput per GPU (TFLOP/s/GPU): 26.8 | learning rate: 1.406250E-04 | global batch size:    32 | lm loss: 1.107468E+01 | loss scale: 1.0 | grad norm: 30.066 | num zeros: 1299.0 | params norm: 496.206 | number of skipped iterations:   0 | number of nan iterations:   0 |
+</pre></div>
+</div>
+<p>A healthy MetaX eight-card run:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[default7]: [2026-09-08 20:31:37.112485] iteration      561/ 7629408 | consumed samples:        17952 | elapsed time per iteration (ms): 1510.4 | throughput per GPU (TFLOP/s/GPU): 54.1 | learning rate: 3.000000E-03 | global batch size:    32 | lm loss: 4.858129E-02 | loss scale: 1.0 | grad norm: 0.027 | num zeros: 3.0 | params norm: 967.809 | number of skipped iterations:   0 | number of nan iterations:   0 |
+</pre></div>
+</div>
+<p>A healthy T-Head PPU eight-card run with the FlagOS operator stack enabled:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[default7]: [2026-09-14 15:08:27.273656] iteration       44/  102400 | consumed samples:          352 | elapsed time per iteration (ms): 6922.3 | throughput per GPU (TFLOP/s/GPU): 62.0 | learning rate: 1.289062E-04 | global batch size:     8 | lm loss: 6.457796E+00 | loss scale: 1.0 | grad norm: 4.096 | num zeros: 760881152.0 | params norm: 2241.466 | number of skipped iterations:   0 | number of nan iterations:   0 |
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="run-on-the-flagos-operator-stack">
+<h2>6. Run on the FlagOS operator stack<a class="headerlink" href="#run-on-the-flagos-operator-stack" title="Link to this heading">#</a></h2>
+<p>To run the same job through FlagTree and FlagGems instead of the vendor operator library, use the <code class="docutils literal notranslate"><span class="pre">te_fl</span></code> configuration pair and select the FlagOS tier:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/train_te_fl.yaml
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">examples/qwen3/conf/train/te_fl.yaml</span></code> enables the FlagOS backends:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">model</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">transformer_impl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transformer_engine</span>
+<span class="w">  </span><span class="nt">te_fl_prefer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">flagos</span>
+<span class="w">  </span><span class="nt">enable_flag_gems</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">flag_gems_unused</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"chunk"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"conv3d"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"mul"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"mul_"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"index_put"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"index_put_"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"_index_put_impl_"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"baddbmm"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"mm"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"normal_"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"sum_dim"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"gather_backward"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"index_add_"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"slice_backward"</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="s">"slice"</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">flag_gems_log_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${experiment.exp_name}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">flag_gems_log_path</span></code> must not point at the runner hostfile. FlagGems opens that path with <code class="docutils literal notranslate"><span class="pre">mode=&quot;w&quot;</span></code> and overwrites the hostfile, after which FlagScale aborts with <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">Invalid</span> <span class="pre">entry</span> <span class="pre">in</span> <span class="pre">hostfile</span></code>.</p>
+</div>
+</section>
+<hr class="docutils" />
+<section id="known-issues-and-workarounds">
+<h2>7. Known issues and workarounds<a class="headerlink" href="#known-issues-and-workarounds" title="Link to this heading">#</a></h2>
+<section id="metax">
+<h3>7.1 MetaX<a class="headerlink" href="#metax" title="Link to this heading">#</a></h3>
+<p><strong><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">cannot</span> <span class="pre">import</span> <span class="pre">name</span> <span class="pre">'AttrsDescriptor'</span> <span class="pre">from</span> <span class="pre">'triton.compiler.compiler'</span></code></strong> — after switching to FlagTree, PyTorch’s <code class="docutils literal notranslate"><span class="pre">torch._inductor</span></code> cannot find <code class="docutils literal notranslate"><span class="pre">AttrsDescriptor</span></code>. Add a shim to <code class="docutils literal notranslate"><span class="pre">/opt/conda/lib/python3.12/site-packages/triton/compiler/compiler.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton.compiler.compiler</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">compiler</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AttrsDescriptor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg_properties</span><span class="p">,</span> <span class="n">func_properties</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arg_properties</span> <span class="o">=</span> <span class="n">arg_properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func_properties</span> <span class="o">=</span> <span class="n">func_properties</span>
+
+<span class="n">compiler</span><span class="o">.</span><span class="n">AttrsDescriptor</span> <span class="o">=</span> <span class="n">AttrsDescriptor</span>
+</pre></div>
+</div>
+<p><strong><code class="docutils literal notranslate"><span class="pre">CUDA_DEVICE_MAX_CONNECTIONS</span></code> required on a non-CUDA platform</strong> — keep <code class="docutils literal notranslate"><span class="pre">CUDA_DEVICE_MAX_CONNECTIONS:</span> <span class="pre">1</span></code> in the task config.</p>
+<p><strong>Multi-card failure after switching to FlagOS</strong> — the MetaX backend C++ bindings are incompatible with the Triton 3.6.0 Python API.</p>
+</section>
+<section id="hygon">
+<h3>7.2 Hygon<a class="headerlink" href="#hygon" title="Link to this heading">#</a></h3>
+<p><strong><code class="docutils literal notranslate"><span class="pre">gradient_accumulation_fusion</span></code> needs APEX CUDA extensions</strong> — set <code class="docutils literal notranslate"><span class="pre">no_gradient_accumulation_fusion:</span> <span class="pre">true</span></code> in the task config.</p>
+<p><strong>JIT operator fusion fails</strong> — set <code class="docutils literal notranslate"><span class="pre">disable_jit_fuser:</span> <span class="pre">true</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">NotImplementedError:</span> <span class="pre">the</span> <span class="pre">derivative</span> <span class="pre">for</span> <span class="pre">'chunk'</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">implemented</span></code></strong> — the FlagGems <code class="docutils literal notranslate"><span class="pre">chunk</span></code> operator has no backward. Add <code class="docutils literal notranslate"><span class="pre">chunk</span></code> to <code class="docutils literal notranslate"><span class="pre">flag_gems_unused</span></code>, or set <code class="docutils literal notranslate"><span class="pre">enable_flag_gems:</span> <span class="pre">false</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">AssertionError:</span> <span class="pre">Unknown</span> <span class="pre">c10d</span> <span class="pre">backend</span> <span class="pre">type</span> <span class="pre">FLAGCX</span></code></strong> — set <code class="docutils literal notranslate"><span class="pre">system.distributed_backend:</span> <span class="pre">nccl</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">Invalid</span> <span class="pre">entry</span> <span class="pre">in</span> <span class="pre">hostfile</span></code></strong> — caused by <code class="docutils literal notranslate"><span class="pre">flag_gems_log_path</span></code> pointing at the hostfile. Point it at a dedicated log path instead.</p>
+</section>
+<section id="ascend">
+<h3>7.3 Ascend<a class="headerlink" href="#ascend" title="Link to this heading">#</a></h3>
+<p><strong><code class="docutils literal notranslate"><span class="pre">TypeError:</span> <span class="pre">'&lt;'</span> <span class="pre">not</span> <span class="pre">supported</span> <span class="pre">between</span> <span class="pre">instances</span> <span class="pre">of</span> <span class="pre">'NoneType'</span> <span class="pre">and</span> <span class="pre">'int'</span></code></strong> — <code class="docutils literal notranslate"><span class="pre">get_device_arch_version()</span></code> returns <code class="docutils literal notranslate"><span class="pre">None</span></code> on NPU because the device has no <code class="docutils literal notranslate"><span class="pre">.major</span></code> attribute. The path is only reached when <code class="docutils literal notranslate"><span class="pre">tensor_model_parallel_size</span> <span class="pre">&gt;</span> <span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">context_parallel_size</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>, so single-card runs pass and multi-card runs fail. Patch the function to return a value below 10 on non-NVIDIA devices:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_device_arch_version</span><span class="p">():</span>
+    <span class="n">props</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">get_device_properties</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda:0"</span><span class="p">))</span>
+    <span class="n">major</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">props</span><span class="p">,</span> <span class="s2">"major"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">major</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># NPU / non-NVIDIA devices</span>
+        <span class="k">return</span> <span class="mi">9</span>
+    <span class="k">return</span> <span class="n">major</span>
+</pre></div>
+</div>
+<p><strong>Python 3.10 compatibility</strong> — <code class="docutils literal notranslate"><span class="pre">flagscale/train/megatron/training/models/hybrid.py</span></code> needs the <code class="docutils literal notranslate"><span class="pre">typing_extensions</span></code> import path for <code class="docutils literal notranslate"><span class="pre">override</span></code>.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">MLIRCompilationError:</span> <span class="pre">ub</span> <span class="pre">overflow</span></code></strong> in the FlagGems attention backward kernel — lower <code class="docutils literal notranslate"><span class="pre">seq_length</span></code> or fall back to the native TransformerEngine backend.</p>
+</section>
+<section id="t-head-ppu">
+<h3>7.4 T-Head PPU<a class="headerlink" href="#t-head-ppu" title="Link to this heading">#</a></h3>
+<p><strong>FlagTree and FlagGems cannot be compiled on <code class="docutils literal notranslate"><span class="pre">/workspace</span></code></strong> — <code class="docutils literal notranslate"><span class="pre">/workspace</span></code> is an OSS object-store FUSE mount (<code class="docutils literal notranslate"><span class="pre">ossfs2</span></code>) that cannot host in-place ELF writes. Build from local disk, keeping <code class="docutils literal notranslate"><span class="pre">.git</span></code> for <code class="docutils literal notranslate"><span class="pre">setuptools_scm</span></code>.</p>
+<p><strong>FlagCX is not enabled</strong> — the FlagCX path is known to fail on this platform.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="notes">
+<h2>8. Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>FlagScale itself needs no hardware-specific install; the platform support comes entirely from the plugins.</p></li>
+<li><p>Keep <code class="docutils literal notranslate"><span class="pre">CUDA_DEVICE_MAX_CONNECTIONS:</span> <span class="pre">1</span></code> in every config, including non-CUDA platforms.</p></li>
+<li><p>Training logs are written under the experiment directory; <code class="docutils literal notranslate"><span class="pre">--stop</span></code> terminates the job.</p></li>
+<li><p>For model-level configuration options, see <a class="reference internal" href="requirements.html"><span class="std std-doc">Requirements</span></a> and the <a class="reference external" href="https://github.com/flagos-ai/FlagScale/tree/main/examples">examples</a> directory.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="user-guide.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">User Guide</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#component-versions-used">1. Component versions used</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#platform-environment-variables">2. Platform environment variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-flagscale">3. Install FlagScale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-the-training-task">4. Configure the training task</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experiment-level-yaml">4.1 Experiment-level YAML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-level-yaml">4.2 Task-level YAML</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-training-test">5. Run the training test</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#expected-output">Expected output</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-on-the-flagos-operator-stack">6. Run on the FlagOS operator stack</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-issues-and-workarounds">7. Known issues and workarounds</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metax">7.1 MetaX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hygon">7.2 Hygon</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend">7.3 Ascend</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#t-head-ppu">7.4 T-Head PPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">8. Notes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagscale_zh/getting_started/multi-platform-training.html">中文</a></body>
+</html>

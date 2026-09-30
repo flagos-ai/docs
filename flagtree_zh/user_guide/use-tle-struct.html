@@ -1,0 +1,1520 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="使用 TLE-Struct" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/use-tle-struct.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本节介绍如何使用 TLE-Struct。TLE-Struct 在 trition_3.6.x 分支上可用。 GPU 内存管理: 您可以使用以下操作来管理 GPU 的内存。 tle.gpu.memory_space: 为给定张量指定 memory_space： tle.gpu.alloc: 以下示例演示如何在 GPU 的高速片上 SMEM（共享内存）中预留一块维度为 XBLOCK * YBLOCK 、数据类型为 float32 的内存。 签名： tle.gpu.alloc(shape, dtype, layout=None, scope=tle.gpu.smem, init_value=N..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="本节介绍如何使用 TLE-Struct。TLE-Struct 在 trition_3.6.x 分支上可用。 GPU 内存管理: 您可以使用以下操作来管理 GPU 的内存。 tle.gpu.memory_space: 为给定张量指定 memory_space： tle.gpu.alloc: 以下示例演示如何在 GPU 的高速片上 SMEM（共享内存）中预留一块维度为 XBLOCK * YBLOCK 、数据类型为 float32 的内存。 签名： tle.gpu.alloc(shape, dtype, layout=None, scope=tle.gpu.smem, init_value=N..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>使用 TLE-Struct &#8212; FlagTree 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/use-tle-struct.9dda4256-5666-4092-9d83-61bc9decc028.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/use-tle-struct';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/use-tle-struct.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="使用 TLE-Raw" href="use-tle-raw.html" />
+    <link rel="prev" title="使用 TLE-Lite" href="use-tle-lite.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagTree 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v070.html">FlagTree 0.7.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v060.html">FlagTree 0.6.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v050.html">FlagTree 0.5.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v040.html">FlagTree 0.4.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v030.html">FlagTree 0.3.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v020.html">FlagTree 0.2.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v010.html">FlagTree 0.1.0 发布</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagTree_overview/FlagTree-overview.html">FlagTree 概述</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagTree_overview/features.html">特性</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/compilation-architecture.html">FlagTree 编译架构</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/common-architecture.html">通用架构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html">FlagTree 可扩展框架</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-hints.html">Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-tle.html">TLE-Lite、TLE-Struct 和 TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flir.html">FLIR：统一中间层</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">开始使用</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">系统要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">安装 FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install-arm64-cpu.html">在 Arm64 CPU 上安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="user-guide.html">用户指南</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="use-hints.html">使用 Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-lite.html">使用 TLE-Lite</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">使用 TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-raw.html">使用 TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="use-tle-cpu.html">使用 TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">示例</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/use-tle-struct.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>使用 TLE-Struct</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu">GPU 内存管理</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-memory-space">tle.gpu.memory_space</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-alloc">tle.gpu.alloc</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-buffered-tensor-slot">tle.gpu.buffered_tensor.slot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-buffered-tensor-reshape">tle.gpu.buffered_tensor.reshape</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-set-layout">tle.gpu.set_layout</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-local-ptr">tle.gpu.local_ptr</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">tle.gpu.local_ptr（用于远程）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-copy">tle.gpu.copy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-barrier-api">tle.gpu barrier API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-wgmma-tle-gpu-wgmma-wait">tle.gpu.wgmma 与 tle.gpu.wgmma_wait</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">执行编排</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-warp-specialize">tle.gpu.warp_specialize</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dsa">DSA 内存管理和数据移动</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-alloc">tle.dsa.alloc</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-copy">tle.dsa.copy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-local-ptr">tle.dsa.local_ptr</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">tle.dsa.local_ptr（用于远程）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-to-tensor-tle-dsa-to-buffer">tle.dsa.to_tensor 和 tle.dsa.to_buffer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">向量运算符（缓冲区形式）</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-addtle-dsa-subtle-dsa-multle-dsa-divtle-dsa-max-tle-dsa-min">tle.dsa.add、tle.dsa.sub、tle.dsa.mul、tle.dsa.div、tle.dsa.max 和 tle.dsa.min</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">循环和提示</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-pipelinetle-dsa-parallel-tle-dsa-hint">tle.dsa.pipeline、tle.dsa.parallel 和 tle.dsa.hint</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">切片和视图</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-extract-slicetle-dsa-insert-slicetle-dsa-extract-element-tle-dsa-subview">tle.dsa.extract_slice、tle.dsa.insert_slice、tle.dsa.extract_element 和 tle.dsa.subview</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="tle-struct">
+<h1>使用 TLE-Struct<a class="headerlink" href="#tle-struct" title="Link to this heading">#</a></h1>
+<p>本节介绍如何使用 TLE-Struct。TLE-Struct 在 trition_3.6.x 分支上可用。</p>
+<section id="gpu">
+<h2>GPU 内存管理<a class="headerlink" href="#gpu" title="Link to this heading">#</a></h2>
+<p>您可以使用以下操作来管理 GPU 的内存。</p>
+<section id="tle-gpu-memory-space">
+<h3>tle.gpu.memory_space<a class="headerlink" href="#tle-gpu-memory-space" title="Link to this heading">#</a></h3>
+<p>为给定张量指定 memory_space：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">memory_space</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s2">"shared_memory"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-gpu-alloc">
+<h3>tle.gpu.alloc<a class="headerlink" href="#tle-gpu-alloc" title="Link to this heading">#</a></h3>
+<p>以下示例演示如何在 GPU 的高速片上 SMEM（共享内存）中预留一块维度为 <code class="docutils literal notranslate"><span class="pre">XBLOCK</span> <span class="pre">*</span> <span class="pre">YBLOCK</span></code>、数据类型为 <code class="docutils literal notranslate"><span class="pre">float32</span></code> 的内存。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a_smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">XBLOCK</span><span class="p">,</span> <span class="n">YBLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+                      <span class="n">layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">storage_kind</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>签名：<code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc(shape,</span> <span class="pre">dtype,</span> <span class="pre">layout=None,</span> <span class="pre">scope=tle.gpu.smem,</span> <span class="pre">init_value=None,</span> <span class="pre">alias=None,</span> <span class="pre">alias_offset_bytes=0,</span> <span class="pre">nv_mma_shared_layout=True)</span> <span class="pre">-&gt;</span> <span class="pre">tle.gpu.buffered_tensor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shape</span></code>：非空 tuple/list（或可迭代对象），每个维度都必须是正的编译期整数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code>：<code class="docutils literal notranslate"><span class="pre">tl.dtype</span></code>。语义检查器会校验类型；不在标准分配类型集合中的 dtype 会收到警告。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">layout</span></code>：可选 shared-memory layout 对象；传入时必须是 <code class="docutils literal notranslate"><span class="pre">tle.gpu.shared_layout</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scope</span></code>：存储作用域。当前分配路径支持 <code class="docutils literal notranslate"><span class="pre">tle.gpu.smem</span></code>；<code class="docutils literal notranslate"><span class="pre">tle.gpu.tmem</span></code> 虽然定义为作用域，但当前 <code class="docutils literal notranslate"><span class="pre">alloc</span></code> 尚不支持。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">init_value</span></code>：可选的寄存器 tensor，用于初始化新分配的 buffer；不能与 <code class="docutils literal notranslate"><span class="pre">alias</span></code> 同时使用。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alias</span></code>：可选的源 <code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code>。alias 模式不会分配新存储，而是为已有 shared-memory buffer 创建带类型的视图；请求的 scope 和源 buffer 都必须是 SMEM。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alias_offset_bytes</span></code>：从源 alias view 基址开始计算的非负编译期字节偏移。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nv_mma_shared_layout</span></code>：当 <code class="docutils literal notranslate"><span class="pre">layout=None</span></code> 且 scope 为 SMEM 时，<code class="docutils literal notranslate"><span class="pre">True</span></code>（默认值）选择面向 MMA consumer 的默认布局，<code class="docutils literal notranslate"><span class="pre">False</span></code> 选择默认 swizzled shared layout。在 MUSA 上，自动 MMA 布局由 SQMMA lowering 具体化。</p></li>
+</ul>
+<p>当 <code class="docutils literal notranslate"><span class="pre">layout=None</span></code> 时，后端根据 scope 和 <code class="docutils literal notranslate"><span class="pre">nv_mma_shared_layout</span></code> 推导布局；显式 layout 通过其 <code class="docutils literal notranslate"><span class="pre">to_ir()</span></code> 方法转换。alias 分配不会创建新 allocation。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 使用默认 swizzled layout 的普通 SMEM 分配</span>
+<span class="n">smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">,</span> <span class="n">nv_mma_shared_layout</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># 使用寄存器 tensor 初始化新 buffer</span>
+<span class="n">init</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">BLOCK</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">initialized</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">init_value</span><span class="o">=</span><span class="n">init</span><span class="p">,</span> <span class="n">nv_mma_shared_layout</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># 为已有 SMEM allocation 创建带类型的视图</span>
+<span class="n">view</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="n">smem</span><span class="p">,</span> <span class="n">alias_offset_bytes</span><span class="o">=</span><span class="n">BLOCK</span> <span class="o">*</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="n">nv_mma_shared_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-gpu-buffered-tensor-slot">
+<h3>tle.gpu.buffered_tensor.slot<a class="headerlink" href="#tle-gpu-buffered-tensor-slot" title="Link to this heading">#</a></h3>
+<p>从 staged shared-memory buffer 中选择一个 stage：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">slot</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">slot</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>签名：<code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor.slot(stage)</span> <span class="pre">-&gt;</span> <span class="pre">tle.gpu.buffered_tensor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code> 的 rank 必须 &gt;= 2。首维是 stage 维度；返回 view 的 shape 为 <code class="docutils literal notranslate"><span class="pre">buffer.shape[1:]</span></code>。</p></li>
+<li><p>仅支持 SMEM buffered tensor。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stage</span></code> 必须是标量 <code class="docutils literal notranslate"><span class="pre">tl.int32</span></code>；不支持向量索引和其他整数 dtype。</p></li>
+<li><p>返回值是通过 <code class="docutils literal notranslate"><span class="pre">ttg.memdesc_index</span></code> 选出的 alias subview，不会分配或拷贝存储。</p></li>
+<li><p>slot layout 通过从源 layout 中去掉首维派生；当前实现支持 <code class="docutils literal notranslate"><span class="pre">swizzled_shared_layout</span></code> 和 <code class="docutils literal notranslate"><span class="pre">nv_mma_shared_layout</span></code> 源 layout。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">staged</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">,</span> <span class="n">nv_mma_shared_layout</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">stage</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+<span class="n">tile</span> <span class="o">=</span> <span class="n">staged</span><span class="o">.</span><span class="n">slot</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+<span class="n">tile_ptrs</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+<span class="n">tile_values</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tile_ptrs</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-gpu-buffered-tensor-reshape">
+<h3>tle.gpu.buffered_tensor.reshape<a class="headerlink" href="#tle-gpu-buffered-tensor-reshape" title="Link to this heading">#</a></h3>
+<p>创建具有不同静态 shape 的 shared-memory alias view：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">reshaped</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>签名：<code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor.reshape(shape)</span> <span class="pre">-&gt;</span> <span class="pre">tle.gpu.buffered_tensor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shape</span></code> 必须是非空且每一维为正数的静态维度序列。</p></li>
+<li><p>新 shape 的元素总数必须等于 <code class="docutils literal notranslate"><span class="pre">buffer</span></code> 的元素总数。</p></li>
+<li><p>操作生成 <code class="docutils literal notranslate"><span class="pre">ttg.memdesc_reshape</span></code>，保留底层存储、dtype 和 storage scope，不拷贝数据。</p></li>
+<li><p>返回值的 layout 会根据 reshape 后的 memdesc 重新推导；当前支持 <code class="docutils literal notranslate"><span class="pre">shared_linear</span></code> 和 NVIDIA MMA encoding，不支持的 encoding 会在编译时失败。</p></li>
+<li><p>对带有 allocation prefix 的 view（例如 staged buffer），结果的 allocation metadata 会保留该 prefix。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">buffer</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">512</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">,</span> <span class="n">nv_mma_shared_layout</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+<span class="n">reshaped</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-gpu-set-layout">
+<h3>tle.gpu.set_layout<a class="headerlink" href="#tle-gpu-set-layout" title="Link to this heading">#</a></h3>
+<p>为 block tensor value 附加显式 distributed layout：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">set_layout</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>签名：<code class="docutils literal notranslate"><span class="pre">tle.gpu.set_layout(value,</span> <span class="pre">layout)</span> <span class="pre">-&gt;</span> <span class="pre">tl.tensor</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>：block <code class="docutils literal notranslate"><span class="pre">tl.tensor</span></code>；非 tensor 值会先转换为 tensor。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">layout</span></code>：带有 <code class="docutils literal notranslate"><span class="pre">to_ir()</span></code> 方法的编译期 layout 对象。</p></li>
+<li><p>返回值保留输入的 shape 和 element type，并携带请求的 encoding。该操作是布局契约，不是数据拷贝。</p></li>
+<li><p>编译器必须提供显式 TLE layout 支持（<code class="docutils literal notranslate"><span class="pre">ir.builder.ensure_ttg_layout_attrs</span></code>）；否则编译会抛出 <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code>。</p></li>
+</ul>
+<p>内置 NVIDIA layout 对象包括：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BlockEncoding(size_per_thread,</span> <span class="pre">threads_per_warp,</span> <span class="pre">warps_per_cta,</span> <span class="pre">order,</span> <span class="pre">cga_layout=None)</span></code>：生成 <code class="docutils literal notranslate"><span class="pre">#ttg.blocked</span></code> encoding。各维度列表的 rank 必须一致，<code class="docutils literal notranslate"><span class="pre">order</span></code> 必须是该 rank 的排列。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MmaEncoding(version,</span> <span class="pre">warps_per_cta,</span> <span class="pre">instr_shape,</span> <span class="pre">cga_layout=None)</span></code>：用于 dot result 或 accumulator 的 <code class="docutils literal notranslate"><span class="pre">#ttg.nvidia_mma</span></code> encoding。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DotOperandEncoding(operand_index,</span> <span class="pre">parent,</span> <span class="pre">k_width)</span></code>：从 distributed parent 派生 <code class="docutils literal notranslate"><span class="pre">#ttg.dot_op</span></code> encoding；<code class="docutils literal notranslate"><span class="pre">operand_index</span></code> 只能为 <code class="docutils literal notranslate"><span class="pre">0</span></code> 或 <code class="docutils literal notranslate"><span class="pre">1</span></code>，<code class="docutils literal notranslate"><span class="pre">k_width</span></code> 必须为正数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SlicedEncoding(dim,</span> <span class="pre">parent)</span></code>：对 distributed parent 沿指定维度生成降秩的 <code class="docutils literal notranslate"><span class="pre">#ttg.slice</span></code> encoding；<code class="docutils literal notranslate"><span class="pre">dim</span></code> 必须在 parent rank 范围内。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">parent</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">BlockEncoding</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">layout</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">SlicedEncoding</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+<span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+
+<span class="n">values</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">set_layout</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">),</span> <span class="n">layout</span><span class="p">)</span>
+<span class="n">out_ptrs</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">set_layout</span><span class="p">(</span><span class="n">out_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptrs</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>MUSA backend 还会从 <code class="docutils literal notranslate"><span class="pre">tle.gpu.mthreads</span></code> 提供 <code class="docutils literal notranslate"><span class="pre">MusaWmmaEncoding</span></code>、<code class="docutils literal notranslate"><span class="pre">MusaSqmmaEncoding</span></code> 和 <code class="docutils literal notranslate"><span class="pre">MusaDotOperandEncoding</span></code>；它们对指令 shape 和 operand 的限制由具体 backend 定义。</p>
+</section>
+<section id="tle-gpu-local-ptr">
+<h3>tle.gpu.local_ptr<a class="headerlink" href="#tle-gpu-local-ptr" title="Link to this heading">#</a></h3>
+<p>获取内存指针。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 获取 a_smem[0,:] 的指针: [(0, 0), (0, 1)...(0, YBLOCK-1)]</span>
+<span class="n">a_smem_ptrs</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">a_smem</span><span class="p">,</span>
+    <span class="n">indices</span><span class="o">=</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">broadcast</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="n">YBLOCK</span><span class="p">]),</span> <span class="n">tl</span><span class="o">.</span><span class="n">arrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">YBLOCK</span><span class="p">)))</span>
+</pre></div>
+</div>
+<ul>
+<li><p>签名: <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr(buffer,</span> <span class="pre">indices=None)</span> <span class="pre">-&gt;</span> <span class="pre">tl.tensor</span> <span class="pre">|</span> <span class="pre">tl.ptr</span></code></p></li>
+<li><p>用途: 在共享内存缓冲区上构建任意形状的指针视图，用于 <code class="docutils literal notranslate"><span class="pre">tl.load</span></code>/<code class="docutils literal notranslate"><span class="pre">tl.store</span></code>。</p></li>
+<li><p>参数:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: 由 <code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc</span></code> 返回的 buffered_tensor（SMEM / TMEM）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">indices</span></code>: 可选的整数张量元组，其长度必须等于 <code class="docutils literal notranslate"><span class="pre">rank(buffer)</span></code>，且每个张量必须具有相同的形状。如果省略或传入 <code class="docutils literal notranslate"><span class="pre">None</span></code>，后端将按照完整索引语义处理。</p></li>
+</ul>
+</li>
+<li><p>语义:</p>
+<ul class="simple">
+<li><p>当显式提供 <code class="docutils literal notranslate"><span class="pre">indices</span></code> 时，输出指针张量的形状等于索引的公共（广播后）形状。</p></li>
+<li><p>对于输出形状中的每个逻辑索引 <code class="docutils literal notranslate"><span class="pre">(i0,</span> <span class="pre">i1,</span> <span class="pre">...)</span></code>，相应的指针指向 <code class="docutils literal notranslate"><span class="pre">buffer[indices0(i0,</span> <span class="pre">...),</span> <span class="pre">indices1(i0,</span> <span class="pre">...),</span> <span class="pre">...]</span></code>。</p></li>
+<li><p>当 <code class="docutils literal notranslate"><span class="pre">indices=None</span></code> 时，返回覆盖整个 <code class="docutils literal notranslate"><span class="pre">buffer</span></code> 的完整视图指针：</p>
+<ul>
+<li><p>如果秩 &gt; 0，返回形状等于 <code class="docutils literal notranslate"><span class="pre">shape(buffer)</span></code> 的指针张量。</p></li>
+<li><p>如果秩 = 0，返回标量指针。</p></li>
+</ul>
+</li>
+<li><p>返回的指针驻留在共享内存地址空间（LLVM 地址空间 3）。索引必须是整数类型（例如 i32、i64 等），并在下层时标准化为 i32。</p></li>
+<li><p>内存布局按行主序线性化（最后一维变化最快）。共享内存布局和编码遵循缓冲区的 memdesc。</p></li>
+</ul>
+</li>
+<li><p>示例 1: 1D 切片</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="c1"># 切片 [offset, offset + SLICE)</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">SLICE</span><span class="p">)</span>
+<span class="n">slice_ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">smem</span><span class="p">,</span> <span class="p">(</span><span class="n">idx</span><span class="p">,))</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">slice_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>示例 2: K 维分块（矩阵切片）</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">smem_a</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="c1"># 切片 (BM, KW)，其中 KW 是 K 维切片</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">KW</span><span class="p">))</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">KW</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="n">k_start</span><span class="p">,</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">KW</span><span class="p">))</span>
+<span class="n">a_slice</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">smem_a</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+<span class="n">a_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">a_slice</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>示例 3: 任意 gather 视图</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">H</span><span class="p">,</span> <span class="n">W</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+    <span class="c1"># 每行取一个偏移列</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">H</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">SLICE</span><span class="p">))</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">SLICE</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">SLICE</span><span class="p">))</span>
+    <span class="n">gather_ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">smem</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">gather_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>支持的下游操作：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.load</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.store</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.atomic_add</span></code>、<code class="docutils literal notranslate"><span class="pre">atomic_and</span></code>、<code class="docutils literal notranslate"><span class="pre">atomic_cas</span></code>、<code class="docutils literal notranslate"><span class="pre">atomic_max</span></code>、<code class="docutils literal notranslate"><span class="pre">atomic_min</span></code>、<code class="docutils literal notranslate"><span class="pre">atomic_or</span></code>、<code class="docutils literal notranslate"><span class="pre">atomic_xchg</span></code>、<code class="docutils literal notranslate"><span class="pre">atomic_xor</span></code></p></li>
+</ul>
+<p>实践注意事项：</p>
+<ul class="simple">
+<li><p>原子操作的可用性取决于元素数据类型（dtype）和后端硬件的能力。建议优先使用在目标硬件上明确验证支持的整数或浮点类型。</p></li>
+<li><p>对于涉及 local_ptr 的 load-after-store 冒险，TLE 后端 pass <code class="docutils literal notranslate"><span class="pre">TleInsertLocalPointerBarriers</span></code> 会自动插入必要的内存屏障。仅在使用超出此 pass 范围的自定义同步模式时才需要手动插入屏障。</p></li>
+<li><p>示例 4: 在同一 local_ptr 上执行 load、store 和原子操作。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">smem_i32</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">smem_i32</span><span class="p">,</span> <span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">),))</span>
+
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">atomic_add</span><span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>tle.gpu.local_ptr（用于远程）<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>签名: <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr(remote_buffer,</span> <span class="pre">indices=None)</span> <span class="pre">-&gt;</span> <span class="pre">tl.tensor</span> <span class="pre">|</span> <span class="pre">tl.ptr</span></code></p></li>
+<li><p>用途: 在由 <code class="docutils literal notranslate"><span class="pre">tle.remote(...)</span></code> 返回的远程共享/本地缓冲区上构造指针视图。</p></li>
+<li><p>输入:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">remote_buffer</span></code>: 由 <code class="docutils literal notranslate"><span class="pre">tle.remote(buffer,</span> <span class="pre">shard_id,</span> <span class="pre">scope)</span></code> 返回，其中 <code class="docutils literal notranslate"><span class="pre">buffer</span></code> 通常通过 <code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc</span></code> 分配。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">indices</span></code>: 与本地模式一致（<code class="docutils literal notranslate"><span class="pre">None</span></code> 表示完整视图，或可提供形状匹配的整数张量元组）。</p></li>
+</ul>
+</li>
+<li><p>语义:</p>
+<ul>
+<li><p>指针的形状、索引行为和线性化规则与本地 <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> 相同。</p></li>
+<li><p>地址解析路由到由 <code class="docutils literal notranslate"><span class="pre">shard_id</span></code> 指定的远程分片。</p></li>
+<li><p>对于需要排序保证的跨分片读/写，请结合使用 <code class="docutils literal notranslate"><span class="pre">tle.distributed_barrier(...)</span></code>。</p></li>
+</ul>
+</li>
+</ul>
+<p>读取相邻分片上的远程 SMEM 切片。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">storage_kind</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">remote_smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">smem</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">))</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BK</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">))</span>
+<span class="n">remote_ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">remote_smem</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-gpu-copy">
+<h3>tle.gpu.copy<a class="headerlink" href="#tle-gpu-copy" title="Link to this heading">#</a></h3>
+<p>以下示例演示如何将数据切片从低速 GMEM（全局内存）加载到高速片上 SMEM 中。</p>
+<ul class="simple">
+<li><p>从源复制:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">a_ptrs</span></code>: GMEM 中的基指针</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ystride_a</span> <span class="pre">*</span> <span class="pre">yoffs[None,</span> <span class="pre">:]</span></code>: 添加到基指针的偏移向量。</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">yoffs[None,</span> <span class="pre">:]</span></code>: 表示 Y 轴偏移的范围，广播为行向量。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ystride_a</span></code>: 源布局中行之间的步长。这计算了倾向于从 GMEM 加载的 2D 块的确切地址。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>到目标:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">a_smem</span></code>: 之前分配的 SMEM 缓冲区。数据将写入此处，供此块中的线程快速访问。</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">a_ptrs</span> <span class="o">+</span> <span class="n">ystride_a</span> <span class="o">*</span> <span class="n">yoffs</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="n">a_smem</span><span class="p">,</span> <span class="p">[</span><span class="n">XBLOCK</span><span class="p">,</span> <span class="n">YBLOCK</span><span class="p">])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tle.gpu.copy</span></code> 在 global memory 和 GPU local/shared memory 之间搬运数据，同时覆盖普通 tensor load/store 路径和 TMA descriptor 路径。</p>
+<ul class="simple">
+<li><p>签名：<code class="docutils literal notranslate"><span class="pre">tle.gpu.copy(src,</span> <span class="pre">dst,</span> <span class="pre">shape,</span> <span class="pre">offsets=None,</span> <span class="pre">barrier=None,</span> <span class="pre">mask=None)</span></code></p></li>
+<li><p>拷贝方向由操作数类型推导：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.tensor</span></code> 或 TMA descriptor -&gt; <code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code>：global 到 local/shared。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">tl.tensor</span></code> 或 TMA descriptor：local/shared 到 global。</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shape</span></code> 表示要拷贝的 tile 形状。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offsets</span></code> 用于 TMA descriptor copy，表示 descriptor 坐标偏移。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">barrier</span></code> 是可选的显式 TMA completion barrier，只支持 NVIDIA global-to-shared TMA load（<code class="docutils literal notranslate"><span class="pre">src</span></code> 是 TMA descriptor、<code class="docutils literal notranslate"><span class="pre">dst</span></code> 是 shared-memory <code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code>）。barrier 必须带 <code class="docutils literal notranslate"><span class="pre">expect_bytes</span></code> 分配，即来自 <code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc_barrier(...)</span></code> 或 <code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc_barriers(...)</span></code> 返回的某个 indexed slot。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask</span></code> 是普通指针 tensor 拷贝的可选逐元素掩码。GM 到 local 时，mask 为 false 的元素会以零写入 local memory；local 到 GM 时，mask 为 false 的元素不会写入。TMA descriptor 拷贝不接受 <code class="docutils literal notranslate"><span class="pre">mask</span></code>。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 带显式 completion barrier 的 TMA load</span>
+<span class="n">a_bar</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc_barrier</span><span class="p">(</span><span class="n">expect_bytes</span><span class="o">=</span><span class="n">BLOCK_M</span> <span class="o">*</span> <span class="n">BLOCK_K</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span>
+    <span class="n">a_desc</span><span class="p">,</span>
+    <span class="n">a_smem</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">BLOCK_M</span><span class="p">,</span> <span class="n">BLOCK_K</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">pid_m</span> <span class="o">*</span> <span class="n">BLOCK_M</span><span class="p">,</span> <span class="n">pid_k</span> <span class="o">*</span> <span class="n">BLOCK_K</span><span class="p">],</span>
+    <span class="n">barrier</span><span class="o">=</span><span class="n">a_bar</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_wait</span><span class="p">(</span><span class="n">a_bar</span><span class="p">,</span> <span class="n">phaseIdx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># 普通指针 tensor 拷贝可以传入逐元素 mask</span>
+<span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">&lt;</span> <span class="n">n</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">smem</span><span class="p">,</span> <span class="p">[</span><span class="n">BLOCK</span><span class="p">],</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tle.gpu.copy(...,</span> <span class="pre">barrier=...)</span></code> 不支持普通 copy、shared-to-global TMA store、named barrier，或未设置 <code class="docutils literal notranslate"><span class="pre">expect_bytes</span></code> 的 barrier。</p>
+</section>
+</section>
+<section id="tle-gpu-barrier-api">
+<h2>tle.gpu barrier API<a class="headerlink" href="#tle-gpu-barrier-api" title="Link to this heading">#</a></h2>
+<p>TLE GPU barrier 用于表达手写 Hopper producer/consumer 流水所需的同步，包括 TMA completion barrier、empty/full mbarrier，以及 warp group 之间的轻量 named barrier。</p>
+<p>API 总览：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc_barriers(num_barriers,</span> <span class="pre">arrive_count=1,</span> <span class="pre">init=tle.gpu.PENDING,</span> <span class="pre">expect_bytes=None)</span> <span class="pre">-&gt;</span> <span class="pre">tle.gpu.barrier</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc_barrier(arrive_count=1,</span> <span class="pre">init=tle.gpu.PENDING,</span> <span class="pre">expect_bytes=None)</span> <span class="pre">-&gt;</span> <span class="pre">tle.gpu.barrier</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.barrier_wait(bar,</span> <span class="pre">phaseIdx=None)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.barrier_arrive(bar,</span> <span class="pre">arrive_count=1,</span> <span class="pre">phaseIdx=None)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.PENDING</span></code>：初始不可通过。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.READY</span></code>：初始可通过；只适用于 mbarrier 路径。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.barrier</span></code>：allocation API 返回的 value 类型；数组通过 <code class="docutils literal notranslate"><span class="pre">bars[i]</span></code> 取 slot。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.barrier_type</span></code>：barrier value 的类型描述。</p></li>
+</ul>
+<p>分配参数：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">num_barriers</span></code>：barrier slot 数量，必须是编译期正整数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrive_count</span></code>：pending arrival count。对 mbarrier 表示逻辑 arrive 数；对 named barrier 表示参与线程数，通常为 <code class="docutils literal notranslate"><span class="pre">num_warps</span> <span class="pre">*</span> <span class="pre">32</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">init</span></code>：<code class="docutils literal notranslate"><span class="pre">tle.gpu.PENDING</span></code> 或 <code class="docutils literal notranslate"><span class="pre">tle.gpu.READY</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expect_bytes</span></code>：TMA global-to-shared completion barrier 期望完成的字节数，必须为编译期正整数；不使用时为 <code class="docutils literal notranslate"><span class="pre">None</span></code>。</p></li>
+</ul>
+<p>后端路径选择：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">barrier_wait</span></code> 或 <code class="docutils literal notranslate"><span class="pre">barrier_arrive</span></code> 传入 <code class="docutils literal notranslate"><span class="pre">phaseIdx</span></code> 时选择 mbarrier 路径。</p></li>
+<li><p>不传 <code class="docutils literal notranslate"><span class="pre">phaseIdx</span></code> 时选择 named barrier 路径。</p></li>
+<li><p>同一个 barrier slot 不能混用 mbarrier 和 named barrier。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expect_bytes</span></code> barrier 和 <code class="docutils literal notranslate"><span class="pre">init=tle.gpu.READY</span></code> barrier 必须走 mbarrier 路径。</p></li>
+<li><p>named barrier 要求静态 barrier slot index，例如 <code class="docutils literal notranslate"><span class="pre">sync[0]</span></code>；动态 slot index 会报错。</p></li>
+</ul>
+<p>在 ring buffer 复用场景中，<code class="docutils literal notranslate"><span class="pre">phaseIdx</span></code> 建议传该 slot 的 logical use id，lowering 会在内部映射到硬件 phase。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bars</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc_barriers</span><span class="p">(</span>
+    <span class="n">num_barriers</span><span class="o">=</span><span class="n">NUM_SLOTS</span><span class="p">,</span>
+    <span class="n">arrive_count</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">init</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">READY</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">k_iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">NUM_ITERS</span><span class="p">):</span>
+    <span class="n">slot</span> <span class="o">=</span> <span class="n">k_iter</span> <span class="o">%</span> <span class="n">NUM_SLOTS</span>
+    <span class="n">use_id</span> <span class="o">=</span> <span class="n">k_iter</span> <span class="o">//</span> <span class="n">NUM_SLOTS</span>
+
+    <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_wait</span><span class="p">(</span><span class="n">bars</span><span class="p">[</span><span class="n">slot</span><span class="p">],</span> <span class="n">phaseIdx</span><span class="o">=</span><span class="n">use_id</span><span class="p">)</span>
+    <span class="c1"># 使用 shared-memory slot `slot`</span>
+    <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_arrive</span><span class="p">(</span><span class="n">bars</span><span class="p">[</span><span class="n">slot</span><span class="p">],</span> <span class="n">phaseIdx</span><span class="o">=</span><span class="n">use_id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>示例：两个 4-warp worker partition 之间使用 named barrier 同步。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">consumer</span><span class="p">(</span><span class="n">sync</span><span class="p">,</span> <span class="n">CID</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">CID</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_arrive</span><span class="p">(</span><span class="n">sync</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_wait</span><span class="p">(</span><span class="n">sync</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+
+<span class="n">sync</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc_barriers</span><span class="p">(</span><span class="n">num_barriers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">arrive_count</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">warp_specialize</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="n">producer</span><span class="p">,</span> <span class="p">(</span><span class="o">...</span><span class="p">,)),</span>
+        <span class="p">(</span><span class="n">consumer</span><span class="p">,</span> <span class="p">(</span><span class="n">sync</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">consumer</span><span class="p">,</span> <span class="p">(</span><span class="n">sync</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="p">],</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">168</span><span class="p">,</span> <span class="mi">168</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>示例：围绕 TMA load 的 empty/full 同步。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">producer</span><span class="p">(</span><span class="n">a_desc</span><span class="p">,</span> <span class="n">a_smem</span><span class="p">,</span> <span class="n">a_empty</span><span class="p">,</span> <span class="n">a_full</span><span class="p">):</span>
+    <span class="n">phase</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_wait</span><span class="p">(</span><span class="n">a_empty</span><span class="p">,</span> <span class="n">phaseIdx</span><span class="o">=</span><span class="n">phase</span><span class="p">)</span>
+    <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">a_desc</span><span class="p">,</span> <span class="n">a_smem</span><span class="p">,</span> <span class="p">[</span><span class="n">BLOCK_M</span><span class="p">,</span> <span class="n">BLOCK_K</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">barrier</span><span class="o">=</span><span class="n">a_full</span><span class="p">)</span>
+
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">consumer</span><span class="p">(</span><span class="n">a_smem</span><span class="p">,</span> <span class="n">a_empty</span><span class="p">,</span> <span class="n">a_full</span><span class="p">):</span>
+    <span class="n">phase</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_wait</span><span class="p">(</span><span class="n">a_full</span><span class="p">,</span> <span class="n">phaseIdx</span><span class="o">=</span><span class="n">phase</span><span class="p">)</span>
+    <span class="c1"># 消费 a_smem ...</span>
+    <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">barrier_arrive</span><span class="p">(</span><span class="n">a_empty</span><span class="p">,</span> <span class="n">phaseIdx</span><span class="o">=</span><span class="n">phase</span><span class="p">)</span>
+
+
+<span class="n">a_empty</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc_barrier</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">READY</span><span class="p">)</span>
+<span class="n">a_full</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc_barrier</span><span class="p">(</span><span class="n">expect_bytes</span><span class="o">=</span><span class="n">A_TILE_BYTES</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="tle-gpu-wgmma-tle-gpu-wgmma-wait">
+<h3>tle.gpu.wgmma 与 tle.gpu.wgmma_wait<a class="headerlink" href="#tle-gpu-wgmma-tle-gpu-wgmma-wait" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.gpu.wgmma</span></code> 发起一次异步 Hopper WGMMA，并返回 accumulator dependency value。普通 tensor op、reduce 或 store 消费该 accumulator 前，必须先调用 <code class="docutils literal notranslate"><span class="pre">tle.gpu.wgmma_wait(...)</span></code>。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma</span><span class="p">(</span>
+    <span class="n">a</span><span class="p">,</span>
+    <span class="n">b</span><span class="p">,</span>
+    <span class="n">acc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_precision</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">max_num_imprecise_acc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">out_dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">trans_a</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">trans_b</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tl</span><span class="o">.</span><span class="n">tensor</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma_wait</span><span class="p">(</span><span class="n">pendings</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tl</span><span class="o">.</span><span class="n">tensor</span>
+</pre></div>
+</div>
+<p>操作数与结果规则：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code> 可以是 shared-memory <code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code> 或 register <code class="docutils literal notranslate"><span class="pre">tl.tensor</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code> 当前必须是 shared-memory <code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code>。</p></li>
+<li><p>shared-memory 操作数必须使用默认 NVIDIA MMA shared layout，且是 rank-2 tile。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">trans_a</span></code> 和 <code class="docutils literal notranslate"><span class="pre">trans_b</span></code> 必须是编译期 bool。</p></li>
+<li><p>shape 约束：<code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">&gt;=</span> <span class="pre">64</span></code> 且能被 64 整除，<code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">&gt;=</span> <span class="pre">8</span></code> 且能被 8 整除，<code class="docutils literal notranslate"><span class="pre">K</span> <span class="pre">&gt;=</span> <span class="pre">16</span></code>，且 <code class="docutils literal notranslate"><span class="pre">a.K</span> <span class="pre">==</span> <span class="pre">b.K</span></code>。</p></li>
+<li><p>非 FP8 操作数必须 dtype 一致，且属于 <code class="docutils literal notranslate"><span class="pre">tl.int8</span></code>、<code class="docutils literal notranslate"><span class="pre">tl.float16</span></code>、<code class="docutils literal notranslate"><span class="pre">tl.bfloat16</span></code> 或 <code class="docutils literal notranslate"><span class="pre">tl.float32</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">out_dtype</span></code> 控制 accumulator dtype；不支持 <code class="docutils literal notranslate"><span class="pre">tl.bfloat16</span></code> 输出。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_num_imprecise_acc</span></code> 控制 FP8 imprecise accumulation，不改变返回 tensor dtype。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wgmma_wait(pendings,</span> <span class="pre">acc)</span></code> 等待直到最多只剩 <code class="docutils literal notranslate"><span class="pre">pendings</span></code> 个 WGMMA group outstanding；<code class="docutils literal notranslate"><span class="pre">wgmma_wait(acc)</span></code> 等价于 <code class="docutils literal notranslate"><span class="pre">wgmma_wait(0,</span> <span class="pre">acc)</span></code>。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a_smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">64</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">b_smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+
+<span class="n">acc</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma</span><span class="p">(</span><span class="n">a_smem</span><span class="p">,</span> <span class="n">b_smem</span><span class="p">,</span> <span class="n">out_dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma_wait</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>手写流水中保留一个 pending WGMMA group：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">acc</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma</span><span class="p">(</span><span class="n">a0_smem</span><span class="p">,</span> <span class="n">b0_smem</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma</span><span class="p">(</span><span class="n">a1_smem</span><span class="p">,</span> <span class="n">b1_smem</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma_wait</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+<span class="c1"># 此时可在一个 WGMMA group 保持 pending 的同时执行独立工作</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">wgmma_wait</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id2">
+<h2>执行编排<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<section id="tle-gpu-warp-specialize">
+<h3>tle.gpu.warp_specialize<a class="headerlink" href="#tle-gpu-warp-specialize" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.gpu.warp_specialize</span></code> 用于在同一 CTA 内显式创建 warp 专用区域，将不同的 JIT 函数放入不同的 warp 分区。典型用例是将 TMA/cp.async 生产者、WGMMA 消费者和 epilogue/reduction 等任务分离，并通过 <code class="docutils literal notranslate"><span class="pre">tle.pipe</span></code> 或其他显式同步原语在它们之间传递共享内存数据。</p>
+<ul class="simple">
+<li><p><strong>签名</strong>: <code class="docutils literal notranslate"><span class="pre">tle.gpu.warp_specialize(functions_and_args,</span> <span class="pre">worker_num_warps,</span> <span class="pre">worker_num_regs)</span></code></p></li>
+<li><p><strong>参数</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">functions_and_args</span></code>: <code class="docutils literal notranslate"><span class="pre">[(fn0,</span> <span class="pre">args0),</span> <span class="pre">(fn1,</span> <span class="pre">args1),</span> <span class="pre">...]</span></code>。第 0 项进入默认分区；后续项进入工作分区。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">worker_num_warps</span></code>: 工作分区的 warp 数量列表；长度必须等于 <code class="docutils literal notranslate"><span class="pre">len(functions_and_args)</span> <span class="pre">-</span> <span class="pre">1</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">worker_num_regs</span></code>: 工作分区请求的寄存器数量列表；长度必须等于 <code class="docutils literal notranslate"><span class="pre">len(functions_and_args)</span> <span class="pre">-</span> <span class="pre">1</span></code>。</p></li>
+</ul>
+</li>
+<li><p><strong>语义</strong>:</p>
+<ul>
+<li><p>每个 <code class="docutils literal notranslate"><span class="pre">args</span></code> 必须是元组；普通的 Python <code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>/<code class="docutils literal notranslate"><span class="pre">bool</span></code>/<code class="docutils literal notranslate"><span class="pre">tl.dtype</span></code> 作为 constexpr 传递。</p></li>
+<li><p>默认分区可以返回值；<code class="docutils literal notranslate"><span class="pre">tle.gpu.warp_specialize(...)</span></code> 的返回值来自默认分区；工作分区仅执行副作用并以 warp return 结束。</p></li>
+<li><p>工作分区的被调用者将携带相应的 <code class="docutils literal notranslate"><span class="pre">&quot;ttg.num-warps&quot;</span></code> 属性，区域将记录 <code class="docutils literal notranslate"><span class="pre">requestedRegisters</span></code>。</p></li>
+<li><p>捕获的工作参数在 IR 中会去重；多个工作线程可以共享同一个管道端点或缓冲区句柄。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">warp_specialize</span></code> 本身不提供数据可见性保证；生产者/消费者排序应通过 <code class="docutils literal notranslate"><span class="pre">tle.pipe</span></code> 的 commit/wait/release、屏障或其他同步原语来表达。</p></li>
+</ul>
+</li>
+</ul>
+<p>示例: 生产者分区加载共享内存，消费者工作线程进行计算。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">producer</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">x_ptr</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">offs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">):</span>
+        <span class="n">slot</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">BLOCK</span> <span class="o">+</span> <span class="n">offs</span><span class="p">)</span>
+        <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">tile</span><span class="p">),</span> <span class="n">vals</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">consumer</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">offs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+    <span class="n">acc</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">):</span>
+        <span class="n">ready</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">ready</span><span class="o">.</span><span class="n">slot</span><span class="o">.</span><span class="n">tile</span><span class="p">))</span>
+        <span class="n">acc</span> <span class="o">+=</span> <span class="n">tile</span>
+        <span class="n">reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">capacity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"x_pipe"</span><span class="p">,</span> <span class="n">tile</span><span class="o">=</span><span class="n">smem</span><span class="p">)</span>
+
+    <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">warp_specialize</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span><span class="n">producer</span><span class="p">,</span> <span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">(),</span> <span class="n">x_ptr</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">consumer</span><span class="p">,</span> <span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">(),</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)),</span>
+        <span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">],</span>      <span class="c1"># consumer worker 使用 4 个 warp</span>
+        <span class="p">[</span><span class="mi">168</span><span class="p">],</span>    <span class="c1"># consumer worker 请求的寄存器数</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>示例: 多个 worker 与 SPMC 管道配对。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tile</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span>
+    <span class="n">capacity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"spmc_tile"</span><span class="p">,</span>
+    <span class="n">readers</span><span class="o">=</span><span class="p">(</span><span class="s2">"qk"</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">),</span>
+    <span class="n">tile</span><span class="o">=</span><span class="n">tile</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">warp_specialize</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="n">load_tile_producer</span><span class="p">,</span> <span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">(),</span> <span class="n">a_desc</span><span class="p">,</span> <span class="n">b_desc</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">qk_consumer</span><span class="p">,</span> <span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="s2">"qk"</span><span class="p">),</span> <span class="n">acc_qk</span><span class="p">)),</span>
+        <span class="p">(</span><span class="n">value_consumer</span><span class="p">,</span> <span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="s2">"value"</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s2">"tile"</span><span class="p">,)),</span> <span class="n">acc_v</span><span class="p">)),</span>
+    <span class="p">],</span>
+    <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">240</span><span class="p">,</span> <span class="mi">168</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="dsa">
+<h2>DSA 内存管理和数据移动<a class="headerlink" href="#dsa" title="Link to this heading">#</a></h2>
+<section id="tle-dsa-alloc">
+<h3>tle.dsa.alloc<a class="headerlink" href="#tle-dsa-alloc" title="Link to this heading">#</a></h3>
+<p>签名: <code class="docutils literal notranslate"><span class="pre">tle.dsa.alloc(shape,</span> <span class="pre">dtype,</span> <span class="pre">mem_addr_space)</span></code>
+用途: 在指定的内存地址空间中分配 DSA 本地缓冲区。
+华为 Ascend 暴露的地址空间:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.ascend.UB</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.ascend.L1</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.ascend.L0A</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.ascend.L0B</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.ascend.L0C</span></code></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">XBLOCK</span><span class="p">,</span> <span class="n">YBLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">b_l1</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">XBLOCK</span><span class="p">,</span> <span class="n">YBLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">L1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-dsa-copy">
+<h3>tle.dsa.copy<a class="headerlink" href="#tle-dsa-copy" title="Link to this heading">#</a></h3>
+<p>签名: <code class="docutils literal notranslate"><span class="pre">tle.dsa.copy(src,</span> <span class="pre">dst,</span> <span class="pre">shape,</span> <span class="pre">inter_no_alias=False)</span></code>
+用途: 在 GMEM 指针和 DSA 本地缓冲区之间执行显式数据移动（双向）。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x_ptrs</span><span class="p">,</span> <span class="n">a_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">tail_m</span><span class="p">,</span> <span class="n">tail_n</span><span class="p">])</span>    <span class="c1"># GMEM → 本地缓冲区  </span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">a_ub</span><span class="p">,</span> <span class="n">out_ptrs</span><span class="p">,</span> <span class="p">[</span><span class="n">tail_m</span><span class="p">,</span> <span class="n">tail_n</span><span class="p">])</span>  <span class="c1"># 本地缓冲区 → GMEM</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-dsa-local-ptr">
+<h3>tle.dsa.local_ptr<a class="headerlink" href="#tle-dsa-local-ptr" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>签名: <code class="docutils literal notranslate"><span class="pre">tle.dsa.local_ptr(buffer,</span> <span class="pre">indices=None)</span> <span class="pre">-&gt;</span> <span class="pre">tl.tensor</span> <span class="pre">|</span> <span class="pre">tl.ptr</span></code></p></li>
+<li><p>用途: 在 DSA 本地缓冲区（例如 UB 或 L1）上构造指针视图，以启用显式本地内存访问模式。</p></li>
+<li><p>参数:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">buffer</span></code>: DSA 缓冲张量，通常通过 <code class="docutils literal notranslate"><span class="pre">tle.dsa.alloc</span></code> 分配。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">indices</span></code>: 可选的整数张量元组；如果省略或设置为 <code class="docutils literal notranslate"><span class="pre">None</span></code>，则使用完整索引空间（完整视图语义）。</p></li>
+</ul>
+</li>
+</ul>
+<p>语义:<br />
+指针视图模型与 <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> 相同（相同的形状和索引规则）。<br />
+适用于需要显式指针物化的 DSA 本地访问模式。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">rows</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">))</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BK</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">))</span>
+<span class="n">a_ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">a_ub</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+<span class="n">a_val</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">a_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>tle.dsa.local_ptr（用于远程）<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>签名: <code class="docutils literal notranslate"><span class="pre">tle.dsa.local_ptr(remote_buffer,</span> <span class="pre">indices=None)</span> <span class="pre">-&gt;</span> <span class="pre">tl.tensor</span> <span class="pre">|</span> <span class="pre">tl.ptr</span></code></p></li>
+<li><p>用途: 在由 <code class="docutils literal notranslate"><span class="pre">tle.remote(...)</span></code> 返回的远程 DSA 本地缓冲区上构造指针视图。</p></li>
+<li><p>输入:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">remote_buffer</span></code>: 由 <code class="docutils literal notranslate"><span class="pre">tle.remote(dsa_buffer,</span> <span class="pre">shard_id,</span> <span class="pre">scope)</span></code> 返回。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">indices</span></code>: 与本地 DSA 情况相同的语义。</p></li>
+</ul>
+</li>
+<li><p>语义:</p>
+<ul>
+<li><p>保持与本地 DSA 变体相同的指针视图规则。</p></li>
+<li><p>解引用指针将内存访问路由到由 <code class="docutils literal notranslate"><span class="pre">shard_id</span></code> 标识的远程分片。</p></li>
+<li><p>当需要跨分片排序时，请结合使用 <code class="docutils literal notranslate"><span class="pre">tle.distributed_barrier(...)</span></code>。</p></li>
+</ul>
+</li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">remote_a_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">a_ub</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="n">peer_rank</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">))</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BK</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">))</span>
+<span class="n">remote_ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">remote_a_ub</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+<span class="n">remote_val</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-dsa-to-tensor-tle-dsa-to-buffer">
+<h3>tle.dsa.to_tensor 和 tle.dsa.to_buffer<a class="headerlink" href="#tle-dsa-to-tensor-tle-dsa-to-buffer" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.to_tensor(buffer,</span> <span class="pre">writable=True)</span></code>: 将 DSA 缓冲区转换为张量视图以参与张量表达式。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.to_buffer(tensor,</span> <span class="pre">space)</span></code>: 将张量值转换回指定地址空间中的 DSA 缓冲区。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">c_val</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">to_tensor</span><span class="p">(</span><span class="n">c_ub</span><span class="p">,</span> <span class="n">writable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">c_val</span> <span class="o">*</span> <span class="mf">0.5</span>
+<span class="n">d_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">to_buffer</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">d_ub</span><span class="p">,</span> <span class="n">out_ptrs</span><span class="p">,</span> <span class="p">[</span><span class="n">tail_m</span><span class="p">,</span> <span class="n">tail_n</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>向量运算符（缓冲区形式）<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="tle-dsa-addtle-dsa-subtle-dsa-multle-dsa-divtle-dsa-max-tle-dsa-min">
+<h3>tle.dsa.add、tle.dsa.sub、tle.dsa.mul、tle.dsa.div、tle.dsa.max 和 tle.dsa.min<a class="headerlink" href="#tle-dsa-addtle-dsa-subtle-dsa-multle-dsa-divtle-dsa-max-tle-dsa-min" title="Link to this heading">#</a></h3>
+<p>内置运算符:
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.add</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.sub</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.mul</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.div</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.max</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.min</span></code></p>
+<p>通用签名:<br />
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.(lhs,</span> <span class="pre">rhs,</span> <span class="pre">out)</span></code></p>
+<p>计算模型:<br />
+对 DSA 本地缓冲区执行逐元素二元运算。</p>
+<p>形状规则:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lhs</span></code>、<code class="docutils literal notranslate"><span class="pre">rhs</span></code> 和 <code class="docutils literal notranslate"><span class="pre">out</span></code> 的秩和形状必须相同。</p></li>
+<li><p>此 API 层默认不执行隐式广播。</p></li>
+<li><p>类型规则:</p>
+<ul>
+<li><p>实践中，建议所有三个操作数使用相同的数据类型（<code class="docutils literal notranslate"><span class="pre">dtype</span></code>）。</p></li>
+<li><p>整数类型通常用于索引/计数路径，而浮点类型通常用于激活/数值计算路径。</p></li>
+</ul>
+</li>
+<li><p>地址空间规则:</p>
+<ul>
+<li><p>缓冲区必须分配在后端支持的 DSA 本地地址空间中（例如 UB/L1 组合）。</p></li>
+<li><p>热数据应尽可能保留在本地内存中，以避免不必要的全局内存（GMEM）往返。</p></li>
+</ul>
+</li>
+</ul>
+<p>运算符语义:
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.add(lhs,</span> <span class="pre">rhs,</span> <span class="pre">out)</span></code>: <code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">lhs</span> <span class="pre">+</span> <span class="pre">rhs</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.sub(lhs,</span> <span class="pre">rhs,</span> <span class="pre">out)</span></code>: <code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">lhs</span> <span class="pre">-</span> <span class="pre">rhs</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.mul(lhs,</span> <span class="pre">rhs,</span> <span class="pre">out)</span></code>: <code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">lhs</span> <span class="pre">*</span> <span class="pre">rhs</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.div(lhs,</span> <span class="pre">rhs,</span> <span class="pre">out)</span></code>: <code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">lhs</span> <span class="pre">/</span> <span class="pre">rhs</span></code>（精度和舍入行为取决于后端实现）
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.max(lhs,</span> <span class="pre">rhs,</span> <span class="pre">out)</span></code>: <code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">max(lhs,</span> <span class="pre">rhs)</span></code>
+<code class="docutils literal notranslate"><span class="pre">tle.dsa.min(lhs,</span> <span class="pre">rhs,</span> <span class="pre">out)</span></code>: <code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">min(lhs,</span> <span class="pre">rhs)</span></code></p>
+<p>就地/重用建议:</p>
+<ul class="simple">
+<li><p>输出缓冲区可以在多个计算步骤中重用，例如 <code class="docutils literal notranslate"><span class="pre">tle.dsa.mul(tmp,</span> <span class="pre">b,</span> <span class="pre">tmp)</span></code>。</p></li>
+<li><p>除非后端明确保证别名安全，否则输入和输出缓冲区不应任意共享内存。</p></li>
+</ul>
+<p>示例 1: 算术链 <code class="docutils literal notranslate"><span class="pre">((a</span> <span class="pre">-</span> <span class="pre">b)</span> <span class="pre">*</span> <span class="pre">b)</span> <span class="pre">/</span> <span class="pre">scale</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">b_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">scale_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">tmp_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">out_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">a_ptrs</span><span class="p">,</span> <span class="n">a_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">b_ptrs</span><span class="p">,</span> <span class="n">b_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">scale_ptrs</span><span class="p">,</span> <span class="n">scale_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">a_ub</span><span class="p">,</span> <span class="n">b_ub</span><span class="p">,</span> <span class="n">tmp_ub</span><span class="p">)</span>        <span class="c1"># tmp = a - b</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">mul</span><span class="p">(</span><span class="n">tmp_ub</span><span class="p">,</span> <span class="n">b_ub</span><span class="p">,</span> <span class="n">tmp_ub</span><span class="p">)</span>      <span class="c1"># tmp = tmp * b</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">div</span><span class="p">(</span><span class="n">tmp_ub</span><span class="p">,</span> <span class="n">scale_ub</span><span class="p">,</span> <span class="n">out_ub</span><span class="p">)</span>  <span class="c1"># out = tmp / scale</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">out_ub</span><span class="p">,</span> <span class="n">out_ptrs</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>示例 2: 使用 <code class="docutils literal notranslate"><span class="pre">max</span></code> + <code class="docutils literal notranslate"><span class="pre">min</span></code> 进行 Clamp</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">floor_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">ceil_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">tmp_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+<span class="n">y_ub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">mem_addr_space</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">ascend</span><span class="o">.</span><span class="n">UB</span><span class="p">)</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x_ptrs</span><span class="p">,</span> <span class="n">x_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">floor_ptrs</span><span class="p">,</span> <span class="n">floor_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">ceil_ptrs</span><span class="p">,</span> <span class="n">ceil_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x_ub</span><span class="p">,</span> <span class="n">floor_ub</span><span class="p">,</span> <span class="n">tmp_ub</span><span class="p">)</span>    <span class="c1"># tmp = max(x, floor)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">tmp_ub</span><span class="p">,</span> <span class="n">ceil_ub</span><span class="p">,</span> <span class="n">y_ub</span><span class="p">)</span>     <span class="c1"># y = min(tmp, ceil)</span>
+
+<span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">y_ub</span><span class="p">,</span> <span class="n">y_ptrs</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id5">
+<h2>循环和提示<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<section id="tle-dsa-pipelinetle-dsa-parallel-tle-dsa-hint">
+<h3>tle.dsa.pipeline、tle.dsa.parallel 和 tle.dsa.hint<a class="headerlink" href="#tle-dsa-pipelinetle-dsa-parallel-tle-dsa-hint" title="Link to this heading">#</a></h3>
+<p>循环和提示 API 包括:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.pipeline(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.parallel(...)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.hint(...)</span></code> — 以上下文管理器 <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">tle.dsa.hint(...)</span></code> 的形式提供编译时提示。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">hint</span><span class="p">(</span><span class="n">inter_no_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">a_ub</span><span class="p">,</span> <span class="p">[</span><span class="n">tail_size</span><span class="p">],</span> <span class="n">inter_no_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id6">
+<h2>切片和视图<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<section id="tle-dsa-extract-slicetle-dsa-insert-slicetle-dsa-extract-element-tle-dsa-subview">
+<h3>tle.dsa.extract_slice、tle.dsa.insert_slice、tle.dsa.extract_element 和 tle.dsa.subview<a class="headerlink" href="#tle-dsa-extract-slicetle-dsa-insert-slicetle-dsa-extract-element-tle-dsa-subview" title="Link to this heading">#</a></h3>
+<p>切片和视图 API 包括:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.extract_slice</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.insert_slice</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.extract_element</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.dsa.subview</span></code></p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sub</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">extract_slice</span><span class="p">(</span><span class="n">full</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k0</span><span class="p">),</span> <span class="n">sizes</span><span class="o">=</span><span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">full</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">insert_slice</span><span class="p">(</span><span class="n">full</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k0</span><span class="p">),</span> <span class="n">sizes</span><span class="o">=</span><span class="p">(</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">),</span> <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">elem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">dsa</span><span class="o">.</span><span class="n">extract_element</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">indice</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="use-tle-lite.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">使用 TLE-Lite</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="use-tle-raw.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">使用 TLE-Raw</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu">GPU 内存管理</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-memory-space">tle.gpu.memory_space</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-alloc">tle.gpu.alloc</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-buffered-tensor-slot">tle.gpu.buffered_tensor.slot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-buffered-tensor-reshape">tle.gpu.buffered_tensor.reshape</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-set-layout">tle.gpu.set_layout</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-local-ptr">tle.gpu.local_ptr</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">tle.gpu.local_ptr（用于远程）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-copy">tle.gpu.copy</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-barrier-api">tle.gpu barrier API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-wgmma-tle-gpu-wgmma-wait">tle.gpu.wgmma 与 tle.gpu.wgmma_wait</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">执行编排</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-gpu-warp-specialize">tle.gpu.warp_specialize</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dsa">DSA 内存管理和数据移动</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-alloc">tle.dsa.alloc</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-copy">tle.dsa.copy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-local-ptr">tle.dsa.local_ptr</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">tle.dsa.local_ptr（用于远程）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-to-tensor-tle-dsa-to-buffer">tle.dsa.to_tensor 和 tle.dsa.to_buffer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">向量运算符（缓冲区形式）</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-addtle-dsa-subtle-dsa-multle-dsa-divtle-dsa-max-tle-dsa-min">tle.dsa.add、tle.dsa.sub、tle.dsa.mul、tle.dsa.div、tle.dsa.max 和 tle.dsa.min</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">循环和提示</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-pipelinetle-dsa-parallel-tle-dsa-hint">tle.dsa.pipeline、tle.dsa.parallel 和 tle.dsa.hint</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">切片和视图</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-dsa-extract-slicetle-dsa-insert-slicetle-dsa-extract-element-tle-dsa-subview">tle.dsa.extract_slice、tle.dsa.insert_slice、tle.dsa.extract_element 和 tle.dsa.subview</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagtree_en/user_guide/use-tle-struct.html">English</a></body>
+</html>

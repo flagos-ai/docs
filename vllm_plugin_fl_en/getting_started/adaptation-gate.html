@@ -1,0 +1,841 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Adaptation gate" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/adaptation-gate.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="The adaptation gate is a small manual test suite in the vllm-plugin-FL repository( tools/adaptation-gate-cases) for accelerator adaptation and vLLM plugin upgrades. It validates text, image, and mixed text-image requests for the required models in both eager and graph modes. The test cases themse..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="The adaptation gate is a small manual test suite in the vllm-plugin-FL repository( tools/adaptation-gate-cases) for accelerator adaptation and vLLM plugin upgrades. It validates text, image, and mixed text-image requests for the required models in both eager and graph modes. The test cases themse..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Adaptation gate &#8212; VLLM-Plugin-FL Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/adaptation-gate.81441d86-f0e2-4aa9-b34d-c8a7d40e642e.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/adaptation-gate';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/adaptation-gate.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Operator dispatch user guide" href="../dispatch_user_guide/dispatch-user-guide.html" />
+    <link rel="prev" title="Run an inference task" href="run-inference-task.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="VLLM-Plugin-FL Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="VLLM-Plugin-FL Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    vllm-plugin-FL Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">vllm-plugin-FL Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/operator-dispatch-mechanism.html">Operator dispatch mechanism</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="getting-started.html">Getting Started</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">Install software for running an inference task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run-inference-task.html">Run an inference task</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Adaptation gate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dispatch_user_guide/dispatch-user-guide.html">Operator dispatch user guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/quick-start.html">Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-backend-selection.html">Configure backend selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-policy.html">Policy context management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/add-ops-and-vendors.html">Add new operators and vendor backends</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/dispatch-api-reference.html">Dispatch API Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/adaptation-gate.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Adaptation gate</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-matrix">Test matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-gate">Run the gate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-and-quality-checks">Results and quality checks</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="adaptation-gate">
+<h1>Adaptation gate<a class="headerlink" href="#adaptation-gate" title="Link to this heading">#</a></h1>
+<p>The adaptation gate is a small manual test suite in the vllm-plugin-FL repository
+(<code class="docutils literal notranslate"><span class="pre">tools/adaptation-gate-cases</span></code>) for accelerator adaptation and vLLM plugin upgrades. It validates
+text, image, and mixed text-image requests for the required models in both eager and graph modes.</p>
+<p>The test cases themselves are maintained in the repository:
+<a class="reference external" href="https://github.com/flagos-ai/vllm-plugin-FL/tree/main/tools/adaptation-gate-cases">tools/adaptation-gate-cases</a>.</p>
+<p>Run the gate after <a class="reference internal" href="install.html"><span class="std std-doc">installing</span></a> vllm-plugin-FL and before running an inference task;
+the served models are the same ones used in <a class="reference internal" href="run-inference-task.html"><span class="std std-doc">Run an inference task</span></a>.</p>
+<section id="test-matrix">
+<h2>Test matrix<a class="headerlink" href="#test-matrix" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Mode</p></th>
+<th class="head"><p>Single long text case</p></th>
+<th class="head"><p>Single long image case</p></th>
+<th class="head"><p>Text cases</p></th>
+<th class="head"><p>Image cases</p></th>
+<th class="head"><p>Mixed text and image cases</p></th>
+<th class="head"><p>Total cases</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Qwen3.6-27B</span></code></p></td>
+<td><p>eager</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>4+4</p></td>
+<td><p>26</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Qwen3.6-27B</span></code></p></td>
+<td><p>graph</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>4+4</p></td>
+<td><p>26</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Qwen3.6-35B-A3B</span></code></p></td>
+<td><p>eager</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>4+4</p></td>
+<td><p>26</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Qwen3.6-35B-A3B</span></code></p></td>
+<td><p>graph</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+<td><p>4+4</p></td>
+<td><p>26</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The matrix counts pytest scenarios; each concurrent scenario sends eight requests.</p>
+<p>Each mode runs the following scenarios:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Test file</p></th>
+<th class="head"><p>Scenarios</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_text.py</span></code></p></td>
+<td><p>Single text case; 8 concurrent text cases</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_image.py</span></code></p></td>
+<td><p>Single image case; 8 concurrent image cases</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_mix_text_image.py</span></code></p></td>
+<td><p>8 concurrent mixed text-image cases</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="run-the-gate">
+<h2>Run the gate<a class="headerlink" href="#run-the-gate" title="Link to this heading">#</a></h2>
+<p>The scripts live in <code class="docutils literal notranslate"><span class="pre">tools/adaptation-gate-cases</span></code> of the plugin repository. Start an eager service
+in terminal 1:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/vllm-workspace/vllm-plugin-FL/tools/adaptation-gate-cases
+<span class="nv">MODEL_PATH</span><span class="o">=</span>/models/Qwen3.6-27B<span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">8000</span><span class="w"> </span>./run_serve_eager.sh
+</pre></div>
+</div>
+<p>Wait for the service and run every test in terminal 2:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/vllm-workspace/vllm-plugin-FL/tools/adaptation-gate-cases
+<span class="nv">MODEL_PATH</span><span class="o">=</span>/models/Qwen3.6-27B<span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">8000</span><span class="w"> </span>./run_test.sh
+</pre></div>
+</div>
+<p>Then stop the eager service and repeat with graph mode on a different port:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">MODEL_PATH</span><span class="o">=</span>/models/Qwen3.6-27B<span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">8001</span><span class="w"> </span>./run_serve_graph.sh
+<span class="nv">MODEL_PATH</span><span class="o">=</span>/models/Qwen3.6-27B<span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">8001</span><span class="w"> </span>./run_test.sh
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">run_test.sh</span></code> executes all of these commands even if an earlier file fails:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-sv<span class="w"> </span>test_text.py
+pytest<span class="w"> </span>-sv<span class="w"> </span>test_image.py
+pytest<span class="w"> </span>-sv<span class="w"> </span>test_mix_text_image.py
+</pre></div>
+</div>
+<p>Every model must be tested once with eager execution and once with graph execution; stop the
+current service before switching modes. The required combinations are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/models/Qwen3.6-27B</span></code> — <code class="docutils literal notranslate"><span class="pre">eager</span></code> and <code class="docutils literal notranslate"><span class="pre">graph</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/models/Qwen3.6-35B-A3B</span></code> — <code class="docutils literal notranslate"><span class="pre">eager</span></code> and <code class="docutils literal notranslate"><span class="pre">graph</span></code></p></li>
+</ul>
+<p>The serve scripts require <code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> and <code class="docutils literal notranslate"><span class="pre">PORT</span></code>. Their served model name uses
+<code class="docutils literal notranslate"><span class="pre">SERVED_MODEL_NAME</span></code> when set and otherwise falls back to <code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code>. <code class="docutils literal notranslate"><span class="pre">run_test.sh</span></code> requires <code class="docutils literal notranslate"><span class="pre">PORT</span></code>
+plus either <code class="docutils literal notranslate"><span class="pre">SERVED_MODEL_NAME</span></code> or <code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code>. Useful environment overrides are
+<code class="docutils literal notranslate"><span class="pre">TENSOR_PARALLEL_SIZE</span></code>, <code class="docutils literal notranslate"><span class="pre">MAX_MODEL_LEN</span></code>, and <code class="docutils literal notranslate"><span class="pre">SERVER_PID_FILE</span></code>. <code class="docutils literal notranslate"><span class="pre">run_test.sh</span></code> also supports
+<code class="docutils literal notranslate"><span class="pre">BASE_URL</span></code>, <code class="docutils literal notranslate"><span class="pre">SERVICE_TIMEOUT</span></code>, <code class="docutils literal notranslate"><span class="pre">REQUEST_TIMEOUT</span></code>, <code class="docutils literal notranslate"><span class="pre">SERVER_PID_FILE</span></code>, and <code class="docutils literal notranslate"><span class="pre">RESULTS_DIR</span></code>.</p>
+<p>You may use a custom command instead of <code class="docutils literal notranslate"><span class="pre">run_serve.sh</span></code>. It must expose an OpenAI-compatible
+endpoint, serve the model as <code class="docutils literal notranslate"><span class="pre">qwen</span></code>, and allow local images from this directory. For example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>vllm<span class="w"> </span>serve<span class="w"> </span>/models/Qwen3.6-27B<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--served-model-name<span class="w"> </span>/models/Qwen3.6-27B<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tensor-parallel-size<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-model-len<span class="w"> </span><span class="m">32768</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--allowed-local-media-path<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/images"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--trust-remote-code<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--enforce-eager
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--enforce-eager</span></code> for the eager run and remove it for the graph run, then run
+<code class="docutils literal notranslate"><span class="pre">MODEL_PATH=/path/to/model</span> <span class="pre">PORT=8000</span> <span class="pre">./run_test.sh</span></code> against each service. Both runs are mandatory
+even though the test client does not need to know the execution mode.</p>
+<p>Each pytest file or individual case can also be run directly. <code class="docutils literal notranslate"><span class="pre">PORT</span></code> and at least one of
+<code class="docutils literal notranslate"><span class="pre">SERVED_MODEL_NAME</span></code> or <code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> are required. The result label uses <code class="docutils literal notranslate"><span class="pre">MODEL_PATH</span></code> when available
+and otherwise uses <code class="docutils literal notranslate"><span class="pre">SERVED_MODEL_NAME</span></code>:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">MODEL_PATH</span><span class="o">=</span>/models/Qwen3.6-27B<span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">8000</span><span class="w"> </span>pytest<span class="w"> </span>-sv<span class="w"> </span>test_text.py
+<span class="nv">MODEL_PATH</span><span class="o">=</span>/models/Qwen3.6-27B<span class="w"> </span><span class="nv">PORT</span><span class="o">=</span><span class="m">8000</span><span class="w"> </span>pytest<span class="w"> </span>-sv<span class="w"> </span>test_image.py::test_image_single
+</pre></div>
+</div>
+</section>
+<section id="results-and-quality-checks">
+<h2>Results and quality checks<a class="headerlink" href="#results-and-quality-checks" title="Link to this heading">#</a></h2>
+<p>Each pytest case writes one JSON file under <code class="docutils literal notranslate"><span class="pre">results/MODEL/port-PORT/SCENARIO.json</span></code>. Use different
+ports for the eager and graph services when both result sets must be retained; reusing a port
+overwrites that model and port’s previous result. A two-model, two-port matrix contains 20 JSON
+files. Every file contains the exact inputs, API outputs, timing, per-response checks, and a
+pass/fail summary. On failure, a concise request-level error summary is also printed to the
+terminal.</p>
+<p>Responses must contain the expected semantic answer and must not contain empty output, <code class="docutils literal notranslate"><span class="pre">!!!</span></code>,
+mojibake, control characters, suspicious character runs, or repeated words or phrases. The detailed
+LLM introduction must also contain at least 256 characters. Number words and digits are treated as
+equivalent.</p>
+<p>Regenerate the image fixtures with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>generate_images.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="run-inference-task.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Run an inference task</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../dispatch_user_guide/dispatch-user-guide.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Operator dispatch user guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-matrix">Test matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-gate">Run the gate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-and-quality-checks">Results and quality checks</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../vllm_plugin_fl_zh/getting_started/adaptation-gate.html">中文</a></body>
+</html>

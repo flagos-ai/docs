@@ -1,0 +1,1004 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="用户指南" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/user-guide.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本指南介绍如何配置 FlagScale 以及如何运行训练、推理、服务和强化学习任务。 多平台训练与测试- 1. 使用的组件版本, 2. 平台环境变量, 3. 安装 FlagScale, 4. 配置训练任务, 5. 运行训练测试, 6. 使用 FlagOS 算子栈运行, 7. 已知问题与规避方式, 8. 注意事项.. 第一步：配置 YAML 文件: FlagScale 使用 Hydra 进行配置管理。每个任务由两个协同工作的 YAML 文件驱动：一个实验级文件和一个任务级文件，均位于 examples/ 目录下。运行任务前，需要先配置这些文件。 实验级 YAML: 以 examples/q..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="本指南介绍如何配置 FlagScale 以及如何运行训练、推理、服务和强化学习任务。 多平台训练与测试- 1. 使用的组件版本, 2. 平台环境变量, 3. 安装 FlagScale, 4. 配置训练任务, 5. 运行训练测试, 6. 使用 FlagOS 算子栈运行, 7. 已知问题与规避方式, 8. 注意事项.. 第一步：配置 YAML 文件: FlagScale 使用 Hydra 进行配置管理。每个任务由两个协同工作的 YAML 文件驱动：一个实验级文件和一个任务级文件，均位于 examples/ 目录下。运行任务前，需要先配置这些文件。 实验级 YAML: 以 examples/q..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>用户指南 &#8212; FlagScale 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/user-guide.3194e080-c970-44fc-932f-d140c2cc98b1.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/user-guide';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/user-guide.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="多平台训练与测试" href="multi-platform-training.html" />
+    <link rel="prev" title="安装 FlagScale" href="install.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagScale 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagScale 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagScale 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v210.html">FlagScale v2.1.0 发布说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v200.html">FlagScale v2.0.0 发布说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v100.html">FlagScale v1.0.0 发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagScale_overview/FlagScale-overview.html">FlagScale 概览</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagScale_overview/features.html">特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FlagScale_overview/workflow.html">工作流</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="getting-started.html">快速入门</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">安装 FlagScale</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">用户指南</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="multi-platform-training.html">多平台训练与测试</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/user-guide.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>用户指南</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#yaml">第一步：配置 YAML 文件</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">实验级 YAML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">任务级 YAML</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">第二步：运行任务</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">训练</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">推理</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">服务</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">强化学习</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>用户指南<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>本指南介绍如何配置 FlagScale 以及如何运行训练、推理、服务和强化学习任务。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="multi-platform-training.html">多平台训练与测试</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#id2">1. 使用的组件版本</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#id3">2. 平台环境变量</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#flagscale">3. 安装 FlagScale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#id4">4. 配置训练任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#id6">5. 运行训练测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#flagos">6. 使用 FlagOS 算子栈运行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#id8">7. 已知问题与规避方式</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#id9">8. 注意事项</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="yaml">
+<h2>第一步：配置 YAML 文件<a class="headerlink" href="#yaml" title="Link to this heading">#</a></h2>
+<p>FlagScale 使用 <a class="reference external" href="https://hydra.cc/">Hydra</a> 进行配置管理。每个任务由两个协同工作的 YAML 文件驱动：一个实验级文件和一个任务级文件，均位于 <code class="docutils literal notranslate"><span class="pre">examples/</span></code> 目录下。运行任务前，需要先配置这些文件。</p>
+<section id="id2">
+<h3>实验级 YAML<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>以 <code class="docutils literal notranslate"><span class="pre">examples/qwen3/conf/serve.yaml</span></code> 为例说明此配置文件。</p>
+<p>实验级文件是 <code class="docutils literal notranslate"><span class="pre">flagscale</span></code> 命令的入口。它定义了运行的全局上下文：</p>
+<ul class="simple">
+<li><p>输出存储位置：<code class="docutils literal notranslate"><span class="pre">exp_dir:</span> <span class="pre">outputs/${experiment.exp_name}</span></code></p></li>
+<li><p>使用哪个后端引擎：<code class="docutils literal notranslate"><span class="pre">backend:</span> <span class="pre">vllm</span></code></p></li>
+<li><p>加载哪个任务级文件：<code class="docutils literal notranslate"><span class="pre">defaults:</span> <span class="pre">-</span> <span class="pre">serve:</span> <span class="pre">8b</span></code></p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># 示例：examples/qwen3/conf/serve.yaml</span>
+<span class="nt">defaults</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8b</span>
+
+<span class="nt">experiment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">exp_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qwen3_8b</span>
+<span class="w">  </span><span class="nt">exp_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outputs/${experiment.exp_name}</span>
+<span class="w">  </span><span class="nt">task</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serve</span>
+<span class="w">    </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm</span>
+<span class="w">  </span><span class="nt">runner</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">use_fs_serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">envs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">CUDA_VISIBLE_DEVICES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">CUDA_DEVICE_MAX_CONNECTIONS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+
+<span class="nt">hydra</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">run</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${experiment.exp_dir}/hydra</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>任务级 YAML<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>以 <code class="docutils literal notranslate"><span class="pre">examples/qwen3/conf/serve/8b.yaml</span></code> 为例说明此配置文件。</p>
+<p>任务级 YAML 文件指定模型、数据集以及训练或推理等具体任务的参数。此文件中的每个参数都直接映射到后端引擎接受的参数，其中连字符（-）替换为下划线（\_）。</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># 示例：examples/qwen3/conf/serve/8b.yaml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm_model</span>
+<span class="w">  </span><span class="nt">engine_args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${oc.env:QWEN3_PATH}</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0</span>
+<span class="w">    </span><span class="nt">uvicorn_log_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${oc.env:QWEN3_PORT}</span>
+<span class="w">    </span><span class="nt">gpu_memory_utilization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<span class="w">    </span><span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">no_enable_prefix_caching</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">compilation_config</span><span class="p">:</span><span class="w"> </span><span class="s">'{"full_cuda_graph":</span><span class="nv"> </span><span class="s">true}'</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>第二步：运行任务<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>FlagScale 为各种任务提供统一的运行器，包括训练、推理、强化学习和服务。只需指定配置文件，即可通过一条 <code class="docutils literal notranslate"><span class="pre">flagscale</span></code> 命令运行任务。运行器会自动加载配置并执行任务。以下各节演示如何运行分布式训练任务。</p>
+<section id="id5">
+<h3>训练<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>需要 Megatron-LM-FL 环境</p>
+<ol class="arabic">
+<li><p>准备数据集演示和分词器：</p>
+<ul class="simple">
+<li><p>下载数据集：我们提供了来自 <a class="reference external" href="https://pile.eleuther.ai/">Pile</a> 数据集的一个小型预处理数据（<a class="reference external" href="https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.bin">bin</a> 和 <a class="reference external" href="https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.idx">idx</a>）。</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>./data<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>./data
+wget<span class="w"> </span>https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.idx
+wget<span class="w"> </span>https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.bin
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>下载分词器</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>./qwentokenizer<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>./qwentokenizer
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/tokenizer_config.json"</span><span class="w"> </span>-O<span class="w"> </span>tokenizer_config.json
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/qwen.tiktoken"</span><span class="w"> </span>-O<span class="w"> </span>qwen.tiktoken
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/qwen_generation_utils.py"</span><span class="w"> </span>-O<span class="w"> </span>qwen_generation_utils.py
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/tokenization_qwen.py"</span><span class="w"> </span>-O<span class="w"> </span>tokenization_qwen.py
+</pre></div>
+</div>
+</li>
+<li><p>修改任务级 YAML 文件中的数据集和分词器路径，以及实验级 YAML 文件中的模型名称
+{style=lower-alpha}</p>
+<ol class="arabic simple">
+<li><p><strong>任务级 YAML 文件</strong>：修改 ./examples/qwen3/conf/train/0\_6b.yaml 中的 <code class="docutils literal notranslate"><span class="pre">data_path</span></code> 和 <code class="docutils literal notranslate"><span class="pre">tokenizer_path</span></code>。</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data</span><span class="p">:</span>
+<span class="w"> </span><span class="nt">data_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data/enron_emails_demo_text_document_qwen</span><span class="w">    </span><span class="c1"># 在此修改 data_path</span>
+<span class="w"> </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w"> </span><span class="nt">no_mmap_bin_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w"> </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">     </span><span class="nt">legacy_tokenizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">     </span><span class="nt">tokenizer_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QwenTokenizerFS</span>
+<span class="w">     </span><span class="nt">tokenizer_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./qwentokenizer</span><span class="w">   </span><span class="c1"># 在此修改 tokenizer_path</span>
+<span class="w">     </span><span class="nt">vocab_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">151936</span>
+<span class="w">     </span><span class="nt">make_vocab_size_divisible_by</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>实验级 YAML</strong>：修改 ./examples/qwen3/conf/train.yaml 中的 <code class="docutils literal notranslate"><span class="pre">train</span></code> 模型名称。该值必须与上述文件名 <strong>0\_6b</strong>.yaml 匹配。</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0_6b</span><span class="w">  </span><span class="c1"># 修改：train 值必须与其对应的配置文件名匹配</span>
+</pre></div>
+</div>
+</li>
+<li><p>启动分布式训练任务：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/train.yaml
+<span class="c1"># 或</span>
+flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/train.yaml
+</pre></div>
+</div>
+</li>
+<li><p>停止分布式训练任务：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>--stop
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id6">
+<h3>推理<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>需要 vLLM-FL 环境</p>
+<ol class="arabic">
+<li><p>下载推理模型</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>modelscope<span class="w"> </span>download<span class="w"> </span>--model<span class="w"> </span>Qwen/Qwen3-4B<span class="w"> </span>--local_dir<span class="w"> </span>./Qwen3-4B
+</pre></div>
+</div>
+</li>
+<li><p>修改任务级 YAML 文件中的模型路径和实验级 YAML 文件中的模型名称
+{style=lower-alpha}</p>
+<ol class="arabic simple">
+<li><p><strong>任务级 YAML 文件</strong>：修改 <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/inference/4b.yaml</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">model</span></code> 路径。</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">llm</span><span class="p">:</span>
+<span class="w"> </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./Qwen3-4B</span><span class="w">         </span><span class="c1"># 修改：设置模型目录</span>
+<span class="w"> </span><span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w"> </span><span class="nt">tensor_parallel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w"> </span><span class="nt">pipeline_parallel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w"> </span><span class="nt">gpu_memory_utilization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<span class="w"> </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1234</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>实验级 YAML</strong>：修改 <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/inference_fl.yaml</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">inference</span></code> 模型名称。该值必须与上述文件名 <strong>4b</strong>.yaml 匹配。</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">defaults</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">_self_</span>
+<span class="o">-</span> <span class="n">inference</span><span class="p">:</span> <span class="mi">4</span><span class="n">b</span>    <span class="c1"># 修改：Inference 值必须与其对应的配置文件名匹配</span>
+</pre></div>
+</div>
+</li>
+<li><p>启动推理：</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>inference<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/inference_fl.yaml
+<span class="c1"># 或</span>
+flagscale<span class="w"> </span>inference<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/inference_fl.yaml
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>服务<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>下载服务模型</p></li>
+<li><p>修改任务级 YAML 文件中的模型路径和实验级 YAML 文件中的模型名称
+{style=lower-alpha}</p>
+<ol class="arabic simple">
+<li><p><strong>任务级 YAML 文件</strong>：修改 <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/serve/0_6b.yaml</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">model</span></code> 路径。</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm_model</span>
+<span class="nt">engine_args</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./Qwen3-0.6B</span><span class="w">          </span><span class="c1"># 修改：设置模型目录</span>
+<span class="w">   </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0</span>
+<span class="w">   </span><span class="nt">max_model_len</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span>
+<span class="w">   </span><span class="nt">max_num_seqs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">   </span><span class="nt">uvicorn_log_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+<span class="w">   </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30000</span><span class="w">                  </span><span class="c1"># 您环境中可用的端口，例如：30000</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>实验级 YAML</strong>：修改 <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/serve.yaml</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">serve</span></code> 模型名称。</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0_6b</span><span class="w">         </span><span class="c1"># 修改：Serve 值必须与其对应的配置文件名匹配</span>
+<span class="nt">experiment</span><span class="p">:</span>
+<span class="nt">exp_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qwen3-0.6b</span><span class="w">  </span><span class="c1"># 根据需要修改以便测试区分</span>
+<span class="nt">exp_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outputs/${experiment.exp_name}</span>
+<span class="nt">task</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serve</span>
+<span class="w">   </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm</span>
+<span class="nt">runner</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">hostfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">   </span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">use_fs_serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">envs</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">CUDA_VISIBLE_DEVICES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">   </span><span class="nt">CUDA_DEVICE_MAX_CONNECTIONS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>启动服务：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>serve<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/serve.yaml
+<span class="c1"># 或</span>
+flagscale<span class="w"> </span>serve<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/serve.yaml
+</pre></div>
+</div>
+</li>
+<li><p>停止服务：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flagscale</span> <span class="n">serve</span> <span class="n">qwen3</span> <span class="o">--</span><span class="n">stop</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id8">
+<h3>强化学习<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>需要 verl-FL 环境</p>
+<ol class="arabic">
+<li><p>下载模型</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>modelscope<span class="w"> </span>download<span class="w"> </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span>--local_dir<span class="w"> </span>./Qwen3-0.6B
+</pre></div>
+</div>
+</li>
+<li><p>下载数据集</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">gsm8k</span> <span class="o">&amp;&amp;</span> <span class="n">cd</span> <span class="n">gsm8k</span>
+<span class="n">wget</span> <span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/rl/datasets/gsm8k/train.parquet"</span>
+<span class="n">wget</span> <span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/rl/datasets/gsm8k/test.parquet"</span>
+</pre></div>
+</div>
+</li>
+<li><p>修改任务级 YAML 文件中的模型路径和实验级 YAML 文件中的模型名称
+{style=lower-alpha}</p>
+<ol class="arabic">
+<li><p><strong>任务级 YAML 文件</strong>：在 <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/rl/0_6b.yaml</span></code> 中</p>
+<ul class="simple">
+<li><p>修改 <code class="docutils literal notranslate"><span class="pre">train_files</span></code>（训练数据集路径）和 <code class="docutils literal notranslate"><span class="pre">val_files</span></code>（测试数据集路径）。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">:</span>
+   <span class="n">train_files</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">gsm8k</span><span class="o">/</span><span class="n">train</span><span class="o">.</span><span class="n">parquet</span> <span class="c1"># 修改：设置您的训练数据集</span>
+   <span class="n">val_files</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">gsm8k</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">parquet</span> <span class="c1"># 修改：设置您的测试数据集</span>
+   <span class="n">train_batch_size</span><span class="p">:</span> <span class="mi">1024</span>
+   <span class="n">max_prompt_length</span><span class="p">:</span> <span class="mi">512</span>
+   <span class="n">max_response_length</span><span class="p">:</span> <span class="mi">1024</span>
+   <span class="n">filter_overlong_prompts</span><span class="p">:</span> <span class="n">true</span>
+   <span class="n">truncation</span><span class="p">:</span> <span class="s2">"error"</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>修改 <code class="docutils literal notranslate"><span class="pre">path</span></code>（模型检查点路径）。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">actor_rollout_ref</span><span class="p">:</span>
+   <span class="n">model</span><span class="p">:</span>
+      <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">ckpt</span><span class="o">/</span><span class="n">Qwen3</span><span class="o">-</span><span class="mf">0.6</span><span class="n">B</span> <span class="c1"># 修改：设置您的模型检查点目录</span>
+      <span class="n">use_remove_padding</span><span class="p">:</span> <span class="n">true</span>
+      <span class="n">enable_gradient_checkpointing</span><span class="p">:</span> <span class="n">true</span>
+      <span class="n">trust_remote_code</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>实验级 YAML</strong>：修改 <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/rl.yaml</span></code> 中的 exp\_dir（实验目录）和 runtime\_env（运行时环境路径）。</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="p">:</span>
+   <span class="n">exp_name</span><span class="p">:</span> <span class="mi">0_6</span><span class="n">b</span>
+   <span class="n">exp_dir</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">qwen3</span><span class="o">-</span><span class="n">rl</span><span class="o">/</span> <span class="c1"># 修改：设置您的实验目录</span>
+   <span class="n">runner</span><span class="p">:</span>
+      <span class="n">runtime_env</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">verl</span><span class="o">-</span><span class="n">FL</span><span class="o">/</span><span class="n">verl</span><span class="o">/</span><span class="n">trainer</span><span class="o">/</span><span class="n">runtime_env</span><span class="o">.</span><span class="n">yaml</span> <span class="c1"># 修改：设置您的 runtime_env.yaml</span>
+</pre></div>
+</div>
+</li>
+<li><p>启动强化学习：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>rl<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/rl.yaml
+<span class="c1"># 或</span>
+flagscale<span class="w"> </span>rl<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/rl.yaml
+</pre></div>
+</div>
+<p>您可以在实验目录中查看输出。</p>
+</li>
+<li><p>停止强化学习：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>rl<span class="w"> </span>qwen3<span class="w"> </span>--stop
+</pre></div>
+</div>
+<p>或强制停止 Ray 集群。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ray</span> <span class="n">stop</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="install.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">安装 FlagScale</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="multi-platform-training.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">多平台训练与测试</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#yaml">第一步：配置 YAML 文件</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">实验级 YAML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">任务级 YAML</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">第二步：运行任务</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">训练</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">推理</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">服务</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">强化学习</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagscale_en/getting_started/user-guide.html">English</a></body>
+</html>

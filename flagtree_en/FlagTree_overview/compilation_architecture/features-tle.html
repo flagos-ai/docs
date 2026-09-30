@@ -1,0 +1,887 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="TLE-Lite, TLE-Struct, and TLE-Raw" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="FlagTree_overview/compilation_architecture/features-tle.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="This section introduces TLE-Lite, TLE-Struct, and TLE-Raw and how they are handled in the compilation process. TLE-Lite, TLE-Struct, and TLE-Raw introduction: TLE-Lite, TLE-Struct, and TLE-Raw are the compiler languages, located in the middle layer of the AI ecosystem. The upper layer connects AI..." />
+<meta property="og:image" content="_images/three-level-tle.png" />
+<meta property="og:image:alt" content="alt text" />
+<meta name="description" content="This section introduces TLE-Lite, TLE-Struct, and TLE-Raw and how they are handled in the compilation process. TLE-Lite, TLE-Struct, and TLE-Raw introduction: TLE-Lite, TLE-Struct, and TLE-Raw are the compiler languages, located in the middle layer of the AI ecosystem. The upper layer connects AI..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>TLE-Lite, TLE-Struct, and TLE-Raw &#8212; FlagTree Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../../_static/tippy/FlagTree_overview/compilation_architecture/features-tle.75be92e4-9ed3-4ee7-8d4e-15ef785ce2cb.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'FlagTree_overview/compilation_architecture/features-tle';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/FlagTree_overview/compilation_architecture/features-tle.html" />
+    <link rel="icon" href="../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FLIR: Unified intermediate layer" href="flir.html" />
+    <link rel="prev" title="Hints" href="features-hints.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree Documentation - Home"/>
+    <img src="../../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    FlagTree Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../release_notes/release-notes.html">Release Notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v070.html">FlagTree 0.7.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v060.html">FlagTree 0.6.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v050.html">FlagTree 0.5.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v040.html">FlagTree 0.4.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v030.html">FlagTree 0.3.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v020.html">FlagTree 0.2.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v010.html">FlagTree 0.1.0 release</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../FlagTree-overview.html">FlagTree Overview</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../features.html">Features</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="compilation-architecture.html">FlagTree compilation architecture</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common-architecture.html">Common architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flagtree-extensible-framework.html">FlagTree extensible framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features-hints.html">Hints</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">TLE-Lite, TLE-Struct, and TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flir.html">FLIR: Unified intermediate layer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../getting_started/getting-started.html">Getting Started</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install.html">Install FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install-arm64-cpu.html">Install on Arm64 CPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/user-guide.html">User Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-hints.html">Use Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-lite.html">Use TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-struct.html">Use TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-raw.html">Use TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../user_guide/use-tle-cpu.html">Use TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/examples.html">Examples</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/FlagTree_overview/compilation_architecture/features-tle.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TLE-Lite, TLE-Struct, and TLE-Raw</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-lite-tle-struct-and-tle-raw-introduction">TLE-Lite, TLE-Struct, and TLE-Raw introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-in-the-compilation-process">TLE in the compilation process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-gpu-commonir-lowering">Optional GPU CommonIR lowering</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="tle-lite-tle-struct-and-tle-raw">
+<h1>TLE-Lite, TLE-Struct, and TLE-Raw<a class="headerlink" href="#tle-lite-tle-struct-and-tle-raw" title="Link to this heading">#</a></h1>
+<p>This section introduces TLE-Lite, TLE-Struct, and TLE-Raw and how they are handled in the compilation process.</p>
+<section id="tle-lite-tle-struct-and-tle-raw-introduction">
+<h2>TLE-Lite, TLE-Struct, and TLE-Raw introduction<a class="headerlink" href="#tle-lite-tle-struct-and-tle-raw-introduction" title="Link to this heading">#</a></h2>
+<p>TLE-Lite, TLE-Struct, and TLE-Raw are the compiler languages, located in the middle layer of the AI ecosystem. The upper layer connects AI frameworks through graph compilers and operator libraries, while the lower layer connects to various hardware runtimes.</p>
+<p>The following diagram demonstrates the location of TLE-Lite, TLE-Struct, and TLE-Raw in the AI ecosystem.</p>
+<p><a href="../../_images/three-level-tle.png" data-lightbox="image-set">
+<img alt="alt text" src="../../_images/three-level-tle.png" /></a>
+</p>
+<p>These three compiler languages provide different levels of performance optimizations for different users:</p>
+<ul class="simple">
+<li><p>TLE-Lite allows users to modify existing Triton kernels with minimal changes, while being compatible with various hardware backends. It can be used by algorithm engineers in quick optimization scenarios.</p></li>
+<li><p>TLE-Struct allows users to explicitly defines structural mapping between computation and data for different clusters with different hardware architectures, such as GPGPU and DSA. It can be used by developers who have a certain understanding of characteristics and optimization of targeted hardware.</p></li>
+<li><p>TLE-Raw allows users to directly modify vendors’ native programming languages. It can be used by developers who have a good understanding of targeted hardware. These developers are mainly the performance optimization experts.</p></li>
+</ul>
+<p>Hints, TLE-Lite and TLE-Struct will eventually lower to LLVM (Low Level Virtual Machine) IR (Intermediate Representation) through FLIR (that is, FlagTree IR), while TLE-Raw will lower to LLVM IR through the corresponding compilation pipeline of the language, such as the vendor’s private compiler. Finally, they will be linked together to jointly generate a complete kernel for the runtime to load and execute.</p>
+<p>Low-level inter-GPU and inter-node communication is also split by level: the distributed primitives of TLE-Lite and TLE-Struct perform cross-device communication through FlagCX, while TLE-Raw is lower level, sitting at the same level as Raw, and provides device-side communication interfaces directly through NVSHMEM, which is used only for NVIDIA GPUs.</p>
+<p>The following diagram illustrates the TLE-Raw’s compatibility with existing DSLs (TileLang and cuTile) as well as essential libraries and tools (PyCUDA and MLIR Pybind), and also the location in the AI ecosystem.</p>
+<p><a href="../../_images/tle-raw.png" data-lightbox="image-set">
+<img alt="alt text" src="../../_images/tle-raw.png" /></a>
+</p>
+<p>For how to use TLE, see <a class="reference internal" href="../../user_guide/use-tle-lite.html"><span class="std std-doc">Use TLE-Lite</span></a>, <a class="reference internal" href="../../user_guide/use-tle-struct.html"><span class="std std-doc">Use TLE-Struct</span></a>, and <a class="reference internal" href="../../user_guide/use-tle-raw.html"><span class="std std-doc">Use TLE-Raw</span></a>.</p>
+</section>
+<section id="tle-in-the-compilation-process">
+<h2>TLE in the compilation process<a class="headerlink" href="#tle-in-the-compilation-process" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Purpose and scope</p>
+<ul>
+<li><p>Extends Triton with explicit shared and tensor memory management, asynchronous data movement via Tensor Memory Accelerator (TMA), and pipeline control optimized for NVIDIA Hopper-class GPUs for now.</p></li>
+<li><p>Frontend APIs live under <code class="docutils literal notranslate"><span class="pre">tle</span></code> and lower into custom MLIR dialect and processed by passes under <code class="docutils literal notranslate"><span class="pre">tle</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Frontend DSL layer (Python)</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.language.core</span></code> overrides key <code class="docutils literal notranslate"><span class="pre">tl</span></code> builtins to attach extra attributes (for example, “tt.load.async”) and the <code class="docutils literal notranslate"><span class="pre">buffered_tensor</span></code> handles representing shared or tensor memory allocations (core.py) are returned. For example, the key <code class="docutils literal notranslate"><span class="pre">tl</span></code> builtins are <code class="docutils literal notranslate"><span class="pre">load</span></code>, <code class="docutils literal notranslate"><span class="pre">alloc</span></code>, <code class="docutils literal notranslate"><span class="pre">copy</span></code>, <code class="docutils literal notranslate"><span class="pre">local_load</span></code>, <code class="docutils literal notranslate"><span class="pre">local_store</span></code>, and loop helpers.</p></li>
+<li><p>GPU-specific helpers in GPU define layouts (<code class="docutils literal notranslate"><span class="pre">swizzled_shared_layout</span></code>, <code class="docutils literal notranslate"><span class="pre">nv_mma_shared_layout</span></code>, and so on.), scopes (<code class="docutils literal notranslate"><span class="pre">smem</span></code>, <code class="docutils literal notranslate"><span class="pre">tmem</span></code>), and <code class="docutils literal notranslate"><span class="pre">buffered_tensor</span></code> semantics. These semantics wrap IR memdesc types while keeping Triton-style type checking.`</p></li>
+<li><p>Users import these symbols (for example, <code class="docutils literal notranslate"><span class="pre">tle.alloc</span></code>, <code class="docutils literal notranslate"><span class="pre">tle.copy</span></code>, <code class="docutils literal notranslate"><span class="pre">tle.pipeline</span></code>) inside <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> kernels to allocate SMEM tiles, launch async copies, or orchestrate staged loops.</p></li>
+</ul>
+</li>
+<li><p>Semantic validation</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">TLESemantic</span></code> in <code class="docutils literal notranslate"><span class="pre">semantic.py</span></code> runs alongside Triton’s semantic layer. It validates shapes, dtypes, and copy compatibility before lowering, providing early error messages and adapting constexpr inputs.</p></li>
+<li><p>Semantic helpers call into custom builder hooks (exposed through the C++ bridge) to emit <code class="docutils literal notranslate"><span class="pre">LocalAllocOp</span></code>, <code class="docutils literal notranslate"><span class="pre">TMACopyOp</span></code>, and so on., ensuring Python APIs map 1:1 to TTIR constructs.</p></li>
+</ul>
+</li>
+<li><p>TLE-Raw and EDSL Layer</p>
+<ul>
+<li><p>TLE-Raw (raw) exposes a lightweight MLIR-based EDSL (Embedded Domain-Specific Language) for writing dialect-specific intrinsics directly. Decorators like <code class="docutils literal notranslate"><span class="pre">&#64;dialect(name=&quot;mlir&quot;)</span></code> build LLVM IR from Python ASTs via <code class="docutils literal notranslate"><span class="pre">EdslMLIRJITFunction</span></code>, enabling backend developers to prototype kernels or helper ops outside the high-level Triton syntax.</p></li>
+<li><p>The TLE-Raw runtime (<code class="docutils literal notranslate"><span class="pre">call()</span></code> helper) materializes <code class="docutils literal notranslate"><span class="pre">tle::DSLRegionOp</span></code> nodes whose bodies are later inlined by passes.</p></li>
+</ul>
+</li>
+<li><p>C++ bridge and dialect</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">triton_tle.cc</span></code> registers additional builder methods (creating encoding attributes, memdesc types, TMACopy ops, DSL regions) onto Triton’s <code class="docutils literal notranslate"><span class="pre">TritonOpBuilder</span></code>, and wires new passes plus raw IR helpers into Python through <code class="docutils literal notranslate"><span class="pre">pybind11</span></code>.</p></li>
+<li><p>The MLIR dialect resides in the dialect directory, encompassing IR definitions and Analysis, Conversion, and Transforms infrastructure that mirrors upstream Triton conventions.</p></li>
+</ul>
+</li>
+<li><p>Pass and lowering pipeline</p>
+<ul>
+<li><p>Pass registrations are defined in <code class="docutils literal notranslate"><span class="pre">Passes.td</span></code> and exposed as Python APIs, including <code class="docutils literal notranslate"><span class="pre">add_early_assign_memory_space</span></code>, <code class="docutils literal notranslate"><span class="pre">add_lower_async_load</span></code>, <code class="docutils literal notranslate"><span class="pre">add_lower_tma_copy</span></code>, <code class="docutils literal notranslate"><span class="pre">add_tle_convert_arg_to_memdesc</span></code>, <code class="docutils literal notranslate"><span class="pre">add_tle_dsl_region_inline</span></code>.</p></li>
+<li><p>Key transformations:</p>
+<ul>
+<li><p>Early Assign Memory Space rewrites tensors tagged with <code class="docutils literal notranslate"><span class="pre">tt.memory_space=&quot;shared_memory&quot;</span></code> into explicit local alloc and store sequences and removes the attribute, and exposes concrete SMEM ops (<code class="docutils literal notranslate"><span class="pre">TleEarlyAssignMemorySpace.cpp</span></code>) for subsequent passes.</p></li>
+<li><p>Lower Async Load looks for loads marked with “tt.load.async” (set by <code class="docutils literal notranslate"><span class="pre">tle.load</span></code>) and converts them into Hopper-style async copy plus commit or wait chains that feed <code class="docutils literal notranslate"><span class="pre">LocalLoadOps</span></code>. It also deduplicates redundant allocations (<code class="docutils literal notranslate"><span class="pre">TleLowerAsyncLoad.cpp</span></code>).</p></li>
+<li><p>Lower TMA Copy lowers high-level <code class="docutils literal notranslate"><span class="pre">TMACopyOp</span></code> (emitted by <code class="docutils literal notranslate"><span class="pre">tle.copy</span></code> with tensor descriptors) into NVIDIA TMA intrinsics, handling both GM→SMEM and SMEM→GM directions with barrier management (<code class="docutils literal notranslate"><span class="pre">TleLowerTmaCopy.cpp</span></code>).</p></li>
+<li><p>Convert Arg To MemDesc materializes memdesc-compatible operands and results within DSL regions by inserting temporary local alloc and load sequences. This allows generic Triton passes to reason about these operands and results (<code class="docutils literal notranslate"><span class="pre">ConvertArgToMemDesc.cpp</span></code>).</p></li>
+<li><p>DSL Region Inline splices <code class="docutils literal notranslate"><span class="pre">tle::DSLRegionOp</span></code> bodies back into surrounding CFG (Control Flow Graph) blocks, replacing yields with branches once TLE-Raw kernels are lowered (<code class="docutils literal notranslate"><span class="pre">DSLRegionInline.cpp</span></code>).</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Backend distribution</p>
+<ul>
+<li><p>Backend-specific logic currently targets NVIDIA (see <code class="docutils literal notranslate"><span class="pre">nvidia</span></code> and the use of <code class="docutils literal notranslate"><span class="pre">triton::nvidia_gpu</span></code> intrinsics inside passes). Other hardware backends can be added by reusing the TLE-Raw DSL and pass hooks and implementing their own lowering passes and encodings under <code class="docutils literal notranslate"><span class="pre">third_party/&lt;backend&gt;/backend/compiler.py</span></code>. This extension mechanism is similar to how HINTS are dispatched.</p></li>
+<li><p>Pass wrappers exported from <code class="docutils literal notranslate"><span class="pre">triton_tle.cc</span></code> let each backend opt into only the passes it supports when assembling its pipeline. For example, NVIDIA enables TMA lowering while another backend might stop after memory-space tagging.</p></li>
+</ul>
+</li>
+<li><p>Testing and examples</p>
+<ul>
+<li><p>Integration tests under <code class="docutils literal notranslate"><span class="pre">tle</span></code> cover end-to-end kernels for pipeline loops, GEMM, and TMA copies. These tests ensure alignment between Python APIs, semantic checks, and passes.</p></li>
+<li><p>Developers can run <code class="docutils literal notranslate"><span class="pre">python/test/tle/run_tests.py</span></code> after modifying either the Python DSL or MLIR passes to catch regressions quickly.</p></li>
+</ul>
+</li>
+<li><p>Extending TLE</p>
+<ul>
+<li><p>New APIs should mirror the established pattern: add Python surface ops with semantic validation → expose necessary builder hooks → create and extend dialect ops → add lowering passes and register them for backends.</p></li>
+<li><p>Centralize layout and scope abstractions in <code class="docutils literal notranslate"><span class="pre">types.py</span></code> to enable toggling future hardware (for example, tensor memory) without touching users’ code, and document any new passes in <code class="docutils literal notranslate"><span class="pre">Passes.td</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="optional-gpu-commonir-lowering">
+<h2>Optional GPU CommonIR lowering<a class="headerlink" href="#optional-gpu-commonir-lowering" title="Link to this heading">#</a></h2>
+<p>The default NVIDIA build keeps the native TLE GPU lowering path. When CommonIR is explicitly enabled, the frontend first keeps structured buffer operations as CommonIR TileIR and then converts them to native TTGIR:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tle.gpu.* -&gt; tile.* / !tile.buf -&gt; CommonIRToTTGIR -&gt; native TTGIR
+</pre></div>
+</div>
+<p>This path makes frontend buffer semantics explicit without changing the IR contract the NVIDIA backend finally receives. The <code class="docutils literal notranslate"><span class="pre">CommonIRToTTGIR</span></code> pass must eliminate all <code class="docutils literal notranslate"><span class="pre">tile.*</span></code>, <code class="docutils literal notranslate"><span class="pre">!tile.buf</span></code>, and temporary buffer-to-memdesc bridges before entering the subsequent TTGIR pipeline.</p>
+<p>This path is selected at build time, is off by default, and currently supports only the default NVIDIA backend. Put a compatible version of the official <a class="reference external" href="https://github.com/flagos-ai/flir">FLIR</a> <code class="docutils literal notranslate"><span class="pre">main</span></code> branch into <code class="docutils literal notranslate"><span class="pre">third_party/flir</span></code>, then build FlagTree:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/flir.git<span class="w"> </span>third_party/flir
+<span class="nv">FLAGTREE_COMMON_IR</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--no-build-isolation
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">FLAGTREE_COMMON_IR</span></code> environment variable sets the internal CMake variable <code class="docutils literal notranslate"><span class="pre">FLAGTREE_COMMON_IR_ENABLED</span></code>. When enabled, the C++ build defines <code class="docutils literal notranslate"><span class="pre">__FLAGTREE_COMMON_IR__</span></code>, exposes a unified capability-query interface to Python, and registers the CommonIR dialect and conversion pass only in this build. Do not set <code class="docutils literal notranslate"><span class="pre">FLAGTREE_BACKEND</span></code> at the same time. Switching between the native and CommonIR paths requires rebuilding FlagTree; it is not a per-kernel runtime option.</p>
+<p>The supported GPU buffer forms are as follows:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>TLE / frontend form</p></th>
+<th class="head"><p>CommonIR form</p></th>
+<th class="head"><p>Native TTGIR result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc</span></code> (SMEM; alias is not supported by CommonIR)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.alloc</span></code> / <code class="docutils literal notranslate"><span class="pre">!tile.buf&lt;...,</span> <span class="pre">#shared&gt;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ttg.local_alloc</span></code> / <code class="docutils literal notranslate"><span class="pre">!ttg.memdesc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.copy</span></code> (pointer copy of a whole buffer)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.copy</span></code></p></td>
+<td><p>Synchronous or asynchronous TTGIR copy ops</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">buf.load()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.to_tensor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ttg.local_load</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">buf.store(value)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.store_tensor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ttg.local_store</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>buffered-tensor slot / view</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.subview</span></code></p></td>
+<td><p>memdesc subview</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> on a local buffer</p></td>
+<td><p>Temporary <code class="docutils literal notranslate"><span class="pre">!tile.buf</span></code> to <code class="docutils literal notranslate"><span class="pre">!ttg.memdesc</span></code> bridge</p></td>
+<td><p>Existing TLE local-pointer ops</p></td>
+</tr>
+<tr class="row-even"><td><p>Shared-memory operands of <code class="docutils literal notranslate"><span class="pre">tle.gpu.wgmma</span></code>, including transposes</p></td>
+<td><p>buffer-to-memdesc bridge</p></td>
+<td><p>Existing descriptor views and WGMMA lowering</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">buf</span></code> is a <code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code>; its <code class="docutils literal notranslate"><span class="pre">load()</span></code> / <code class="docutils literal notranslate"><span class="pre">store(value)</span></code> methods are written identically in native and CommonIR builds. The native build implements them through <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">tl.load</span></code> / <code class="docutils literal notranslate"><span class="pre">tl.store</span></code>; the CommonIR build keeps whole-buffer TileIR operations until the conversion stage. The former experimental interfaces <code class="docutils literal notranslate"><span class="pre">tle.gpu.to_tensor(buf)</span></code> / <code class="docutils literal notranslate"><span class="pre">tle.gpu.store_tensor(value,</span> <span class="pre">buf)</span></code> have been replaced by these two methods, with no legacy aliases retained.</p>
+<p>TMA descriptor copies keep the existing TMA operations after the buffer-to-memdesc bridge. GM-to-shared TMA copies additionally preserve the user-provided completion barrier and expected byte count, and barrier argument validation follows the native path.</p>
+<p>The CommonIR build currently reports explicit frontend errors for the following forms instead of silently bypassing CommonIR:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc</span></code> buffers with alias;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.copy</span></code> with a mask, or completion barriers used outside GM-to-shared TMA copies;</p></li>
+<li><p>remote-buffer <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code>;</p></li>
+<li><p>ordinary pointer copies carrying offsets (the offset should be added to the pointer operand itself instead).</p></li>
+</ul>
+<p>After building, run the following targeted checks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>test/CommonIR/test_gpu_semantics.py
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>test/CommonIR/test_gpu_wgmma_bridge.py<span class="w"> </span>python/test/tle/integration/test_tle_tma_copy.py
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>python/test/tle/unit/test_tle_whitelist.py
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>python/test/tle/unit/test_tle_gpu_buffer_access.py
+lit<span class="w"> </span>-sv<span class="w"> </span>--filter<span class="o">=</span><span class="s1">'gpu-tileir'</span><span class="w"> </span>build/cmake.*/test
+</pre></div>
+</div>
+<p>The lit cases check both the intermediate TileIR contract and the absence of CommonIR operations or un-eliminated bridge casts in the final TTGIR.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="features-hints.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hints</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="flir.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">FLIR: Unified intermediate layer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-lite-tle-struct-and-tle-raw-introduction">TLE-Lite, TLE-Struct, and TLE-Raw introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-in-the-compilation-process">TLE in the compilation process</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-gpu-commonir-lowering">Optional GPU CommonIR lowering</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../../flagtree_zh/FlagTree_overview/compilation_architecture/features-tle.html">中文</a></body>
+</html>

@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"#torch-fl-flagos\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u7ecf Torch-FL \u4f7f\u7528 FlagOS \u52a0\u901f\u5668<a class=\"headerlink\" href=\"#torch-fl-flagos\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">flagquantum</span></code> \u4f9d\u8d56 PyTorch\uff0c\u800c\u4e0d\u662f Torch-FL\u3002\u5bfc\u5165 FlagQuantum\u3001\u67e5\u8be2\u540e\u7aef\u6216\u8fd0\u884c CPU \u4e0e CUDA \u65f6\u90fd\u4e0d\u4f1a\u5bfc\u5165 <code class=\"docutils literal notranslate\"><span class=\"pre\">torch_fl</span></code>\uff1b\u53ea\u6709\u5728\u663e\u5f0f\u9009\u62e9 <code class=\"docutils literal notranslate\"><span class=\"pre\">flagos</span></code> \u65f6\u624d\u4f1a\u6fc0\u6d3b\u8fd9\u4e2a\u53ef\u9009\u63d0\u4f9b\u65b9\uff0c\u800c Torch-FL \u7f3a\u5931\u6216\u4e0d\u517c\u5bb9\u4f1a\u5728\u6fc0\u6d3b\u65f6\u62a5\u51fa\u8bca\u65ad\u9519\u8bef\uff0c\u800c\u4e0d\u4f1a\u7981\u7528 CPU \u6216 CUDA\u3002</p>", "a[href=\"#id5\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u8fb9\u754c<a class=\"headerlink\" href=\"#id5\" title=\"Link to this heading\">#</a></h2>", "a[href=\"#id4\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u90e8\u7f72\u5305<a class=\"headerlink\" href=\"#id4\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">flagquantum.deployment.create_deployment_package</span></code> \u4f1a\u7ed1\u5b9a\u8bad\u7ec3\u597d\u7684\u53c2\u6570\u3001\u9762\u5411\u76ee\u6807\u7f16\u8bd1\uff0c\u5e76\u5c01\u88c5\u51fa\u4e00\u4e2a\u53ef\u5ba1\u8ba1\u7684\u5305\uff0c\u4fbf\u4e8e\u4e4b\u540e\u6301\u4e45\u5316\u3001\u7b7e\u540d\u6216\u63d0\u4ea4\u3002\u9884\u68c0\u4f1a\u628a\u7a0b\u5e8f\u4e0e\u76ee\u6807\u505a\u6821\u9a8c\uff0c\u5e76\u5bf9\u786e\u5207\u7684\u5305\u505a\u8eab\u4efd\u6838\u9a8c\uff0c\u800c\u4e0d\u8054\u7cfb\u63d0\u4f9b\u65b9\uff1a</p>", "a[href=\"#id3\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u771f\u5b9e\u91cf\u5b50\u786c\u4ef6<a class=\"headerlink\" href=\"#id3\" title=\"Link to this heading\">#</a></h2><p>\u663e\u5f0f\u6307\u5b9a\u7f16\u8bd1\u5668\u4e0e\u63d0\u4f9b\u65b9\u76ee\u6807\u53ef\u4ee5\u8ba9\u8fd9\u6761\u8def\u5f84\u4fdd\u6301\u5931\u8d25\u5373\u62d2\u7edd\u2014\u2014\u8be5\u8def\u5f84\u7edd\u4e0d\u4f1a\u9690\u5f0f\u9009\u62e9\u6216\u66ff\u6362\u7f16\u8bd1\u5668\u3001\u63d0\u4f9b\u65b9\uff1a</p>", "a[href=\"#id1\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u786c\u4ef6\u4e0e\u8fdc\u7a0b\u76ee\u6807<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><p>FlagQuantum \u65e2\u80fd\u5728\u5f53\u524d\u8fdb\u7a0b\u53ef\u63a7\u7684\u8d44\u6e90\u4e0a\u8fd0\u884c\u540c\u4e00\u4efd\u7a0b\u5e8f\uff0c\u4e5f\u80fd\u628a\u5b83\u9001\u5230\u5916\u90e8\u6267\u884c\u76ee\u6807\u3002\u4e24\u8005\u523b\u610f\u91c7\u7528\u4e0d\u540c\u7684\u547d\u540d\uff1a<code class=\"docutils literal notranslate\"><span class=\"pre\">ExecutionOptions</span></code> \u63cf\u8ff0\u5f53\u524d\u8fdb\u7a0b\u7684\u8bbe\u5907\uff0c\u800c <code class=\"docutils literal notranslate\"><span class=\"pre\">target</span></code> \u547d\u540d\u5916\u90e8\u7cfb\u7edf\u3002</p>", "a[href=\"#id2\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u8fdc\u7a0b\u4efb\u52a1<a class=\"headerlink\" href=\"#id2\" title=\"Link to this heading\">#</a></h2><p>\u9762\u5411 Notebook \u7684\u63d0\u4ea4\u6700\u770b\u91cd\u53ef\u7528\u6027\uff1a<code class=\"docutils literal notranslate\"><span class=\"pre\">fq.run()</span></code> \u4f1a\u4e00\u76f4\u7b49\u5230\u7ed3\u679c\uff0c\u800c <code class=\"docutils literal notranslate\"><span class=\"pre\">fq.submit()</span></code> \u5728\u51c6\u5907\u4e0e\u63d0\u4f9b\u65b9\u786e\u8ba4\u5b8c\u6210\u540e\u5c31\u8fd4\u56de\uff0c\u56e0\u6b64\u5728\u4efb\u52a1\u6392\u961f\u671f\u95f4\u5185\u6838\u4ecd\u7136\u53ef\u7528\u3002</p>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

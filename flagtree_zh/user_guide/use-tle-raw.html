@@ -1,0 +1,1038 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="使用 TLE-Raw" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/use-tle-raw.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本节介绍如何使用 TLE-Raw。TLE-Raw 在 trition_3.6.x 分支上可用。 TLE Raw 为 Triton 提供了低级扩展接口，允许用户通过第三方方言和语言（例如使用 CUDA 进行线程级调度、同步和内存访问）来填补能力空白并获得细粒度控制。用户可以根据目标硬件和工具链成熟度，在可移植性和可组合优化（通过 MLIR 方言集成）与最大细粒度控制（通过 CUDA 集成）之间进行选择。 将 MLIR 方言集成到 LLVM 中以实现可移植性和可组合优化: 以下是 MLIR（多级中间表示）的示例。 TLE-raw 由以下部分组成： 方言声明（装饰器）- 装饰器: @tle.r..." />
+<meta property="og:image" content="_images/cuda-to-vllm-line-pass.png" />
+<meta property="og:image:alt" content="alt text" />
+<meta name="description" content="本节介绍如何使用 TLE-Raw。TLE-Raw 在 trition_3.6.x 分支上可用。 TLE Raw 为 Triton 提供了低级扩展接口，允许用户通过第三方方言和语言（例如使用 CUDA 进行线程级调度、同步和内存访问）来填补能力空白并获得细粒度控制。用户可以根据目标硬件和工具链成熟度，在可移植性和可组合优化（通过 MLIR 方言集成）与最大细粒度控制（通过 CUDA 集成）之间进行选择。 将 MLIR 方言集成到 LLVM 中以实现可移植性和可组合优化: 以下是 MLIR（多级中间表示）的示例。 TLE-raw 由以下部分组成： 方言声明（装饰器）- 装饰器: @tle.r..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>使用 TLE-Raw &#8212; FlagTree 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/use-tle-raw.66f88f37-450d-4f8a-8e11-2e9ce34d9e20.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/use-tle-raw';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/use-tle-raw.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="使用 TLE-CPU" href="use-tle-cpu.html" />
+    <link rel="prev" title="使用 TLE-Struct" href="use-tle-struct.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagTree 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v070.html">FlagTree 0.7.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v060.html">FlagTree 0.6.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v050.html">FlagTree 0.5.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v040.html">FlagTree 0.4.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v030.html">FlagTree 0.3.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v020.html">FlagTree 0.2.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v010.html">FlagTree 0.1.0 发布</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagTree_overview/FlagTree-overview.html">FlagTree 概述</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagTree_overview/features.html">特性</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/compilation-architecture.html">FlagTree 编译架构</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/common-architecture.html">通用架构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html">FlagTree 可扩展框架</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-hints.html">Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-tle.html">TLE-Lite、TLE-Struct 和 TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flir.html">FLIR：统一中间层</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">开始使用</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">系统要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">安装 FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install-arm64-cpu.html">在 Arm64 CPU 上安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="user-guide.html">用户指南</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="use-hints.html">使用 Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-lite.html">使用 TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-struct.html">使用 TLE-Struct</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">使用 TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="use-tle-cpu.html">使用 TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">示例</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/use-tle-raw.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>使用 TLE-Raw</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlir-llvm">将 MLIR 方言集成到 LLVM 中以实现可移植性和可组合优化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-llvm">将 CUDA 集成到 LLVM 中以实现最大细粒度控制</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llvm">LLVM 路线</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">使用示例</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nvshmem">使用 NVSHMEM 进行多卡通信</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">处理流程</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-llvm-triton">前端: CUDA-LLVM 集成到 Triton 前端和运行时</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#python-c-mlir-pass-pass">中端: Python 到 C++，MLIR pass 关系和 pass 继承</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-llvm-ir-triton-tle-raw">后端: CUDA-LLVM IR 转换 — 参数处理和 Triton/TLE-Raw 数据桥接</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">语义对象映射</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="tle-raw">
+<h1>使用 TLE-Raw<a class="headerlink" href="#tle-raw" title="Link to this heading">#</a></h1>
+<p>本节介绍如何使用 TLE-Raw。TLE-Raw 在 trition_3.6.x 分支上可用。</p>
+<p>TLE Raw 为 Triton 提供了低级扩展接口，允许用户通过第三方方言和语言（例如使用 CUDA 进行线程级调度、同步和内存访问）来填补能力空白并获得细粒度控制。用户可以根据目标硬件和工具链成熟度，在可移植性和可组合优化（通过 MLIR 方言集成）与最大细粒度控制（通过 CUDA 集成）之间进行选择。</p>
+<section id="mlir-llvm">
+<h2>将 MLIR 方言集成到 LLVM 中以实现可移植性和可组合优化<a class="headerlink" href="#mlir-llvm" title="Link to this heading">#</a></h2>
+<p>以下是 MLIR（多级中间表示）的示例。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span> <span class="k">as</span> <span class="n">L</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlir</span><span class="w"> </span><span class="kn">import</span> <span class="n">ir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlir.dialects</span><span class="w"> </span><span class="kn">import</span> <span class="n">arith</span><span class="p">,</span> <span class="n">llvm</span><span class="p">,</span> <span class="n">nvvm</span><span class="p">,</span> <span class="n">scf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">triton.experimental.tle.raw</span><span class="w"> </span><span class="kn">import</span> <span class="n">dialect</span><span class="p">,</span> <span class="n">Input</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton.experimental.tle.language.raw</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tle_raw</span>
+
+<span class="n">DEVICE</span> <span class="o">=</span> <span class="n">triton</span><span class="o">.</span><span class="n">runtime</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">active</span><span class="o">.</span><span class="n">get_active_torch_device</span><span class="p">()</span>
+
+<span class="nd">@dialect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"mlir"</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vector_add_tile</span><span class="p">(</span>
+    <span class="n">output</span><span class="p">:</span> <span class="n">Input</span><span class="p">[</span><span class="n">L</span><span class="p">[</span><span class="s2">"!llvm.ptr&lt;1&gt;"</span><span class="p">]],</span>
+    <span class="n">x</span><span class="p">:</span> <span class="n">Input</span><span class="p">[</span><span class="n">L</span><span class="p">[</span><span class="s2">"!llvm.ptr&lt;1&gt;"</span><span class="p">]],</span>
+    <span class="n">y</span><span class="p">:</span> <span class="n">Input</span><span class="p">[</span><span class="n">L</span><span class="p">[</span><span class="s2">"!llvm.ptr&lt;1&gt;"</span><span class="p">]],</span>
+    <span class="n">n_elements</span><span class="p">:</span> <span class="n">Input</span><span class="p">[</span><span class="n">L</span><span class="p">[</span><span class="s2">"i32"</span><span class="p">]],</span>
+<span class="p">):</span>
+    <span class="n">tidx</span> <span class="o">=</span> <span class="n">nvvm</span><span class="o">.</span><span class="n">read_ptx_sreg_tid_x</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IntegerType</span><span class="o">.</span><span class="n">get_signless</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+    <span class="n">bdimx</span> <span class="o">=</span> <span class="n">nvvm</span><span class="o">.</span><span class="n">read_ptx_sreg_ntid_x</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IntegerType</span><span class="o">.</span><span class="n">get_signless</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+    <span class="n">gdimx</span> <span class="o">=</span> <span class="n">nvvm</span><span class="o">.</span><span class="n">read_ptx_sreg_nctaid_x</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IntegerType</span><span class="o">.</span><span class="n">get_signless</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+    <span class="n">bidx</span> <span class="o">=</span> <span class="n">nvvm</span><span class="o">.</span><span class="n">read_ptx_sreg_ctaid_x</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IntegerType</span><span class="o">.</span><span class="n">get_signless</span><span class="p">(</span><span class="mi">32</span><span class="p">))</span>
+    <span class="n">tidx</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">index_cast</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IndexType</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">tidx</span><span class="p">)</span>
+    <span class="n">bdimx</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">index_cast</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IndexType</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">bdimx</span><span class="p">)</span>
+    <span class="n">gdimx</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">index_cast</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IndexType</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">gdimx</span><span class="p">)</span>
+    <span class="n">bidx</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">index_cast</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IndexType</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">bidx</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addi</span><span class="p">(</span><span class="n">arith</span><span class="o">.</span><span class="n">muli</span><span class="p">(</span><span class="n">bidx</span><span class="p">,</span> <span class="n">bdimx</span><span class="p">),</span> <span class="n">tidx</span><span class="p">)</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">muli</span><span class="p">(</span><span class="n">bdimx</span><span class="p">,</span> <span class="n">gdimx</span><span class="p">)</span>
+    <span class="n">n_elements</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">index_cast</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IndexType</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">n_elements</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scf</span><span class="o">.</span><span class="n">for_</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">index_cast</span><span class="p">(</span><span class="n">ir</span><span class="o">.</span><span class="n">IntegerType</span><span class="o">.</span><span class="n">get_signless</span><span class="p">(</span><span class="mi">32</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">ptrty</span> <span class="o">=</span> <span class="n">ir</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"!llvm.ptr&lt;1&gt;"</span><span class="p">)</span>
+        <span class="n">f32ty</span> <span class="o">=</span> <span class="n">ir</span><span class="o">.</span><span class="n">Type</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="s2">"f32"</span><span class="p">)</span>
+        <span class="n">xptr</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">.</span><span class="n">getelementptr</span><span class="p">(</span><span class="n">ptrty</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2147483648</span><span class="p">],</span> <span class="n">f32ty</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">yptr</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">.</span><span class="n">getelementptr</span><span class="p">(</span><span class="n">ptrty</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2147483648</span><span class="p">],</span> <span class="n">f32ty</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">xval</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f32ty</span><span class="p">,</span> <span class="n">xptr</span><span class="p">)</span>
+        <span class="n">yval</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f32ty</span><span class="p">,</span> <span class="n">yptr</span><span class="p">)</span>
+        <span class="n">outval</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span><span class="p">(</span><span class="n">xval</span><span class="p">,</span> <span class="n">yval</span><span class="p">)</span>
+        <span class="n">outptr</span> <span class="o">=</span> <span class="n">llvm</span><span class="o">.</span><span class="n">getelementptr</span><span class="p">(</span><span class="n">ptrty</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">2147483648</span><span class="p">],</span> <span class="n">f32ty</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">llvm</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">outval</span><span class="p">,</span> <span class="n">outptr</span><span class="p">)</span>
+        <span class="n">scf</span><span class="o">.</span><span class="n">yield_</span><span class="p">([])</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_kernel</span><span class="p">(</span>
+    <span class="n">x_ptr</span><span class="p">,</span>
+    <span class="n">y_ptr</span><span class="p">,</span>
+    <span class="n">output_ptr</span><span class="p">,</span>
+    <span class="n">n_elements</span><span class="p">,</span>
+    <span class="n">BLOCK_SIZE</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">tle_raw</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">vector_add_tile</span><span class="p">,</span> <span class="p">[</span><span class="n">output_ptr</span><span class="p">,</span> <span class="n">x_ptr</span><span class="p">,</span> <span class="n">y_ptr</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">device</span> <span class="o">==</span> <span class="n">DEVICE</span> <span class="ow">and</span> <span class="n">y</span><span class="o">.</span><span class="n">device</span> <span class="o">==</span> <span class="n">DEVICE</span> <span class="ow">and</span> <span class="n">output</span><span class="o">.</span><span class="n">device</span> <span class="o">==</span> <span class="n">DEVICE</span>
+    <span class="n">n_elements</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">meta</span><span class="p">:</span> <span class="p">(</span><span class="n">triton</span><span class="o">.</span><span class="n">cdiv</span><span class="p">(</span><span class="n">n_elements</span><span class="p">,</span> <span class="n">meta</span><span class="p">[</span><span class="s2">"BLOCK_SIZE"</span><span class="p">]),</span> <span class="p">)</span>
+    <span class="n">add_kernel</span><span class="p">[</span><span class="n">grid</span><span class="p">](</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">n_elements</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2048</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2048</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">DEVICE</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>TLE-raw 由以下部分组成：</p>
+<ul class="simple">
+<li><p>方言声明（装饰器）</p>
+<ul>
+<li><p>装饰器: &#64;tle.raw.language(name=“mlir”)</p></li>
+<li><p>说明: 此装饰器将函数 vector_add_tile 标记为直接用 MLIR 方言编写的代码块。它告诉编译器（具体通过 FlagTree EDSL（嵌入式领域特定语言）），该函数体应使用 MLIR 操作（如 nvvm、arith 和 tensor）来解释和下层，而不是标准的 Python 或 Triton 操作。</p></li>
+</ul>
+</li>
+<li><p>函数实现</p>
+<ul>
+<li><p>函数: vector_add_tile(…)</p></li>
+<li><p>说明: 这是使用低级 MLIR Python 绑定编写的计算内核的实际实现。它定义了将由硬件执行的具体操作（线程索引、内存加载、浮点加法和内存存储）。</p></li>
+</ul>
+</li>
+<li><p>函数调用</p>
+<ul>
+<li><p>调用: tle_raw.call(vector_add_tile, args=[x, y, output])</p></li>
+<li><p>说明: 此行从高级 Triton 内核（add_kernel）中调用已声明的 MLIR 函数（vector_add_tile）。它传递输入张量 x、y 和输出缓冲区。关键是，它提供了硬件映射提示（定义线程数量）和内存布局规范（定义张量驻留在”shared”内存中并具有特定顺序）。这使得编译器能够弥合高级 tl.load/tl.store 操作与低级 MLIR IR 生成之间的差距。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="cuda-llvm">
+<h2>将 CUDA 集成到 LLVM 中以实现最大细粒度控制<a class="headerlink" href="#cuda-llvm" title="Link to this heading">#</a></h2>
+<p>本节仅介绍如何将 CUDA 内核集成到 LLVM 内联路径中。将其他厂商集成到 LLVM 内联路径中可以遵循类似的步骤。</p>
+<p>TLE-Raw 通过 LLVM 内联路径支持 CUDA 内核集成。在 CUDA 侧集成 TLE-Raw 的厂商应评估：</p>
+<ul class="simple">
+<li><p>clang 是否能生成 LLVM IR 并将其序列化为文本</p></li>
+<li><p>TTGIR 相关的 pass 操作是否可以重用或适配</p></li>
+</ul>
+<section id="llvm">
+<h3>LLVM 路线<a class="headerlink" href="#llvm" title="Link to this heading">#</a></h3>
+<p>基本流程：使用 clang 将 CUDA 代码转换为 LLVM IR，然后应用现有的 LLVM 内联 pass。</p>
+<p><a href="../_images/cuda-to-vllm-line-pass.png" data-lightbox="image-set">
+<img alt="alt text" src="../_images/cuda-to-vllm-line-pass.png" /></a>
+</p>
+</section>
+<section id="id1">
+<h3>使用示例<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>参考: <code class="docutils literal notranslate"><span class="pre">python/tutorials/tle/raw/cuda/01-vector-add.py</span></code></p></li>
+<li><p>Triton 侧: 提供 CUDA 文件路径和函数声明。其他厂商可以注册自己的语言名称作为 <code class="docutils literal notranslate"><span class="pre">name</span></code> 参数的值。
+<a href="../_images/triton-side.png" data-lightbox="image-set">
+<img alt="alt text" src="../_images/triton-side.png" /></a>
+</p></li>
+<li><p>CUDA 侧: 实现 CUDA 内核。LLVM 结构体参数声明仍然保留（因为后续内联需要处理 Triton ptr 到 LLVM 的转换，目前留给用户进行一对一映射）。其他厂商应根据自己的语言自定义映射。</p></li>
+</ul>
+<p><a href="../_images/cuda-side.PNG" data-lightbox="image-set">
+<img alt="alt text" src="../_images/cuda-side.PNG" /></a>
+</p>
+</section>
+<section id="nvshmem">
+<h3>使用 NVSHMEM 进行多卡通信<a class="headerlink" href="#nvshmem" title="Link to this heading">#</a></h3>
+<p>NVSHMEM 是 NVIDIA 提供的 PGAS（Partitioned Global Address Space）通信库，为多卡/多节点程序提供统一地址空间：每张 GPU 上的一块内存（对称内存）既可以被本卡访问，也可以被其他 GPU 直接访问，因此跨卡通信可以用普通的 load/store 或 put/get 语义表达，而不必显式编写点对点收发逻辑。它提供主机端与设备端两套 API，设备端接口可在 kernel 内部直接调用，常用于 all-gather、all-reduce、GEMM + 通信融合等场景。NVSHMEM 仅用于 NVIDIA 卡；TLE-Lite 和 TLE-Struct 的分布式原语走的是 FlagCX，不使用 NVSHMEM。</p>
+<p><code class="docutils literal notranslate"><span class="pre">&#64;dialect</span></code> 在 CUDA 集成的基础上新增 <code class="docutils literal notranslate"><span class="pre">library</span></code> 与 <code class="docutils literal notranslate"><span class="pre">compiler</span></code> 参数，用于把 NVSHMEM 设备端接口直接内联进 TLE-Raw kernel：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@dialect</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"cuda"</span><span class="p">,</span>
+    <span class="n">library</span><span class="o">=</span><span class="s2">"nvshmem"</span><span class="p">,</span>
+    <span class="n">compiler</span><span class="o">=</span><span class="s2">"clang"</span><span class="p">,</span>
+    <span class="n">file</span><span class="o">=</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"simple-shift-device.cu"</span><span class="p">),</span>
+    <span class="n">extern_func_name</span><span class="o">=</span><span class="s2">"simple_shift"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">simple_shift</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">library=&quot;nvshmem&quot;</span></code>：启用 NVSHMEM 设备端 bitcode 链接（<code class="docutils literal notranslate"><span class="pre">libnvshmem_device.bc</span></code>，NVSHMEM 3.7 及以上按 SM 拆分时自动选择对应 <code class="docutils literal notranslate"><span class="pre">.bc</span></code>），并在 kernel 上注册 NVSHMEM cumodule init hook，使设备端 NVSHMEM 调用可以正常初始化。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">compiler=&quot;clang&quot;</span></code>：使用 clang 以 <code class="docutils literal notranslate"><span class="pre">--cuda-device-only</span></code> 编译 <code class="docutils literal notranslate"><span class="pre">file</span></code> 指定的 <code class="docutils literal notranslate"><span class="pre">.cu</span></code> 源文件。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file</span></code> / <code class="docutils literal notranslate"><span class="pre">extern_func_name</span></code>：与 CUDA 集成一致，分别指定设备端源文件与其中的函数符号。</p></li>
+</ul>
+<p>调用方式与 CUDA 集成相同，通过 <code class="docutils literal notranslate"><span class="pre">tle_raw.call</span></code> 从 Triton kernel 中调用：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">simple_shift_kernel</span><span class="p">(</span><span class="n">destination_ptr</span><span class="p">):</span>
+    <span class="n">tle_raw</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">simple_shift</span><span class="p">,</span> <span class="p">[</span><span class="n">destination_ptr</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>NVSHMEM 相关的 host 侧准备工作由 <code class="docutils literal notranslate"><span class="pre">triton.experimental.tle.raw.nvshmem.utils</span></code> 提供：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">init_torch_distributed()</span></code> / <code class="docutils literal notranslate"><span class="pre">init_nvshmem_by_torch_pg(common,</span> <span class="pre">group)</span></code>：基于 PyTorch 进程组初始化 torch.distributed 与 NVSHMEM。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_host(source)</span></code> / <code class="docutils literal notranslate"><span class="pre">load_common_host(source=None)</span></code>：编译并加载 host 侧 <code class="docutils literal notranslate"><span class="pre">.cu</span></code>（含 <code class="docutils literal notranslate"><span class="pre">nvshmem.h</span></code>、<code class="docutils literal notranslate"><span class="pre">nvshmemx.h</span></code>），返回可直接调用其中 <code class="docutils literal notranslate"><span class="pre">extern</span> <span class="pre">&quot;C&quot;</span></code> 函数的库对象。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tensor_from_pointer(pointer,</span> <span class="pre">shape,</span> <span class="pre">dtype,</span> <span class="pre">device)</span></code>：在 CUDA 显存上创建非拥有的 Torch tensor 视图。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">copy_on_stream(dst_ptr,</span> <span class="pre">src_ptr,</span> <span class="pre">nbytes,</span> <span class="pre">stream)</span></code>、<code class="docutils literal notranslate"><span class="pre">set_signal_cuda_ptr(signal_ptr,</span> <span class="pre">signal,</span> <span class="pre">stream)</span></code>：流上的拷贝与 signal 指针设置。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">print_perf(...)</span></code> / <code class="docutils literal notranslate"><span class="pre">print_perf_mean(...)</span></code>：按 rank 汇总打印性能数据。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enable_nvshmem_device_bc(enabled=True)</span></code> / <code class="docutils literal notranslate"><span class="pre">is_nvshmem_device_bc_enabled()</span></code> / <code class="docutils literal notranslate"><span class="pre">get_nvshmem_extern_libs(arch=None)</span></code>：设备端 bitcode 链接开关与外部库查询（<code class="docutils literal notranslate"><span class="pre">library=&quot;nvshmem&quot;</span></code> 会自动开启）。</p></li>
+</ul>
+<p>使用前需要满足：</p>
+<ul class="simple">
+<li><p>设置 <code class="docutils literal notranslate"><span class="pre">NVSHMEM_HOME</span></code> 环境变量（或通过 <code class="docutils literal notranslate"><span class="pre">triton.knobs.nvidia.nvshmem_home</span></code> 指定），用于解析 <code class="docutils literal notranslate"><span class="pre">libnvshmem_host.so</span></code> 与设备端 bitcode。</p></li>
+<li><p>示例面向 sm90 及以上架构，且要求 <code class="docutils literal notranslate"><span class="pre">world_size</span> <span class="pre">&gt;=</span> <span class="pre">2</span></code>；多卡启动时通过 <code class="docutils literal notranslate"><span class="pre">RANK</span></code>、<code class="docutils literal notranslate"><span class="pre">LOCAL_RANK</span></code>、<code class="docutils literal notranslate"><span class="pre">WORLD_SIZE</span></code>、<code class="docutils literal notranslate"><span class="pre">LOCAL_WORLD_SIZE</span></code> 传入拓扑。</p></li>
+</ul>
+<p>完整示例见 <code class="docutils literal notranslate"><span class="pre">python/tutorials/tle/raw/nvshmem/</span></code>：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">01-simple-shift</span></code>：最小的 NVSHMEM 设备端 put 示例，演示 dialect 声明与 host/device 两侧的配合。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">02-allgather-gemm</span></code>：基于 NVSHMEM 的 all-gather GEMM（含 benchmark）。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">03-gemm-allreduce</span></code>：基于 NVSHMEM multimem 的 GEMM + all-reduce。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">04-cuda-ipc-allreduce</span></code>：基于 CUDA IPC 的 all-reduce（含 benchmark），使用不带 <code class="docutils literal notranslate"><span class="pre">library=&quot;nvshmem&quot;</span></code> 的 CUDA 方言。</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3>处理流程<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="cuda-llvm-triton">
+<h4>前端: CUDA-LLVM 集成到 Triton 前端和运行时<a class="headerlink" href="#cuda-llvm-triton" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>步骤</p></th>
+<th class="head"><p>模块</p></th>
+<th class="head"><p>关键 Pass 开发</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>方言注册入口（dialect 装饰器）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python/triton/experimental/tle/raw/runtime.py</span></code></p></td>
+<td><p>- 维护 <code class="docutils literal notranslate"><span class="pre">registry</span> <span class="pre">=</span> <span class="pre">{&quot;cuda&quot;:</span> <span class="pre">CUDAJITFunction,</span> <span class="pre">&quot;mlir&quot;:</span> <span class="pre">MLIRJITFunction}</span></code>。<br>- <code class="docutils literal notranslate"><span class="pre">dialect(name=&quot;cuda&quot;,</span> <span class="pre">...)</span></code> 构造 <code class="docutils literal notranslate"><span class="pre">CUDAJITFunction</span></code> 对象。</p></td>
+</tr>
+<tr class="row-odd"><td><p>TTIR 扩展: <code class="docutils literal notranslate"><span class="pre">Tle_DSLRegionOp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FlagTree/third_party/tle/dialect/include/IR/TleOps.td</span></code></p></td>
+<td><p>- 接受 Triton 参数；<br>- 将 LLVM IR 包装到 region 字段中。</p></td>
+</tr>
+<tr class="row-even"><td><p>CUDA 运行时: 实际调用 clang 的位置</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python/triton/experimental/tle/raw/cuda/runtime.py</span></code></p></td>
+<td><p>- <code class="docutils literal notranslate"><span class="pre">CUDAJITFunction</span></code> 在初始化时读取 <code class="docutils literal notranslate"><span class="pre">.cu</span></code> 源文本。<br>- <code class="docutils literal notranslate"><span class="pre">make_llvm()</span></code> 直接调用 <code class="docutils literal notranslate"><span class="pre">subprocess.run(clang</span> <span class="pre">...)</span></code> 生成 LLVM IR。<br>- <code class="docutils literal notranslate"><span class="pre">parse_llvm_ir(...)</span></code> 将文本转换为可插入 Triton builder 的模块。<br><a href="../_images/make_llvm.PNG" data-lightbox="image-set">
+<img alt="alt text" src="../_images/make_llvm.PNG" /></a>
+</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="python-c-mlir-pass-pass">
+<h4>中端: Python 到 C++，MLIR pass 关系和 pass 继承<a class="headerlink" href="#python-c-mlir-pass-pass" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>步骤</p></th>
+<th class="head"><p>模块</p></th>
+<th class="head"><p>关键 Pass 开发</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>将 LLVM 函数附加到 <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python/triton/experimental/tle/language/raw/core.py</span></code></p></td>
+<td><p>- <code class="docutils literal notranslate"><span class="pre">call()</span></code> 获取 builder 上下文。<br>- 触发 <code class="docutils literal notranslate"><span class="pre">func.make_llvm(context)</span></code>。<br>- 调用 <code class="docutils literal notranslate"><span class="pre">create_tle_raw_region_by_llvm_func(...)</span></code> 生成 <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> op。<br><a href="../_images/dsl_region_op.PNG" data-lightbox="image-set">
+<img alt="alt text" src="../_images/dsl_region_op.PNG" /></a>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p>C++ 桥接: IR 注入和类型桥接</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">third_party/tle/triton_tle.cc</span></code></p></td>
+<td><p>- <code class="docutils literal notranslate"><span class="pre">third_party/tle/triton_tle.cc</span></code> 为 <code class="docutils literal notranslate"><span class="pre">create_tle_raw_region_by_llvm_func</span></code> 和 raw passes 暴露 Python 绑定。<br>- <code class="docutils literal notranslate"><span class="pre">third_party/tle/triton_tle_raw.cc</span></code> 实现 <code class="docutils literal notranslate"><span class="pre">createTLERawRegionByLLVMFunc</span></code>: 解析函数，将其克隆到当前模块，执行参数/返回类型映射，并创建 <code class="docutils literal notranslate"><span class="pre">tle::DSLRegionOp</span></code> + <code class="docutils literal notranslate"><span class="pre">tle::YieldOp</span></code>。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cuda-llvm-ir-triton-tle-raw">
+<h4>后端: CUDA-LLVM IR 转换 — 参数处理和 Triton/TLE-Raw 数据桥接<a class="headerlink" href="#cuda-llvm-ir-triton-tle-raw" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>步骤</p></th>
+<th class="head"><p>模块</p></th>
+<th class="head"><p>关键 Pass 开发</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>后端 pass 注册</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">third_party/nvidia/backend/compiler.py</span></code></p></td>
+<td><p>- <code class="docutils literal notranslate"><span class="pre">make_ttgir()</span></code> 插入 <code class="docutils literal notranslate"><span class="pre">tle.raw_passes.add_tle_convert_arg_to_memdesc(pm)</span></code>，将 <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> 张量参数转换为 memdesc 形式。<br>- <code class="docutils literal notranslate"><span class="pre">make_llir()</span></code> 插入 <code class="docutils literal notranslate"><span class="pre">tle.raw_passes.add_tle_dsl_region_inline(pm)</span></code>，在 LLVM 转换之前将 <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> 内联到主控制流中。<br><a href="../_images/make_ttgir_and_make_llir.png" data-lightbox="image-set">
+<img alt="alt text" src="../_images/make_ttgir_and_make_llir.png" /></a>
+</p></td>
+</tr>
+<tr class="row-odd"><td><p>参数桥接</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TleConvertArgToMemDesc</span></code>（TTGIR 阶段）</p></td>
+<td><p>- 将 <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> 中的张量参数/结果转换为 memdesc 语义，添加本地存储和同步。<br>- 关键操作:<br>  - 张量操作数 → <code class="docutils literal notranslate"><span class="pre">LocalAlloc</span></code> + <code class="docutils literal notranslate"><span class="pre">LocalStore</span></code>；<br>  - <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> 结果张量 → <code class="docutils literal notranslate"><span class="pre">LocalLoad</span></code> 读回；<br>  - 必要时插入 <code class="docutils literal notranslate"><span class="pre">NVVM::Barrier0Op</span></code>；<br>  - 处理 pack 相关的新类型。</p></td>
+</tr>
+<tr class="row-even"><td><p>LLVM 内联准备</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TleDSLRegionInline</span></code>（LLIR 阶段）</p></td>
+<td><p>- 从 region op 内联 <code class="docutils literal notranslate"><span class="pre">tle.dsl_region</span></code>。<br>- 关键操作:<br>  - 拆分块，创建延续；<br>  - 将 yield 重写为到延续的分支；<br>  - 替换原始 <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> 结果的使用；<br>  - 删除 <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> op。</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id3">
+<h4>语义对象映射<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>语义对象</p></th>
+<th class="head"><p>Triton 侧</p></th>
+<th class="head"><p>TLE-Raw 侧</p></th>
+<th class="head"><p>LLVM 侧</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>标量参数</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">i32</span></code>/<code class="docutils literal notranslate"><span class="pre">f32</span></code>/…</p></td>
+<td><p>直接作为 <code class="docutils literal notranslate"><span class="pre">Tle_ArgType</span></code></p></td>
+<td><p>LLVM 标量参数</p></td>
+</tr>
+<tr class="row-odd"><td><p>指针参数</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tt.ptr&lt;T&gt;</span></code></p></td>
+<td><p>直接传递或提取为 LLVM ptr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">attribute((address_space(N)))</span> <span class="pre">T*</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>张量输入</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tensor&lt;...&gt;</span></code></p></td>
+<td><p>转换为 <code class="docutils literal notranslate"><span class="pre">ttg.memdesc</span></code> / <code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> 操作数</p></td>
+<td><p>展开为 allocated/aligned/offset/sizes/strides</p></td>
+</tr>
+<tr class="row-odd"><td><p>张量输出</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tensor&lt;...&gt;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dsl_region</span></code> 结果 + <code class="docutils literal notranslate"><span class="pre">tle.pack</span></code>/yield</p></td>
+<td><p>LLVM 结构体或多返回字段，然后重新打包</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="use-tle-struct.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">使用 TLE-Struct</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="use-tle-cpu.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">使用 TLE-CPU</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlir-llvm">将 MLIR 方言集成到 LLVM 中以实现可移植性和可组合优化</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-llvm">将 CUDA 集成到 LLVM 中以实现最大细粒度控制</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llvm">LLVM 路线</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">使用示例</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nvshmem">使用 NVSHMEM 进行多卡通信</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">处理流程</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-llvm-triton">前端: CUDA-LLVM 集成到 Triton 前端和运行时</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#python-c-mlir-pass-pass">中端: Python 到 C++，MLIR pass 关系和 pass 继承</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cuda-llvm-ir-triton-tle-raw">后端: CUDA-LLVM IR 转换 — 参数处理和 Triton/TLE-Raw 数据桥接</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">语义对象映射</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagtree_en/user_guide/use-tle-raw.html">English</a></body>
+</html>

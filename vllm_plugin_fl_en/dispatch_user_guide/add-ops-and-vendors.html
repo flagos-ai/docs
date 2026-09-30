@@ -1,0 +1,947 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Add new operators and vendor backends" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="dispatch_user_guide/add-ops-and-vendors.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="Add new operators: When adding a new operator, modify these files: backends/flaggems/impl/*.py- Add FlagGems implementation, backends/flaggems/flaggems.py- Add method to backend class, backends/flaggems/register_ops.py- Register OpImpl, backends/reference/impl/*.py- Add PyTorch implementation (if..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="Add new operators: When adding a new operator, modify these files: backends/flaggems/impl/*.py- Add FlagGems implementation, backends/flaggems/flaggems.py- Add method to backend class, backends/flaggems/register_ops.py- Register OpImpl, backends/reference/impl/*.py- Add PyTorch implementation (if..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Add new operators and vendor backends &#8212; VLLM-Plugin-FL Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/dispatch_user_guide/add-ops-and-vendors.2997cc58-ac14-4d81-a97b-49a134a8b9d7.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'dispatch_user_guide/add-ops-and-vendors';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/dispatch_user_guide/add-ops-and-vendors.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dispatch API Reference" href="../reference/dispatch-api-reference.html" />
+    <link rel="prev" title="Policy context management" href="configure-policy.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="VLLM-Plugin-FL Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="VLLM-Plugin-FL Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    vllm-plugin-FL Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">vllm-plugin-FL Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/operator-dispatch-mechanism.html">Operator dispatch mechanism</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">Getting Started</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">Install software for running an inference task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/run-inference-task.html">Run an inference task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/adaptation-gate.html">Adaptation gate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="dispatch-user-guide.html">Operator dispatch user guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="quick-start.html">Quick start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure-backend-selection.html">Configure backend selection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configure-policy.html">Policy context management</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Add new operators and vendor backends</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/dispatch-api-reference.html">Dispatch API Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/dispatch_user_guide/add-ops-and-vendors.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Add new operators and vendor backends</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-new-operators">Add new operators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-vendor-backends">Add vendor backends</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-built-in-vendor-backend">Option 1: Built-in vendor backend</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-external-plugin-package">Option 2: External plugin package</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-3-environment-based-plugin">Option 3: Environment-based plugin</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#priority-levels">Priority levels</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-backend">Test your backend</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vendor-backend-checklist">Vendor backend checklist</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#current-vendor-backends">Current vendor backends</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-safety">Multi-process safety</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="add-new-operators-and-vendor-backends">
+<h1>Add new operators and vendor backends<a class="headerlink" href="#add-new-operators-and-vendor-backends" title="Link to this heading">#</a></h1>
+<section id="add-new-operators">
+<h2>Add new operators<a class="headerlink" href="#add-new-operators" title="Link to this heading">#</a></h2>
+<p>When adding a new operator, modify these files:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/flaggems/impl/*.py</span></code> - Add FlagGems implementation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/flaggems/flaggems.py</span></code> - Add method to backend class</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/flaggems/register_ops.py</span></code> - Register OpImpl</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/reference/impl/*.py</span></code> - Add PyTorch implementation (if applicable)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/reference/reference.py</span></code> - Add method to backend class</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/reference/register_ops.py</span></code> - Register OpImpl</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/vendor/&lt;vendor&gt;/impl/*.py</span></code> - Add vendor-specific implementation (optional)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/vendor/&lt;vendor&gt;/&lt;vendor&gt;.py</span></code> - Add method to vendor backend class</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">backends/vendor/&lt;vendor&gt;/register_ops.py</span></code> - Register vendor OpImpl</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ops.py</span></code> - Add abstract method declaration</p></li>
+</ul>
+<p><strong>Note:</strong> Not all operators require a reference implementation. For example, <code class="docutils literal notranslate"><span class="pre">attention_backend</span></code> only has FlagGems and vendor implementations since it returns a backend class path rather than executing a computation.</p>
+<section id="add-vendor-backends">
+<h3>Add vendor backends<a class="headerlink" href="#add-vendor-backends" title="Link to this heading">#</a></h3>
+<p>The dispatch system supports three ways to integrate vendor backends:</p>
+<ol class="arabic simple">
+<li><p><strong>Built-in vendor backends</strong> - Located in <code class="docutils literal notranslate"><span class="pre">backends/vendor/</span></code> (recommended for core vendors)</p></li>
+<li><p><strong>External plugin packages</strong> - Distributed as separate Python packages</p></li>
+<li><p><strong>Environment-based plugins</strong> - Loaded via <code class="docutils literal notranslate"><span class="pre">VLLM_FL_PLUGIN_MODULES</span></code></p></li>
+</ol>
+<section id="option-1-built-in-vendor-backend">
+<h4>Option 1: Built-in vendor backend<a class="headerlink" href="#option-1-built-in-vendor-backend" title="Link to this heading">#</a></h4>
+<p>Directory structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>backends/vendor/&lt;vendor_name&gt;/
+├── __init__.py
+├── &lt;vendor_name&gt;.py        # Backend class
+├── register_ops.py         # Registration function
+└── impl/                   # Operator implementations
+    ├── __init__.py
+    ├── activation.py
+    ├── normalization.py
+    ├── rotary.py
+    └── attention.py        # (optional) Vendor-specific attention backend
+</pre></div>
+</div>
+<p><strong>Step 1: Create backend class</strong> (<code class="docutils literal notranslate"><span class="pre">&lt;vendor_name&gt;.py</span></code>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">...base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Backend</span>
+
+<span class="k">class</span><span class="w"> </span><span class="err">&lt;</span><span class="nc">VendorName</span><span class="o">&gt;</span><span class="n">Backend</span><span class="p">(</span><span class="n">Backend</span><span class="p">):</span>
+    <span class="n">_available</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"&lt;vendor_name&gt;"</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vendor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"&lt;vendor_name&gt;"</span>  <span class="c1"># Required for vendor backends</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_available</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="o">&lt;</span><span class="n">VendorName</span><span class="o">&gt;</span><span class="n">Backend</span><span class="o">.</span><span class="n">_available</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="o">&lt;</span><span class="n">vendor_library</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">VendorName</span><span class="o">&gt;</span><span class="n">Backend</span><span class="o">.</span><span class="n">_available</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="o">&lt;</span><span class="n">VendorName</span><span class="o">&gt;</span><span class="n">Backend</span><span class="o">.</span><span class="n">_available</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="o">&lt;</span><span class="n">VendorName</span><span class="o">&gt;</span><span class="n">Backend</span><span class="o">.</span><span class="n">_available</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">silu_and_mul</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.impl.activation</span><span class="w"> </span><span class="kn">import</span> <span class="n">silu_and_mul_</span><span class="o">&lt;</span><span class="n">vendor</span><span class="o">&gt;</span>
+        <span class="k">return</span> <span class="n">silu_and_mul_</span><span class="o">&lt;</span><span class="n">vendor</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Step 2: Create registration module</strong> (<code class="docutils literal notranslate"><span class="pre">register_ops.py</span></code>):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">....types</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpImpl</span><span class="p">,</span> <span class="n">BackendImplKind</span><span class="p">,</span> <span class="n">BackendPriority</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">register_builtins</span><span class="p">(</span><span class="n">registry</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="o">&lt;</span><span class="n">vendor_name</span><span class="o">&gt;</span> <span class="kn">import</span><span class="w"> </span><span class="o">&lt;</span><span class="n">VendorName</span><span class="o">&gt;</span><span class="n">Backend</span>
+    <span class="n">backend</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">VendorName</span><span class="o">&gt;</span><span class="n">Backend</span><span class="p">()</span>
+
+    <span class="n">impls</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">OpImpl</span><span class="p">(</span>
+            <span class="n">op_name</span><span class="o">=</span><span class="s2">"silu_and_mul"</span><span class="p">,</span>
+            <span class="n">impl_id</span><span class="o">=</span><span class="s2">"vendor.&lt;vendor_name&gt;"</span><span class="p">,</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">BackendImplKind</span><span class="o">.</span><span class="n">VENDOR</span><span class="p">,</span>
+            <span class="n">fn</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">silu_and_mul</span><span class="p">,</span>
+            <span class="n">vendor</span><span class="o">=</span><span class="s2">"&lt;vendor_name&gt;"</span><span class="p">,</span>
+            <span class="n">priority</span><span class="o">=</span><span class="n">BackendPriority</span><span class="o">.</span><span class="n">VENDOR</span><span class="p">,</span>  <span class="c1"># 100</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">registry</span><span class="o">.</span><span class="n">register_many</span><span class="p">(</span><span class="n">impls</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Step 3: Register in builtin_ops.py</strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.backends.vendor.</span><span class="o">&lt;</span><span class="n">vendor_name</span><span class="o">&gt;.</span><span class="n">register_ops</span> <span class="kn">import</span><span class="w"> </span><span class="nn">register_builtins</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">register_</span><span class="o">&lt;</span><span class="n">vendor</span><span class="o">&gt;</span>
+    <span class="n">register_</span><span class="o">&lt;</span><span class="n">vendor</span><span class="o">&gt;</span><span class="p">(</span><span class="n">registry</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;Vendor&gt; operators not available: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="option-2-external-plugin-package">
+<h4>Option 2: External plugin package<a class="headerlink" href="#option-2-external-plugin-package" title="Link to this heading">#</a></h4>
+<p>Create a separate package with entry points:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># setup.py</span>
+<span class="n">setup</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"vllm-plugin-&lt;vendor&gt;"</span><span class="p">,</span>
+    <span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">"vllm_fl.plugin"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"&lt;vendor&gt; = vllm_fl_&lt;vendor&gt;.register_ops:register_builtins"</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Install and use:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>vllm-plugin-&lt;vendor&gt;
+<span class="c1"># Plugin auto-discovered via entry points</span>
+</pre></div>
+</div>
+</section>
+<section id="option-3-environment-based-plugin">
+<h4>Option 3: Environment-based plugin<a class="headerlink" href="#option-3-environment-based-plugin" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_FL_PLUGIN_MODULES</span><span class="o">=</span>my_custom_backend.register_ops
+</pre></div>
+</div>
+<p>The module should provide a <code class="docutils literal notranslate"><span class="pre">register_builtins(registry)</span></code> function.</p>
+</section>
+<section id="priority-levels">
+<h4>Priority levels<a class="headerlink" href="#priority-levels" title="Link to this heading">#</a></h4>
+<p>Use constants from <code class="docutils literal notranslate"><span class="pre">types.py</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">BackendPriority.DEFAULT</span></code> (150) - FlagGems</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BackendPriority.VENDOR</span></code> (100) - Vendor backends</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BackendPriority.REFERENCE</span></code> (50) - PyTorch</p></li>
+</ul>
+</section>
+<section id="test-your-backend">
+<h4>Test your backend<a class="headerlink" href="#test-your-backend" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">vllm_fl.dispatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_default_manager</span>
+
+<span class="n">manager</span> <span class="o">=</span> <span class="n">get_default_manager</span><span class="p">()</span>
+<span class="n">manager</span><span class="o">.</span><span class="n">ensure_initialized</span><span class="p">()</span>
+
+<span class="c1"># Check registration</span>
+<span class="n">snap</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">op_name</span><span class="p">,</span> <span class="n">impls</span> <span class="ow">in</span> <span class="n">snap</span><span class="o">.</span><span class="n">impls_by_op</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">impl</span> <span class="ow">in</span> <span class="n">impls</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">impl</span><span class="o">.</span><span class="n">vendor</span> <span class="o">==</span> <span class="s2">"&lt;vendor_name&gt;"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">op_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">impl</span><span class="o">.</span><span class="n">impl_id</span><span class="si">}</span><span class="s2">, available=</span><span class="si">{</span><span class="n">impl</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Enable debug output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_FL_LOG_LEVEL</span><span class="o">=</span>DEBUG
+</pre></div>
+</div>
+</section>
+<section id="vendor-backend-checklist">
+<h4>Vendor backend checklist<a class="headerlink" href="#vendor-backend-checklist" title="Link to this heading">#</a></h4>
+<ul class="contains-task-list simple">
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox">Backend class inherits from <code class="docutils literal notranslate"><span class="pre">Backend</span></code></p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"><code class="docutils literal notranslate"><span class="pre">vendor</span></code> property returns vendor name (not None)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"><code class="docutils literal notranslate"><span class="pre">is_available()</span></code> checks hardware/library availability</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"><code class="docutils literal notranslate"><span class="pre">register_ops.py</span></code> uses <code class="docutils literal notranslate"><span class="pre">BackendImplKind.VENDOR</span></code></p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox"><code class="docutils literal notranslate"><span class="pre">impl_id</span></code> follows format: <code class="docutils literal notranslate"><span class="pre">vendor.&lt;vendor_name&gt;</span></code></p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox">Priority set to <code class="docutils literal notranslate"><span class="pre">BackendPriority.VENDOR</span></code> (100)</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox">Error handling for missing dependencies</p></li>
+<li class="task-list-item"><p><input class="task-list-item-checkbox" disabled="disabled" type="checkbox">(Optional) <code class="docutils literal notranslate"><span class="pre">attention_backend()</span></code> returns vendor-specific attention backend class path</p></li>
+</ul>
+</section>
+<section id="current-vendor-backends">
+<h4>Current vendor backends<a class="headerlink" href="#current-vendor-backends" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Vendor</p></th>
+<th class="head"><p>Device</p></th>
+<th class="head"><p>Availability probe</p></th>
+<th class="head"><p>Attention backend</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cuda</span></code></p></td>
+<td><p>NVIDIA GPU</p></td>
+<td><p>FlagGems vendor detection (excludes CUDA-like devices)</p></td>
+<td><p>vLLM native (<code class="docutils literal notranslate"><span class="pre">FLASH_ATTN</span></code>, <code class="docutils literal notranslate"><span class="pre">FLASHMLA</span></code>, <code class="docutils literal notranslate"><span class="pre">FLASHMLA_SPARSE</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ascend</span></code></p></td>
+<td><p>Huawei Ascend NPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">torch.npu.is_available()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AscendAttentionBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">AscendMLABackend</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gcu</span></code></p></td>
+<td><p>Enflame GCU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">torch.gcu.is_available()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AttentionGCUBackend</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">iluvatar</span></code></p></td>
+<td><p>Iluvatar GPU</p></td>
+<td><p>vLLM platform vendor</p></td>
+<td><p>vLLM native (<code class="docutils literal notranslate"><span class="pre">FLASH_ATTN</span></code>, <code class="docutils literal notranslate"><span class="pre">FLASHMLA</span></code>, <code class="docutils literal notranslate"><span class="pre">TRITON_ATTN</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">kunlunxin</span></code></p></td>
+<td><p>Kunlunxin XPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">torch_xmlir</span></code> + <code class="docutils literal notranslate"><span class="pre">torch.cuda.is_available()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">KunlunxinAttentionBackend</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">metax</span></code></p></td>
+<td><p>MetaX (MACA)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">torch.cuda.is_available()</span></code></p></td>
+<td><p>vLLM native, <code class="docutils literal notranslate"><span class="pre">TRITON_ATTN</span></code> with FlagGems</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">musa</span></code></p></td>
+<td><p>Moore Threads (MUSA)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">torch.musa.is_available()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TRITON_ATTN</span></code>, <code class="docutils literal notranslate"><span class="pre">TRITON_MLA</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sunrise</span></code></p></td>
+<td><p>Sunrise PPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">torch.ptpu.is_available()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AttentionFLBackend</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">thead</span></code></p></td>
+<td><p>T-Head PPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PPU_SDK</span></code> environment variable</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FLASH_ATTN</span></code> (FA3 wheel)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">txda</span></code></p></td>
+<td><p>Tsingmicro TXDA</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">torch.txda.is_available()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AttentionFLBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">MLAFLBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">TritonAttentionBackend</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The vendor name reported by a backend is what <code class="docutils literal notranslate"><span class="pre">allow_vendors</span></code>, <code class="docutils literal notranslate"><span class="pre">deny_vendors</span></code>, and the <code class="docutils literal notranslate"><span class="pre">vendor:&lt;name&gt;</span></code> tokens match. It is not always the directory name: the MetaX backend is <code class="docutils literal notranslate"><span class="pre">maca</span></code>, the Enflame backend is <code class="docutils literal notranslate"><span class="pre">gcu</span></code>, and the Tsingmicro backend is <code class="docutils literal notranslate"><span class="pre">txda</span></code>.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">backends/vendor/template/</span></code> for a template to create new vendor backends.</p>
+</section>
+</section>
+</section>
+<section id="multi-process-safety">
+<h2>Multi-process safety<a class="headerlink" href="#multi-process-safety" title="Link to this heading">#</a></h2>
+<p>OpManager supports multi-process environments:</p>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">os.register_at_fork()</span></code> to automatically reset state after fork</p></li>
+<li><p>PID detection ensures independent initialization per process</p></li>
+<li><p>Thread-safe registry and cache operations</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="configure-policy.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Policy context management</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/dispatch-api-reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Dispatch API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-new-operators">Add new operators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-vendor-backends">Add vendor backends</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-1-built-in-vendor-backend">Option 1: Built-in vendor backend</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-2-external-plugin-package">Option 2: External plugin package</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-3-environment-based-plugin">Option 3: Environment-based plugin</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#priority-levels">Priority levels</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-your-backend">Test your backend</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vendor-backend-checklist">Vendor backend checklist</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#current-vendor-backends">Current vendor backends</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-process-safety">Multi-process safety</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../vllm_plugin_fl_zh/dispatch_user_guide/add-ops-and-vendors.html">中文</a></body>
+</html>

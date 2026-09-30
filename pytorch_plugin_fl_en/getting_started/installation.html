@@ -1,0 +1,997 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Installation" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/installation.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="Choose a platform: Each platform is selected by a single build variable, FLAGOS_ACCELERATOR, and each platform has its own execution path:,,,, Platform, FLAGOS_ACCELERATOR, Execution path, Status,,, NVIDIA CUDA, cuda(default), CUDA boxing over an external libtorch_cuda.so, Stable,, MetaX, metax, ..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="Choose a platform: Each platform is selected by a single build variable, FLAGOS_ACCELERATOR, and each platform has its own execution path:,,,, Platform, FLAGOS_ACCELERATOR, Execution path, Status,,, NVIDIA CUDA, cuda(default), CUDA boxing over an external libtorch_cuda.so, Stable,, MetaX, metax, ..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Installation &#8212; PyTorch-Plugin-FL Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/installation.cd8a0f3f-e29d-4550-8418-fa1343288523.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/installation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/installation.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Distributed Collectives" href="../architecture/distributed.html" />
+    <link rel="prev" title="Architecture" href="../overview/architecture.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="PyTorch-Plugin-FL Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="PyTorch-Plugin-FL Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    PyTorch-Plugin-FL
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">PyTorch-Plugin-FL Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/architecture.html">Architecture</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/architecture.html">Architecture</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/distributed.html">Distributed Collectives</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/profiler.html">Profiler Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/torch-compile.html">torch.compile Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/compatibility.html">Compatibility and Platform Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/environment-variables.html">Environment Variables</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/installation.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Installation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-a-platform">Choose a platform</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-requirements">Common requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source-installation-contract">Source installation contract</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nvidia-cuda">NVIDIA CUDA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metax">MetaX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend">Ascend</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppu">PPU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hygon-dcu">Hygon DCU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enflame-gcu">Enflame GCU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#moore-threads-musa">Moore Threads MUSA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-robotics-bpu">D-Robotics BPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-time-switches">Build-time switches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verification">Verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
+<section id="choose-a-platform">
+<h2>Choose a platform<a class="headerlink" href="#choose-a-platform" title="Link to this heading">#</a></h2>
+<p>Each platform is selected by a single build variable, <code class="docutils literal notranslate"><span class="pre">FLAGOS_ACCELERATOR</span></code>, and each platform has its own execution path:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Platform</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_ACCELERATOR</span></code></p></th>
+<th class="head"><p>Execution path</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NVIDIA CUDA</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda</span></code> (default)</p></td>
+<td><p>CUDA boxing over an external <code class="docutils literal notranslate"><span class="pre">libtorch_cuda.so</span></code></p></td>
+<td><p>Stable</p></td>
+</tr>
+<tr class="row-odd"><td><p>MetaX</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">metax</span></code></p></td>
+<td><p>CUDA boxing via <code class="docutils literal notranslate"><span class="pre">cu-bridge</span></code> against the vendor libtorch</p></td>
+<td><p>Stable</p></td>
+</tr>
+<tr class="row-even"><td><p>Ascend</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ascend</span></code></p></td>
+<td><p>Native ACLNN operator backend, FlagGems via FlagTree (Triton 3.5)</p></td>
+<td><p>Beta</p></td>
+</tr>
+<tr class="row-odd"><td><p>PPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ppu</span></code></p></td>
+<td><p>Same CUDA-boxing path as NVIDIA CUDA, against the PPU CUDA-13-compatible SDK, bundling its own libtorch</p></td>
+<td><p>Experimental</p></td>
+</tr>
+<tr class="row-even"><td><p>Hygon DCU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dcu</span></code></p></td>
+<td><p>CUDA boxing over the hipified DTK torch build</p></td>
+<td><p>Beta</p></td>
+</tr>
+<tr class="row-odd"><td><p>Enflame GCU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gcu</span></code></p></td>
+<td><p>Native <code class="docutils literal notranslate"><span class="pre">libtopsaten.so</span></code> operator backend, with CPU fallback for unrouted/int64/float64 ops</p></td>
+<td><p>Beta</p></td>
+</tr>
+<tr class="row-even"><td><p>Moore Threads MUSA</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">musa</span></code></p></td>
+<td><p>FlagGems-first Triton kernels, native <code class="docutils literal notranslate"><span class="pre">mudnn</span></code> backend as fallback, CPU fallback for unrouted ops</p></td>
+<td><p>Experimental</p></td>
+</tr>
+<tr class="row-odd"><td><p>D-Robotics BPU</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bpu</span></code></p></td>
+<td><p>No eager kernel sets are built; eager ops run on CPU, acceleration comes from the graph path</p></td>
+<td><p>Runtime only</p></td>
+</tr>
+<tr class="row-even"><td><p>TsingMicro</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tsingmicro</span></code></p></td>
+<td><p>Runtime/build selector present; no per-operator kernel set documented</p></td>
+<td><p>Runtime only</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="common-requirements">
+<h2>Common requirements<a class="headerlink" href="#common-requirements" title="Link to this heading">#</a></h2>
+<p>All platforms require:</p>
+<ul class="simple">
+<li><p><strong>Python</strong>: 3.8 or later (platform SDKs and available wheels may impose a narrower range)</p></li>
+<li><p><strong>PyTorch</strong>: 2.10.x (<code class="docutils literal notranslate"><span class="pre">&gt;=2.10,&lt;2.11</span></code>) — the generated ATen bindings are tied to this minor line</p></li>
+<li><p><strong>CMake</strong>: 3.18 or later</p></li>
+<li><p><strong>C++ toolchain</strong>: a working C++17 compiler (GCC 7+, Clang 5+, or MSVC 2017+)</p></li>
+<li><p><strong>Platform SDK/runtime</strong>: the vendor-specific SDK, compiler and runtime libraries for your accelerator</p></li>
+</ul>
+<p>Patch releases inside the same PyTorch minor line (for example 2.10.0 to 2.10.1) are compatible. A different minor line (for example 2.11.x) fails at build or run time, because the generated bindings are sensitive to C++ ABI and operator schema changes.</p>
+</section>
+<section id="source-installation-contract">
+<h2>Source installation contract<a class="headerlink" href="#source-installation-contract" title="Link to this heading">#</a></h2>
+<p>Every platform installation follows the same pattern:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>&lt;platform&gt;<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code> is required: without it, pip creates an isolated build environment that cannot see the PyTorch installation and platform SDK in your current environment, and the generated native bindings then link against the wrong torch or fail to find the vendor SDK.</p>
+<p>Each platform directory in the upstream repository (<code class="docutils literal notranslate"><span class="pre">docs/vendors/&lt;platform&gt;/installation.md</span></code>) defines the platform’s SDK environment variables and any extra build flags. Platform summaries:</p>
+<section id="nvidia-cuda">
+<h3>NVIDIA CUDA<a class="headerlink" href="#nvidia-cuda" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/Torch-FL.git<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>Torch-FL
+
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0+cpu<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+
+<span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>cuda<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-vvv<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>This generates the CUDA-boxing kernels from PyTorch’s ATen schema, bundles <code class="docutils literal notranslate"><span class="pre">libtorch_cuda.so</span></code> and the related CUDA dispatcher libraries into <code class="docutils literal notranslate"><span class="pre">torch_fl/lib/</span></code>, and pins matching <code class="docutils literal notranslate"><span class="pre">nvidia-*-cu12</span></code> runtime dependencies. Requirements: an NVIDIA GPU with compute capability 7.0 or later, driver 470 or later, a CUDA 12.x toolkit for the build, plus <code class="docutils literal notranslate"><span class="pre">cmake</span></code>, <code class="docutils literal notranslate"><span class="pre">ninja</span></code> and <code class="docutils literal notranslate"><span class="pre">patchelf</span></code>.</p>
+<p>Optional FlagGems C++ dispatch (lowest-overhead FlagGems route):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>cuda<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">FLAGOS_BUILD_FLAGGEMS_CPP</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">FLAGGEMS_DIR</span><span class="o">=</span>&lt;path-to-FlagGems&gt;/lib/cmake/FlagGems<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-vvv<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="metax">
+<h3>MetaX<a class="headerlink" href="#metax" title="Link to this heading">#</a></h3>
+<p>MetaX ships a self-contained boxing wheel: CUDA-boxing kernels compiled with the host <code class="docutils literal notranslate"><span class="pre">g++</span></code>, plus the MetaX-forked libtorch C++ runtime bundled inside the wheel. The target machine needs only the stock <code class="docutils literal notranslate"><span class="pre">torch==2.10.0+cpu</span></code> wheel, the <code class="docutils literal notranslate"><span class="pre">torch_fl</span></code> wheel, and the <code class="docutils literal notranslate"><span class="pre">/opt/maca</span></code> driver runtime.</p>
+<p>The wheel is built on a machine with the full MACA SDK and a <code class="docutils literal notranslate"><span class="pre">torch+metax</span></code> wheel (both from the MetaX developer portal), in three steps: build the boxing artifacts, bundle the forked libtorch with <code class="docutils literal notranslate"><span class="pre">scripts/vendor/bundle_maca_libtorch.sh</span></code>, then repackage the wheel. The result is a large wheel (the bundled libtorch puts it above PyPI’s size limit), distributed through a private index or a direct transfer.</p>
+<p>On the target host:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0+cpu<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+pip<span class="w"> </span>install<span class="w"> </span>torch_fl-&lt;version&gt;+&lt;sdk&gt;.whl
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">FLAGOS_WHEEL_LOCAL</span></code> records the target SDK in the wheel’s local version label (for example <code class="docutils literal notranslate"><span class="pre">0.1.0+metax3.8.1</span></code>), which keeps two SDK-incompatible wheels from being indistinguishable by filename.</p>
+<p><strong>Import order matters on MetaX</strong>: import <code class="docutils literal notranslate"><span class="pre">torch_fl</span></code> before <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">torch</span></code>, because PyTorch’s bundled CUDA 12.x runtime is ABI-incompatible with MACA’s <code class="docutils literal notranslate"><span class="pre">cu-bridge</span></code> and <code class="docutils literal notranslate"><span class="pre">torch_fl</span></code> preloads a shim that supplies the required symbol versions.</p>
+</section>
+<section id="ascend">
+<h3>Ascend<a class="headerlink" href="#ascend" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+<span class="nb">source</span><span class="w"> </span>/usr/local/Ascend/ascend-toolkit/set_env.sh
+
+<span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>ascend<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Requirements: an Ascend 910 with CANN 9.0.0 or compatible, accessible <code class="docutils literal notranslate"><span class="pre">/dev/davinci*</span></code> device nodes, and Python 3.11 if you use the FlagTree Ascend 3.5 wheel (it is cp311-only; Python 3.8+ works for an ACLNN-only build).</p>
+<p>The default configuration enables the FlagGems Python route for measured operators, with native ACLNN kernels as the fallback. <code class="docutils literal notranslate"><span class="pre">scripts/codegen/codegen_ascend.py</span></code> generates the ACLNN kernels; operators without an ACLNN mapping fall back to CPU.</p>
+<p>FlagGems on Ascend runs on <strong>FlagTree</strong> (the FlagOS Triton fork) on its Ascend 3.5 line. FlagTree installs the module named <code class="docutils literal notranslate"><span class="pre">triton</span></code>, so remove any stock or vendor Triton first, then install FlagTree and FlagGems from the FlagOS index. Nothing in this path imports or links <code class="docutils literal notranslate"><span class="pre">torch_npu</span></code>: the backend installs a lightweight <code class="docutils literal notranslate"><span class="pre">torch_npu</span></code> stub and registers its own <code class="docutils literal notranslate"><span class="pre">flagos</span></code> policy on FlagTree’s strategy registry.</p>
+<p><strong>Import order matters on Ascend</strong> too: import <code class="docutils literal notranslate"><span class="pre">torch_fl</span></code> before packages that might register a device backend.</p>
+</section>
+<section id="ppu">
+<h3>PPU<a class="headerlink" href="#ppu" title="Link to this heading">#</a></h3>
+<p>PPU presents itself as a CUDA-compatible device: its torch wheel is a full CUDA 13 build and it registers operators under the <code class="docutils literal notranslate"><span class="pre">CUDA</span></code> dispatch key, so no stock <code class="docutils literal notranslate"><span class="pre">+cpu</span></code> wheel and no external <code class="docutils literal notranslate"><span class="pre">libtorch_cuda.so</span></code> are needed.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>ppu<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">CUDA_HOME</span><span class="o">=</span>/usr/local/PPU_SDK/CUDA_SDK<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">FLAGOS_BUILD_FLAGGEMS_CPP</span><span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">FLAGOS_BUILD_FLAGGEMS</span><span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="nv">FLAGOS_SKIP_CUDA_ASSETS</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-vvv<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>At runtime, export <code class="docutils literal notranslate"><span class="pre">FLAGOS_DISABLE_CUDA_ASSETS=1</span></code> so the import-time preload of a bundled <code class="docutils literal notranslate"><span class="pre">libtorch_cuda.so</span></code> is a no-op (PPU torch provides the runtime itself).</p>
+</section>
+<section id="hygon-dcu">
+<h3>Hygon DCU<a class="headerlink" href="#hygon-dcu" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>/opt/dtk/env.sh
+
+<span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>dcu<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-vvv<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>The build is pure boxing: the DTK torch wheel registers HIP kernels under the <code class="docutils literal notranslate"><span class="pre">CUDA</span></code> dispatch key, generated boxing kernels dispatch into <code class="docutils literal notranslate"><span class="pre">libtorch_hip.so</span></code> unchanged, and runtime sources compile with plain host <code class="docutils literal notranslate"><span class="pre">g++</span></code> — no <code class="docutils literal notranslate"><span class="pre">nvcc</span></code>, <code class="docutils literal notranslate"><span class="pre">hipcc</span></code> or hipify pass. FlagGems Python is on by default; the FlagGems C++ path stays off because DTK ships no <code class="docutils literal notranslate"><span class="pre">liboperators.so</span></code>.</p>
+</section>
+<section id="enflame-gcu">
+<h3>Enflame GCU<a class="headerlink" href="#enflame-gcu" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+
+<span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>gcu<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Requires the TopsRider SDK (<code class="docutils literal notranslate"><span class="pre">libtopsrt.so</span></code> runtime and <code class="docutils literal notranslate"><span class="pre">libtopsaten.so</span></code> operator library). The build runs <code class="docutils literal notranslate"><span class="pre">scripts/codegen/codegen_gcu.py</span></code>, validating each operator against the <code class="docutils literal notranslate"><span class="pre">topsaten</span></code> symbols actually present in the installed <code class="docutils literal notranslate"><span class="pre">libtopsaten.so</span></code>; operators missing from the SDK are skipped with a warning. The <code class="docutils literal notranslate"><span class="pre">torch-gcu</span></code> wheel cannot be used alongside PyTorch-Plugin-FL, because it claims <code class="docutils literal notranslate"><span class="pre">PrivateUse1</span></code> for itself.</p>
+</section>
+<section id="moore-threads-musa">
+<h3>Moore Threads MUSA<a class="headerlink" href="#moore-threads-musa" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+
+<span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>musa<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Requires the MUSA toolkit under <code class="docutils literal notranslate"><span class="pre">/usr/local/musa</span></code>: <code class="docutils literal notranslate"><span class="pre">musart</span></code> (runtime), <code class="docutils literal notranslate"><span class="pre">mudnn</span></code> (operator library) and <code class="docutils literal notranslate"><span class="pre">murand</span></code> (device RNG). The build runs <code class="docutils literal notranslate"><span class="pre">scripts/codegen/codegen_mudnn.py</span></code>; coverage is the generated operator set plus handwritten convolution kernels, with native RNG kernels and CPU fallback for everything else. <code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code> is mandatory here: without it, pip’s build overlay resolves its own torch and <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">torch_fl</span></code> then fails with an undefined <code class="docutils literal notranslate"><span class="pre">c10</span></code> symbol.</p>
+</section>
+<section id="d-robotics-bpu">
+<h3>D-Robotics BPU<a class="headerlink" href="#d-robotics-bpu" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0+cpu<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+<span class="nv">FLAGOS_ACCELERATOR</span><span class="o">=</span>bpu<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>The BPU platform provides runtime acceleration only: no per-operator BPU kernels exist, eager operators run on the CPU via fallback, and acceleration comes from whole-graph compilation (<code class="docutils literal notranslate"><span class="pre">torch.compile(backend=&quot;bpu&quot;)</span></code>) or from the prebuilt-HBM LLM runtime. Graph compilation needs <code class="docutils literal notranslate"><span class="pre">hbdk4</span></code>, which ships x86_64-only wheels.</p>
+</section>
+</section>
+<section id="build-time-switches">
+<h2>Build-time switches<a class="headerlink" href="#build-time-switches" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">setup.py</span></code> forces a per-accelerator value for the kernel-set switches and rejects an explicit environment value that contradicts it:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_ACCELERATOR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cuda</span></code></p></td>
+<td><p>Hardware platform the wheel is built for</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_BUILD_VENDOR</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code>, <code class="docutils literal notranslate"><span class="pre">OFF</span></code> on <code class="docutils literal notranslate"><span class="pre">metax</span></code></p></td>
+<td><p>Compile the vendor’s native kernels (a no-op where the vendor ships none)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_BUILD_FLAGGEMS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code>, <code class="docutils literal notranslate"><span class="pre">OFF</span></code> on <code class="docutils literal notranslate"><span class="pre">bpu</span></code></p></td>
+<td><p>Compile the FlagGems Python kernel wrappers</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_BUILD_FLAGGEMS_CPP</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code> on <code class="docutils literal notranslate"><span class="pre">cuda</span></code>/<code class="docutils literal notranslate"><span class="pre">tsingmicro</span></code></p></td>
+<td><p>Compile the FlagGems C++ wrapper (<code class="docutils literal notranslate"><span class="pre">liboperators.so</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_BUILD_BOXING</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code>, <code class="docutils literal notranslate"><span class="pre">OFF</span></code> on <code class="docutils literal notranslate"><span class="pre">ascend</span></code>/<code class="docutils literal notranslate"><span class="pre">gcu</span></code>/<code class="docutils literal notranslate"><span class="pre">musa</span></code></p></td>
+<td><p>Compile the generated CUDA-boxing kernels</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_BUILD_TILEOPS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ON</span></code> on <code class="docutils literal notranslate"><span class="pre">cuda</span></code></p></td>
+<td><p>Compile the TileOps kernel wrappers (SM90 NVIDIA parts)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_BUILD_JOBS</span></code></p></td>
+<td><p>CPU count</p></td>
+<td><p>Parallel jobs for the CMake build</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_SKIP_CUDA_ASSETS</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>Do not bundle an external <code class="docutils literal notranslate"><span class="pre">libtorch_cuda.so</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGOS_WHEEL_LOCAL</span></code></p></td>
+<td><p>SDK-derived</p></td>
+<td><p>Local version label for the wheel</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The wheel records the accelerator and kernel sets it was built with in <code class="docutils literal notranslate"><span class="pre">torch_fl/_build_config.py</span></code>, and every runtime reader consults that record — a stale exported variable cannot make a wheel describe itself wrongly. Full details of every variable are in the <a class="reference internal" href="../reference/environment-variables.html"><span class="doc">environment variable reference</span></a>.</p>
+</section>
+<section id="verification">
+<h2>Verification<a class="headerlink" href="#verification" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">import torch_fl</span>
+<span class="s2">import torch</span>
+
+<span class="s2">print(f'PyTorch version: {torch.__version__}')</span>
+<span class="s2">print(f'flagos devices: {torch.flagos.device_count()}')</span>
+<span class="s2">print(f'flagos available: {torch.flagos.is_available()}')</span>
+
+<span class="s2">x = torch.randn(4, 4, device='flagos:0')</span>
+<span class="s2">y = (x @ x).sum()</span>
+<span class="s2">print(f'Sample result: {y.cpu().item():.4f}')</span>
+<span class="s2">"</span>
+</pre></div>
+</div>
+<p>A working installation reports the device count of the current machine and a floating-point result. If the count is 0, check the vendor SDK installation, the driver, the device nodes, and the import order rules above.</p>
+</section>
+<section id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Unit tests: no hardware dependency</span>
+pytest<span class="w"> </span>tests/unit<span class="w"> </span>-q
+
+<span class="c1"># Operator correctness on the active backend</span>
+pytest<span class="w"> </span>tests/integration/ops/<span class="w"> </span>-m<span class="w"> </span>main_ops<span class="w"> </span>-v<span class="w"> </span>--tb<span class="o">=</span>short
+
+<span class="c1"># Factory operators respect device placement</span>
+pytest<span class="w"> </span>tests/integration/test_factory_ops.py<span class="w"> </span>-v<span class="w"> </span>--tb<span class="o">=</span>short
+</pre></div>
+</div>
+<p>Operator tests are selected by markers registered in <code class="docutils literal notranslate"><span class="pre">tests/integration/ops/conftest.py</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Marker</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">main_ops</span></code></p></td>
+<td><p>Representative operator in the CI smoke subset</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">anyplatform</span></code></p></td>
+<td><p>Runs on any accelerator backend</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">cuda</span></code>, <code class="docutils literal notranslate"><span class="pre">metax</span></code>, <code class="docutils literal notranslate"><span class="pre">ascend</span></code>, <code class="docutils literal notranslate"><span class="pre">musa</span></code></p></td>
+<td><p>Requires that backend’s kernels or hardware</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flaggems</span></code></p></td>
+<td><p>Asserts the FlagGems route from <code class="docutils literal notranslate"><span class="pre">backends_&lt;platform&gt;.conf</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flaggems_python</span></code></p></td>
+<td><p>Requires the FlagGems Python wrapper backend</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flaggems_cpp</span></code></p></td>
+<td><p>Requires a wheel built with <code class="docutils literal notranslate"><span class="pre">FLAGOS_BUILD_FLAGGEMS_CPP=ON</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Cross-backend contracts (profiler, AMP) are selected with the <code class="docutils literal notranslate"><span class="pre">profiler*</span></code> and <code class="docutils literal notranslate"><span class="pre">amp*</span></code> markers from <code class="docutils literal notranslate"><span class="pre">tests/integration/conftest.py</span></code>; a test needing a capability the active platform does not provide skips with a reason naming the platform.</p>
+<p>Test filtering is automatic: the conftest detects the platform from the wheel’s build record, the installed platform marker, or the routing table name, and skips tests marked for unavailable backends. Unit tests, model tests and the manual suites are documented in the upstream <code class="docutils literal notranslate"><span class="pre">docs/development/testing.md</span></code>.</p>
+</section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="../reference/compatibility.html"><span class="doc">Compatibility matrix</span></a> — per-platform capability validation</p></li>
+<li><p><a class="reference internal" href="../reference/environment-variables.html"><span class="doc">Environment variables</span></a> — build and runtime configuration</p></li>
+<li><p><a class="reference internal" href="../architecture/distributed.html"><span class="doc">Distributed collectives</span></a> — <code class="docutils literal notranslate"><span class="pre">ProcessGroupFlagOS</span></code> and FlagCX</p></li>
+<li><p><a class="reference internal" href="../architecture/profiler.html"><span class="doc">Profiler</span></a> — <code class="docutils literal notranslate"><span class="pre">torch.profiler</span></code> integration</p></li>
+<li><p><a class="reference internal" href="../architecture/torch-compile.html"><span class="doc">torch.compile</span></a> — Inductor and FlagTree integration</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../overview/architecture.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Architecture</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../architecture/distributed.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Distributed Collectives</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#choose-a-platform">Choose a platform</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-requirements">Common requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source-installation-contract">Source installation contract</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nvidia-cuda">NVIDIA CUDA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metax">MetaX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend">Ascend</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppu">PPU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hygon-dcu">Hygon DCU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enflame-gcu">Enflame GCU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#moore-threads-musa">Moore Threads MUSA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#d-robotics-bpu">D-Robotics BPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-time-switches">Build-time switches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verification">Verification</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tests">Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../pytorch_plugin_fl_zh/getting_started/installation.html">中文</a></body>
+</html>

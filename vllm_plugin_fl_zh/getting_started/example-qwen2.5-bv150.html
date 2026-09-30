@@ -1,0 +1,1954 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Qwen2.5-1.5B 在 Iluvatar BI-V150 上的推理" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/example-qwen2.5-bv150.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="硬件：Iluvatar BI-V150（CoreX） 框架：vLLM + vllm-plugin-FL + FlagGems 目录: 模型概览, 环境要求, 安装, 模型下载, 推理脚本, 运行说明, 参数调优, 基准性能, 常见问题. 1. 模型概览: Qwen2.5-1.5B 是阿里巴巴 Qwen2.5 系列的小规模语言模型，参数量约 15 亿。 模型信息:,, 属性, 值,,, 模型类型, Qwen2ForCausalLM,, 参数量, 1.54B,, 隐藏层大小, 1536,, 层数, 28,, 注意力头数, 12,, 上下文长度, 32,768 tokens,, 词表大小, 1..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="硬件：Iluvatar BI-V150（CoreX） 框架：vLLM + vllm-plugin-FL + FlagGems 目录: 模型概览, 环境要求, 安装, 模型下载, 推理脚本, 运行说明, 参数调优, 基准性能, 常见问题. 1. 模型概览: Qwen2.5-1.5B 是阿里巴巴 Qwen2.5 系列的小规模语言模型，参数量约 15 亿。 模型信息:,, 属性, 值,,, 模型类型, Qwen2ForCausalLM,, 参数量, 1.54B,, 隐藏层大小, 1536,, 层数, 28,, 注意力头数, 12,, 上下文长度, 32,768 tokens,, 词表大小, 1..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Qwen2.5-1.5B 在 Iluvatar BI-V150 上的推理 &#8212; VLLM-Plugin-FL 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/example-qwen2.5-bv150.3fe50bcb-bbc8-4bb0-8c65-fbda919b0da5.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/example-qwen2.5-bv150';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/example-qwen2.5-bv150.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="VLLM-Plugin-FL 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="VLLM-Plugin-FL 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    vllm-plugin-FL 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">vllm-plugin-FL 概览</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/operator-dispatch-mechanism.html">算子调度机制</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="getting-started.html">快速入门</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">安装运行推理任务所需的软件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run-inference-task.html">运行推理任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adaptation-gate.html">适配门禁测试</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dispatch_user_guide/dispatch-user-guide.html">算子调度用户指南</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/quick-start.html">快速开始</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-backend-selection.html">配置后端选择</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-policy.html">策略上下文管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/add-ops-and-vendors.html">添加新算子和厂商后端</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考文档</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/dispatch-api-reference.html">调度 API 参考</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/example-qwen2.5-bv150.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Qwen2.5-1.5B 在 Iluvatar BI-V150 上的推理</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 模型概览</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">模型信息</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#huggingface-modelscope">HuggingFace / ModelScope 路径</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">2. 环境要求</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.1 前提条件</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.2 环境变量</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">3. 安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">3.1 组件依赖关系</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">3.2 必需与可选组件</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">3.3 步骤 0：基础环境设置</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">系统要求</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu">验证 GPU 可用性</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">网络配置</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">安装构建依赖</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree-iluvatar">3.4 步骤 1：安装 FlagTree（Iluvatar 后端）</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree">什么是 FlagTree</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">验证</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker 镜像（推荐的替代方案）</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-corex">3.5 步骤 2：安装 vLLM（CoreX 定制版本）</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">获取 vllm-corex</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">验证</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems">3.6 步骤 3：安装 FlagGems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">什么是 FlagGems</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">验证</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">使用方式</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-plugin-fl">3.7 步骤 4：安装 vllm-plugin-FL</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">什么是 vllm-plugin-FL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">验证</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagcx">3.8 步骤 5：（可选）安装 FlagCX</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">什么是 FlagCX</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">验证</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">3.9 步骤 6：环境变量和验证</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bv150">BV150 必需的环境变量</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">完整验证脚本</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">4. 模型下载</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelscope">4.1 从 ModelScope 下载（推荐，国内可访问）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">4.2 ModelScope 缓存目录结构</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#huggingface">4.3 从 HuggingFace 下载（需要网络访问）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">5. 推理脚本</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">5.1 基础推理脚本</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">5.2 带 FlagGems 的推理脚本</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-api">5.3 服务模式（vLLM API 服务器）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">6. 运行说明</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">6.1 直接运行</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">6.2 在 Docker 容器中运行</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">6.3 预期输出</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">7. 参数调优</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llm">7.1 LLM 初始化参数</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#samplingparams">7.2 SamplingParams 参数</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">7.3 BV150 特定优化</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">8. 基准性能</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qwen2-5-1-5b-bv150">8.1 Qwen2.5-1.5B 在 BV150 上的预期性能</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">8.2 性能影响因素</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">9. 常见问题</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q1-symmetric-memory">Q1：模型加载失败，报 <code class="docutils literal notranslate"><span class="pre">_symmetric_memory</span></code> 错误</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q2-oom">Q2：推理时 OOM（内存不足）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q3">Q3：推理速度远低于预期</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q4">Q4：模型下载失败（网络受限）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q5-runtimeerror-no-hip-gpus-are-available">Q5：<code class="docutils literal notranslate"><span class="pre">RuntimeError:</span> <span class="pre">No</span> <span class="pre">HIP</span> <span class="pre">GPUs</span> <span class="pre">are</span> <span class="pre">available</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q6">Q6：输出乱码或无意义</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q7-modulenotfounderror-no-module-named-triton">Q7：<code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">'triton'</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q8-libcudart-so-12">Q8：<code class="docutils literal notranslate"><span class="pre">libcudart.so.12</span></code> 未找到</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q9-vendor-iluvatar-not-found-in-vendor-device-map">Q9：<code class="docutils literal notranslate"><span class="pre">Vendor</span> <span class="pre">'iluvatar'</span> <span class="pre">not</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">VENDOR_DEVICE_MAP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">网络受限环境替代方案</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm">vLLM 版本兼容性</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Docker 镜像推荐</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="qwen2-5-1-5b-iluvatar-bi-v150">
+<h1>Qwen2.5-1.5B 在 Iluvatar BI-V150 上的推理<a class="headerlink" href="#qwen2-5-1-5b-iluvatar-bi-v150" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>硬件：Iluvatar BI-V150（CoreX）
+框架：vLLM + vllm-plugin-FL + FlagGems</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="id1">
+<h2>目录<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><a class="reference internal" href="#1-%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%A7%88"><span class="xref myst">模型概览</span></a></p></li>
+<li><p><a class="reference internal" href="#2-%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="xref myst">环境要求</span></a></p></li>
+<li><p><a class="reference internal" href="#3-%E5%AE%89%E8%A3%85"><span class="xref myst">安装</span></a></p></li>
+<li><p><a class="reference internal" href="#4-%E6%A8%A1%E5%9E%8B%E4%B8%8B%E8%BD%BD"><span class="xref myst">模型下载</span></a></p></li>
+<li><p><a class="reference internal" href="#5-%E6%8E%A8%E7%90%86%E8%84%9A%E6%9C%AC"><span class="xref myst">推理脚本</span></a></p></li>
+<li><p><a class="reference internal" href="#6-%E8%BF%90%E8%A1%8C%E8%AF%B4%E6%98%8E"><span class="xref myst">运行说明</span></a></p></li>
+<li><p><a class="reference internal" href="#7-%E5%8F%82%E6%95%B0%E8%B0%83%E4%BC%98"><span class="xref myst">参数调优</span></a></p></li>
+<li><p><a class="reference internal" href="#8-%E5%9F%BA%E5%87%86%E6%80%A7%E8%83%BD"><span class="xref myst">基准性能</span></a></p></li>
+<li><p><a class="reference internal" href="#9-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="xref myst">常见问题</span></a></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>1. 模型概览<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p><strong>Qwen2.5-1.5B</strong> 是阿里巴巴 Qwen2.5 系列的小规模语言模型，参数量约 15 亿。</p>
+<section id="id3">
+<h3>模型信息<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>属性</p></th>
+<th class="head"><p>值</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>模型类型</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Qwen2ForCausalLM</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>参数量</p></td>
+<td><p>1.54B</p></td>
+</tr>
+<tr class="row-even"><td><p>隐藏层大小</p></td>
+<td><p>1536</p></td>
+</tr>
+<tr class="row-odd"><td><p>层数</p></td>
+<td><p>28</p></td>
+</tr>
+<tr class="row-even"><td><p>注意力头数</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-odd"><td><p>上下文长度</p></td>
+<td><p>32,768 tokens</p></td>
+</tr>
+<tr class="row-even"><td><p>词表大小</p></td>
+<td><p>151,936</p></td>
+</tr>
+<tr class="row-odd"><td><p>数据类型</p></td>
+<td><p>bfloat16 / float16</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="huggingface-modelscope">
+<h3>HuggingFace / ModelScope 路径<a class="headerlink" href="#huggingface-modelscope" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>平台</p></th>
+<th class="head"><p>路径</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HuggingFace</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Qwen/Qwen2.5-1.5B</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>ModelScope</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Qwen/Qwen2.5-1___5B</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>2. 环境要求<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="id5">
+<h3>2.1 前提条件<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>确保已安装 FlagOS 组件：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>组件</p></th>
+<th class="head"><p>最低版本</p></th>
+<th class="head"><p>验证方式</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>vLLM（vllm-corex）</p></td>
+<td><p>v0.13.0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">vllm;</span> <span class="pre">print(vllm.__version__)&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>vllm-plugin-FL</p></td>
+<td><p>最新</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">vllm_plugin_fl;</span> <span class="pre">print(vllm_plugin_fl.__version__)&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>FlagGems</p></td>
+<td><p>&gt;= 5.0.0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">flag_gems;</span> <span class="pre">print(flag_gems.__version__)&quot;</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>FlagTree</p></td>
+<td><p>0.5.1+iluvatar3.1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">triton;</span> <span class="pre">print(triton.__version__)&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>PyTorch CoreX</p></td>
+<td><p>&gt;= 2.2.0</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">torch;</span> <span class="pre">print(torch.__version__)&quot;</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id6">
+<h3>2.2 环境变量<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 必需</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_PLUGINS</span><span class="o">=</span>fl
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGTREE_BACKEND</span><span class="o">=</span>iluvatar
+
+<span class="c1"># 推荐</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MODELSCOPE_CACHE</span><span class="o">=</span>/path/to/model/cache
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h2>3. 安装<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<section id="id8">
+<h3>3.1 组件依赖关系<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>vllm-plugin-FL
+  ├── 依赖 vLLM（v0.13.0 vllm-corex）── 推理引擎
+  ├── 依赖 FlagGems（&gt;= 5.0.0）───────── 算子加速
+  ├── 依赖 FlagTree（0.5.1+iluvatar3.1）── Triton 编译器
+  └── 可选：FlagCX（&gt;= 0.9.0）──────────── 多卡通信
+
+FlagGems
+  ├── 依赖 PyTorch（CoreX 定制版）
+  └── 依赖 Triton（由 FlagTree 提供）
+
+FlagTree（iluvatar）
+  └── 独立编译器，提供 iluvatar 后端 triton wheel
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h3>3.2 必需与可选组件<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>组件</p></th>
+<th class="head"><p>是否必需</p></th>
+<th class="head"><p>版本</p></th>
+<th class="head"><p>备注</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>PyTorch</strong></p></td>
+<td><p>必需</p></td>
+<td><p>&gt;= 2.2.0（CoreX 定制版）</p></td>
+<td><p>Iluvatar 需要 torch-corex</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>FlagTree</strong></p></td>
+<td><p><strong>必需</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.5.1+iluvatar3.1</span></code></p></td>
+<td><p>Iluvatar 后端 Triton 编译器</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>vLLM</strong></p></td>
+<td><p>必需</p></td>
+<td><p>v0.13.0（vllm-corex）</p></td>
+<td><p><strong>必须使用 CoreX 定制版本</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>FlagGems</strong></p></td>
+<td><p>必需</p></td>
+<td><p>&gt;= 5.0.0</p></td>
+<td><p>算子加速库</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>vllm-plugin-FL</strong></p></td>
+<td><p>必需</p></td>
+<td><p>v0.1.x（最新）</p></td>
+<td><p>多芯片调度插件</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>FlagCX</strong></p></td>
+<td><p>可选</p></td>
+<td><p>&gt;= 0.9.0</p></td>
+<td><p>多卡通信（IXCCL 后端）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id10">
+<h3>3.3 步骤 0：基础环境设置<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<section id="id11">
+<h4>系统要求<a class="headerlink" href="#id11" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>操作系统</strong>：Ubuntu 20.04 / 22.04（Docker 容器环境）</p></li>
+<li><p><strong>Python</strong>：3.10 或 3.12（推荐 3.12）</p></li>
+<li><p><strong>CoreX SDK</strong>：已安装 Iluvatar CoreX 驱动和运行时</p></li>
+</ul>
+</section>
+<section id="gpu">
+<h4>验证 GPU 可用性<a class="headerlink" href="#gpu" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 检查 CoreX 设备</span>
+corex-smi
+
+<span class="c1"># 或通过 PyTorch 检查</span>
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">import torch</span>
+<span class="s2">print(f'CUDA available: {torch.cuda.is_available()}')</span>
+<span class="s2">print(f'Device count: {torch.cuda.device_count()}')</span>
+<span class="s2">if torch.cuda.device_count() &gt; 0:</span>
+<span class="s2">    print(f'Device 0: {torch.cuda.get_device_name(0)}')</span>
+<span class="s2">    m = torch.cuda.get_device_properties(0).total_mem / 1e9</span>
+<span class="s2">    print(f'Memory: {m:.1f} GB')</span>
+<span class="s2">"</span>
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h4>网络配置<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<p>Days 集群通常无法直接访问 GitHub 或 HuggingFace。配置镜像源：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip 镜像</span>
+pip<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>global.index-url<span class="w"> </span>https://pypi.tuna.tsinghua.edu.cn/simple
+
+<span class="c1"># FlagOS 私有 PyPI（用于带后端后缀的 flagtree wheel）</span>
+<span class="nv">RES</span><span class="o">=</span><span class="s2">"--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple --trusted-host=resource.flagos.net"</span>
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h4>安装构建依赖<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>zlib1g<span class="w"> </span>zlib1g-dev<span class="w"> </span>libxml2<span class="w"> </span>libxml2-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>nlohmann-json3-dev<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>ninja-build
+
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>pip<span class="w"> </span>setuptools<span class="w"> </span>wheel
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>scikit-build-core&gt;<span class="o">=</span><span class="m">0</span>.11<span class="w"> </span>pybind11<span class="w"> </span>ninja<span class="w"> </span>cmake
+</pre></div>
+</div>
+</section>
+</section>
+<section id="flagtree-iluvatar">
+<h3>3.4 步骤 1：安装 FlagTree（Iluvatar 后端）<a class="headerlink" href="#flagtree-iluvatar" title="Link to this heading">#</a></h3>
+<section id="flagtree">
+<h4>什么是 FlagTree<a class="headerlink" href="#flagtree" title="Link to this heading">#</a></h4>
+<p>FlagTree 是基于 Triton 的统一多芯片编译器。对于 Iluvatar BV150，FlagTree 提供 <strong>iluvatar 后端</strong>，将 Triton DSL 编译为 CoreX IR → Iluvatar GPU 机器码。</p>
+</section>
+<section id="id14">
+<h4>安装<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">RES</span><span class="o">=</span><span class="s2">"--index-url=https://resource.flagos.net/repository/flagos-pypi-hosted/simple --trusted-host=resource.flagos.net"</span>
+
+<span class="c1"># Python 3.12</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">flagtree</span><span class="o">===</span><span class="m">0</span>.5.1+iluvatar3.1<span class="w"> </span><span class="nv">$RES</span>
+
+<span class="c1"># Python 3.10</span>
+python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">flagtree</span><span class="o">===</span><span class="m">0</span>.5.1+iluvatar3.1<span class="w"> </span><span class="nv">$RES</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>关键</strong>：<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">flagtree===0.5.1</span></code>（不带后缀）安装的是 <strong>NVIDIA 版本</strong>，在 BV150 上无法工作。您<strong>必须</strong>使用 <code class="docutils literal notranslate"><span class="pre">flagtree===0.5.1+iluvatar3.1</span></code>（带 <code class="docutils literal notranslate"><span class="pre">+iluvatar3.1</span></code> 后缀）。此 wheel 提供带有 Iluvatar 后端的 Triton 编译器。</p>
+</div></blockquote>
+</section>
+<section id="id15">
+<h4>验证<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>show<span class="w"> </span>flagtree
+
+<span class="c1"># 验证 Triton 版本</span>
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">import triton</span>
+<span class="s2">print(f'Triton version: {triton.__version__}')</span>
+<span class="s2">print(f'Triton path: {triton.__path__}')</span>
+<span class="s2">"</span>
+</pre></div>
+</div>
+</section>
+<section id="docker">
+<h4>Docker 镜像（推荐的替代方案）<a class="headerlink" href="#docker" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 拉取预构建的 Iluvatar FlagTree 镜像</span>
+docker<span class="w"> </span>pull<span class="w"> </span>harbor.baai.ac.cn/flagtree/flagtree-iluvatar-py312-torch2.7.1-4.4.0release:latest
+
+<span class="c1"># 此镜像包含：FlagTree（iluvatar）+ PyTorch CoreX + Triton iluvatar 后端</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="vllm-corex">
+<h3>3.5 步骤 2：安装 vLLM（CoreX 定制版本）<a class="headerlink" href="#vllm-corex" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p><strong>关键</strong>：上游 vLLM 无法在 BV150 上使用。上游的 <code class="docutils literal notranslate"><span class="pre">_C.abi3.so</span></code> 链接到 <code class="docutils literal notranslate"><span class="pre">libcudart.so.12</span></code>（CUDA 运行时），而 Iluvatar CoreX 没有该库。</p>
+<p>您<strong>必须</strong>使用 <strong>vllm-corex</strong>（Iluvatar 定制的 vLLM，基于 vLLM v0.13.0）。</p>
+</div></blockquote>
+<section id="id16">
+<h4>获取 vllm-corex<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 方法 A：从 CoreX SDK 获取（推荐）</span>
+<span class="c1"># vllm-corex wheel 通常在 CoreX SDK 包中</span>
+pip<span class="w"> </span>install<span class="w"> </span>/path/to/vllm_corex-0.13.0*-py3-none-any.whl
+
+<span class="c1"># 方法 B：从镜像仓库获取</span>
+<span class="c1"># 使用预装 vllm-corex 的容器镜像</span>
+docker<span class="w"> </span>pull<span class="w"> </span>harbor.baai.ac.cn/flaggems/iluvatar-flaggems-test-bi-v150:latest
+</pre></div>
+</div>
+</section>
+<section id="id17">
+<h4>验证<a class="headerlink" href="#id17" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">import vllm</span>
+<span class="s2">print(f'vLLM version: {vllm.__version__}')</span>
+<span class="s2">print(f'vLLM path: {vllm.__file__}')</span>
+<span class="s2">from vllm import LLM, SamplingParams</span>
+<span class="s2">print('vLLM import OK')</span>
+<span class="s2">"</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="flaggems">
+<h3>3.6 步骤 3：安装 FlagGems<a class="headerlink" href="#flaggems" title="Link to this heading">#</a></h3>
+<section id="id18">
+<h4>什么是 FlagGems<a class="headerlink" href="#id18" title="Link to this heading">#</a></h4>
+<p>FlagGems 是基于 Triton 的高性能统一算子库。通过 PyTorch ATen 注册，它<strong>自动替换</strong> <code class="docutils literal notranslate"><span class="pre">torch.*</span></code> 和 <code class="docutils literal notranslate"><span class="pre">torch.nn.functional.*</span></code> 中的算子为优化的 Triton 实现。</p>
+<p>对于 Iluvatar BV150，FlagGems 将标准 PyTorch 算子（mm、softmax、rms_norm 等）编译为 CoreX IR 执行。</p>
+</section>
+<section id="id19">
+<h4>安装<a class="headerlink" href="#id19" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. 构建依赖（如果已在步骤 0 中完成则可跳过）</span>
+pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>scikit-build-core&gt;<span class="o">=</span><span class="m">0</span>.11<span class="w"> </span>pybind11<span class="w"> </span>ninja<span class="w"> </span>cmake
+
+<span class="c1"># 2. 克隆 FlagGems</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/FlagGems
+<span class="nb">cd</span><span class="w"> </span>FlagGems
+
+<span class="c1"># 3. 检出稳定版本</span>
+git<span class="w"> </span>checkout<span class="w"> </span>v5.0.0
+
+<span class="c1"># 4. 安装</span>
+pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>.
+<span class="c1"># 或可编辑模式：pip install -e .</span>
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h4>验证<a class="headerlink" href="#id20" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">c</span> <span class="s2">"</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="c1"># 先初始化 CUDA/CoreX（重要！）</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">device_count</span><span class="p">()</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'FlagGems version: </span><span class="si">{</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Vendor: </span><span class="si">{</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">vendor_name</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Device: </span><span class="si">{</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+<span class="s2">"</span>
+</pre></div>
+</div>
+</section>
+<section id="id21">
+<h4>使用方式<a class="headerlink" href="#id21" title="Link to this heading">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">device_count</span><span class="p">()</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+
+<span class="c1"># 方法 1：全局启用（推荐）</span>
+<span class="n">flag_gems</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+<span class="c1"># 方法 2：作用域启用</span>
+<span class="k">with</span> <span class="n">flag_gems</span><span class="o">.</span><span class="n">use_gems</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4096</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"cuda"</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>  <span class="c1"># 使用 FlagGems 实现</span>
+
+<span class="c1"># 方法 3：显式调用</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flag_gems</span><span class="w"> </span><span class="kn">import</span> <span class="n">ops</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ops</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>导入顺序（BV150 必需）</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ✅ 正确</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">device_count</span><span class="p">()</span>  <span class="c1"># 先初始化 CoreX</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>               <span class="c1"># 再导入 flag_gems</span>
+
+<span class="c1"># ❌ 错误</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>               <span class="c1"># 过早导入可能导致 RuntimeError</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</pre></div>
+</div>
+<p>原因：<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">flag_gems</span></code> 会触发 <code class="docutils literal notranslate"><span class="pre">utils/libentry.py</span></code> 中的模块级 <code class="docutils literal notranslate"><span class="pre">LibCache()</span></code> 初始化，该初始化调用 <code class="docutils literal notranslate"><span class="pre">torch.cuda.get_device_name()</span></code>。在 CoreX 上，这可能导致 <code class="docutils literal notranslate"><span class="pre">RuntimeError:</span> <span class="pre">No</span> <span class="pre">HIP</span> <span class="pre">GPUs</span> <span class="pre">are</span> <span class="pre">available</span></code>。</p>
+</div></blockquote>
+</section>
+</section>
+<section id="vllm-plugin-fl">
+<h3>3.7 步骤 4：安装 vllm-plugin-FL<a class="headerlink" href="#vllm-plugin-fl" title="Link to this heading">#</a></h3>
+<section id="id22">
+<h4>什么是 vllm-plugin-FL<a class="headerlink" href="#id22" title="Link to this heading">#</a></h4>
+<p>vllm-plugin-FL 是 FlagOS 生态系统的<strong>核心调度插件</strong>，负责：</p>
+<ul class="simple">
+<li><p><strong>多芯片调度</strong>：自动检测硬件平台（Iluvatar / NVIDIA / Ascend 等）</p></li>
+<li><p><strong>厂商适配</strong>：管理 <code class="docutils literal notranslate"><span class="pre">VENDOR_DEVICE_MAP</span></code>，注册厂商设备</p></li>
+<li><p><strong>FlagGems 集成</strong>：协调算子加速库加载</p></li>
+<li><p><strong>FlagCX 集成</strong>：多卡通信</p></li>
+</ul>
+</section>
+<section id="id23">
+<h4>安装<a class="headerlink" href="#id23" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. 克隆插件仓库</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/vllm-plugin-FL
+<span class="nb">cd</span><span class="w"> </span>vllm-plugin-FL
+
+<span class="c1"># 2. 安装</span>
+pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span>.
+<span class="c1"># 或可编辑模式：pip install -e .</span>
+</pre></div>
+</div>
+</section>
+<section id="id24">
+<h4>验证<a class="headerlink" href="#id24" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">import vllm_plugin_fl</span>
+<span class="s2">print(f'Plugin version: {vllm_plugin_fl.__version__}')</span>
+<span class="s2">"</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="flagcx">
+<h3>3.8 步骤 5：（可选）安装 FlagCX<a class="headerlink" href="#flagcx" title="Link to this heading">#</a></h3>
+<section id="id25">
+<h4>什么是 FlagCX<a class="headerlink" href="#id25" title="Link to this heading">#</a></h4>
+<p>FlagCX 是统一多芯片通信库。对于 BV150，它使用 <strong>IXCCL</strong>（Iluvatar 通信库）后端，支持多卡同构通信和跨芯片异构通信。</p>
+</section>
+<section id="id26">
+<h4>安装<a class="headerlink" href="#id26" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. 克隆</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/FlagCX.git
+<span class="nb">cd</span><span class="w"> </span>FlagCX
+git<span class="w"> </span>checkout<span class="w"> </span>v0.9.0
+git<span class="w"> </span>submodule<span class="w"> </span>update<span class="w"> </span>--init<span class="w"> </span>--recursive
+
+<span class="c1"># 2. 为 Iluvatar 后端构建</span>
+make<span class="w"> </span><span class="nv">USE_ILUVATAR</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+
+<span class="c1"># 3. 设置环境变量</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
+
+<span class="c1"># 4. 安装 PyTorch 插件</span>
+<span class="nb">cd</span><span class="w"> </span>plugin/torch/
+<span class="nv">FLAGCX_ADAPTOR</span><span class="o">=</span>iluvatar<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>--no-build-isolation
+</pre></div>
+</div>
+</section>
+<section id="id27">
+<h4>验证<a class="headerlink" href="#id27" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import flagcx; print(flagcx.__version__)"</span>
+
+<span class="c1"># 运行通信测试</span>
+<span class="nb">cd</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>python3<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>test_allreduce.py<span class="w"> </span>-v
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id28">
+<h3>3.9 步骤 6：环境变量和验证<a class="headerlink" href="#id28" title="Link to this heading">#</a></h3>
+<section id="bv150">
+<h4>BV150 必需的环境变量<a class="headerlink" href="#bv150" title="Link to this heading">#</a></h4>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># === 必需 ===</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_PLUGINS</span><span class="o">=</span>fl<span class="w">                </span><span class="c1"># 加载 vllm-plugin-fl</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGTREE_BACKEND</span><span class="o">=</span>iluvatar<span class="w">      </span><span class="c1"># 设置 FlagTree 后端为 Iluvatar</span>
+
+<span class="c1"># === 推荐 ===</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">USE_FLAGGEMS</span><span class="o">=</span><span class="m">1</span><span class="w">                 </span><span class="c1"># 启用 FlagGems 算子加速（默认启用）</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MODELSCOPE_CACHE</span><span class="o">=</span>/path/to/cache<span class="w">  </span><span class="c1"># 模型缓存目录（无法访问 HF 时）</span>
+
+<span class="c1"># === 可选 ===</span>
+<span class="c1"># export FLAGCX_PATH=/path/to/FlagCX   # 如果安装了 FlagCX</span>
+<span class="c1"># export CUDA_VISIBLE_DEVICES=0        # 控制可见 GPU</span>
+</pre></div>
+</div>
+</section>
+<section id="id29">
+<h4>完整验证脚本<a class="headerlink" href="#id29" title="Link to this heading">#</a></h4>
+<p>创建 <code class="docutils literal notranslate"><span class="pre">verify_flagos.py</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">"""FlagOS BV150 环境完整性验证"""</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">desc</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">func</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  ✅ </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  ❌ </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"FlagOS 环境验证（Iluvatar BV150）"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># 1. 环境变量</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[1] 环境变量："</span><span class="p">)</span>
+<span class="n">check</span><span class="p">(</span><span class="s2">"VLLM_PLUGINS=fl"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"VLLM_PLUGINS"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"fl"</span><span class="p">)</span>
+<span class="n">check</span><span class="p">(</span><span class="s2">"FLAGTREE_BACKEND=iluvatar"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"FLAGTREE_BACKEND"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"iluvatar"</span><span class="p">)</span>
+
+<span class="c1"># 2. PyTorch + CoreX</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[2] PyTorch + CoreX GPU："</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="n">check</span><span class="p">(</span><span class="s2">"torch version"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"      </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+<span class="n">check</span><span class="p">(</span><span class="s2">"CUDA available"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+<span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Device: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">get_device_name</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"GPU count: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">device_count</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># 3. FlagTree / Triton</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[3] FlagTree / Triton："</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Triton version: </span><span class="si">{</span><span class="n">triton</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">flagtree</span>
+    <span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"FlagTree version: </span><span class="si">{</span><span class="n">flagtree</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  ⚠️ flagtree 模块不可直接导入（可能已集成到 triton 中）"</span><span class="p">)</span>
+
+<span class="c1"># 4. FlagGems</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[4] FlagGems："</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+<span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"FlagGems version: </span><span class="si">{</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Vendor: </span><span class="si">{</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">vendor_name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+<span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Device type: </span><span class="si">{</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># 5. vLLM</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[5] vLLM："</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">vllm</span>
+<span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"vLLM version: </span><span class="si">{</span><span class="n">vllm</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<span class="n">check</span><span class="p">(</span><span class="s2">"vLLM import LLM"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># 6. vllm-plugin-FL</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[6] vllm-plugin-FL："</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">vllm_plugin_fl</span>
+    <span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Plugin version: </span><span class="si">{</span><span class="n">vllm_plugin_fl</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  ⚠️ vllm_plugin_fl 不可导入（尝试：from vllm_fl import plugin）"</span><span class="p">)</span>
+
+<span class="c1"># 7. FlagCX（可选）</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[7] FlagCX（可选）："</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">flagcx</span>
+    <span class="n">check</span><span class="p">(</span><span class="sa">f</span><span class="s2">"FlagCX version: </span><span class="si">{</span><span class="n">flagcx</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  ⚠️ FlagCX 未安装（多卡可选）"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="s2">"="</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"验证完成。"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id30">
+<h2>4. 模型下载<a class="headerlink" href="#id30" title="Link to this heading">#</a></h2>
+<section id="modelscope">
+<h3>4.1 从 ModelScope 下载（推荐，国内可访问）<a class="headerlink" href="#modelscope" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>modelscope
+
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">from modelscope import snapshot_download</span>
+<span class="s2">model_dir = snapshot_download(</span>
+<span class="s2">    'Qwen/Qwen2.5-1.5B',</span>
+<span class="s2">    cache_dir='/path/to/cache'</span>
+<span class="s2">)</span>
+<span class="s2">print(f'Model downloaded to: {model_dir}')</span>
+<span class="s2">"</span>
+</pre></div>
+</div>
+</section>
+<section id="id31">
+<h3>4.2 ModelScope 缓存目录结构<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
+<p>下载后，模型文件位于：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/path/to/cache/
+└── Qwen/
+    └── Qwen2___5-1___5B/    # 注意：下划线转义
+        ├── config.json
+        ├── tokenizer.json
+        ├── model-00001-of-00002.safetensors
+        ├── model-00002-of-00002.safetensors
+        └── ...
+</pre></div>
+</div>
+</section>
+<section id="huggingface">
+<h3>4.3 从 HuggingFace 下载（需要网络访问）<a class="headerlink" href="#huggingface" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>huggingface-hub
+huggingface-cli<span class="w"> </span>download<span class="w"> </span>Qwen/Qwen2.5-1.5B<span class="w"> </span>--local-dir<span class="w"> </span>/path/to/model
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id32">
+<h2>5. 推理脚本<a class="headerlink" href="#id32" title="Link to this heading">#</a></h2>
+<section id="id33">
+<h3>5.1 基础推理脚本<a class="headerlink" href="#id33" title="Link to this heading">#</a></h3>
+<p>创建 <code class="docutils literal notranslate"><span class="pre">run_qwen2.5_1.5b.py</span></code>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">"""Qwen2.5-1.5B 推理示例 — Iluvatar BI-V150"""</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="c1"># === 环境变量（必需） ===</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"VLLM_PLUGINS"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"fl"</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"FLAGTREE_BACKEND"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"iluvatar"</span>
+
+<span class="c1"># === 配置 ===</span>
+<span class="n">MODEL_PATH</span> <span class="o">=</span> <span class="s2">"/path/to/Qwen/Qwen2.5-1.5B"</span>  <span class="c1"># 修改为实际路径</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># 采样参数</span>
+    <span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span>
+        <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+        <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+        <span class="n">max_tokens</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loading model from: </span><span class="si">{</span><span class="n">MODEL_PATH</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"(首次加载可能需要几分钟...)"</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># 加载模型</span>
+        <span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">,</span>
+            <span class="n">max_num_batched_tokens</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>
+            <span class="n">max_num_seqs</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+            <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">enforce_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>          <span class="c1"># BV150 必需：禁用 CUDA Graph</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span>                <span class="c1"># 自动选择 bfloat16/float16</span>
+            <span class="n">gpu_memory_utilization</span><span class="o">=</span><span class="mf">0.90</span><span class="p">,</span> <span class="c1"># GPU 内存利用率</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"模型加载成功！</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="c1"># 测试提示词</span>
+        <span class="n">prompts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">"Hello, my name is"</span><span class="p">,</span>
+            <span class="s2">"The capital of China is"</span><span class="p">,</span>
+            <span class="s2">"Machine learning is"</span><span class="p">,</span>
+            <span class="s2">"请用中文介绍一下深度学习："</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">prompts</span><span class="p">,</span> <span class="n">sampling_params</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">output</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">outputs</span><span class="p">):</span>
+            <span class="n">prompt</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">prompt</span>
+            <span class="n">generated_text</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Prompt </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">prompt</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Generated </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">generated_text</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"推理过程中出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="id34">
+<h3>5.2 带 FlagGems 的推理脚本<a class="headerlink" href="#id34" title="Link to this heading">#</a></h3>
+<p>显式启用 FlagGems 算子加速：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">"""Qwen2.5-1.5B 推理 + FlagGems 加速 — Iluvatar BI-V150"""</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"VLLM_PLUGINS"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"fl"</span>
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"FLAGTREE_BACKEND"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"iluvatar"</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+<span class="c1"># 重要：在导入 flag_gems 之前初始化 CoreX</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">device_count</span><span class="p">()</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+<span class="n">flag_gems</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+
+<span class="n">MODEL_PATH</span> <span class="o">=</span> <span class="s2">"/path/to/Qwen/Qwen2.5-1.5B"</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">,</span>
+    <span class="n">max_num_batched_tokens</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>
+    <span class="n">max_num_seqs</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enforce_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">top_p</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">([</span>
+    <span class="s2">"The capital of China is"</span><span class="p">,</span>
+    <span class="s2">"Machine learning is"</span><span class="p">,</span>
+    <span class="s2">"请用中文介绍一下深度学习："</span><span class="p">,</span>
+<span class="p">],</span> <span class="n">sampling_params</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Prompt: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">prompt</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Generated: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="vllm-api">
+<h3>5.3 服务模式（vLLM API 服务器）<a class="headerlink" href="#vllm-api" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 启动兼容 OpenAI 的 API 服务器</span>
+vllm<span class="w"> </span>serve<span class="w"> </span>/path/to/Qwen/Qwen2.5-1.5B<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--trust-remote-code<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--enforce-eager<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-num-batched-tokens<span class="w"> </span><span class="m">8192</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-num-seqs<span class="w"> </span><span class="m">32</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--gpu-memory-utilization<span class="w"> </span><span class="m">0</span>.90<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--port<span class="w"> </span><span class="m">8000</span>
+</pre></div>
+</div>
+<p>客户端请求：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>http://localhost:8000/v1/chat/completions<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span><span class="s1">'{</span>
+<span class="s1">        "model": "/path/to/Qwen/Qwen2.5-1.5B",</span>
+<span class="s1">        "messages": [{"role": "user", "content": "Hello!"}],</span>
+<span class="s1">        "max_tokens": 100</span>
+<span class="s1">    }'</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id35">
+<h2>6. 运行说明<a class="headerlink" href="#id35" title="Link to this heading">#</a></h2>
+<section id="id36">
+<h3>6.1 直接运行<a class="headerlink" href="#id36" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 设置环境变量</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_PLUGINS</span><span class="o">=</span>fl
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGTREE_BACKEND</span><span class="o">=</span>iluvatar
+<span class="nb">export</span><span class="w"> </span><span class="nv">MODELSCOPE_CACHE</span><span class="o">=</span>/path/to/cache
+
+<span class="c1"># 运行推理脚本</span>
+python3<span class="w"> </span>run_qwen2.5_1.5b.py
+</pre></div>
+</div>
+</section>
+<section id="id37">
+<h3>6.2 在 Docker 容器中运行<a class="headerlink" href="#id37" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 进入容器</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;container_name&gt;<span class="w"> </span>bash
+
+<span class="c1"># 设置环境变量</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_PLUGINS</span><span class="o">=</span>fl
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGTREE_BACKEND</span><span class="o">=</span>iluvatar
+
+<span class="c1"># 运行推理</span>
+python3<span class="w"> </span>/path/to/run_qwen2.5_1.5b.py
+</pre></div>
+</div>
+</section>
+<section id="id38">
+<h3>6.3 预期输出<a class="headerlink" href="#id38" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Loading model from: /path/to/Qwen/Qwen2.5-1.5B
+(首次加载可能需要几分钟...)
+模型加载成功！
+
+Prompt 0: 'Hello, my name is'
+Generated 0: 'Sarah, and I am a student at the University of California, Berkeley...'
+
+Prompt 1: 'The capital of China is'
+Generated 1: 'Beijing, a city with a history of over 3,000 years...'
+
+Prompt 2: 'Machine learning is'
+Generated 2: 'a subset of artificial intelligence that enables systems to learn...'
+
+Prompt 3: '请用中文介绍一下深度学习：'
+Generated 3: '深度学习是机器学习的一个重要分支，它通过多层神经网络来学习数据的层次化特征表示...'
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id39">
+<h2>7. 参数调优<a class="headerlink" href="#id39" title="Link to this heading">#</a></h2>
+<section id="llm">
+<h3>7.1 LLM 初始化参数<a class="headerlink" href="#llm" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>推荐值</p></th>
+<th class="head"><p>备注</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enforce_eager</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><strong>BV150 必需</strong>。Iluvatar CoreX 不支持 CUDA Graph</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_num_batched_tokens</span></code></p></td>
+<td><p>8192</p></td>
+<td><p>每批次最大 token 数，根据内存调整</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_num_seqs</span></code></p></td>
+<td><p>8–64</p></td>
+<td><p>并行序列数，BV150 推荐 32</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">gpu_memory_utilization</span></code></p></td>
+<td><p>0.85–0.95</p></td>
+<td><p>GPU 内存利用率，BV150 推荐 0.90</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">trust_remote_code</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Qwen2.5 需要自定义代码支持</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code></p></td>
+<td><p>自动选择，也可指定 <code class="docutils literal notranslate"><span class="pre">&quot;bfloat16&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">max_model_len</span></code></p></td>
+<td><p>32768</p></td>
+<td><p>最大上下文长度（Qwen2.5 默认）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="samplingparams">
+<h3>7.2 SamplingParams 参数<a class="headerlink" href="#samplingparams" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>参数</p></th>
+<th class="head"><p>推荐值</p></th>
+<th class="head"><p>备注</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">temperature</span></code></p></td>
+<td><p>0.7</p></td>
+<td><p>采样温度（0=确定性，1=高随机性）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">top_p</span></code></p></td>
+<td><p>0.8</p></td>
+<td><p>核采样阈值</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">top_k</span></code></p></td>
+<td><p>50</p></td>
+<td><p>Top-K 采样</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">max_tokens</span></code></p></td>
+<td><p>512–2048</p></td>
+<td><p>生成长度限制</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">repetition_penalty</span></code></p></td>
+<td><p>1.05</p></td>
+<td><p>重复惩罚</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">stop</span></code></p></td>
+<td><p>自定义</p></td>
+<td><p>停止 token 列表</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id40">
+<h3>7.3 BV150 特定优化<a class="headerlink" href="#id40" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 内存优化配置</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">,</span>
+    <span class="n">enforce_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">max_num_batched_tokens</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>    <span class="c1"># 降低以节省内存</span>
+    <span class="n">max_num_seqs</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>                <span class="c1"># 降低并行度以节省内存</span>
+    <span class="n">gpu_memory_utilization</span><span class="o">=</span><span class="mf">0.85</span><span class="p">,</span>    <span class="c1"># 降低内存利用率</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="s2">"float16"</span><span class="p">,</span>                <span class="c1"># 使用 float16 节省内存</span>
+    <span class="n">max_model_len</span><span class="o">=</span><span class="mi">16384</span><span class="p">,</span>            <span class="c1"># 缩短上下文长度</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id41">
+<h2>8. 基准性能<a class="headerlink" href="#id41" title="Link to this heading">#</a></h2>
+<section id="qwen2-5-1-5b-bv150">
+<h3>8.1 Qwen2.5-1.5B 在 BV150 上的预期性能<a class="headerlink" href="#qwen2-5-1-5b-bv150" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>数据基于 Iluvatar BI-V150（CoreX）环境测试。</p>
+</div></blockquote>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>指标</p></th>
+<th class="head"><p>值</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>模型加载时间</p></td>
+<td><p>~2–5 分钟</p></td>
+</tr>
+<tr class="row-odd"><td><p>Prefill 吞吐量</p></td>
+<td><p>~1000–3000 tokens/s</p></td>
+</tr>
+<tr class="row-even"><td><p>Decode 吞吐量</p></td>
+<td><p>~20–50 tokens/s</p></td>
+</tr>
+<tr class="row-odd"><td><p>首 token 延迟</p></td>
+<td><p>~1–5 秒</p></td>
+</tr>
+<tr class="row-even"><td><p>GPU 内存使用</p></td>
+<td><p>~4–6 GB</p></td>
+</tr>
+<tr class="row-odd"><td><p>峰值内存</p></td>
+<td><p>~8 GB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id42">
+<h3>8.2 性能影响因素<a class="headerlink" href="#id42" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>enforce_eager</strong>：禁用 CUDA Graph 会降低 decode 性能，但 BV150 需要它</p></li>
+<li><p><strong>FlagGems 加速</strong>：启用 FlagGems 可改善注意力和 FFN 算子性能</p></li>
+<li><p><strong>批次大小</strong>：增加 <code class="docutils literal notranslate"><span class="pre">max_num_seqs</span></code> 可提高吞吐量但增加内存使用</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id43">
+<h2>9. 常见问题<a class="headerlink" href="#id43" title="Link to this heading">#</a></h2>
+<section id="q1-symmetric-memory">
+<h3>Q1：模型加载失败，报 <code class="docutils literal notranslate"><span class="pre">_symmetric_memory</span></code> 错误<a class="headerlink" href="#q1-symmetric-memory" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">AttributeError</span><span class="p">:</span> <span class="n">module</span> <span class="s1">'torch'</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s1">'_symmetric_memory'</span>
+</pre></div>
+</div>
+<p><strong>原因</strong>：torch-corex 中不支持的符号。vLLM 的 <code class="docutils literal notranslate"><span class="pre">parallel_state.py</span></code> 尝试导入 <code class="docutils literal notranslate"><span class="pre">_symmetric_memory</span></code>。</p>
+<p><strong>解决方案</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 找到文件</span>
+grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">"_symmetric_memory"</span><span class="w"> </span><span class="k">$(</span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import vllm; print(vllm.__path__[0])"</span><span class="k">)</span>
+
+<span class="c1"># 注释掉相关行</span>
+<span class="c1"># import _symmetric_memory</span>
+</pre></div>
+</div>
+<p>或使用 vllm-corex（已修复）。</p>
+</section>
+<section id="q2-oom">
+<h3>Q2：推理时 OOM（内存不足）<a class="headerlink" href="#q2-oom" title="Link to this heading">#</a></h3>
+<p><strong>原因</strong>：模型 + KV Cache 超出 BV150 内存容量。</p>
+<p><strong>解决方案</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">MODEL_PATH</span><span class="p">,</span>
+    <span class="n">enforce_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">gpu_memory_utilization</span><span class="o">=</span><span class="mf">0.80</span><span class="p">,</span>     <span class="c1"># 降低利用率</span>
+    <span class="n">max_num_batched_tokens</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>     <span class="c1"># 减少批次</span>
+    <span class="n">max_num_seqs</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>                  <span class="c1"># 减少并行序列</span>
+    <span class="n">max_model_len</span><span class="o">=</span><span class="mi">8192</span><span class="p">,</span>              <span class="c1"># 缩短上下文</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="q3">
+<h3>Q3：推理速度远低于预期<a class="headerlink" href="#q3" title="Link to this heading">#</a></h3>
+<p><strong>检查清单</strong>：</p>
+<ol class="arabic simple">
+<li><p>是否设置了 <code class="docutils literal notranslate"><span class="pre">enforce_eager=True</span></code>（必需）</p></li>
+<li><p>是否启用了 <code class="docutils literal notranslate"><span class="pre">VLLM_PLUGINS=fl</span></code> 和 <code class="docutils literal notranslate"><span class="pre">FLAGTREE_BACKEND=iluvatar</span></code></p></li>
+<li><p>FlagGems 是否正确加载（<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">flag_gems;</span> <span class="pre">flag_gems.enable()</span></code>）</p></li>
+<li><p>GPU 是否仅单卡运行（<code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES=0</span></code>）</p></li>
+</ol>
+</section>
+<section id="q4">
+<h3>Q4：模型下载失败（网络受限）<a class="headerlink" href="#q4" title="Link to this heading">#</a></h3>
+<p><strong>原因</strong>：Days 集群无法访问 HuggingFace。</p>
+<p><strong>解决方案</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 使用 ModelScope</span>
+pip<span class="w"> </span>install<span class="w"> </span>modelscope
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">from modelscope import snapshot_download</span>
+<span class="s2">snapshot_download('Qwen/Qwen2.5-1.5B', cache_dir='/data/model')</span>
+<span class="s2">"</span>
+
+<span class="c1"># 或从现有镜像/本地路径复制</span>
+cp<span class="w"> </span>-r<span class="w"> </span>/data/iluv/model/Qwen2___5-1___5B<span class="w"> </span>/your/cache/
+</pre></div>
+</div>
+</section>
+<section id="q5-runtimeerror-no-hip-gpus-are-available">
+<h3>Q5：<code class="docutils literal notranslate"><span class="pre">RuntimeError:</span> <span class="pre">No</span> <span class="pre">HIP</span> <span class="pre">GPUs</span> <span class="pre">are</span> <span class="pre">available</span></code><a class="headerlink" href="#q5-runtimeerror-no-hip-gpus-are-available" title="Link to this heading">#</a></h3>
+<p><strong>原因</strong>：FlagGems 在 CUDA/CoreX 初始化之前导入。</p>
+<p><strong>解决方案</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">device_count</span><span class="p">()</span>  <span class="c1"># 先初始化</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>               <span class="c1"># 再导入</span>
+</pre></div>
+</div>
+</section>
+<section id="q6">
+<h3>Q6：输出乱码或无意义<a class="headerlink" href="#q6" title="Link to this heading">#</a></h3>
+<p><strong>检查清单</strong>：</p>
+<ol class="arabic simple">
+<li><p>是否设置了 <code class="docutils literal notranslate"><span class="pre">trust_remote_code=True</span></code>（Qwen2.5 需要）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tokenizer</span></code> 是否正确加载</p></li>
+<li><p>模型路径是否正确（注意 ModelScope 目录名使用 <code class="docutils literal notranslate"><span class="pre">___</span></code> 转义）</p></li>
+</ol>
+</section>
+<section id="q7-modulenotfounderror-no-module-named-triton">
+<h3>Q7：<code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">'triton'</span></code><a class="headerlink" href="#q7-modulenotfounderror-no-module-named-triton" title="Link to this heading">#</a></h3>
+<p><strong>原因</strong>：FlagTree 安装时未带后端后缀。</p>
+<p><strong>解决方案</strong>：使用 <code class="docutils literal notranslate"><span class="pre">flagtree===0.5.1+iluvatar3.1</span></code>（带 <code class="docutils literal notranslate"><span class="pre">+iluvatar</span></code> 后缀）。</p>
+</section>
+<section id="q8-libcudart-so-12">
+<h3>Q8：<code class="docutils literal notranslate"><span class="pre">libcudart.so.12</span></code> 未找到<a class="headerlink" href="#q8-libcudart-so-12" title="Link to this heading">#</a></h3>
+<p><strong>原因</strong>：使用了上游 vLLM 而非 vllm-corex。</p>
+<p><strong>解决方案</strong>：必须使用 vllm-corex。</p>
+</section>
+<section id="q9-vendor-iluvatar-not-found-in-vendor-device-map">
+<h3>Q9：<code class="docutils literal notranslate"><span class="pre">Vendor</span> <span class="pre">'iluvatar'</span> <span class="pre">not</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">VENDOR_DEVICE_MAP</span></code><a class="headerlink" href="#q9-vendor-iluvatar-not-found-in-vendor-device-map" title="Link to this heading">#</a></h3>
+<p><strong>原因</strong>：vllm-plugin-FL 版本过旧。</p>
+<p><strong>解决方案</strong>：升级到最新版本。</p>
+</section>
+<section id="id44">
+<h3>网络受限环境替代方案<a class="headerlink" href="#id44" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># pip 使用清华镜像</span>
+pip<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>global.index-url<span class="w"> </span>https://pypi.tuna.tsinghua.edu.cn/simple
+
+<span class="c1"># Git 使用 Gitee 镜像（如有）</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://gitee.com/mirrors/FlagGems
+
+<span class="c1"># 模型下载使用 ModelScope</span>
+pip<span class="w"> </span>install<span class="w"> </span>modelscope
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"</span>
+<span class="s2">from modelscope import snapshot_download</span>
+<span class="s2">snapshot_download('Qwen/Qwen2.5-1.5B', cache_dir='/path/to/cache')</span>
+<span class="s2">"</span>
+
+<span class="c1"># 或使用本地已下载的模型</span>
+<span class="c1"># 从本地路径如 /data/iluv/model/ 复制</span>
+</pre></div>
+</div>
+</section>
+<section id="vllm">
+<h3>vLLM 版本兼容性<a class="headerlink" href="#vllm" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>vllm-plugin-FL 版本</p></th>
+<th class="head"><p>vLLM 版本</p></th>
+<th class="head"><p>备注</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>v0.1.x</p></td>
+<td><p><strong>v0.13.0</strong>（vllm-corex）</p></td>
+<td><p>BV150 推荐版本</p></td>
+</tr>
+<tr class="row-odd"><td><p>latest（main）</p></td>
+<td><p>v0.18.1 / v0.20.2</p></td>
+<td><p>主要针对 NVIDIA 设计</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>BV150 必须使用 v0.13.0 系列的 vllm-corex。</strong></p>
+</section>
+<section id="id45">
+<h3>Docker 镜像推荐<a class="headerlink" href="#id45" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># FlagTree Iluvatar 镜像</span>
+docker<span class="w"> </span>pull<span class="w"> </span>harbor.baai.ac.cn/flagtree/flagtree-iluvatar-py312-torch2.7.1-4.4.0release:latest
+
+<span class="c1"># FlagGems Iluvatar 测试镜像</span>
+docker<span class="w"> </span>pull<span class="w"> </span>harbor.baai.ac.cn/flaggems/iluvatar-flaggems-test-bi-v150:latest
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1. 模型概览</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">模型信息</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#huggingface-modelscope">HuggingFace / ModelScope 路径</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">2. 环境要求</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.1 前提条件</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.2 环境变量</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">3. 安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">3.1 组件依赖关系</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">3.2 必需与可选组件</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">3.3 步骤 0：基础环境设置</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">系统要求</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu">验证 GPU 可用性</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">网络配置</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">安装构建依赖</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree-iluvatar">3.4 步骤 1：安装 FlagTree（Iluvatar 后端）</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree">什么是 FlagTree</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">验证</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker 镜像（推荐的替代方案）</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-corex">3.5 步骤 2：安装 vLLM（CoreX 定制版本）</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">获取 vllm-corex</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">验证</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems">3.6 步骤 3：安装 FlagGems</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">什么是 FlagGems</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">验证</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">使用方式</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-plugin-fl">3.7 步骤 4：安装 vllm-plugin-FL</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">什么是 vllm-plugin-FL</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">验证</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagcx">3.8 步骤 5：（可选）安装 FlagCX</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">什么是 FlagCX</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">安装</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">验证</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">3.9 步骤 6：环境变量和验证</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bv150">BV150 必需的环境变量</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">完整验证脚本</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">4. 模型下载</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modelscope">4.1 从 ModelScope 下载（推荐，国内可访问）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">4.2 ModelScope 缓存目录结构</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#huggingface">4.3 从 HuggingFace 下载（需要网络访问）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">5. 推理脚本</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">5.1 基础推理脚本</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">5.2 带 FlagGems 的推理脚本</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-api">5.3 服务模式（vLLM API 服务器）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">6. 运行说明</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">6.1 直接运行</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">6.2 在 Docker 容器中运行</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">6.3 预期输出</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">7. 参数调优</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llm">7.1 LLM 初始化参数</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#samplingparams">7.2 SamplingParams 参数</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">7.3 BV150 特定优化</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">8. 基准性能</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qwen2-5-1-5b-bv150">8.1 Qwen2.5-1.5B 在 BV150 上的预期性能</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">8.2 性能影响因素</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">9. 常见问题</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q1-symmetric-memory">Q1：模型加载失败，报 <code class="docutils literal notranslate"><span class="pre">_symmetric_memory</span></code> 错误</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q2-oom">Q2：推理时 OOM（内存不足）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q3">Q3：推理速度远低于预期</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q4">Q4：模型下载失败（网络受限）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q5-runtimeerror-no-hip-gpus-are-available">Q5：<code class="docutils literal notranslate"><span class="pre">RuntimeError:</span> <span class="pre">No</span> <span class="pre">HIP</span> <span class="pre">GPUs</span> <span class="pre">are</span> <span class="pre">available</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q6">Q6：输出乱码或无意义</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q7-modulenotfounderror-no-module-named-triton">Q7：<code class="docutils literal notranslate"><span class="pre">ModuleNotFoundError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">'triton'</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q8-libcudart-so-12">Q8：<code class="docutils literal notranslate"><span class="pre">libcudart.so.12</span></code> 未找到</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q9-vendor-iluvatar-not-found-in-vendor-device-map">Q9：<code class="docutils literal notranslate"><span class="pre">Vendor</span> <span class="pre">'iluvatar'</span> <span class="pre">not</span> <span class="pre">found</span> <span class="pre">in</span> <span class="pre">VENDOR_DEVICE_MAP</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">网络受限环境替代方案</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm">vLLM 版本兼容性</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Docker 镜像推荐</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../vllm_plugin_fl_en/getting_started/example-qwen2.5-bv150.html">English</a></body>
+</html>

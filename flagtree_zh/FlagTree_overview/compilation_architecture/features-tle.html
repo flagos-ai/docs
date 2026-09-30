@@ -1,0 +1,887 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="TLE-Lite、TLE-Struct 和 TLE-Raw" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="FlagTree_overview/compilation_architecture/features-tle.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本节介绍 TLE-Lite、TLE-Struct 和 TLE-Raw 以及它们在编译过程中的处理方式。 TLE-Lite、TLE-Struct 和 TLE-Raw 简介: TLE-Lite、TLE-Struct 和 TLE-Raw 是编译器语言，位于 AI 生态系统的中间层。上层通过图编译器和算子库连接 AI 框架，下层连接各种硬件运行时。 下图展示了 TLE-Lite、TLE-Struct 和 TLE-Raw 在 AI 生态系统中的位置。 alt text 这三种编译器语言为不同用户提供了不同级别的性能优化： TLE-Lite 允许用户以最小的改动修改现有的 Triton 内核，同时兼..." />
+<meta property="og:image" content="_images/three-level-tle.png" />
+<meta property="og:image:alt" content="alt text" />
+<meta name="description" content="本节介绍 TLE-Lite、TLE-Struct 和 TLE-Raw 以及它们在编译过程中的处理方式。 TLE-Lite、TLE-Struct 和 TLE-Raw 简介: TLE-Lite、TLE-Struct 和 TLE-Raw 是编译器语言，位于 AI 生态系统的中间层。上层通过图编译器和算子库连接 AI 框架，下层连接各种硬件运行时。 下图展示了 TLE-Lite、TLE-Struct 和 TLE-Raw 在 AI 生态系统中的位置。 alt text 这三种编译器语言为不同用户提供了不同级别的性能优化： TLE-Lite 允许用户以最小的改动修改现有的 Triton 内核，同时兼..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>TLE-Lite、TLE-Struct 和 TLE-Raw &#8212; FlagTree 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../../_static/tippy/FlagTree_overview/compilation_architecture/features-tle.cd71ee7f-3b3e-46d8-bbf9-2ccbf68dd7ee.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'FlagTree_overview/compilation_architecture/features-tle';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/FlagTree_overview/compilation_architecture/features-tle.html" />
+    <link rel="icon" href="../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FLIR：统一中间层" href="flir.html" />
+    <link rel="prev" title="Hints" href="features-hints.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree 文档中心 - Home"/>
+    <img src="../../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    FlagTree 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../release_notes/release-notes.html">发布说明</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v070.html">FlagTree 0.7.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v060.html">FlagTree 0.6.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v050.html">FlagTree 0.5.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v040.html">FlagTree 0.4.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v030.html">FlagTree 0.3.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v020.html">FlagTree 0.2.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v010.html">FlagTree 0.1.0 发布</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../FlagTree-overview.html">FlagTree 概述</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../features.html">特性</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="compilation-architecture.html">FlagTree 编译架构</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common-architecture.html">通用架构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flagtree-extensible-framework.html">FlagTree 可扩展框架</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features-hints.html">Hints</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">TLE-Lite、TLE-Struct 和 TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flir.html">FLIR：统一中间层</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../getting_started/getting-started.html">开始使用</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/requirements.html">系统要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install.html">安装 FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install-arm64-cpu.html">在 Arm64 CPU 上安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/user-guide.html">用户指南</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-hints.html">使用 Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-lite.html">使用 TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-struct.html">使用 TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-raw.html">使用 TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../user_guide/use-tle-cpu.html">使用 TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/examples.html">示例</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/FlagTree_overview/compilation_architecture/features-tle.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>TLE-Lite、TLE-Struct 和 TLE-Raw</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">TLE-Lite、TLE-Struct 和 TLE-Raw 简介</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle">TLE 在编译过程中的处理</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-commonir-lowering">可选的 GPU CommonIR Lowering</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="tle-litetle-struct-tle-raw">
+<h1>TLE-Lite、TLE-Struct 和 TLE-Raw<a class="headerlink" href="#tle-litetle-struct-tle-raw" title="Link to this heading">#</a></h1>
+<p>本节介绍 TLE-Lite、TLE-Struct 和 TLE-Raw 以及它们在编译过程中的处理方式。</p>
+<section id="id1">
+<h2>TLE-Lite、TLE-Struct 和 TLE-Raw 简介<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>TLE-Lite、TLE-Struct 和 TLE-Raw 是编译器语言，位于 AI 生态系统的中间层。上层通过图编译器和算子库连接 AI 框架，下层连接各种硬件运行时。</p>
+<p>下图展示了 TLE-Lite、TLE-Struct 和 TLE-Raw 在 AI 生态系统中的位置。</p>
+<p><a href="../../_images/three-level-tle.png" data-lightbox="image-set">
+<img alt="alt text" src="../../_images/three-level-tle.png" /></a>
+</p>
+<p>这三种编译器语言为不同用户提供了不同级别的性能优化：</p>
+<ul class="simple">
+<li><p>TLE-Lite 允许用户以最小的改动修改现有的 Triton 内核，同时兼容各种硬件后端。可供算法工程师在快速优化场景中使用。</p></li>
+<li><p>TLE-Struct 允许用户为不同硬件架构（如 GPGPU 和 DSA）的不同集群显式定义计算与数据之间的结构化映射。可供对目标硬件特性和优化有一定了解的开发者使用。</p></li>
+<li><p>TLE-Raw 允许用户直接修改厂商的原生编程语言。可供对目标硬件有深入了解的开发者使用，这些开发者主要是性能优化专家。</p></li>
+</ul>
+<p>Hints、TLE-Lite 和 TLE-Struct 最终将通过 FLIR（即 FlagTree IR）lowering 到 LLVM（低级虚拟机）IR（中间表示），而 TLE-Raw 将通过相应语言的编译管线（如厂商的私有编译器）lowering 到 LLVM IR。最终，它们将被链接在一起，共同生成一个完整的内核，供运行时加载和执行。</p>
+<p>跨卡/跨节点的底层通信也按层级划分：TLE-Lite 和 TLE-Struct 的分布式原语通过 FlagCX 完成跨设备通信；TLE-Raw 更底层，与 Raw 处于同一级别，通过 NVSHMEM 直接提供设备端通信接口，且 NVSHMEM 仅用于 NVIDIA 卡。</p>
+<p>下图展示了 TLE-Raw 与现有 DSL（TileLang 和 cuTile）以及必要的库和工具（PyCUDA 和 MLIR Pybind）的兼容性，以及其在 AI 生态系统中的位置。</p>
+<p><a href="../../_images/tle-raw.png" data-lightbox="image-set">
+<img alt="alt text" src="../../_images/tle-raw.png" /></a>
+</p>
+<p>有关如何使用 TLE，请参见<a class="reference internal" href="../../user_guide/use-tle-lite.html"><span class="std std-doc">使用 TLE-Lite</span></a>、<a class="reference internal" href="../../user_guide/use-tle-struct.html"><span class="std std-doc">使用 TLE-Struct</span></a> 和<a class="reference internal" href="../../user_guide/use-tle-raw.html"><span class="std std-doc">使用 TLE-Raw</span></a>。</p>
+</section>
+<section id="tle">
+<h2>TLE 在编译过程中的处理<a class="headerlink" href="#tle" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>目的和范围</p>
+<ul>
+<li><p>扩展 Triton，提供显式的共享内存和张量内存管理、通过张量内存加速器（TMA）进行异步数据移动，以及针对 NVIDIA Hopper 级 GPU 优化的流水线控制（目前）。</p></li>
+<li><p>前端 API 位于 <code class="docutils literal notranslate"><span class="pre">tle</span></code> 下，lowering 到自定义 MLIR 方言，并由 <code class="docutils literal notranslate"><span class="pre">tle</span></code> 下的 Pass 处理。</p></li>
+</ul>
+</li>
+<li><p>前端 DSL 层（Python）</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.language.core</span></code> 重写了关键的 <code class="docutils literal notranslate"><span class="pre">tl</span></code> 内置函数，以附加额外的属性（例如 <code class="docutils literal notranslate"><span class="pre">&quot;tt.load.async&quot;</span></code>），并返回表示共享或张量内存分配的 <code class="docutils literal notranslate"><span class="pre">buffered_tensor</span></code> 句柄（core.py）。例如，关键的 <code class="docutils literal notranslate"><span class="pre">tl</span></code> 内置函数包括 <code class="docutils literal notranslate"><span class="pre">load</span></code>、<code class="docutils literal notranslate"><span class="pre">alloc</span></code>、<code class="docutils literal notranslate"><span class="pre">copy</span></code>、<code class="docutils literal notranslate"><span class="pre">local_load</span></code>、<code class="docutils literal notranslate"><span class="pre">local_store</span></code> 和循环辅助函数。</p></li>
+<li><p>GPU 特定的辅助函数在 GPU 中定义布局（<code class="docutils literal notranslate"><span class="pre">swizzled_shared_layout</span></code>、<code class="docutils literal notranslate"><span class="pre">nv_mma_shared_layout</span></code> 等）、作用域（<code class="docutils literal notranslate"><span class="pre">smem</span></code>、<code class="docutils literal notranslate"><span class="pre">tmem</span></code>）以及 <code class="docutils literal notranslate"><span class="pre">buffered_tensor</span></code> 语义。这些语义包装了 IR memdesc 类型，同时保持 Triton 风格的类型检查。</p></li>
+<li><p>用户在 <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> 内核中导入这些符号（例如 <code class="docutils literal notranslate"><span class="pre">tle.alloc</span></code>、<code class="docutils literal notranslate"><span class="pre">tle.copy</span></code>、<code class="docutils literal notranslate"><span class="pre">tle.pipeline</span></code>），以分配 SMEM 瓦片、启动异步拷贝或编排分阶段循环。</p></li>
+</ul>
+</li>
+<li><p>语义验证</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">semantic.py</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">TLESemantic</span></code> 与 Triton 的语义层并行运行。它在 lowering 之前验证形状、数据类型和拷贝兼容性，提供早期错误消息并适配 constexpr 输入。</p></li>
+<li><p>语义辅助函数调用自定义 builder 钩子（通过 C++ 桥接暴露），以生成 <code class="docutils literal notranslate"><span class="pre">LocalAllocOp</span></code>、<code class="docutils literal notranslate"><span class="pre">TMACopyOp</span></code> 等，确保 Python API 与 TTIR 构造一一映射。</p></li>
+</ul>
+</li>
+<li><p>TLE-Raw 和 EDSL 层</p>
+<ul>
+<li><p>TLE-Raw（raw）暴露了一个轻量级的基于 MLIR 的 EDSL（嵌入式领域特定语言），用于直接编写方言特定的内建函数。像 <code class="docutils literal notranslate"><span class="pre">&#64;dialect(name=&quot;mlir&quot;)</span></code> 这样的装饰器通过 <code class="docutils literal notranslate"><span class="pre">EdslMLIRJITFunction</span></code> 从 Python AST 构建 LLVM IR，使后端开发者能够在高层 Triton 语法之外原型化内核或辅助操作。</p></li>
+<li><p>TLE-Raw 运行时（<code class="docutils literal notranslate"><span class="pre">call()</span></code> 辅助函数）物化 <code class="docutils literal notranslate"><span class="pre">tle::DSLRegionOp</span></code> 节点，其主体随后由 Pass 内联。</p></li>
+</ul>
+</li>
+<li><p>C++ 桥接和方言</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">triton_tle.cc</span></code> 在 Triton 的 <code class="docutils literal notranslate"><span class="pre">TritonOpBuilder</span></code> 上注册了额外的 builder 方法（创建编码属性、memdesc 类型、TMACopy 操作、DSL 区域），并通过 <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> 将新的 Pass 和原始 IR 辅助函数连接到 Python。</p></li>
+<li><p>MLIR 方言位于 dialect 目录中，包含 IR 定义以及 Analysis、Conversion 和 Transforms 基础设施，与上游 Triton 的惯例保持一致。</p></li>
+</ul>
+</li>
+<li><p>Pass 和 Lowering 管线</p>
+<ul>
+<li><p>Pass 注册在 <code class="docutils literal notranslate"><span class="pre">Passes.td</span></code> 中定义，并作为 Python API 暴露，包括 <code class="docutils literal notranslate"><span class="pre">add_early_assign_memory_space</span></code>、<code class="docutils literal notranslate"><span class="pre">add_lower_async_load</span></code>、<code class="docutils literal notranslate"><span class="pre">add_lower_tma_copy</span></code>、<code class="docutils literal notranslate"><span class="pre">add_tle_convert_arg_to_memdesc</span></code>、<code class="docutils literal notranslate"><span class="pre">add_tle_dsl_region_inline</span></code>。</p></li>
+<li><p>关键转换：</p>
+<ul>
+<li><p>Early Assign Memory Space 将标记为 <code class="docutils literal notranslate"><span class="pre">tt.memory_space=&quot;shared_memory&quot;</span></code> 的张量重写为显式的本地分配和存储序列，并移除该属性，为后续 Pass 暴露具体的 SMEM 操作（<code class="docutils literal notranslate"><span class="pre">TleEarlyAssignMemorySpace.cpp</span></code>）。</p></li>
+<li><p>Lower Async Load 查找标记为 <code class="docutils literal notranslate"><span class="pre">&quot;tt.load.async&quot;</span></code>（由 <code class="docutils literal notranslate"><span class="pre">tle.load</span></code> 设置）的加载操作，并将其转换为 Hopper 风格的异步拷贝加提交或等待链，为 <code class="docutils literal notranslate"><span class="pre">LocalLoadOps</span></code> 提供数据。它还会去重冗余分配（<code class="docutils literal notranslate"><span class="pre">TleLowerAsyncLoad.cpp</span></code>）。</p></li>
+<li><p>Lower TMA Copy 将高层 <code class="docutils literal notranslate"><span class="pre">TMACopyOp</span></code>（由 <code class="docutils literal notranslate"><span class="pre">tle.copy</span></code> 使用张量描述符生成）lowering 为 NVIDIA TMA 内建函数，处理 GM→SMEM 和 SMEM→GM 两个方向，并进行屏障管理（<code class="docutils literal notranslate"><span class="pre">TleLowerTmaCopy.cpp</span></code>）。</p></li>
+<li><p>Convert Arg To MemDesc 通过插入临时的本地分配和加载序列，在 DSL 区域内物化兼容 memdesc 的操作数和结果。这使得通用的 Triton Pass 能够对这些操作数和结果进行推理（<code class="docutils literal notranslate"><span class="pre">ConvertArgToMemDesc.cpp</span></code>）。</p></li>
+<li><p>DSL Region Inline 将 <code class="docutils literal notranslate"><span class="pre">tle::DSLRegionOp</span></code> 主体拼接到周围的 CFG（控制流图）块中，在 TLE-Raw 内核被 lowering 后，将 yield 替换为分支（<code class="docutils literal notranslate"><span class="pre">DSLRegionInline.cpp</span></code>）。</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>后端分发</p>
+<ul>
+<li><p>后端特定逻辑目前针对 NVIDIA（参见 <code class="docutils literal notranslate"><span class="pre">nvidia</span></code> 以及在 Pass 内部使用 <code class="docutils literal notranslate"><span class="pre">triton::nvidia_gpu</span></code> 内建函数）。其他硬件后端可以通过复用 TLE-Raw DSL 和 Pass 钩子，并在 <code class="docutils literal notranslate"><span class="pre">third_party/&lt;backend&gt;/backend/compiler.py</span></code> 下实现自己的 lowering Pass 和编码来添加。此扩展机制与 HINTS 的分发方式类似。</p></li>
+<li><p>从 <code class="docutils literal notranslate"><span class="pre">triton_tle.cc</span></code> 导出的 Pass 包装器允许每个后端在组装其管线时仅选择其支持的 Pass。例如，NVIDIA 启用 TMA lowering，而其他后端可能在内存空间标记后停止。</p></li>
+</ul>
+</li>
+<li><p>测试和示例</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle</span></code> 下的集成测试涵盖流水线循环、GEMM 和 TMA 拷贝的端到端内核。这些测试确保 Python API、语义检查和 Pass 之间的一致性。</p></li>
+<li><p>开发者在修改 Python DSL 或 MLIR Pass 后，可以运行 <code class="docutils literal notranslate"><span class="pre">python/test/tle/run_tests.py</span></code> 来快速捕获回归问题。</p></li>
+</ul>
+</li>
+<li><p>扩展 TLE</p>
+<ul>
+<li><p>新的 API 应遵循既定的模式：添加带有语义验证的 Python 表面操作 → 暴露必要的 builder 钩子 → 创建和扩展方言操作 → 添加 lowering Pass 并为后端注册。</p></li>
+<li><p>将布局和作用域抽象集中在 <code class="docutils literal notranslate"><span class="pre">types.py</span></code> 中，以便在不触及用户代码的情况下切换未来的硬件（例如张量内存），并在 <code class="docutils literal notranslate"><span class="pre">Passes.td</span></code> 中记录任何新的 Pass。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="gpu-commonir-lowering">
+<h2>可选的 GPU CommonIR Lowering<a class="headerlink" href="#gpu-commonir-lowering" title="Link to this heading">#</a></h2>
+<p>默认的 NVIDIA 构建保留原生 TLE GPU Lowering 路径。显式开启 CommonIR 后，前端先将结构化 buffer 操作保留为 CommonIR TileIR，再转换为原生 TTGIR：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tle.gpu.* -&gt; tile.* / !tile.buf -&gt; CommonIRToTTGIR -&gt; 原生 TTGIR
+</pre></div>
+</div>
+<p>该路径显式表达前端 buffer 语义，不改变 NVIDIA 后端最终接收的 IR 约定。<code class="docutils literal notranslate"><span class="pre">CommonIRToTTGIR</span></code> pass 必须在进入后续 TTGIR 管线前，消除全部 <code class="docutils literal notranslate"><span class="pre">tile.*</span></code>、<code class="docutils literal notranslate"><span class="pre">!tile.buf</span></code> 以及临时的 buffer-to-memdesc 桥接。</p>
+<p>此路径在构建时选择，默认关闭，目前只支持默认 NVIDIA 后端。将官方 <a class="reference external" href="https://github.com/flagos-ai/flir">FLIR</a> <code class="docutils literal notranslate"><span class="pre">main</span></code> 分支的兼容版本放到 <code class="docutils literal notranslate"><span class="pre">third_party/flir</span></code>，然后构建 FlagTree：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/flir.git<span class="w"> </span>third_party/flir
+<span class="nv">FLAGTREE_COMMON_IR</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.<span class="w"> </span>--no-build-isolation
+</pre></div>
+</div>
+<p>环境变量 <code class="docutils literal notranslate"><span class="pre">FLAGTREE_COMMON_IR</span></code> 设置内部 CMake 变量 <code class="docutils literal notranslate"><span class="pre">FLAGTREE_COMMON_IR_ENABLED</span></code>。开启时，C++ 构建定义 <code class="docutils literal notranslate"><span class="pre">__FLAGTREE_COMMON_IR__</span></code>，向 Python 暴露一个统一的能力查询接口，并仅在此构建中注册 CommonIR dialect 和 conversion pass。不要同时设置 <code class="docutils literal notranslate"><span class="pre">FLAGTREE_BACKEND</span></code>。在原生路径和 CommonIR 路径之间切换需要重新构建 FlagTree，这不是逐 kernel 的运行时选项。</p>
+<p>支持的 GPU buffer 形式如下：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>TLE / 前端形式</p></th>
+<th class="head"><p>CommonIR 形式</p></th>
+<th class="head"><p>原生 TTGIR 结果</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc</span></code>（SMEM；CommonIR 不支持 alias）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.alloc</span></code> / <code class="docutils literal notranslate"><span class="pre">!tile.buf&lt;...,</span> <span class="pre">#shared&gt;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ttg.local_alloc</span></code> / <code class="docutils literal notranslate"><span class="pre">!ttg.memdesc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.copy</span></code>（整个 buffer 的指针拷贝）</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.copy</span></code></p></td>
+<td><p>同步或异步 TTGIR 拷贝操作</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">buf.load()</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.to_tensor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ttg.local_load</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">buf.store(value)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.store_tensor</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ttg.local_store</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>buffered-tensor 的 slot / view</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tile.subview</span></code></p></td>
+<td><p>memdesc subview</p></td>
+</tr>
+<tr class="row-odd"><td><p>本地 buffer 上的 <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code></p></td>
+<td><p>临时的 <code class="docutils literal notranslate"><span class="pre">!tile.buf</span></code> 到 <code class="docutils literal notranslate"><span class="pre">!ttg.memdesc</span></code> 桥接</p></td>
+<td><p>已有 TLE local-pointer 操作</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">tle.gpu.wgmma</span></code> 的共享内存操作数，包括转置</p></td>
+<td><p>buffer-to-memdesc 桥接</p></td>
+<td><p>已有 descriptor view 和 WGMMA Lowering</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">buf</span></code> 是 <code class="docutils literal notranslate"><span class="pre">tle.gpu.buffered_tensor</span></code>，其 <code class="docutils literal notranslate"><span class="pre">load()</span></code> / <code class="docutils literal notranslate"><span class="pre">store(value)</span></code> 方法在原生与 CommonIR 构建中使用相同写法。原生构建通过 <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> 和 <code class="docutils literal notranslate"><span class="pre">tl.load</span></code> / <code class="docutils literal notranslate"><span class="pre">tl.store</span></code> 实现；CommonIR 构建保留整个 buffer 的 TileIR 操作，直到 conversion 阶段。原实验接口 <code class="docutils literal notranslate"><span class="pre">tle.gpu.to_tensor(buf)</span></code> / <code class="docutils literal notranslate"><span class="pre">tle.gpu.store_tensor(value,</span> <span class="pre">buf)</span></code> 改用这两个方法，不保留旧名称别名。</p>
+<p>TMA descriptor 拷贝经过 buffer-to-memdesc 桥接后，保留已有 TMA 操作。GM 到 shared 的 TMA 拷贝还会保留用户提供的完成屏障和预期字节数，屏障参数校验沿用原生路径。</p>
+<p>CommonIR 构建目前会对下列形式给出明确的前端错误，而不是静默绕过 CommonIR：</p>
+<ul class="simple">
+<li><p>带 alias 的 <code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc</span></code> buffer；</p></li>
+<li><p>带 mask 的 <code class="docutils literal notranslate"><span class="pre">tle.gpu.copy</span></code>，或在 GM 到 shared 的 TMA 拷贝之外使用完成屏障；</p></li>
+<li><p>remote-buffer <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code>；</p></li>
+<li><p>普通指针拷贝携带 offsets（应改为对指针操作数本身添加偏移）。</p></li>
+</ul>
+<p>构建完成后，可运行以下针对性检查：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>test/CommonIR/test_gpu_semantics.py
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>test/CommonIR/test_gpu_wgmma_bridge.py<span class="w"> </span>python/test/tle/integration/test_tle_tma_copy.py
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>python/test/tle/unit/test_tle_whitelist.py
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-q<span class="w"> </span>python/test/tle/unit/test_tle_gpu_buffer_access.py
+lit<span class="w"> </span>-sv<span class="w"> </span>--filter<span class="o">=</span><span class="s1">'gpu-tileir'</span><span class="w"> </span>build/cmake.*/test
+</pre></div>
+</div>
+<p>lit 用例同时检查中间 TileIR 约定，以及最终 TTGIR 中不存在 CommonIR 操作或未消除的桥接 cast。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="features-hints.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Hints</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="flir.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">FLIR：统一中间层</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">TLE-Lite、TLE-Struct 和 TLE-Raw 简介</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle">TLE 在编译过程中的处理</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-commonir-lowering">可选的 GPU CommonIR Lowering</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../../flagtree_en/FlagTree_overview/compilation_architecture/features-tle.html">English</a></body>
+</html>

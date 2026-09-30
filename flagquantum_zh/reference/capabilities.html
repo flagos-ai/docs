@@ -1,0 +1,890 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="能力参考" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="reference/capabilities.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="FlagQuantum 公开每个能力的成熟度，而不是靠示例去暗示。本页是摘要；仓库中经机器校验的能力矩阵才是权威来源。 如何理解成熟度:,, 等级, 含义,,, 发布认证, 有受发布门禁约束、经审计且可复现的证据，且无未解决的发布阻塞项,, 生产支持, 具备兼容性、运维指引与目标硬件证据的受支持路径,, 开发证据, 可执行且经过测试的开发结果，不构成生产或通用可扩展性主张,, 实验性, 研究性接口，不提供兼容性或生产保证,,,, 成熟度只对每个能力所声明的范围成立。本地、复制、切片或仅停留在规划阶段的执行路径都不构成分布式可扩展性证据。稳定的公开 API 也不会提升某个实验性后端的等级。..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="FlagQuantum 公开每个能力的成熟度，而不是靠示例去暗示。本页是摘要；仓库中经机器校验的能力矩阵才是权威来源。 如何理解成熟度:,, 等级, 含义,,, 发布认证, 有受发布门禁约束、经审计且可复现的证据，且无未解决的发布阻塞项,, 生产支持, 具备兼容性、运维指引与目标硬件证据的受支持路径,, 开发证据, 可执行且经过测试的开发结果，不构成生产或通用可扩展性主张,, 实验性, 研究性接口，不提供兼容性或生产保证,,,, 成熟度只对每个能力所声明的范围成立。本地、复制、切片或仅停留在规划阶段的执行路径都不构成分布式可扩展性证据。稳定的公开 API 也不会提升某个实验性后端的等级。..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>能力参考 &#8212; FlagQuantum 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/reference/capabilities.4d038b6e-d14d-4da0-87ff-6dcd9013aff8.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/capabilities';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/reference/capabilities.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="参考资料" href="reference.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagQuantum 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagQuantum 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagQuantum 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 概览</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../FlagQuantum_overview/FlagQuantum-overview.html">FlagQuantum 概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FlagQuantum_overview/features.html">特性</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FlagQuantum_overview/architecture.html">架构</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 快速入门</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">快速入门</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">环境要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">安装 FlagQuantum</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/requirements.html">环境要求</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/install.html">安装 FlagQuantum</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 用户指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/user-guide.html">用户指南</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/basic-usage.html">基本用法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/circuits-and-ir.html">线路与 FlagQuantum IR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/training-with-pytorch.html">使用 PyTorch 训练</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/measurement-and-noise.html">测量与噪声</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/simulation-representations.html">模拟表示</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/distributed-execution.html">分布式执行</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/hardware-and-remote.html">硬件与远程目标</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/algorithms.html">算法、纠错与数字孪生</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/tutorials.html">教程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/run-tests.html">运行测试</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/basic-usage.html">基本用法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/circuits-and-ir.html">线路与 FlagQuantum IR</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/training-with-pytorch.html">使用 PyTorch 训练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/measurement-and-noise.html">测量与噪声</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/simulation-representations.html">模拟表示</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/distributed-execution.html">分布式执行</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/hardware-and-remote.html">硬件与远程目标</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/algorithms.html">算法、纠错与数字孪生</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/tutorials.html">教程</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/run-tests.html">运行测试</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考资料</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="reference.html">参考资料</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">能力参考</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/reference/capabilities.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>能力参考</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">如何理解成熟度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">构建、模拟与训练</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagos">分布式与 FlagOS 执行</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">部署、互操作与研究性接口</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">已公开的性能主张</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>能力参考<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>FlagQuantum 公开每个能力的成熟度，而不是靠示例去暗示。本页是摘要；仓库中经机器校验的能力矩阵才是权威来源。</p>
+<section id="id2">
+<h2>如何理解成熟度<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>等级</p></th>
+<th class="head"><p>含义</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>发布认证</p></td>
+<td><p>有受发布门禁约束、经审计且可复现的证据，且无未解决的发布阻塞项</p></td>
+</tr>
+<tr class="row-odd"><td><p>生产支持</p></td>
+<td><p>具备兼容性、运维指引与目标硬件证据的受支持路径</p></td>
+</tr>
+<tr class="row-even"><td><p>开发证据</p></td>
+<td><p>可执行且经过测试的开发结果，不构成生产或通用可扩展性主张</p></td>
+</tr>
+<tr class="row-odd"><td><p>实验性</p></td>
+<td><p>研究性接口，不提供兼容性或生产保证</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>成熟度只对每个能力所声明的范围成立。本地、复制、切片或仅停留在规划阶段的执行路径都不构成分布式可扩展性证据。稳定的公开 API 也不会提升某个实验性后端的等级。</p>
+</section>
+<section id="id3">
+<h2>构建、模拟与训练<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>能力</p></th>
+<th class="head"><p>成熟度</p></th>
+<th class="head"><p>边界简述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>统一线路 API 与 FlagQuantum IR</p></td>
+<td><p>发布认证</p></td>
+<td><p>IR v1；不兼容的 schema 变更需要显式迁移</p></td>
+</tr>
+<tr class="row-odd"><td><p>本地态向量模拟与训练</p></td>
+<td><p>生产支持</p></td>
+<td><p>容量受单设备限制</p></td>
+</tr>
+<tr class="row-even"><td><p>分片态向量训练</p></td>
+<td><p>生产支持</p></td>
+<td><p>多机发布认证取决于已提升的审计硬件证据</p></td>
+</tr>
+<tr class="row-odd"><td><p>可微与分片 MPS 训练</p></td>
+<td><p>开发证据</p></td>
+<td><p>已有单机与双机证据；层并行收缩与容量长跑仍不完整</p></td>
+</tr>
+<tr class="row-even"><td><p>张量网络执行与训练</p></td>
+<td><p>实验性</p></td>
+<td><p>通用反向收缩与生产级分布式传输尚未认证</p></td>
+</tr>
+<tr class="row-odd"><td><p>受限本地 MPS TEBD</p></td>
+<td><p>实验性</p></td>
+<td><p>仅支持静态实系数的一体与相邻二体泡利项、批大小为 1、二阶虚时间</p></td>
+</tr>
+<tr class="row-even"><td><p>精确与轨迹式含噪模拟</p></td>
+<td><p>实验性</p></td>
+<td><p>脉冲重叠、串扰、泄漏、提供方标定适配器与含噪梯度均不支持</p></td>
+</tr>
+<tr class="row-odd"><td><p>连续时间 Lindblad 演化</p></td>
+<td><p>生产支持</p></td>
+<td><p>仅限时不变稠密哈密顿量的 CPU complex64/complex128</p></td>
+</tr>
+<tr class="row-even"><td><p>Double-Single FP32 数值原语</p></td>
+<td><p>实验性</p></td>
+<td><p>面向 FP32 硬件的软件扩展精度；不等价于 FP64</p></td>
+</tr>
+<tr class="row-odd"><td><p>分离实部/虚部 FP32 态向量（P0–P5）</p></td>
+<td><p>实验性</p></td>
+<td><p>默认运行时永不选择的显式前向、期望值与 Double-Single 路径</p></td>
+</tr>
+<tr class="row-even"><td><p>量子态制备</p></td>
+<td><p>实验性</p></td>
+<td><p>演示规模；输入本身已是指数级大小</p></td>
+</tr>
+<tr class="row-odd"><td><p>Oracle 构建块与真值表合成</p></td>
+<td><p>实验性</p></td>
+<td><p>可逆经典逻辑；辅助位必须初始化为零态</p></td>
+</tr>
+<tr class="row-even"><td><p>Grover 搜索与振幅估计</p></td>
+<td><p>实验性</p></td>
+<td><p>优势体现在查询复杂度，且前提是 oracle 或态制备免费</p></td>
+</tr>
+<tr class="row-odd"><td><p>量子 PCA、k-medians、核估计</p></td>
+<td><p>实验性</p></td>
+<td><p>优势前提是数据访问模型，而这些单元并不提供</p></td>
+</tr>
+<tr class="row-even"><td><p>特征选择与 QUBO 到 Ising 映射</p></td>
+<td><p>实验性</p></td>
+<td><p>多项式级的经典变换；本身没有求解器，也没有优势</p></td>
+</tr>
+<tr class="row-odd"><td><p>相位估计求奇异值</p></td>
+<td><p>实验性</p></td>
+<td><p>演示规模；经典计算部分是显式付出的</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="flagos">
+<h2>分布式与 FlagOS 执行<a class="headerlink" href="#flagos" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>能力</p></th>
+<th class="head"><p>成熟度</p></th>
+<th class="head"><p>边界简述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>FlagOS 本地态向量 CUDA 参考</p></td>
+<td><p>开发证据</p></td>
+<td><p>基于 CUDA 的参考路径，未认证任何国产加速器</p></td>
+</tr>
+<tr class="row-odd"><td><p>FlagOS 分布式态向量负载</p></td>
+<td><p>开发证据</p></td>
+<td><p>单台 A800 节点上 2、4、8 卡；多机行为尚未确立</p></td>
+</tr>
+<tr class="row-even"><td><p>FlagOS 态向量容量扩展</p></td>
+<td><p>开发证据</p></td>
+<td><p>八卡 A800 节点上一个确切的 32 比特 complex128 前向负载</p></td>
+</tr>
+<tr class="row-odd"><td><p>FlagOS 分布式传输可观测性</p></td>
+<td><p>开发证据</p></td>
+<td><p>2、4、8 rank 的集合通信；设备活动捕获不完整</p></td>
+</tr>
+<tr class="row-even"><td><p>国产单卡认证试验台</p></td>
+<td><p>开发证据</p></td>
+<td><p>采集由供方独占证明的候选结果，本身不提升任何能力等级</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id4">
+<h2>部署、互操作与研究性接口<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>能力</p></th>
+<th class="head"><p>成熟度</p></th>
+<th class="head"><p>边界简述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>线路打包与云端部署</p></td>
+<td><p>开发证据</p></td>
+<td><p>提供方支持与凭据行为各不相同；没有提供方获得发布认证</p></td>
+</tr>
+<tr class="row-odd"><td><p>带证据约束的 QPU 数字孪生</p></td>
+<td><p>开发证据</p></td>
+<td><p>一致性指测量分布的全变差一致性，且只对所声明的线路成立</p></td>
+</tr>
+<tr class="row-even"><td><p>互操作适配器契约</p></td>
+<td><p>实验性</p></td>
+<td><p>协议处于候选稳定级，尚未获得 API 负责人批准</p></td>
+</tr>
+<tr class="row-odd"><td><p>Qiskit、PennyLane、Cirq 与 CUDA-Q 互操作</p></td>
+<td><p>实验性</p></td>
+<td><p>在版本化边界上做静态转换；外部对象不会进入运行时或加速层</p></td>
+</tr>
+<tr class="row-even"><td><p>PennyLane Lightning、Cirq Simulator 与 Qiskit Aer 桥接</p></td>
+<td><p>实验性</p></td>
+<td><p>仅支持一个完全绑定、单批次的线路，不支持梯度、噪声、动态线路、路由或回退</p></td>
+</tr>
+<tr class="row-odd"><td><p>基于证据的模拟器顾问</p></td>
+<td><p>实验性</p></td>
+<td><p>建议绑定到已入库的线路与环境，绝不按规模推断性能</p></td>
+</tr>
+<tr class="row-even"><td><p>动态线路与后端评估</p></td>
+<td><p>实验性</p></td>
+<td><p>本地动态噪声仅限一比特比特翻转信道与读出混淆</p></td>
+</tr>
+<tr class="row-odd"><td><p>扩展 SDK</p></td>
+<td><p>实验性</p></td>
+<td><p>协议已批准但未冻结；编译器插件只交换 <code class="docutils literal notranslate"><span class="pre">CircuitIR</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>重复码存储实验</p></td>
+<td><p>开发证据</p></td>
+<td><p>仅一个固定的三数据比特配置；不主张逻辑抑制或阈值结论</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id5">
+<h2>已公开的性能主张<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>FlagQuantum 公布实测性能主张时，会同时给出原始产物、其摘要、记录环境与确切范围，并继承所属能力的成熟度。没有经过审计的产物时，本页不做任何性能主张。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="reference.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">参考资料</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">如何理解成熟度</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">构建、模拟与训练</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#flagos">分布式与 FlagOS 执行</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">部署、互操作与研究性接口</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">已公开的性能主张</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagquantum_en/reference/capabilities.html">English</a></body>
+</html>

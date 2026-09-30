@@ -1,0 +1,1004 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="User Guide" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/user-guide.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="This guide covers how to configure FlagScale and run training, inference, serving, and reinforcement learning tasks. Multi-Platform Training and Testing- 1. Component versions used, 2. Platform environment variables, 3. Install FlagScale, 4. Configure the training task, 5. Run the training test, ..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="This guide covers how to configure FlagScale and run training, inference, serving, and reinforcement learning tasks. Multi-Platform Training and Testing- 1. Component versions used, 2. Platform environment variables, 3. Install FlagScale, 4. Configure the training task, 5. Run the training test, ..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>User Guide &#8212; FlagScale Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/user-guide.b1c78d4f-abe8-4917-9f2a-3938fc9b6236.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/user-guide';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/user-guide.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Multi-Platform Training and Testing" href="multi-platform-training.html" />
+    <link rel="prev" title="Install FlagScale" href="install.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagScale Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagScale Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagScale Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v210.html">FlagScale v2.1.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v200.html">FlagScale v2.0.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release_notes_v100.html">FlagScale v1.0.0 Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagScale_overview/FlagScale-overview.html">FlagScale Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagScale_overview/features.html">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../FlagScale_overview/workflow.html">Workflow</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="getting-started.html">Getting Started</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">Install FlagScale</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">User Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="multi-platform-training.html">Multi-Platform Training and Testing</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/user-guide.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>User Guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-configure-yaml-files">Step 1: Configure YAML files</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experiment-level-yaml">Experiment-level YAML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-level-yaml">Task-level YAML</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-run-tasks">Step 2： Run tasks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#train">Train</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#serve">Serve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reinforcement-learning">Reinforcement Learning</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
+<p>This guide covers how to configure FlagScale and run training, inference, serving, and reinforcement learning tasks.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="multi-platform-training.html">Multi-Platform Training and Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#component-versions-used">1. Component versions used</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#platform-environment-variables">2. Platform environment variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#install-flagscale">3. Install FlagScale</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#configure-the-training-task">4. Configure the training task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#run-the-training-test">5. Run the training test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#run-on-the-flagos-operator-stack">6. Run on the FlagOS operator stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#known-issues-and-workarounds">7. Known issues and workarounds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-platform-training.html#notes">8. Notes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="step-1-configure-yaml-files">
+<h2>Step 1: Configure YAML files<a class="headerlink" href="#step-1-configure-yaml-files" title="Link to this heading">#</a></h2>
+<p>FlagScale uses <a class="reference external" href="https://hydra.cc/">Hydra</a> for configuration management. Every task is driven by two YAML files that work together: an experiment-level file and a task-level file, both in the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory. Before running the task, you need to configure these files first.</p>
+<section id="experiment-level-yaml">
+<h3>Experiment-level YAML<a class="headerlink" href="#experiment-level-yaml" title="Link to this heading">#</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">examples/qwen3/conf/serve.yaml</span></code> as an example to explain this configuration file.</p>
+<p>The experiment-level file is the entry point for <code class="docutils literal notranslate"><span class="pre">flagscale</span></code> commands. It defines a global context for the run:</p>
+<ul class="simple">
+<li><p>where outputs are stored: <code class="docutils literal notranslate"><span class="pre">exp_dir:</span> <span class="pre">outputs/${experiment.exp_name}</span></code></p></li>
+<li><p>which backend engine to use: <code class="docutils literal notranslate"><span class="pre">backend:</span> <span class="pre">vllm</span></code></p></li>
+<li><p>which task-level file to load: <code class="docutils literal notranslate"><span class="pre">defaults:</span> <span class="pre">-</span> <span class="pre">serve:</span> <span class="pre">8b</span></code></p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example: examples/qwen3/conf/serve.yaml</span>
+<span class="nt">defaults</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8b</span>
+
+<span class="nt">experiment</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">exp_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qwen3_8b</span>
+<span class="w">  </span><span class="nt">exp_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outputs/${experiment.exp_name}</span>
+<span class="w">  </span><span class="nt">task</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serve</span>
+<span class="w">    </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm</span>
+<span class="w">  </span><span class="nt">runner</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">hostfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">    </span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">use_fs_serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">envs</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">CUDA_VISIBLE_DEVICES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">CUDA_DEVICE_MAX_CONNECTIONS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+
+<span class="nt">hydra</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">run</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${experiment.exp_dir}/hydra</span>
+</pre></div>
+</div>
+</section>
+<section id="task-level-yaml">
+<h3>Task-level YAML<a class="headerlink" href="#task-level-yaml" title="Link to this heading">#</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">examples/qwen3/conf/serve/8b.yaml</span></code> as an example to explain this configuration file.</p>
+<p>The task-level YAML file specifies the model, dataset, and parameters for specific tasks such as training or inference. Every parameter in this file maps directly to an argument accepted by the backend engine, with hyphens (-) replaced by underscores (_).</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example: examples/qwen3/conf/serve/8b.yaml</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm_model</span>
+<span class="w">  </span><span class="nt">engine_args</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${oc.env:QWEN3_PATH}</span>
+<span class="w">    </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0</span>
+<span class="w">    </span><span class="nt">uvicorn_log_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${oc.env:QWEN3_PORT}</span>
+<span class="w">    </span><span class="nt">gpu_memory_utilization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<span class="w">    </span><span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">no_enable_prefix_caching</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">compilation_config</span><span class="p">:</span><span class="w"> </span><span class="s">'{"full_cuda_graph":</span><span class="nv"> </span><span class="s">true}'</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="step-2-run-tasks">
+<h2>Step 2： Run tasks<a class="headerlink" href="#step-2-run-tasks" title="Link to this heading">#</a></h2>
+<p>FlagScale provides a unified runner for various tasks, including training, inference, reinforcement learning, and serving. Simply specify the configuration file to run the task with a single <code class="docutils literal notranslate"><span class="pre">flagscale</span></code> command. The runner will automatically load the configurations and execute the task. The following sections demonstrate how to run a distributed training task.</p>
+<section id="train">
+<h3>Train<a class="headerlink" href="#train" title="Link to this heading">#</a></h3>
+<p>Require Megatron-LM-FL enviroment</p>
+<ol class="arabic">
+<li><p>Prepare dataset demo and tokenizer:</p>
+<ul class="simple">
+<li><p>Download dataset: We provide a small processed data (<a class="reference external" href="https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.bin">bin</a> and <a class="reference external" href="https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.idx">idx</a>) from the <a class="reference external" href="https://pile.eleuther.ai/">Pile</a> dataset.</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>./data<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>./data
+wget<span class="w"> </span>https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.idx
+wget<span class="w"> </span>https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/datasets/enron_emails_demo_text_document_qwen/enron_emails_demo_text_document_qwen.bin
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Download tokenizer</p></li>
+</ul>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>./qwentokenizer<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>./qwentokenizer
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/tokenizer_config.json"</span><span class="w"> </span>-O<span class="w"> </span>tokenizer_config.json
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/qwen.tiktoken"</span><span class="w"> </span>-O<span class="w"> </span>qwen.tiktoken
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/qwen_generation_utils.py"</span><span class="w"> </span>-O<span class="w"> </span>qwen_generation_utils.py
+wget<span class="w"> </span><span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/tokenizers/qwentokenizer/tokenization_qwen.py"</span><span class="w"> </span>-O<span class="w"> </span>tokenization_qwen.py
+</pre></div>
+</div>
+</li>
+<li><p>Modify the paths of the dataset and tokenizer in the task-level YAML file and the model name in the experiment-level YAML file
+{style=lower-alpha}</p>
+<ol class="arabic simple">
+<li><p><strong>Task-level YAML file</strong>: Modify the <code class="docutils literal notranslate"><span class="pre">data_path</span></code> and <code class="docutils literal notranslate"><span class="pre">tokenizer_path</span></code> in ./examples/qwen3/conf/train/0_6b.yaml.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">data</span><span class="p">:</span>
+<span class="w"> </span><span class="nt">data_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./data/enron_emails_demo_text_document_qwen</span><span class="w">    </span><span class="c1"># modify data_path here</span>
+<span class="w"> </span><span class="nt">split</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w"> </span><span class="nt">no_mmap_bin_files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w"> </span><span class="nt">tokenizer</span><span class="p">:</span>
+<span class="w">     </span><span class="nt">legacy_tokenizer</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">     </span><span class="nt">tokenizer_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">QwenTokenizerFS</span>
+<span class="w">     </span><span class="nt">tokenizer_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./qwentokenizer</span><span class="w">   </span><span class="c1"># modify tokenizer_path here</span>
+<span class="w">     </span><span class="nt">vocab_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">151936</span>
+<span class="w">     </span><span class="nt">make_vocab_size_divisible_by</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Experiment-level YAML</strong>: Modify <code class="docutils literal notranslate"><span class="pre">train</span></code>model name  in ./examples/qwen3/conf/train.yaml. The value must match the file name <strong>0_6b</strong>.yaml above.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0_6b</span><span class="w">  </span><span class="c1"># modify: train value must match its corresponding config file name</span>
+</pre></div>
+</div>
+</li>
+<li><p>Start the distributed training job:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/train.yaml
+<span class="c1"># or</span>
+flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/train.yaml
+</pre></div>
+</div>
+</li>
+<li><p>Stop the distributed training job:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>train<span class="w"> </span>qwen3<span class="w"> </span>--stop
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="inference">
+<h3>Inference<a class="headerlink" href="#inference" title="Link to this heading">#</a></h3>
+<p>Require vLLM-FL environment</p>
+<ol class="arabic">
+<li><p>Download inference model</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>modelscope<span class="w"> </span>download<span class="w"> </span>--model<span class="w"> </span>Qwen/Qwen3-4B<span class="w"> </span>--local_dir<span class="w"> </span>./Qwen3-4B
+</pre></div>
+</div>
+</li>
+<li><p>Modify the model path in the task-level YAML file and the model name in the experiment-level YAML file
+{style=lower-alpha}</p>
+<ol class="arabic simple">
+<li><p><strong>Task-level YAML file</strong>: Modify the <code class="docutils literal notranslate"><span class="pre">model</span></code> path in <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/inference/4b.yaml</span></code>.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">llm</span><span class="p">:</span>
+<span class="w"> </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./Qwen3-4B</span><span class="w">         </span><span class="c1"># modify: Set model directory</span>
+<span class="w"> </span><span class="nt">trust_remote_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w"> </span><span class="nt">tensor_parallel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w"> </span><span class="nt">pipeline_parallel_size</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w"> </span><span class="nt">gpu_memory_utilization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.9</span>
+<span class="w"> </span><span class="nt">seed</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1234</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Experiment-level YAML</strong>: Modify <code class="docutils literal notranslate"><span class="pre">inference</span></code>model name in <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/inference_fl.yaml</span></code>. The value must match the file name <strong>4b</strong>.yaml above.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">defaults</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">_self_</span>
+<span class="o">-</span> <span class="n">inference</span><span class="p">:</span> <span class="mi">4</span><span class="n">b</span>    <span class="c1"># modify: Inference value must match its corresponding config file name</span>
+</pre></div>
+</div>
+</li>
+<li><p>Start inference:</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>inference<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/inference_fl.yaml
+<span class="c1"># or</span>
+flagscale<span class="w"> </span>inference<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/inference_fl.yaml
+</pre></div>
+</div>
+</section>
+<section id="serve">
+<h3>Serve<a class="headerlink" href="#serve" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Download serving model</p></li>
+<li><p>Modify the model path in the task-level YAML file and the model name in the experiment-level YAML file
+{style=lower-alpha}</p>
+<ol class="arabic simple">
+<li><p><strong>Task-level YAML file</strong>: Modify the <code class="docutils literal notranslate"><span class="pre">model</span></code> path in <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/serve/0_6b.yaml</span></code>.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm_model</span>
+<span class="nt">engine_args</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./Qwen3-0.6B</span><span class="w">          </span><span class="c1"># modify: Set model directory</span>
+<span class="w">   </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0</span>
+<span class="w">   </span><span class="nt">max_model_len</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4096</span>
+<span class="w">   </span><span class="nt">max_num_seqs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="w">   </span><span class="nt">uvicorn_log_level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warning</span>
+<span class="w">   </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30000</span><span class="w">                  </span><span class="c1"># A port available in your env, for example: 30000</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><strong>Experiment-level YAML</strong>: Modify <code class="docutils literal notranslate"><span class="pre">serve</span></code> model name in <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/serve.yaml</span></code>.</p></li>
+</ol>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0_6b</span><span class="w">         </span><span class="c1"># modify: Serve value must match its corresponding config file name</span>
+<span class="nt">experiment</span><span class="p">:</span>
+<span class="nt">exp_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">qwen3-0.6b</span><span class="w">  </span><span class="c1"># modify as needed for test clarity</span>
+<span class="nt">exp_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outputs/${experiment.exp_name}</span>
+<span class="nt">task</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">serve</span>
+<span class="w">   </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vllm</span>
+<span class="nt">runner</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">hostfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">   </span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">use_fs_serve</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">envs</span><span class="p">:</span>
+<span class="w">   </span><span class="nt">CUDA_VISIBLE_DEVICES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">   </span><span class="nt">CUDA_DEVICE_MAX_CONNECTIONS</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</li>
+<li><p>Start the server:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>serve<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/serve.yaml
+<span class="c1"># or</span>
+flagscale<span class="w"> </span>serve<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/serve.yaml
+</pre></div>
+</div>
+</li>
+<li><p>Stop the server:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flagscale</span> <span class="n">serve</span> <span class="n">qwen3</span> <span class="o">--</span><span class="n">stop</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="reinforcement-learning">
+<h3>Reinforcement Learning<a class="headerlink" href="#reinforcement-learning" title="Link to this heading">#</a></h3>
+<p>Require verl-FL environment</p>
+<ol class="arabic">
+<li><p>Download model</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>modelscope<span class="w"> </span>download<span class="w"> </span>--model<span class="w"> </span>Qwen/Qwen3-0.6B<span class="w"> </span>--local_dir<span class="w"> </span>./Qwen3-0.6B
+</pre></div>
+</div>
+</li>
+<li><p>Download dataset</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="n">gsm8k</span> <span class="o">&amp;&amp;</span> <span class="n">cd</span> <span class="n">gsm8k</span>
+<span class="n">wget</span> <span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/rl/datasets/gsm8k/train.parquet"</span>
+<span class="n">wget</span> <span class="s2">"https://baai-flagscale.ks3-cn-beijing.ksyuncs.com/rl/datasets/gsm8k/test.parquet"</span>
+</pre></div>
+</div>
+</li>
+<li><p>Modify the model path in the task-level YAML file and the model name in the experiment-level YAML file
+{style=lower-alpha}</p>
+<ol class="arabic">
+<li><p><strong>Task-level YAML file</strong>: In <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/rl/0_6b.yaml</span></code></p>
+<ul class="simple">
+<li><p>Modify the <code class="docutils literal notranslate"><span class="pre">train_files</span></code> (train dataset path) and <code class="docutils literal notranslate"><span class="pre">val_files</span></code> (test dataset path).</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">:</span>
+   <span class="n">train_files</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">gsm8k</span><span class="o">/</span><span class="n">train</span><span class="o">.</span><span class="n">parquet</span> <span class="c1"># modify: Set your train dataset</span>
+   <span class="n">val_files</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">gsm8k</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">parquet</span> <span class="c1"># modify: Set your test dataset</span>
+   <span class="n">train_batch_size</span><span class="p">:</span> <span class="mi">1024</span>
+   <span class="n">max_prompt_length</span><span class="p">:</span> <span class="mi">512</span>
+   <span class="n">max_response_length</span><span class="p">:</span> <span class="mi">1024</span>
+   <span class="n">filter_overlong_prompts</span><span class="p">:</span> <span class="n">true</span>
+   <span class="n">truncation</span><span class="p">:</span> <span class="s2">"error"</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Modify the <code class="docutils literal notranslate"><span class="pre">path</span></code>(model checkpoint path).</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">actor_rollout_ref</span><span class="p">:</span>
+   <span class="n">model</span><span class="p">:</span>
+      <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">ckpt</span><span class="o">/</span><span class="n">Qwen3</span><span class="o">-</span><span class="mf">0.6</span><span class="n">B</span> <span class="c1"># modify: Set your model checkpoint directory</span>
+      <span class="n">use_remove_padding</span><span class="p">:</span> <span class="n">true</span>
+      <span class="n">enable_gradient_checkpointing</span><span class="p">:</span> <span class="n">true</span>
+      <span class="n">trust_remote_code</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Experiment-level YAML</strong>: Modify exp_dir (experiment directory) and runtime_env (runtime environment path) in <code class="docutils literal notranslate"><span class="pre">./examples/qwen3/conf/rl.yaml</span></code>.</p></li>
+</ol>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span><span class="p">:</span>
+   <span class="n">exp_name</span><span class="p">:</span> <span class="mi">0_6</span><span class="n">b</span>
+   <span class="n">exp_dir</span><span class="p">:</span> <span class="o">/</span><span class="n">workspace</span><span class="o">/</span><span class="n">qwen3</span><span class="o">-</span><span class="n">rl</span><span class="o">/</span> <span class="c1"># modify: Set your experiment directory</span>
+   <span class="n">runner</span><span class="p">:</span>
+      <span class="n">runtime_env</span><span class="p">:</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">verl</span><span class="o">-</span><span class="n">FL</span><span class="o">/</span><span class="n">verl</span><span class="o">/</span><span class="n">trainer</span><span class="o">/</span><span class="n">runtime_env</span><span class="o">.</span><span class="n">yaml</span> <span class="c1"># modify: Set your runtime_env.yaml</span>
+</pre></div>
+</div>
+</li>
+<li><p>Start reinforcement learning:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>rl<span class="w"> </span>qwen3<span class="w"> </span>--config<span class="w"> </span>./examples/qwen3/conf/rl.yaml
+<span class="c1"># or</span>
+flagscale<span class="w"> </span>rl<span class="w"> </span>qwen3<span class="w"> </span>-c<span class="w"> </span>./examples/qwen3/conf/rl.yaml
+</pre></div>
+</div>
+<p>You can check the output in your experiment directory.</p>
+</li>
+<li><p>Stop reinforcement learning:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>flagscale<span class="w"> </span>rl<span class="w"> </span>qwen3<span class="w"> </span>--stop
+</pre></div>
+</div>
+<p>Or force to stop Ray cluster.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ray</span> <span class="n">stop</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="install.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Install FlagScale</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="multi-platform-training.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Multi-Platform Training and Testing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-configure-yaml-files">Step 1: Configure YAML files</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#experiment-level-yaml">Experiment-level YAML</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#task-level-yaml">Task-level YAML</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-run-tasks">Step 2： Run tasks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#train">Train</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inference">Inference</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#serve">Serve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reinforcement-learning">Reinforcement Learning</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagscale_zh/getting_started/user-guide.html">中文</a></body>
+</html>

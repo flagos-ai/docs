@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Install on Arm64 CPU" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/install-arm64-cpu.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="[ 中文版|English] Before installing the FlagTree on Arm64 CPU, please read the following notes: Triton version 3.3, based on LLVM a66376b0, aarch64 platform, Target: AArch64 Linux with NEON / SVE2 + i8mm (e.g. Armv9-A Cortex-A720), ⚠️ The cpu backend’s C++ extension layer (TritonCPU dialect + NEON/S..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="[ 中文版|English] Before installing the FlagTree on Arm64 CPU, please read the following notes: Triton version 3.3, based on LLVM a66376b0, aarch64 platform, Target: AArch64 Linux with NEON / SVE2 + i8mm (e.g. Armv9-A Cortex-A720), ⚠️ The cpu backend’s C++ extension layer (TritonCPU dialect + NEON/S..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Install on Arm64 CPU &#8212; FlagTree Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/install-arm64-cpu.32b7ba9d-2ad7-4eef-916c-27298e5ce77c.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/install-arm64-cpu';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/install-arm64-cpu.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="💫 NVIDIA nvidia" href="multi-backend-prebuilt-docker-image-install/install-nv.html" />
+    <link rel="prev" title="Install FlagTree" href="install.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagTree Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../release_notes/release-notes.html">Release Notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v070.html">FlagTree 0.7.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v060.html">FlagTree 0.6.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v050.html">FlagTree 0.5.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v040.html">FlagTree 0.4.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v030.html">FlagTree 0.3.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v020.html">FlagTree 0.2.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v010.html">FlagTree 0.1.0 release</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagTree_overview/FlagTree-overview.html">FlagTree Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagTree_overview/features.html">Features</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/compilation-architecture.html">FlagTree compilation architecture</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/common-architecture.html">Common architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html">FlagTree extensible framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-hints.html">Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-tle.html">TLE-Lite, TLE-Struct, and TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flir.html">FLIR: Unified intermediate layer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="getting-started.html">Getting Started</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">Install FlagTree</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Install on Arm64 CPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../user_guide/user-guide.html">User Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/use-hints.html">Use Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/use-tle-lite.html">Use TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/use-tle-struct.html">Use TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/use-tle-raw.html">Use TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../user_guide/use-tle-cpu.html">Use TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../user_guide/arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/examples.html">Examples</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/install-arm64-cpu.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Install on Arm64 CPU</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-for-build-and-run">1. Environment for build and run</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-dependencies">1.1 System dependencies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-virtualenv-and-install-pytorch">1.2 Create a virtualenv and install PyTorch</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llvm-toolchain">1.3 LLVM toolchain</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-commands">2. Installation Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#source-free-installation">2.1 Source-free installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-from-source">2.2 Build from source</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-and-validation">3. Testing and validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-a">Q&amp;A</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-performance-is-only-half-on-a-big-little-soc">Q: Performance is only half on a big.LITTLE SoC?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-runtime-reports-version-glibc-glibcxx-not-found">Q: Runtime reports version GLIBC / GLIBCXX not found?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-kernel-compilation-fails-with-kernel-s-error-junk-at-end-of-line-first-unrecognized-character-is">Q: kernel compilation fails with <code class="docutils literal notranslate"><span class="pre">kernel.s:</span> <span class="pre">Error:</span> <span class="pre">junk</span> <span class="pre">at</span> <span class="pre">end</span> <span class="pre">of</span> <span class="pre">line,</span> <span class="pre">first</span> <span class="pre">unrecognized</span> <span class="pre">character</span> <span class="pre">is</span> <span class="pre">\</span></code>”``?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-import-triton-language-extra-cpu-tle-ops-fails-with-no-module-named">Q: <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">triton.language.extra.cpu.tle_ops</span></code> fails with “No module named …”?</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p>[<a href="../../../flagtree_zh/getting_started/install-arm64-cpu.html">中文版</a>|English]</p>
+<section class="tex2jax_ignore mathjax_ignore" id="install-on-arm64-cpu">
+<h1>Install on Arm64 CPU<a class="headerlink" href="#install-on-arm64-cpu" title="Link to this heading">#</a></h1>
+<p>Before installing the FlagTree on Arm64 CPU, please read the following notes:</p>
+<ul class="simple">
+<li><p>Triton version 3.3, based on LLVM <strong>a66376b0</strong>, aarch64 platform</p></li>
+<li><p>Target: AArch64 Linux with NEON / SVE2 + i8mm (e.g. Armv9-A Cortex-A720)</p></li>
+<li><p>⚠️ The cpu backend’s C++ extension layer (TritonCPU dialect + NEON/SVE2 C runtime) lives in the separate <a class="reference external" href="https://github.com/flagos-ai/flagtree-cpu">flagtree-cpu</a> repo. The helper script <code class="docutils literal notranslate"><span class="pre">python/scripts/link_flagtree_cpu.sh</span></code> (run from the FlagTree root) clones it into <code class="docutils literal notranslate"><span class="pre">third_party/triton-cpu/</span></code> and creates the symlinks the build expects. TLE ops are injected by the <code class="docutils literal notranslate"><span class="pre">third_party/tle_arm64</span></code> plugin as <code class="docutils literal notranslate"><span class="pre">create_cpu_*</span></code> builder methods.</p></li>
+<li><p>No docker image is provided yet; install from source as below.</p></li>
+</ul>
+<section id="environment-for-build-and-run">
+<h2>1. Environment for build and run<a class="headerlink" href="#environment-for-build-and-run" title="Link to this heading">#</a></h2>
+<section id="system-dependencies">
+<h3>1.1 System dependencies<a class="headerlink" href="#system-dependencies" title="Link to this heading">#</a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>ninja-build<span class="w"> </span>git<span class="w"> </span>ccache<span class="w"> </span>pkg-config<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>libomp-dev<span class="w"> </span>libjemalloc2<span class="w"> </span>zlib1g<span class="w"> </span>zlib1g-dev<span class="w"> </span>libxml2<span class="w"> </span>libxml2-dev<span class="w"> </span>nlohmann-json3-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ca-certificates<span class="w"> </span>curl<span class="w"> </span>wget<span class="w"> </span>numactl<span class="w"> </span>python3-dev<span class="w"> </span>python3-pip<span class="w"> </span>python3-venv
+</pre></div>
+</div>
+</section>
+<section id="create-a-virtualenv-and-install-pytorch">
+<h3>1.2 Create a virtualenv and install PyTorch<a class="headerlink" href="#create-a-virtualenv-and-install-pytorch" title="Link to this heading">#</a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/venv-flagtree
+<span class="nb">source</span><span class="w"> </span>~/venv-flagtree/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip<span class="w"> </span>setuptools<span class="w"> </span>wheel
+<span class="c1"># Build dependencies — with --no-build-isolation (step 2.2 Step 3), pyproject</span>
+<span class="c1"># build requirements are NOT installed automatically and must be present:</span>
+pip<span class="w"> </span>install<span class="w"> </span>pybind11
+<span class="c1"># Install PyTorch first (aarch64 CPU build)</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="nv">torch</span><span class="o">==</span><span class="m">2</span>.10.0+cpu<span class="w"> </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cpu
+</pre></div>
+</div>
+</section>
+<section id="llvm-toolchain">
+<h3>1.3 LLVM toolchain<a class="headerlink" href="#llvm-toolchain" title="Link to this heading">#</a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">oaitriton.blob.core.windows.net</span></code> is reachable, the LLVM toolchain is fetched automatically on the first build (step 2.2 Step 3) according to <code class="docutils literal notranslate"><span class="pre">cmake/llvm-hash.txt</span></code> (a66376b0) and cached under <code class="docutils literal notranslate"><span class="pre">~/.triton/llvm/</span></code> — <strong>no manual step needed</strong>.</p>
+<p>For restricted networks, download manually (note the <strong>arm64</strong> package, for Triton 3.3):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>~/.triton/llvm<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/.triton/llvm
+wget<span class="w"> </span>https://oaitriton.blob.core.windows.net/public/llvm-builds/llvm-a66376b0-ubuntu-arm64.tar.gz
+tar<span class="w"> </span>zxvf<span class="w"> </span>llvm-a66376b0-ubuntu-arm64.tar.gz
+<span class="nb">export</span><span class="w"> </span><span class="nv">LLVM_SYSPATH</span><span class="o">=</span>~/.triton/llvm/llvm-a66376b0-ubuntu-arm64
+<span class="nb">export</span><span class="w"> </span><span class="nv">LLVM_INCLUDE_DIRS</span><span class="o">=</span><span class="nv">$LLVM_SYSPATH</span>/include
+<span class="nb">export</span><span class="w"> </span><span class="nv">LLVM_LIBRARY_DIR</span><span class="o">=</span><span class="nv">$LLVM_SYSPATH</span>/lib
+</pre></div>
+</div>
+</section>
+</section>
+<section id="installation-commands">
+<h2>2. Installation Commands<a class="headerlink" href="#installation-commands" title="Link to this heading">#</a></h2>
+<section id="source-free-installation">
+<h3>2.1 Source-free installation<a class="headerlink" href="#source-free-installation" title="Link to this heading">#</a></h3>
+<p>⚠️ There is no prebuilt wheel for the ARM64 cpu backend yet; build from source per 2.2 below.</p>
+</section>
+<section id="build-from-source">
+<h3>2.2 Build from source<a class="headerlink" href="#build-from-source" title="Link to this heading">#</a></h3>
+<p>Three steps: <strong>clone FlagTree → wire up flagtree-cpu via the helper script → build FlagTree</strong>.</p>
+<blockquote>
+<div><p>Note: the commands below use the <strong>post-merge</strong> repos/branches (flagos-ai). To self-test before merge, substitute your unmerged PR repo/branch for <code class="docutils literal notranslate"><span class="pre">flagos-ai/flagtree-cpu</span></code> (main) and <code class="docutils literal notranslate"><span class="pre">flagos-ai/FlagTree</span></code> (<code class="docutils literal notranslate"><span class="pre">triton_v3.3.x</span></code>). The helper script accepts <code class="docutils literal notranslate"><span class="pre">--flagtree-cpu-url</span></code> and <code class="docutils literal notranslate"><span class="pre">--flagtree-cpu-ref</span></code> to override its defaults.</p>
+</div></blockquote>
+<p><strong>Step 1 — Clone FlagTree and check out the cpu-backend branch</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">YOUR_CODE_DIR</span><span class="si">}</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/FlagTree.git
+<span class="nb">cd</span><span class="w"> </span>FlagTree
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>triton_v3.3.x<span class="w"> </span>origin/triton_v3.3.x<span class="w">   </span><span class="c1"># FlagTree's 3.3.x branch (carries the cpu backend)</span>
+</pre></div>
+</div>
+<p><strong>Step 2 — Wire up flagtree-cpu (clone + symlinks)</strong></p>
+<p>The C++ extension layer (TritonCPU MLIR dialect + NEON/SVE2 C runtime + Python TLE builtins) lives in <code class="docutils literal notranslate"><span class="pre">flagos-ai/flagtree-cpu</span></code>. One helper script clones it into <code class="docutils literal notranslate"><span class="pre">third_party/triton-cpu/</span></code> and creates the 12 symlinks the cpu backend build expects (TritonCPU dialect headers, <code class="docutils literal notranslate"><span class="pre">third_party/cpu/*</span></code>, sleef, the Python TLE builtins under <code class="docutils literal notranslate"><span class="pre">third_party/cpu/language/cpu/</span></code>, and <code class="docutils literal notranslate"><span class="pre">python/triton/language/extra/cpu</span></code> so <code class="docutils literal notranslate"><span class="pre">triton.language.extra.cpu</span></code> imports work):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>python/scripts/link_flagtree_cpu.sh
+</pre></div>
+</div>
+<p>If you already have a local flagtree-cpu clone, reuse it instead of re-cloning:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>python/scripts/link_flagtree_cpu.sh<span class="w"> </span>--flagtree-cpu-path<span class="w"> </span>/path/to/flagtree-cpu
+</pre></div>
+</div>
+<p>All resulting symlinks are relative — the worktree can be moved without breaking links. Re-running the script is safe (existing/correct symlinks are skipped; the script exits non-zero with a clear message if any expected symlink path is occupied by a regular file).</p>
+<p><strong>Step 3 — Build FlagTree (cpu backend)</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">FLAGTREE_BACKEND</span><span class="o">=</span>cpu<span class="w"> </span><span class="nv">TRITON_BUILD_PROTON</span><span class="o">=</span>OFF<span class="w"> </span><span class="nv">MAX_JOBS</span><span class="o">=</span><span class="k">$(</span>nproc<span class="k">)</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">TRITON_APPEND_CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DCMAKE_INSTALL_PREFIX=/tmp/flagtree_install"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>python/<span class="w"> </span>--no-build-isolation<span class="w"> </span>-v
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">TRITON_APPEND_CMAKE_ARGS</span></code> redirects the <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--install</span></code> step: without it, the sleef subproject tries to copy <code class="docutils literal notranslate"><span class="pre">libsleef.so</span></code> into <code class="docutils literal notranslate"><span class="pre">/usr/local/lib</span></code> and the build fails with <em>Permission denied</em> for non-root users. The kernel-visible copy under <code class="docutils literal notranslate"><span class="pre">python/triton/_C/</span></code> is installed either way.</p>
+<p>If you did §1.3’s manual LLVM download, the <code class="docutils literal notranslate"><span class="pre">LLVM_SYSPATH</span></code> you exported is picked up automatically; you can additionally pass <code class="docutils literal notranslate"><span class="pre">TRITON_OFFLINE_BUILD=1</span></code> if you want to assert no network access is used.</p>
+<blockquote>
+<div><p>If you build another backend in the same shell afterward, clear the LLVM-related environment variables first: <code class="docutils literal notranslate"><span class="pre">unset</span> <span class="pre">LLVM_SYSPATH</span> <span class="pre">LLVM_INCLUDE_DIRS</span> <span class="pre">LLVM_LIBRARY_DIR</span> <span class="pre">FLAGTREE_BACKEND</span></code></p>
+</div></blockquote>
+</section>
+</section>
+<section id="testing-and-validation">
+<h2>3. Testing and validation<a class="headerlink" href="#testing-and-validation" title="Link to this heading">#</a></h2>
+<p>⚠️ Before running anything that JIT-compiles kernels (the validation scripts below, and model inference in general), export <code class="docutils literal notranslate"><span class="pre">FLAGTREE_BACKEND=cpu</span></code> — at runtime it enables the ARM <code class="docutils literal notranslate"><span class="pre">-march</span></code> flags, OpenMP linkage and GCC-assembler compatibility handling for the emitted <code class="docutils literal notranslate"><span class="pre">kernel.s</span></code>:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGTREE_BACKEND</span><span class="o">=</span>cpu
+</pre></div>
+</div>
+<p>Confirm the cpu backend is registered and the <code class="docutils literal notranslate"><span class="pre">create_cpu_*</span></code> TLE builder methods injected by the tle_arm64 plugin are visible:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">triton</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">triton.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">backends</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"triton </span><span class="si">{</span><span class="n">triton</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">, cpu backend: </span><span class="si">{</span><span class="s1">'cpu'</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">backends</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">triton._C.libtriton</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lt</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">lt</span><span class="o">.</span><span class="n">ir</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="n">lt</span><span class="o">.</span><span class="n">ir</span><span class="o">.</span><span class="n">context</span><span class="p">())</span>
+<span class="n">cpu_ops</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"create_cpu_"</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"TLE ARM64 ops (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">cpu_ops</span><span class="p">)</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">cpu_ops</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Expected output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">triton</span> <span class="mf">3.3.0</span><span class="p">,</span> <span class="n">cpu</span> <span class="n">backend</span><span class="p">:</span> <span class="kc">True</span>
+<span class="n">TLE</span> <span class="n">ARM64</span> <span class="n">ops</span> <span class="p">(</span><span class="mi">10</span><span class="p">):</span> <span class="p">[</span><span class="s1">'create_cpu_flash_attn_decode'</span><span class="p">,</span> <span class="s1">'create_cpu_fused_decode_step'</span><span class="p">,</span>
+ <span class="s1">'create_cpu_fused_mlp'</span><span class="p">,</span> <span class="s1">'create_cpu_fused_transformer_layer'</span><span class="p">,</span> <span class="s1">'create_cpu_neon_sdot'</span><span class="p">,</span>
+ <span class="s1">'create_cpu_rms_norm'</span><span class="p">,</span> <span class="s1">'create_cpu_sdot_gemv'</span><span class="p">,</span> <span class="s1">'create_cpu_sdot_gemv_fused_bf16'</span><span class="p">,</span>
+ <span class="s1">'create_cpu_sdot_pack_weights'</span><span class="p">,</span> <span class="s1">'create_cpu_swiglu'</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Run a TLE op end to end (&#64;triton.jit → <code class="docutils literal notranslate"><span class="pre">create_cpu_rms_norm</span></code> → TritonCPU dialect → NEON/SVE2 C runtime):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span><span class="o">,</span><span class="w"> </span><span class="nn">triton</span><span class="o">,</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">triton.language.extra.cpu</span><span class="w"> </span><span class="kn">import</span> <span class="n">tle_ops</span> <span class="k">as</span> <span class="n">tle_cpu</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rms_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">w_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">D</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">tle_cpu</span><span class="o">.</span><span class="n">rms_norm</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">w_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+
+<span class="n">D</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+<span class="n">rms_kernel</span><span class="p">[(</span><span class="mi">1</span><span class="p">,)](</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">)</span>
+
+<span class="n">ref</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">/</span> <span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-6</span><span class="p">))</span> <span class="o">*</span> <span class="n">w</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"max err:"</span><span class="p">,</span> <span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">float</span><span class="p">()</span> <span class="o">-</span> <span class="n">ref</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="s2">"-&gt; OK"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For how to use TLE-CPU, see <a class="reference internal" href="../user_guide/use-tle-cpu.html"><span class="std std-doc">TLE-CPU</span></a></p>
+</section>
+<section id="q-a">
+<h2>Q&amp;A<a class="headerlink" href="#q-a" title="Link to this heading">#</a></h2>
+<section id="q-performance-is-only-half-on-a-big-little-soc">
+<h3>Q: Performance is only half on a big.LITTLE SoC?<a class="headerlink" href="#q-performance-is-only-half-on-a-big-little-soc" title="Link to this heading">#</a></h3>
+<p>A: On heterogeneous SoCs (e.g. Cortex-A720 big + A520 little), always pin to the <strong>big cores only</strong> with <code class="docutils literal notranslate"><span class="pre">taskset</span></code> — little cores entering the OMP thread pool stall on the barrier and cost ~2x overall. Also set the governor to performance:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span>c<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="k">$(($(</span>nproc<span class="k">)</span><span class="o">-</span><span class="m">1</span><span class="k">)))</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span>performance<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/devices/system/cpu/cpu<span class="nv">$c</span>/cpufreq/scaling_governor<span class="w"> </span>&gt;/dev/null
+<span class="k">done</span>
+<span class="c1"># Pin big cores only (adjust core ids to your SoC topology)</span>
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span>,1,6,7,8,9,10,11<span class="w"> </span>python<span class="w"> </span>your_inference.py<span class="w"> </span>...
+</pre></div>
+</div>
+</section>
+<section id="q-runtime-reports-version-glibc-glibcxx-not-found">
+<h3>Q: Runtime reports version GLIBC / GLIBCXX not found?<a class="headerlink" href="#q-runtime-reports-version-glibc-glibcxx-not-found" title="Link to this heading">#</a></h3>
+<p>A: Check the versions supported by your environment and LD_PRELOAD if needed (aarch64 paths):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>strings<span class="w"> </span>/lib/aarch64-linux-gnu/libc.so.6<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>GLIBC
+strings<span class="w"> </span>/usr/lib/aarch64-linux-gnu/libstdc++.so.6<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>GLIBCXX
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>/lib/aarch64-linux-gnu/libc.so.6<span class="w">           </span><span class="c1"># if GLIBC not found</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_PRELOAD</span><span class="o">=</span>/usr/lib/aarch64-linux-gnu/libstdc++.so.6<span class="w">  </span><span class="c1"># if GLIBCXX not found</span>
+</pre></div>
+</div>
+</section>
+<section id="q-kernel-compilation-fails-with-kernel-s-error-junk-at-end-of-line-first-unrecognized-character-is">
+<h3>Q: kernel compilation fails with <code class="docutils literal notranslate"><span class="pre">kernel.s:</span> <span class="pre">Error:</span> <span class="pre">junk</span> <span class="pre">at</span> <span class="pre">end</span> <span class="pre">of</span> <span class="pre">line,</span> <span class="pre">first</span> <span class="pre">unrecognized</span> <span class="pre">character</span> <span class="pre">is</span> <span class="pre">\</span></code>”``?<a class="headerlink" href="#q-kernel-compilation-fails-with-kernel-s-error-junk-at-end-of-line-first-unrecognized-character-is" title="Link to this heading">#</a></h3>
+<p>A: <code class="docutils literal notranslate"><span class="pre">FLAGTREE_BACKEND=cpu</span></code> is not exported in the current shell. It is not only a build-time switch — runtime JIT compilation of <code class="docutils literal notranslate"><span class="pre">kernel.s</span></code> also depends on it (it enables stripping of LLVM <code class="docutils literal notranslate"><span class="pre">.file</span></code>/<code class="docutils literal notranslate"><span class="pre">.loc</span></code> debug directives that the GNU assembler rejects, plus the ARM <code class="docutils literal notranslate"><span class="pre">-march</span></code> flags). Export it and re-run.</p>
+</section>
+<section id="q-import-triton-language-extra-cpu-tle-ops-fails-with-no-module-named">
+<h3>Q: <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">triton.language.extra.cpu.tle_ops</span></code> fails with “No module named …”?<a class="headerlink" href="#q-import-triton-language-extra-cpu-tle-ops-fails-with-no-module-named" title="Link to this heading">#</a></h3>
+<p>A: The Step 2 symlinks are incomplete. Re-run <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">python/scripts/link_flagtree_cpu.sh</span></code> — it is idempotent and exits non-zero if any expected symlink fails to resolve.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="install.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Install FlagTree</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="multi-backend-prebuilt-docker-image-install/install-nv.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">💫 NVIDIA nvidia</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-for-build-and-run">1. Environment for build and run</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#system-dependencies">1.1 System dependencies</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-virtualenv-and-install-pytorch">1.2 Create a virtualenv and install PyTorch</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#llvm-toolchain">1.3 LLVM toolchain</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-commands">2. Installation Commands</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#source-free-installation">2.1 Source-free installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-from-source">2.2 Build from source</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing-and-validation">3. Testing and validation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#q-a">Q&amp;A</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-performance-is-only-half-on-a-big-little-soc">Q: Performance is only half on a big.LITTLE SoC?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-runtime-reports-version-glibc-glibcxx-not-found">Q: Runtime reports version GLIBC / GLIBCXX not found?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-kernel-compilation-fails-with-kernel-s-error-junk-at-end-of-line-first-unrecognized-character-is">Q: kernel compilation fails with <code class="docutils literal notranslate"><span class="pre">kernel.s:</span> <span class="pre">Error:</span> <span class="pre">junk</span> <span class="pre">at</span> <span class="pre">end</span> <span class="pre">of</span> <span class="pre">line,</span> <span class="pre">first</span> <span class="pre">unrecognized</span> <span class="pre">character</span> <span class="pre">is</span> <span class="pre">\</span></code>”``?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#q-import-triton-language-extra-cpu-tle-ops-fails-with-no-module-named">Q: <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">triton.language.extra.cpu.tle_ops</span></code> fails with “No module named …”?</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagtree_zh/getting_started/install-arm64-cpu.html">中文</a></body>
+</html>

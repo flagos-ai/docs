@@ -1,0 +1,1 @@
+You can utilize features and commands of Megatron Core on chips supported by TransformerEngine-FL. Please refer to the [Megatron Core User Guide](https://docs.nvidia.com/megatron-core/developer-guide/latest/index.html#) for details.

@@ -1,0 +1,1414 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="使用 TLE-Lite" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/use-tle-lite.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本节介绍如何使用 TLE-Lite。TLE-Lite 在 trition_3.6.x 分支上可用。 内存管理: 您可以使用以下操作来管理内存。 tle.load: tle.load 从 GMEM 异步加载张量。它支持异步提示。 张量切片: 根据指定的子切片形状将输入张量分割为子切片网格，并提取给定坐标处的子切片。 GPU：支持提取到寄存器和共享内存中。 tle.extract_tile: 根据指定的子切片形状将输入张量分割为子切片网格，并提取给定坐标处的子切片。 支持提取到寄存器和共享内存中。 tle.insert_tile: 根据子切片形状将输入张量分割为子切片网格，并用新的切片更新指..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="本节介绍如何使用 TLE-Lite。TLE-Lite 在 trition_3.6.x 分支上可用。 内存管理: 您可以使用以下操作来管理内存。 tle.load: tle.load 从 GMEM 异步加载张量。它支持异步提示。 张量切片: 根据指定的子切片形状将输入张量分割为子切片网格，并提取给定坐标处的子切片。 GPU：支持提取到寄存器和共享内存中。 tle.extract_tile: 根据指定的子切片形状将输入张量分割为子切片网格，并提取给定坐标处的子切片。 支持提取到寄存器和共享内存中。 tle.insert_tile: 根据子切片形状将输入张量分割为子切片网格，并用新的切片更新指..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>使用 TLE-Lite &#8212; FlagTree 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/use-tle-lite.46ac787c-3968-47f7-9252-e15aba0dc20d.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/use-tle-lite';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/use-tle-lite.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="使用 TLE-Struct" href="use-tle-struct.html" />
+    <link rel="prev" title="使用 Hints" href="use-hints.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagTree 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v070.html">FlagTree 0.7.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v060.html">FlagTree 0.6.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v050.html">FlagTree 0.5.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v040.html">FlagTree 0.4.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v030.html">FlagTree 0.3.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v020.html">FlagTree 0.2.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v010.html">FlagTree 0.1.0 发布</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagTree_overview/FlagTree-overview.html">FlagTree 概述</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagTree_overview/features.html">特性</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/compilation-architecture.html">FlagTree 编译架构</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/common-architecture.html">通用架构</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html">FlagTree 可扩展框架</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-hints.html">Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-tle.html">TLE-Lite、TLE-Struct 和 TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flir.html">FLIR：统一中间层</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">开始使用</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">系统要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">安装 FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install-arm64-cpu.html">在 Arm64 CPU 上安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="user-guide.html">用户指南</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="use-hints.html">使用 Hints</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">使用 TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-struct.html">使用 TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-raw.html">使用 TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="use-tle-cpu.html">使用 TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">示例</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/use-tle-lite.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>使用 TLE-Lite</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">内存管理</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-load">tle.load</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">张量切片</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-extract-tile">tle.extract_tile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-insert-tile">tle.insert_tile</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">扫描和排序操作</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-cumsum">tle.cumsum</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">流水线</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">管道与阶段</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">生产者</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">消费者</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">负载字段</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">生命周期</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">简单示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">分布式</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">设备网格</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-device-mesh">tle.device_mesh</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">分片规范</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">同步</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-distributed-barrier">tle.distributed_barrier</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">远程访问</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">设备网格坐标与重分片</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-shard-id">tle.shard_id</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-reshard">tle.reshard</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">远程访问的目标域</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cluster-cluster-dsmem">Cluster 路径（Cluster 内通信，DSMEM）</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-gpu-nvlink-p2p">Device 路径（节点内跨 GPU 通信，NVLink P2P）</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#node-flagcx-rdma">Node 路径（节点间通信，FlagCX/RDMA）</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal">tle.signal</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal-wait">tle.signal_wait</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">组合示例</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">异步过滤与压缩</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tile">流水化 tile 后处理</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pipe-reader">多字段 Pipe 与选择性 Reader</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">分布式交换与重分片</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-ptr">与 local_ptr 交互的原语</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="tle-lite">
+<h1>使用 TLE-Lite<a class="headerlink" href="#tle-lite" title="Link to this heading">#</a></h1>
+<p>本节介绍如何使用 TLE-Lite。TLE-Lite 在 trition_3.6.x 分支上可用。</p>
+<section id="id1">
+<h2>内存管理<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>您可以使用以下操作来管理内存。</p>
+<section id="tle-load">
+<h3>tle.load<a class="headerlink" href="#tle-load" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.load</span></code> 从 GMEM 异步加载张量。它支持异步提示。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id2">
+<h2>张量切片<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>根据指定的子切片形状将输入张量分割为子切片网格，并提取给定坐标处的子切片。
+GPU：支持提取到寄存器和共享内存中。</p>
+<section id="tle-extract-tile">
+<h3>tle.extract_tile<a class="headerlink" href="#tle-extract-tile" title="Link to this heading">#</a></h3>
+<p>根据指定的子切片形状将输入张量分割为子切片网格，并提取给定坐标处的子切片。</p>
+<p>支持提取到寄存器和共享内存中。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># x 是 [4, 4]</span>
+<span class="c1"># z 是 [2, 2]</span>
+<span class="c1"># 将 x 分割为 shape=[2, 2] 的子切片网格，并提取 [0, 0] 处的子切片</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">extract_tile</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-insert-tile">
+<h3>tle.insert_tile<a class="headerlink" href="#tle-insert-tile" title="Link to this heading">#</a></h3>
+<p>根据子切片形状将输入张量分割为子切片网格，并用新的切片更新指定坐标处的子切片。</p>
+<p>支持从寄存器和共享内存进行更新。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># x 是 [4, 4]，y 是 [2, 2]，z 是 [4, 4]</span>
+<span class="c1"># 将 x 分割为 shape=[2, 2] 的子切片，用 y 更新 [0, 0] 子切片，并返回完整的 [4, 4] 张量</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">insert_tile</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id3">
+<h2>扫描和排序操作<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>扫描和排序操作提供了部分张量原语，如前缀、排名和选择，适用于基于直方图的 top-k、流压缩以及块级排序和分桶场景。</p>
+<p>TLE-Lite 将这些操作保持为高级语义，而不是将其绑定到特定的硬件实现：用户描述扫描和排序意图，后端根据硬件选择寄存器或共享内存的下层策略。</p>
+<section id="tle-cumsum">
+<h3>tle.cumsum<a class="headerlink" href="#tle-cumsum" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.cumsum(input,</span> <span class="pre">axis=0,</span> <span class="pre">reverse=False,</span> <span class="pre">dtype=None)</span></code> 在一次操作中沿 <code class="docutils literal notranslate"><span class="pre">axis</span></code> 维度计算排他性累积和与总和。</p>
+<ul class="simple">
+<li><p><strong>签名</strong>: <code class="docutils literal notranslate"><span class="pre">tle.cumsum(input,</span> <span class="pre">axis=0,</span> <span class="pre">reverse=False,</span> <span class="pre">dtype=None)</span></code></p></li>
+<li><p><strong>用途</strong>: 使用单个语义扫描操作同时计算块张量的排他性前缀/后缀和与总和。</p></li>
+<li><p><strong>返回值</strong>: <code class="docutils literal notranslate"><span class="pre">(exclusive_sum,</span> <span class="pre">total_sum)</span></code>。</p></li>
+<li><p><strong>典型场景</strong>: top-k、直方图前缀、流压缩以及需要部分排名/偏移的块级分区逻辑。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exclusive</span></code> 与 <code class="docutils literal notranslate"><span class="pre">input</span></code> 形状相同；<code class="docutils literal notranslate"><span class="pre">total</span></code> 是扫描块的标量和。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reverse=True</span></code> 表示反向排他性和，适用于降序基数/top-k 选择中的后缀计数。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> 可以显式控制累加/结果类型。默认情况下，窄整数提升为 32 位整数，bfloat16 提升为 float32。</p></li>
+<li><p>对于包含性累积和，使用 <code class="docutils literal notranslate"><span class="pre">exclusive_sum</span> <span class="pre">+</span> <span class="pre">input</span></code>。</p></li>
+<li><p>对无效通道使用显式掩码加载，并将非活动通道设置为 0，确保 <code class="docutils literal notranslate"><span class="pre">total_sum</span></code> 仅计算有效元素。</p></li>
+<li><p>支持的作用域是 <code class="docutils literal notranslate"><span class="pre">axis=0</span></code> 的静态秩-1 块张量；这涵盖了 TLE top-k 内核已使用的直方图和基数选择工作负载。</p></li>
+</ul>
+<p>简单示例：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">exclusive</span><span class="p">,</span> <span class="n">total</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">inclusive</span> <span class="o">=</span> <span class="n">exclusive</span> <span class="o">+</span> <span class="n">x</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id4">
+<h2>流水线<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="id5">
+<h3>管道与阶段<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.pipe</span></code> 描述了生产者与一个或多个消费者之间的显式数据流边。它同时记录持有逻辑块的共享内存阶段以及使该块对消费者可见所需的同步，使得 CTA 级别的加载/计算重叠和 warp 专用的生产者/消费者代码能够使用类型化描述符，而不是手动编写多个屏障。</p>
+<ul class="simple">
+<li><p><strong>签名</strong>: <code class="docutils literal notranslate"><span class="pre">tle.pipe(*,</span> <span class="pre">capacity,</span> <span class="pre">scope=&quot;cta&quot;,</span> <span class="pre">name=None,</span> <span class="pre">readers=None,</span> <span class="pre">one_shot=False,</span> <span class="pre">**fields)</span></code></p></li>
+<li><p><strong>用途</strong>: 创建一个类型化管道，用于显式描述 CTA 级别的生产者/消费者数据流、环形缓冲区阶段重用和同步边。</p></li>
+<li><p><strong>参数</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">capacity</span></code>: 编译时常量正整数，表示管道阶段的数量；每个负载字段的第一维必须等于 <code class="docutils literal notranslate"><span class="pre">capacity</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scope</span></code>: 支持的值为 <code class="docutils literal notranslate"><span class="pre">&quot;cta&quot;</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: 可选的管道名称，用于 IR/诊断；如果提供，必须是字符串。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readers</span></code>: 可选的读取器名称列表；省略表示默认的 SPSC 读取器；对于 SPMC，传入 <code class="docutils literal notranslate"><span class="pre">(&quot;left&quot;,</span> <span class="pre">&quot;right&quot;)</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">one_shot</span></code>: 是否为单次就绪/完成边；适用于启动数据广播。<code class="docutils literal notranslate"><span class="pre">one_shot=True</span></code> 不支持 <code class="docutils literal notranslate"><span class="pre">close</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**fields</span></code>: 一个或多个负载缓冲区，必须是由 <code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc(...,</span> <span class="pre">scope=tle.gpu.smem)</span></code> 返回的共享内存缓冲张量，秩 &gt;= 2。</p></li>
+</ul>
+</li>
+<li><p><strong>命名规则</strong>:</p>
+<ul>
+<li><p>管道字段名称和读取器名称必须是有效的 Python 标识符。</p></li>
+<li><p>名称不能以 <code class="docutils literal notranslate"><span class="pre">_</span></code> 开头。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fields</span></code> 和 <code class="docutils literal notranslate"><span class="pre">readers</span></code> 是保留名称。</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.pipe(...)</span></code> 返回一个管道描述符。它拥有分阶段的负载字段，并通过 <code class="docutils literal notranslate"><span class="pre">writer()</span></code> 和 <code class="docutils literal notranslate"><span class="pre">reader(...)</span></code> 创建生产者/消费者端点。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">capacity</span></code> 个阶段形成一个环形缓冲区。<code class="docutils literal notranslate"><span class="pre">iter</span></code> 映射到 <code class="docutils literal notranslate"><span class="pre">stage</span> <span class="pre">=</span> <span class="pre">iter</span> <span class="pre">%</span> <span class="pre">capacity</span></code>，使用相位位来区分重用轮次。</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>生产者<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>生产者持有 <code class="docutils literal notranslate"><span class="pre">pipe.writer()</span></code>。它获取一个可写阶段，为逻辑块填充所有必要的字段，然后提交该块，使数据对消费者可见。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_value.writer()</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_writer</span></code>: 为当前管道创建单个写入器端点。</p></li>
+<li><p>写入器始终可以看到所有负载字段。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">writer.acquire(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_slot</span></code>: 获取一个生产者可写的阶段，返回一个移除了前导 <code class="docutils literal notranslate"><span class="pre">capacity</span></code> 维度的槽位。</p></li>
+<li><p>用户应在 <code class="docutils literal notranslate"><span class="pre">writer.acquire(iter)</span></code> 和 <code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code> 之间生成字段数据。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">None</span></code>: 将阶段标记为就绪，对订阅的消费者可见。同一逻辑块的所有字段写入必须在提交之前完成。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">writer.close(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">None</span></code>: 发布一个关闭的阶段，供感知关闭的消费者循环退出或切换状态。<code class="docutils literal notranslate"><span class="pre">one_shot=True</span></code> 的管道不支持 <code class="docutils literal notranslate"><span class="pre">close</span></code>。</p></li>
+<li><p>提交是生产者侧的可见性边界。</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3>消费者<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>消费者持有 <code class="docutils literal notranslate"><span class="pre">pipe.reader(...)</span></code>。它等待已发布的块，读取返回的槽位，并在所有读取完成后释放阶段。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_value.reader(name=None,</span> <span class="pre">fields=None)</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_reader</span></code>: 创建一个消费者端点。</p></li>
+<li><p>对于 SPSC 管道（<code class="docutils literal notranslate"><span class="pre">readers=None</span></code>），必须省略 <code class="docutils literal notranslate"><span class="pre">name</span></code>。</p></li>
+<li><p>对于 SPMC 管道（例如 <code class="docutils literal notranslate"><span class="pre">readers=(&quot;mma&quot;,</span> <span class="pre">&quot;epilogue&quot;)</span></code>），必须传入 <code class="docutils literal notranslate"><span class="pre">name</span></code> 并匹配已声明的读取器。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fields</span></code> 可以是编译时常量的非空元组/列表，包含唯一的负载字段名称；省略表示订阅所有字段。</p></li>
+<li><p>字段子集的消费者仅缩小端点视图和 <code class="docutils literal notranslate"><span class="pre">wait().slot</span></code>；它们不会创建新管道。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reader.wait(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_wait_result</span></code>: 等待阶段就绪或关闭，返回槽位和关闭标志。</p></li>
+<li><p>标准消费路径读取 <code class="docutils literal notranslate"><span class="pre">wait_result.slot</span></code>；仅在处理关闭时检查 <code class="docutils literal notranslate"><span class="pre">wait_result.is_closed</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reader.release(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">None</span></code>: 消费后释放阶段，允许生产者重用。应在所有 <code class="docutils literal notranslate"><span class="pre">wait(iter).slot</span></code> 读取完成后调用。</p></li>
+<li><p>等待是消费者侧的可见性边界；释放是消费者侧的释放信号。</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>负载字段<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">**fields</span></code> 定义了每个阶段携带的数据。每个字段通过名称在 <code class="docutils literal notranslate"><span class="pre">pipe_slot</span></code> 上暴露，例如 <code class="docutils literal notranslate"><span class="pre">slot.q</span></code> 或 <code class="docutils literal notranslate"><span class="pre">slot.scale</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_slot</span></code> 还暴露 <code class="docutils literal notranslate"><span class="pre">fields:</span> <span class="pre">dict[str,</span> <span class="pre">tle.gpu.buffered_tensor]</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_wait_result</span></code> 包含 <code class="docutils literal notranslate"><span class="pre">slot:</span> <span class="pre">pipe_slot</span></code> 和 <code class="docutils literal notranslate"><span class="pre">is_closed:</span> <span class="pre">tl.tensor</span></code>。</p></li>
+<li><p>一个管道可以携带一个或多个字段。拆分管道时，按逻辑生命周期和读取器协议拆分，而不是按底层传输拆分。</p></li>
+<li><p>同一槽位中的不同字段可以通过不同的机制生成，例如 TMA 复制、cp.async 风格的复制或 <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> + <code class="docutils literal notranslate"><span class="pre">tl.store</span></code>。用户仍然在为该逻辑块生成所有字段后调用一次 <code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code>。</p></li>
+<li><p>每个字段的传输方式由编译器从生产者侧 IR 推断；它不是用户填写的管道属性，也不应编码到管道名称、字段名称或额外的用户属性中。</p></li>
+<li><p>当读取器仅消费字段的子集时，使用 <code class="docutils literal notranslate"><span class="pre">pipe.reader(name,</span> <span class="pre">fields=(...))</span></code> 缩小读取器视图；这不会创建新的令牌。</p></li>
+<li><p>保持管道字段来源可见。不透明的共享内存指针逃逸、未跟踪的共享存储或无法证明安全的重叠写入将直接报错，不会静默回退。</p></li>
+<li><p>NVIDIA 下层将 CTA 作用域的 SMEM 管道映射到 NVWS/mbarrier 同步。多字段负载需要在管道字段根粒度上证明负载窗口、字段所有权、参与者数量和源顺序安全性。</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>生命周期<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>SPSC 管道表示一个生产者向一个默认消费者发布数据。</p></li>
+<li><p>SPMC 管道表示一个生产者向多个命名消费者发布相同的逻辑块，例如 <code class="docutils literal notranslate"><span class="pre">(&quot;mma&quot;,</span> <span class="pre">&quot;epilogue&quot;)</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iter</span></code> 是逻辑块 ID。在同一块内，生产者和所有参与的消费者应使用相同的 <code class="docutils literal notranslate"><span class="pre">iter</span></code>。</p></li>
+<li><p>标准循环生命周期为 <code class="docutils literal notranslate"><span class="pre">writer.acquire(iter)</span></code> → 生成字段 → <code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">reader.wait(iter)</span></code> → 消费字段 → <code class="docutils literal notranslate"><span class="pre">reader.release(iter)</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">one_shot=True</span></code> 表示单次就绪/完成边，通常与 <code class="docutils literal notranslate"><span class="pre">capacity=1</span></code> 一起使用；在此模式下不要依赖环形重用或 <code class="docutils literal notranslate"><span class="pre">close</span></code>。</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>简单示例<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<p>自动软件流水线仍然可以通过 <code class="docutils literal notranslate"><span class="pre">tl.range(...,</span> <span class="pre">num_stages=...)</span></code> 触发。显式管道适用于需要在程序中可见生产者/消费者拆分的场景。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stage_buf</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">capacity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"x_pipe"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">stage_buf</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">()</span>
+<span class="n">offs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+
+<span class="n">slot</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">BLOCK</span> <span class="o">+</span> <span class="n">offs</span><span class="p">))</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">ready</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">ready</span><span class="o">.</span><span class="n">slot</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+<span class="n">reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id11">
+<h2>分布式<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<p>Triton 分布式 API 由四个核心部分组成：设备网格定义、分片规范描述、同步和远程访问（点对点通信）。</p>
+<p>跨卡/跨节点的底层通信在不同层级上提供：TLE-Lite 和 TLE-Struct 的分布式原语通过 FlagCX 完成跨设备通信；TLE-Raw 则更底层，与 Raw 处于同一级别，通过 NVSHMEM 直接提供设备端通信接口（见<a class="reference internal" href="use-tle-raw.html"><span class="std std-doc">使用 TLE-Raw</span></a>），且 NVSHMEM 仅用于 NVIDIA 卡。</p>
+<section id="id12">
+<h3>设备网格<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<section id="tle-device-mesh">
+<h4>tle.device_mesh<a class="headerlink" href="#tle-device-mesh" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.device_mesh</span></code> 定义物理设备的拓扑结构。它是所有分布式操作的基础上下文。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">device_mesh</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topology</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        初始化 DeviceMesh。</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topology (dict): 描述硬件层次结构的字典。</span>
+<span class="sd">                             键是层级名称；值可以是整数（用于 1D）</span>
+<span class="sd">                             或元组列表（用于多维层级）。</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_physical_ids</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># 内部存储：扁平化的物理 ID 列表 (0..N-1)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="o">...</span>         <span class="c1"># 当前逻辑视图的形状，例如 (2, 2, 4, 2, 2, 4)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dim_names</span> <span class="o">=</span> <span class="o">...</span>     <span class="c1"># 当前维度的名称</span>
+        <span class="c1"># 初始化和解析逻辑...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""返回当前网格的逻辑形状。"""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ndim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""返回维度数量。"""</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        将网格展平为 1D。通常用于基于环的通信模式。</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        支持切片操作并返回子网格。</span>
+<span class="sd">        支持标准切片（slice 对象）和整数索引。</span>
+<span class="sd">        """</span>
+        <span class="c1"># 计算切片后的新形状和选定的物理 ID</span>
+        <span class="c1"># ...</span>
+        <span class="k">return</span> <span class="n">sub_mesh</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"DeviceMesh(shape=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="si">}</span><span class="s2">, names=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dim_names</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="c1"># 定义复杂的硬件层次结构</span>
+<span class="n">topology</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># 节点间层级（2x2 = 4 个节点）</span>
+    <span class="s2">"node"</span><span class="p">:</span> <span class="p">[(</span><span class="s2">"node_x"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s2">"node_y"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+    <span class="c1"># 节点内 GPU（4 个设备）</span>
+    <span class="s2">"device"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="c1"># GPU 内集群（2x2）</span>
+    <span class="s2">"block_cluster"</span><span class="p">:</span> <span class="p">[(</span><span class="s2">"cluster_x"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s2">"cluster_y"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+    <span class="c1"># 每个集群内的块（4 个块）</span>
+    <span class="s2">"block"</span><span class="p">:</span> <span class="mi">4</span>
+<span class="p">}</span>
+
+<span class="c1"># mesh.shape -&gt; (2, 2, 4, 2, 2, 4)</span>
+<span class="c1"># 总大小 = 256</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">device_mesh</span><span class="p">(</span><span class="n">topology</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id13">
+<h3>分片规范<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.sharding</span></code> 用于声明张量在设备网格上的当前分布状态。splits 列表描述了张量的每个维度如何在网格上分区，而 partials 列表指示张量是否处于部分和状态。任何未显式提及的网格轴被视为广播（复制）。</p>
+<ul class="simple">
+<li><p>tle.S(axis): 分割 — 表示张量维度沿指定的网格轴分区。</p></li>
+<li><p>tle.B: 广播/复制 — 表示张量维度沿任何未显式引用的网格轴完全复制（即不分割）。</p></li>
+<li><p>tle.P(axis): 部分 — 表示张量仅持有部分值（例如部分和），必须沿指定的网格轴归约以获得完整结果。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sharding</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">splits</span><span class="p">,</span> <span class="n">partials</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    注解：仅用于标注张量的布局状态。</span>
+<span class="sd">    它不生成任何运行时代码，但指导编译器进行后续优化或正确性检查。</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">tensor</span>
+
+
+<span class="c1"># 定义一个分片规范，其中：</span>
+<span class="c1"># - 轴 0 沿 "cluster" 维度分割（具体为 ["cluster_x", "cluster_y"]），</span>
+<span class="c1"># - 轴 1 沿 "device" 维度分割，</span>
+<span class="c1"># - 张量沿 "block" 维度处于部分状态（需要归约来解析）。</span>
+<span class="n">x_shard</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="p">[[</span><span class="s2">"cluster_x"</span><span class="p">,</span> <span class="s2">"cluster_y"</span><span class="p">],</span> <span class="s2">"device"</span><span class="p">],</span>
+    <span class="n">partial</span><span class="o">=</span><span class="p">[</span><span class="s2">"block"</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># 使用上述分片规范创建分片张量</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">make_sharded_tensor</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">x_shard</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h3>同步<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<p>在复杂的分布式算子中——例如 Ring-AllReduce 或具有独立行/列通信的流水线执行——我们通常只需要同步同一”行”或”列”内的线程块，而不是整个集群。全局同步会引入不必要的等待开销。
+此 API 支持子网格同步，这意味着在大型物理集群中，我们可以定义多个逻辑”通信组”，并在每个组内独立执行同步。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    如果传入子网格，则仅同步该子网格内的设备。</span>
+<span class="sd">    子网格外的设备应将此指令视为空操作</span>
+<span class="sd">    （或者编译器应确保其控制流永远不会到达此点）。</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<section id="tle-distributed-barrier">
+<h4>tle.distributed_barrier<a class="headerlink" href="#tle-distributed-barrier" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.distributed_barrier</span></code> 仅同步与给定网格或子网格对应的设备集合。</p>
+<p>从相邻分片读取（环式交换）。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>
+<span class="n">next_device</span> <span class="o">=</span> <span class="p">(</span><span class="n">device_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">mesh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">remote_x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id15">
+<h3>远程访问<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.remote</span></code> 用于获取位于另一设备上的张量的句柄。这对应于点对点通信或直接内存访问（例如 RDMA/NVLink Load）。它使内核能够显式地从特定分片访问数据。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remote</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">shard_id</span><span class="p">,</span> <span class="n">scope</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    获取驻留在特定设备分片上的远程张量的句柄。</span>
+
+<span class="sd">    :param tensor: 逻辑分布式张量（已用 tle.sharding 标注）。</span>
+<span class="sd">    :param shard_id: tuple。目标设备在设备网格中的坐标。</span>
+<span class="sd">                     例如，如果 mesh=(2,4) 且 shard_id=(0, 3)，则指节点 #0 上的 GPU #3。</span>
+<span class="sd">    :return: RemoteTensor。支持 load、store 等操作。</span>
+<span class="sd">    """</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tle.remote</span></code>: 显式读取或写入远程分片。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>
+<span class="n">next_device</span> <span class="o">=</span> <span class="p">(</span><span class="n">device_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">mesh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">remote_x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h3>设备网格坐标与重分片<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<section id="tle-shard-id">
+<h4>tle.shard_id<a class="headerlink" href="#tle-shard-id" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>签名：<code class="docutils literal notranslate"><span class="pre">tle.shard_id(mesh,</span> <span class="pre">axis)</span></code></p></li>
+<li><p>含义：返回当前 program 在指定 mesh 轴上的坐标。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">axis</span></code> 可以是轴名称（如 <code class="docutils literal notranslate"><span class="pre">&quot;node&quot;</span></code>、<code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code>、<code class="docutils literal notranslate"><span class="pre">&quot;cluster_x&quot;</span></code>）或轴序号。</p></li>
+<li><p>典型用途：构造 ring 交换、分阶段 all-reduce、cluster 协同计算中的对端 shard ID。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">device_mesh</span><span class="p">({</span><span class="s2">"node"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+<span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>      <span class="c1"># 0..1</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>  <span class="c1"># 0..3</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-reshard">
+<h4>tle.reshard<a class="headerlink" href="#tle-reshard" title="Link to this heading">#</a></h4>
+<p>分布状态转换。该接口在当前版本中仍为预留入口，尚未实现（调用会抛出 <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>）。推荐流程：用 <code class="docutils literal notranslate"><span class="pre">tle.device_mesh</span></code> 定义拓扑，用 <code class="docutils literal notranslate"><span class="pre">tle.sharding</span></code> 标注分布状态，用 <code class="docutils literal notranslate"><span class="pre">tle.reshard</span></code> 做分布状态转换，计算 kernel 始终保持逻辑 tensor 视角。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x_full</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">reshard</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">[],</span> <span class="n">partial</span><span class="o">=</span><span class="p">[]))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id17">
+<h3>远程访问的目标域<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.remote</span></code> 获取其他设备上数据分片的访问句柄，对应点对点通信或直接内存访问（RDMA/NVLink Load）。当前实现按 <code class="docutils literal notranslate"><span class="pre">space</span></code> 区分三种目标域：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remote</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">shard_id</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"cluster"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+           <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coopkind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">netidx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tensor</span></code>：必填。cluster 路径为 shared-memory 指针或 buffered_tensor；device / node 路径为 <code class="docutils literal notranslate"><span class="pre">tle.create_dist_tensor</span></code> 返回的 <code class="docutils literal notranslate"><span class="pre">DistributedRtContext</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shard_id</span></code>：必填。编译期 int 或运行时 int32 标量；cluster 路径为目标 Block id，device 路径为节点内 peer rank，node 路径为 world rank。编译期 mesh 坐标必须配合 <code class="docutils literal notranslate"><span class="pre">scope</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scope</span></code>：<code class="docutils literal notranslate"><span class="pre">device_mesh</span></code>；使用 mesh 坐标形式的 <code class="docutils literal notranslate"><span class="pre">shard_id</span></code> 时必填。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">space</span></code>：<code class="docutils literal notranslate"><span class="pre">&quot;cluster&quot;</span></code>（缺省）、<code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code> 或 <code class="docutils literal notranslate"><span class="pre">&quot;node&quot;</span></code>。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code>：cluster 路径可选，省略时从输入推导；device / node 路径必填。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code>：device 路径必填；cluster / node 路径不支持。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coopkind</span></code> / <code class="docutils literal notranslate"><span class="pre">netidx</span></code>：仅 node 路径可用。</p></li>
+</ul>
+<section id="cluster-cluster-dsmem">
+<h4>Cluster 路径（Cluster 内通信，DSMEM）<a class="headerlink" href="#cluster-cluster-dsmem" title="Link to this heading">#</a></h4>
+<p>面向同一线程块 cluster（CTA cluster）内跨 Block 的共享内存访问（Hopper 及以上架构的 DSMEM），<code class="docutils literal notranslate"><span class="pre">space</span></code> 缺省时即此路径。输入支持两种：</p>
+<ul class="simple">
+<li><p>shared-memory 指针（标量或 tensor）：直接返回 cluster 地址空间的远端指针，可参与 <code class="docutils literal notranslate"><span class="pre">tl.load</span></code> / <code class="docutils literal notranslate"><span class="pre">tl.store</span></code>，输入为 block tensor 时保留 shape；</p></li>
+<li><p>tle buffered_tensor：返回 remote-marked buffer，再用 <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr(...)</span></code> 物化远端指针视图。</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">shard_id</span></code> 是 cluster 内目标 Block 的 id；传 <code class="docutils literal notranslate"><span class="pre">scope</span></code> 时由 mesh 线性化坐标，并会按 mesh 推断 launch cluster 维度（要求 <code class="docutils literal notranslate"><span class="pre">num_ctas=1</span></code>，一个 program 映射一个 Block）。对已是 cluster-shared 空间的指针，<code class="docutils literal notranslate"><span class="pre">shard_id=0</span></code> 时直接返回本地访问。cluster / device 路径不支持 node 专用参数 <code class="docutils literal notranslate"><span class="pre">coopkind</span></code> / <code class="docutils literal notranslate"><span class="pre">netidx</span></code>。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 此处 smem 是 buffered_tensor，例如由 tle.gpu.alloc 返回</span>
+<span class="n">remote_smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">smem</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">remote_ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">remote_smem</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="device-gpu-nvlink-p2p">
+<h4>Device 路径（节点内跨 GPU 通信，NVLink P2P）<a class="headerlink" href="#device-gpu-nvlink-p2p" title="Link to this heading">#</a></h4>
+<p>面向同一节点内 GPU 之间、经 FlagCX 注册窗口（对称内存）的直接内存访问（NVLink P2P）。与 node 路径类似，<code class="docutils literal notranslate"><span class="pre">tensor</span></code> 传 <code class="docutils literal notranslate"><span class="pre">create_dist_tensor</span></code> 返回的 <code class="docutils literal notranslate"><span class="pre">DistributedRtContext</span></code>，但返回的是普通全局地址空间的远端指针，<code class="docutils literal notranslate"><span class="pre">offset</span></code> 参数必填——指定远端窗口内的元素偏移（Python int 或标量整数 tensor，内部归一为 i64）。</p>
+<p>与 node 路径的关键区别：device 路径的远端指针就是普通全局指针，后续 <code class="docutils literal notranslate"><span class="pre">tl.load</span></code> / <code class="docutils literal notranslate"><span class="pre">tl.store</span></code> 支持任意的 tiled / 多维访存，没有”仅连续传输”的限制；偏移基准由 <code class="docutils literal notranslate"><span class="pre">offset</span></code> 一次固定，之后的指针运算按普通全局指针处理。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">remote_base</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">scatter_ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"device"</span><span class="p">,</span>
+                         <span class="n">dtype</span><span class="o">=</span><span class="n">input_ptr</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">element_ty</span><span class="p">,</span>
+                         <span class="n">shard_id</span><span class="o">=</span><span class="n">target_rank</span><span class="p">,</span>
+                         <span class="n">offset</span><span class="o">=</span><span class="n">SCATTER_NODE_SLICE_OFFSET_ELEMS</span> <span class="o">+</span> <span class="n">source_slot_offset_elems</span><span class="p">)</span>
+<span class="n">scatter_ptrs</span> <span class="o">=</span> <span class="p">(</span><span class="n">remote_base</span> <span class="o">+</span>
+                <span class="p">(</span><span class="n">scatter_row</span> <span class="o">+</span> <span class="n">row_offs</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">input_col</span> <span class="o">+</span> <span class="n">col_offs</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">scatter_ptrs</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">scatter_row_mask</span> <span class="o">&amp;</span> <span class="n">col_mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="node-flagcx-rdma">
+<h4>Node 路径（节点间通信，FlagCX/RDMA）<a class="headerlink" href="#node-flagcx-rdma" title="Link to this heading">#</a></h4>
+<p>面向跨节点点对点传输，数据面基于 FlagCX 注册内存（对称窗口）。当前版本仅支持连续数据传输，使用前请注意：</p>
+<ul class="simple">
+<li><p>Host 侧必须先用 <code class="docutils literal notranslate"><span class="pre">tle.create_dist_tensor(comm_buf)</span></code> 把通信 buffer 注册到 FlagCX 对称内存窗口，返回的 <code class="docutils literal notranslate"><span class="pre">DistributedRtContext</span></code> 作为 kernel 参数传入；device 间 scatter 与 node 间 P2P 可共用同一注册窗口。本地侧使用的 buffer 必须是该 context 所注册的同一个 buffer，并作为全局指针参数直接传给 kernel。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> 必填；不支持 <code class="docutils literal notranslate"><span class="pre">offset</span></code> 参数——偏移要加在返回的指针上。</p></li>
+<li><p>传输形状受限：标量拷贝一次传一个元素；tensor 拷贝两侧必须复用同一个连续区间 <code class="docutils literal notranslate"><span class="pre">tl.arange(0,</span> <span class="pre">N)</span></code>，mask 只支持无 mask 或复用同一个共享前缀 mask <code class="docutils literal notranslate"><span class="pre">offsets</span> <span class="pre">&lt;</span> <span class="pre">valid_n</span></code>（<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">valid_n</span> <span class="pre">&lt;=</span> <span class="pre">N</span></code>）。</p></li>
+<li><p>单次传输的数据量受编译器 tensor 大小限制：一次传输的元素个数 N 必须是 2 的幂且不超过 <code class="docutils literal notranslate"><span class="pre">33554432</span></code>（2^25），超出会在编译期直接报错。要传输更多数据，需要把数据拆成多块，用循环多次调用 load/store，每次传输一块。</p></li>
+<li><p>load 的结果必须直接且仅供配对的 store 使用；二者必须位于同一 basic block，load 在前、store 在后，期间不能插入访存、原子操作、barrier 或其他通信操作；并且恰好一侧使用 node remote pointer。</p></li>
+<li><p>不支持稀疏访问、多维 tiled load/store、strided 访问、非零起点区间、两侧范围不一致——编译期直接拒绝，动态违规则触发 device assert。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coopkind</span></code> 支持 <code class="docutils literal notranslate"><span class="pre">thread</span></code> / <code class="docutils literal notranslate"><span class="pre">warp</span></code> / <code class="docutils literal notranslate"><span class="pre">block</span></code>，默认 <code class="docutils literal notranslate"><span class="pre">block</span></code>（整个 CTA 收敛地发出一次传输）；<code class="docutils literal notranslate"><span class="pre">netidx</span></code> 为已有网络 context 的索引，必须是 <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">INT32_MAX]</span></code> 范围内的编译期整数。</p></li>
+<li><p>device 侧没有 <code class="docutils literal notranslate"><span class="pre">rank()</span></code> / <code class="docutils literal notranslate"><span class="pre">num_ranks()</span></code>，拓扑由 host 以 constexpr 传入 kernel；<code class="docutils literal notranslate"><span class="pre">shard_id</span></code> 推荐直接传 host 预计算的 world rank int，也可以传 mesh 坐标 tuple + <code class="docutils literal notranslate"><span class="pre">scope</span></code>（经 <code class="docutils literal notranslate"><span class="pre">physical_ids</span></code> 解析为 world rank）。node 路径下 <code class="docutils literal notranslate"><span class="pre">scope</span></code> 不影响 launch 配置。</p></li>
+</ul>
+<p>使用方式：先用 <code class="docutils literal notranslate"><span class="pre">tle.remote</span></code> 拿到指向对端节点的远端指针，再用一对 load/store 完成传输，传输方向由 load/store 的位置决定：</p>
+<ul class="simple">
+<li><p><strong>PUT（本地 → 远程）</strong>：先从本地 buffer load，再 store 到远端指针，数据即从本节点写入远程节点。</p></li>
+<li><p><strong>GET（远程 → 本地）</strong>：写法与 PUT 完全对称，方向相反——从远端指针 load，再 store 进本地 buffer，数据即从远程节点读回本地。</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># PUT：本地 load + 远端 store</span>
+<span class="n">remote_dst</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"node"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+                        <span class="n">shard_id</span><span class="o">=</span><span class="n">remote_rank</span><span class="p">,</span> <span class="n">coopkind</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">GroupKind</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">)</span>
+<span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">&lt;</span> <span class="n">nelems</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">comm_buf</span> <span class="o">+</span> <span class="n">src_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">remote_dst</span> <span class="o">+</span> <span class="n">dst_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+<span class="c1"># GET：远端 load + 本地 store</span>
+<span class="n">remote_src</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"node"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+                        <span class="n">shard_id</span><span class="o">=</span><span class="n">remote_rank</span><span class="p">,</span> <span class="n">coopkind</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">GroupKind</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">)</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_src</span> <span class="o">+</span> <span class="n">src_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">comm_buf</span> <span class="o">+</span> <span class="n">dst_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>常见错误写法：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 错：多维 / tiled 访问</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_dst</span> <span class="o">+</span> <span class="n">rows</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">cols</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># 编译期拒绝</span>
+<span class="c1"># 原因：node 路径把 load/store 对整体 lowering 为一次 RDMA put/get，</span>
+<span class="c1"># 接口只支持连续数据（1D 线性区间），无法表达 2D tile 的离散地址。</span>
+
+<span class="c1"># 错：把偏移传给 remote</span>
+<span class="n">remote_dst</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"node"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>  <span class="c1"># 报错</span>
+<span class="c1"># 原因：node 路径下 tle.remote 只负责解析目标 peer，返回的是指向对端</span>
+<span class="c1"># 窗口基址的指针；源/目的偏移由后续 load/store 时的 src_offset / dst_offset 表达。</span>
+
+<span class="c1"># 错：两侧区间不一致，或 mask 不是共享前缀</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">local</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">remote</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">vals</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask2</span><span class="p">)</span>  <span class="c1"># 拒绝</span>
+<span class="c1"># 原因：传输长度和两侧偏移是从 load/store 的指针表达式共同推导的，</span>
+<span class="c1"># 两侧 range / mask 不一致时，传多少、从哪传到哪无法确定，编译期拒绝。</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-signal">
+<h4>tle.signal<a class="headerlink" href="#tle-signal" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.signal</span></code> 原子更新远端 peer 的同步 slot。该原语仅发送信号，不传输数据，也不在接收端等待完成。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">signal</span><span class="p">(</span><span class="n">device_dptr</span><span class="p">,</span> <span class="n">peer</span><span class="p">,</span> <span class="n">slot_id</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">"inc"</span><span class="p">,</span>
+          <span class="n">space</span><span class="o">=</span><span class="s2">"intra_node"</span><span class="p">,</span> <span class="n">group_kind</span><span class="o">=</span><span class="s2">"block"</span><span class="p">,</span> <span class="n">context_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+          <span class="n">scope</span><span class="o">=</span><span class="s2">"system"</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">op=&quot;inc&quot;</span></code> 将目标信号 slot 加一；<code class="docutils literal notranslate"><span class="pre">op=&quot;add&quot;</span></code> 将 <code class="docutils literal notranslate"><span class="pre">value</span></code> 加到目标信号 slot，此时必须提供 <code class="docutils literal notranslate"><span class="pre">value</span></code>，前者必须省略。<code class="docutils literal notranslate"><span class="pre">space</span></code> 选择通信范围（<code class="docutils literal notranslate"><span class="pre">intra_node</span></code>、<code class="docutils literal notranslate"><span class="pre">inter_node</span></code> 或 <code class="docutils literal notranslate"><span class="pre">world</span></code>），<code class="docutils literal notranslate"><span class="pre">peer</span></code> 是该范围内的 rank。<code class="docutils literal notranslate"><span class="pre">context_idx</span></code> 选择预分配的网络上下文。<code class="docutils literal notranslate"><span class="pre">scope</span></code> 控制信号操作对节点上线程的可见性：<code class="docutils literal notranslate"><span class="pre">&quot;system&quot;</span></code> 表示对所有设备上的所有线程可见，<code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code> 表示仅对当前设备上的线程可见；<code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code> 仅在单节点场景下有意义，大多数情况下 <code class="docutils literal notranslate"><span class="pre">&quot;system&quot;</span></code> 是正确选择。<code class="docutils literal notranslate"><span class="pre">group_kind=&quot;block&quot;</span></code>（默认）时，CTA 内所有线程必须收敛执行该操作；整个 group 集合发出一次远端更新。</p>
+</section>
+<section id="tle-signal-wait">
+<h4>tle.signal_wait<a class="headerlink" href="#tle-signal-wait" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.signal_wait</span></code> 等待本地同步 slot 达到目标值。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">signal_wait</span><span class="p">(</span><span class="n">device_dptr</span><span class="p">,</span> <span class="n">slot_id</span><span class="p">,</span> <span class="n">wait_kind</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">group_kind</span><span class="o">=</span><span class="s2">"block"</span><span class="p">,</span> <span class="n">context_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"acquire"</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">wait_kind</span></code> 选择等待模式：<code class="docutils literal notranslate"><span class="pre">&quot;signal&quot;</span></code> 等待 slot 值达到 <code class="docutils literal notranslate"><span class="pre">target</span></code>；<code class="docutils literal notranslate"><span class="pre">&quot;counter&quot;</span></code> 等待 slot 中的计数器达到 <code class="docutils literal notranslate"><span class="pre">target</span></code>；<code class="docutils literal notranslate"><span class="pre">&quot;shadow&quot;</span></code> 从运行时本地维护的 shadow buffer 读取目标值，因此必须省略 <code class="docutils literal notranslate"><span class="pre">target</span></code>。<code class="docutils literal notranslate"><span class="pre">slot_id</span></code> 与 <code class="docutils literal notranslate"><span class="pre">tle.signal</span></code> 共享同一信号 slot 命名空间。<code class="docutils literal notranslate"><span class="pre">group_kind</span></code> 和 <code class="docutils literal notranslate"><span class="pre">context_idx</span></code> 的语义与 <code class="docutils literal notranslate"><span class="pre">tle.signal</span></code> 一致。<code class="docutils literal notranslate"><span class="pre">order</span></code> 约束等待操作的内存序，由于 <code class="docutils literal notranslate"><span class="pre">tle.signal_wait</span></code> 是读取操作，仅允许 <code class="docutils literal notranslate"><span class="pre">&quot;relaxed&quot;</span></code> 和 <code class="docutils literal notranslate"><span class="pre">&quot;acquire&quot;</span></code>，大多数情况下默认值 <code class="docutils literal notranslate"><span class="pre">&quot;acquire&quot;</span></code> 是正确的选择。</p>
+</section>
+</section>
+<section id="id18">
+<h3>组合示例<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<section id="id19">
+<h4>异步过滤与压缩<a class="headerlink" href="#id19" title="Link to this heading">#</a></h4>
+<p>组合 <code class="docutils literal notranslate"><span class="pre">tle.load</span></code> 和 <code class="docutils literal notranslate"><span class="pre">tle.cumsum</span></code>：先用带 mask 的异步加载读入一个 tile，再根据 predicate 生成 active flags，最后用 <code class="docutils literal notranslate"><span class="pre">tle.cumsum</span></code> 生成紧凑写回 offset 和当前 block 的 active 总数。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">offs</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">offs</span> <span class="o">&lt;</span> <span class="n">n_elements</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">keep</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mask</span>
+<span class="n">active</span> <span class="o">=</span> <span class="n">keep</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+<span class="n">write_offsets</span><span class="p">,</span> <span class="n">active_total</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">active</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">block_base</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">block_offsets_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">)</span>
+
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span> <span class="o">+</span> <span class="n">block_base</span> <span class="o">+</span> <span class="n">write_offsets</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">keep</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">block_counts_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">,</span> <span class="n">active_total</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="tile">
+<h4>流水化 tile 后处理<a class="headerlink" href="#tile" title="Link to this heading">#</a></h4>
+<p>组合 <code class="docutils literal notranslate"><span class="pre">tle.pipe</span></code>、shared-memory pointer view 和 tensor slicing。producer 把 global tile 分阶段写入 shared memory；consumer 读取 ready stage，对其中一个子 tile 做局部变换，再把更新后的完整 tile 写回输出。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tile_buf</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="n">BM</span><span class="p">,</span> <span class="n">BN</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">capacity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"post_pipe"</span><span class="p">,</span> <span class="n">tile</span><span class="o">=</span><span class="n">tile_buf</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">()</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BN</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">):</span>
+    <span class="n">slot</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">tile_offset</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">tile_mask</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">other</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">tile</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)),</span> <span class="n">vals</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">):</span>
+    <span class="n">ready</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">tile</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">ready</span><span class="o">.</span><span class="n">slot</span><span class="o">.</span><span class="n">tile</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)))</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">extract_tile</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">BM</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">BN</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">insert_tile</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span> <span class="o">+</span> <span class="n">tile_offset</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">tile</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">tile_mask</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+    <span class="n">reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pipe-reader">
+<h4>多字段 Pipe 与选择性 Reader<a class="headerlink" href="#pipe-reader" title="Link to this heading">#</a></h4>
+<p>组合多字段 pipe payload 和 reader field subset。一条 pipe slot 同时承载 TMA 产生的 tile 和本地写入的 scale vector；MMA reader 只订阅 tile，epilogue reader 同时消费 tile 和 scale。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">PIPE_CAPACITY</span><span class="p">,</span> <span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">PIPE_CAPACITY</span><span class="p">,</span> <span class="n">BM</span><span class="p">],</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">,</span>
+    <span class="n">nv_mma_shared_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span>
+    <span class="n">capacity</span><span class="o">=</span><span class="n">PIPE_CAPACITY</span><span class="p">,</span>
+    <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"multi_field_inputs"</span><span class="p">,</span>
+    <span class="n">readers</span><span class="o">=</span><span class="p">(</span><span class="s2">"mma"</span><span class="p">,</span> <span class="s2">"epilogue"</span><span class="p">),</span>
+    <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">()</span>
+<span class="n">mma_reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="s2">"mma"</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s2">"q"</span><span class="p">,))</span>
+<span class="n">epilogue_reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="s2">"epilogue"</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s2">"q"</span><span class="p">,</span> <span class="s2">"scale"</span><span class="p">))</span>
+
+<span class="n">slot</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">q_desc</span><span class="p">,</span> <span class="n">slot</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="p">[</span><span class="n">q_block</span><span class="p">,</span> <span class="n">k_block</span><span class="p">])</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">),)),</span> <span class="n">scale_values</span><span class="p">)</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">q_ready</span> <span class="o">=</span> <span class="n">mma_reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">slot</span>
+<span class="n">q_tile</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">q_ready</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+<span class="n">mma_reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">epilogue_ready</span> <span class="o">=</span> <span class="n">epilogue_reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">slot</span>
+<span class="n">q_for_epilogue</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">epilogue_ready</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+<span class="n">scale_tile</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">epilogue_ready</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">),)))</span>
+<span class="n">epilogue_reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h4>分布式交换与重分片<a class="headerlink" href="#id20" title="Link to this heading">#</a></h4>
+<p>组合 <code class="docutils literal notranslate"><span class="pre">tle.device_mesh</span></code>、<code class="docutils literal notranslate"><span class="pre">tle.sharding</span></code>、<code class="docutils literal notranslate"><span class="pre">tle.shard_id</span></code>、<code class="docutils literal notranslate"><span class="pre">tle.remote</span></code>、<code class="docutils literal notranslate"><span class="pre">tle.distributed_barrier</span></code> 和 <code class="docutils literal notranslate"><span class="pre">tle.reshard</span></code>。当前 shard 读取相邻设备的 tile 完成 ring 风格交换，然后构造 replicated view 进入本地计算。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">device_mesh</span><span class="p">({</span><span class="s2">"node"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+<span class="n">x_spec</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">[</span><span class="s2">"device"</span><span class="p">],</span> <span class="n">partial</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">make_sharded_tensor</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">x_spec</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">K</span><span class="p">])</span>
+
+<span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>
+<span class="n">next_device</span> <span class="o">=</span> <span class="p">(</span><span class="n">device_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">mesh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">neighbor_x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">neighbor_x</span><span class="p">)</span>
+
+<span class="n">x_full</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">reshard</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">[],</span> <span class="n">partial</span><span class="o">=</span><span class="p">[]))</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">local_compute</span><span class="p">(</span><span class="n">x_full</span><span class="p">,</span> <span class="n">neighbor_vals</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="local-ptr">
+<h2>与 local_ptr 交互的原语<a class="headerlink" href="#local-ptr" title="Link to this heading">#</a></h2>
+<p>以下 API 与 <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> 一起使用。更多信息请参见 <a class="reference internal" href="use-tle-struct.html"><span class="std std-doc">使用 TLE-Struct</span></a>。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.load</span></code>（用于 local_ptr）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.store</span></code>（用于 local_ptr）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.atomic_add</span></code>/<code class="docutils literal notranslate"><span class="pre">and</span></code>/<code class="docutils literal notranslate"><span class="pre">cas</span></code>/<code class="docutils literal notranslate"><span class="pre">max</span></code>/<code class="docutils literal notranslate"><span class="pre">min</span></code>/<code class="docutils literal notranslate"><span class="pre">or</span></code>/<code class="docutils literal notranslate"><span class="pre">xchg</span></code>/<code class="docutils literal notranslate"><span class="pre">xor</span></code>（用于 local_ptr）</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="use-hints.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">使用 Hints</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="use-tle-struct.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">使用 TLE-Struct</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">内存管理</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-load">tle.load</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">张量切片</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-extract-tile">tle.extract_tile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-insert-tile">tle.insert_tile</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">扫描和排序操作</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-cumsum">tle.cumsum</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">流水线</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">管道与阶段</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">生产者</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">消费者</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">负载字段</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">生命周期</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">简单示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">分布式</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">设备网格</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-device-mesh">tle.device_mesh</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">分片规范</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">同步</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-distributed-barrier">tle.distributed_barrier</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">远程访问</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">设备网格坐标与重分片</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-shard-id">tle.shard_id</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-reshard">tle.reshard</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">远程访问的目标域</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cluster-cluster-dsmem">Cluster 路径（Cluster 内通信，DSMEM）</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-gpu-nvlink-p2p">Device 路径（节点内跨 GPU 通信，NVLink P2P）</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#node-flagcx-rdma">Node 路径（节点间通信，FlagCX/RDMA）</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal">tle.signal</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal-wait">tle.signal_wait</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">组合示例</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">异步过滤与压缩</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tile">流水化 tile 后处理</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pipe-reader">多字段 Pipe 与选择性 Reader</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">分布式交换与重分片</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#local-ptr">与 local_ptr 交互的原语</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagtree_en/user_guide/use-tle-lite.html">English</a></body>
+</html>

@@ -1,0 +1,1226 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FlagFFT 用户指南" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/user-guide.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="使用 C API: FlagFFT 在 include/flagfft.h 中提供与 cuFFT 兼容的 C API。 创建计划: 执行变换: 管理计划: 数据类型:,,, FlagFFT 类型, C 类型, 描述,,, flagfftComplex, float2, 单精度复数,, flagfftDoubleComplex, double2, 双精度复数,, flagfftReal, float, 单精度实数,, flagfftDoubleReal, double, 双精度实数,,,, 变换类型:,, 类型常量, 变换,,, FLAGFFT_C2C, 复数 → 复数,, FLAGFFT..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="使用 C API: FlagFFT 在 include/flagfft.h 中提供与 cuFFT 兼容的 C API。 创建计划: 执行变换: 管理计划: 数据类型:,,, FlagFFT 类型, C 类型, 描述,,, flagfftComplex, float2, 单精度复数,, flagfftDoubleComplex, double2, 双精度复数,, flagfftReal, float, 单精度实数,, flagfftDoubleReal, double, 双精度实数,,,, 变换类型:,, 类型常量, 变换,,, FLAGFFT_C2C, 复数 → 复数,, FLAGFFT..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>FlagFFT 用户指南 &#8212; FlagFFT 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/user-guide.99c517bb-7ef4-40b2-ac68-793adf4cdb2c.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/user-guide';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/user-guide.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FlagFFT C API 参考" href="../reference/api-reference.html" />
+    <link rel="prev" title="安装 FlagFFT" href="../getting_started/install.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagFFT 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagFFT 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagFFT 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">FlagFFT 发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">FlagFFT 概览</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">FlagFFT 快速入门</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">安装要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">安装 FlagFFT</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/requirements.html">安装要求</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/install.html">安装 FlagFFT</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">FlagFFT 用户指南</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/api-reference.html">FlagFFT C API 参考</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/tle-reference.html">TLE 参考</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/user-guide.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FlagFFT 用户指南</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-api">使用 C API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">创建计划</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">执行变换</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">管理计划</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">数据类型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">变换类型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">支持的功能</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">计划中 / 尚未支持</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cli">使用原生 CLI</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fft">基准测试 FFT 性能</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">自动调优（计划中）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">退出码</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">运行测试</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">使用统一测试运行器</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">用法</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">组合预设</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">示例</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">输出</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c">运行 C++ 测试</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">测试结构</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">运行单个测试</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">运行 Python 测试</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">配置测试</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flagfft">
+<h1>FlagFFT 用户指南<a class="headerlink" href="#flagfft" title="Link to this heading">#</a></h1>
+<section id="c-api">
+<h2>使用 C API<a class="headerlink" href="#c-api" title="Link to this heading">#</a></h2>
+<p>FlagFFT 在 <code class="docutils literal notranslate"><span class="pre">include/flagfft.h</span></code> 中提供与 cuFFT 兼容的 C API。</p>
+<section id="id1">
+<h3>创建计划<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">flagfftPlan1d</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">batch</span><span class="p">)</span>
+<span class="n">flagfftPlan2d</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
+<span class="n">flagfftPlan3d</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">,</span><span class="w"> </span><span class="n">nz</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w">        </span><span class="c1">// NOT_SUPPORTED</span>
+<span class="n">flagfftPlanMany</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">inembed</span><span class="p">,</span><span class="w"> </span><span class="n">istride</span><span class="p">,</span><span class="w"> </span><span class="n">idist</span><span class="p">,</span>
+<span class="w">                </span><span class="n">onembed</span><span class="p">,</span><span class="w"> </span><span class="n">ostride</span><span class="p">,</span><span class="w"> </span><span class="n">odist</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">batch</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>执行变换<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// 复数到复数（单精度和双精度）</span>
+<span class="n">flagfftExecC2C</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">)</span>
+<span class="n">flagfftExecZ2Z</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">)</span>
+
+<span class="c1">// 实数到复数（正向）</span>
+<span class="n">flagfftExecR2C</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+<span class="n">flagfftExecD2Z</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+
+<span class="c1">// 复数到实数（逆向）</span>
+<span class="n">flagfftExecC2R</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+<span class="n">flagfftExecZ2D</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>管理计划<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">flagfftSetStream</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">stream</span><span class="p">)</span><span class="w">    </span><span class="c1">// 附加 CUDA 流</span>
+<span class="n">flagfftDestroy</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span><span class="w">              </span><span class="c1">// 释放计划资源</span>
+<span class="n">flagfftGetPlanDescription</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span><span class="w">   </span><span class="c1">// 人类可读的计划摘要</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>数据类型<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>FlagFFT 类型</p></th>
+<th class="head"><p>C 类型</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftComplex</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float2</span></code></p></td>
+<td><p>单精度复数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftDoubleComplex</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">double2</span></code></p></td>
+<td><p>双精度复数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftReal</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p>单精度实数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftDoubleReal</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">double</span></code></p></td>
+<td><p>双精度实数</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id5">
+<h3>变换类型<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>类型常量</p></th>
+<th class="head"><p>变换</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_C2C</span></code></p></td>
+<td><p>复数 → 复数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_Z2Z</span></code></p></td>
+<td><p>双精度复数 → 双精度复数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_R2C</span></code></p></td>
+<td><p>实数 → 复数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_D2Z</span></code></p></td>
+<td><p>双精度实数 → 双精度复数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_C2R</span></code></p></td>
+<td><p>复数 → 实数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_Z2D</span></code></p></td>
+<td><p>双精度复数 → 双精度实数</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id6">
+<h3>支持的功能<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>功能</p></th>
+<th class="head"><p>状态</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>一维任意长度 C2C、Z2Z</p></td>
+<td><p>Cooley-Tukey + Bluestein/Rader</p></td>
+</tr>
+<tr class="row-odd"><td><p>一维任意长度 R2C、D2Z（正向）</p></td>
+<td><p>已支持</p></td>
+</tr>
+<tr class="row-even"><td><p>一维任意长度 C2R、Z2D（逆向）</p></td>
+<td><p>已支持</p></td>
+</tr>
+<tr class="row-odd"><td><p>一维往返（R2C→C2R、D2Z→Z2D）</p></td>
+<td><p>已支持</p></td>
+</tr>
+<tr class="row-even"><td><p>二维连续行优先 C2C、Z2Z</p></td>
+<td><p>RTRT 分解</p></td>
+</tr>
+<tr class="row-odd"><td><p>二维连续行优先 R2C、D2Z、C2R、Z2D</p></td>
+<td><p>已支持</p></td>
+</tr>
+<tr class="row-even"><td><p>批量变换</p></td>
+<td><p>已支持</p></td>
+</tr>
+<tr class="row-odd"><td><p>原地和异地</p></td>
+<td><p>已支持</p></td>
+</tr>
+<tr class="row-even"><td><p>CUDA 流附加</p></td>
+<td><p>已支持</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id7">
+<h3>计划中 / 尚未支持<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>功能</p></th>
+<th class="head"><p>状态</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>三维变换（<code class="docutils literal notranslate"><span class="pre">flagfftPlan3d</span></code>）</p></td>
+<td><p>返回 <code class="docutils literal notranslate"><span class="pre">FLAGFFT_NOT_SUPPORTED</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>二维更多执行算法</p></td>
+<td><p>目前仅支持 RTRT</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="cli">
+<h2>使用原生 CLI<a class="headerlink" href="#cli" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">flagfft-cli</span></code> 是一个原生基准测试和验证工具。使用 <code class="docutils literal notranslate"><span class="pre">-DFLAGFFT_BUILD_CLI=ON</span></code> 构建。</p>
+<section id="fft">
+<h3>基准测试 FFT 性能<a class="headerlink" href="#fft" title="Link to this heading">#</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>flagfft-cli<span class="w"> </span>bench<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>选项</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--rank</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>变换秩：<code class="docutils literal notranslate"><span class="pre">1</span></code> 或 <code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--api</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">c2c</span></code></p></td>
+<td><p>变换类型：<code class="docutils literal notranslate"><span class="pre">c2c</span></code>、<code class="docutils literal notranslate"><span class="pre">z2z</span></code>、<code class="docutils literal notranslate"><span class="pre">r2c</span></code>、<code class="docutils literal notranslate"><span class="pre">d2z</span></code>、<code class="docutils literal notranslate"><span class="pre">c2r</span></code>、<code class="docutils literal notranslate"><span class="pre">z2d</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--shape</span></code></p></td>
+<td><p>必填</p></td>
+<td><p>变换尺寸，逗号分隔：<code class="docutils literal notranslate"><span class="pre">1024</span></code>、<code class="docutils literal notranslate"><span class="pre">256x256</span></code>、<code class="docutils literal notranslate"><span class="pre">1024,2048,4096</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--batch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>批量大小</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--direction</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">forward</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">forward</span></code> 或 <code class="docutils literal notranslate"><span class="pre">inverse</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--placement</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">out-of-place</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">out-of-place</span></code> 或 <code class="docutils literal notranslate"><span class="pre">in-place</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--warmup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>预热迭代次数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--iters</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>测量迭代次数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--json</span></code></p></td>
+<td><p>—</p></td>
+<td><p>以 JSON 格式输出结果</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--print-path</span></code></p></td>
+<td><p>—</p></td>
+<td><p>打印执行计划分解路径（与 <code class="docutils literal notranslate"><span class="pre">--json</span></code> 一起使用）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>示例：</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># 基准测试一维 C2C FFT，尺寸 4096，批量 256</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--api<span class="w"> </span>c2c<span class="w"> </span>--shape<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--batch<span class="w"> </span><span class="m">256</span>
+
+<span class="c1"># 基准测试二维 Z2Z FFT</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--rank<span class="w"> </span><span class="m">2</span><span class="w"> </span>--api<span class="w"> </span>z2z<span class="w"> </span>--shape<span class="w"> </span>256x256
+
+<span class="c1"># 比较多种尺寸，JSON 输出</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--api<span class="w"> </span>r2c<span class="w"> </span>--shape<span class="w"> </span><span class="m">1024</span>,2048,4096,8192<span class="w"> </span>--json
+
+<span class="c1"># 打印内核执行计划</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--api<span class="w"> </span>c2c<span class="w"> </span>--shape<span class="w"> </span><span class="m">997</span><span class="w"> </span>--print-path<span class="w"> </span>--json
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>自动调优（计划中）<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>flagfft-cli<span class="w"> </span>tune<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p>目前为占位符；退出并返回 <code class="docutils literal notranslate"><span class="pre">FLAGFFT_NOT_SUPPORTED</span></code>。</p>
+</section>
+<section id="id9">
+<h3>退出码<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>码</p></th>
+<th class="head"><p>含义</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>通过</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>失败 / 参数无效</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>运行时错误</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">77</span></code></p></td>
+<td><p>跳过 / 不支持</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id10">
+<h2>运行测试<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>FlagFFT 有三层测试：统一的 Python 测试运行器、C++ 单元测试（Google Test）和 Python 代码生成测试（pytest）。</p>
+<section id="id11">
+<h3>使用统一测试运行器<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tools/run_tests.py</span></code> 是运行完整测试套件的主要入口。它协调精度测试（C++ ctest 二进制文件，比较 FlagFFT 输出与 cuFFT）和性能基准测试（flagfft-cli bench）。</p>
+<section id="id12">
+<h4>用法<a class="headerlink" href="#id12" title="Link to this heading">#</a></h4>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>tools/run_tests.py<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>标志</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--ops</span></code></p></td>
+<td><p>—</p></td>
+<td><p>要测试的算子 ID，逗号分隔</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--op-list-file</span></code></p></td>
+<td><p>—</p></td>
+<td><p>每行一个算子 ID 的文件路径</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--start</span></code></p></td>
+<td><p>—</p></td>
+<td><p>按字典序跳过此值之前的算子</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--stages</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stable</span></code></p></td>
+<td><p>要包含的阶段，逗号分隔（<code class="docutils literal notranslate"><span class="pre">stable</span></code>、<code class="docutils literal notranslate"><span class="pre">alpha</span></code>、<code class="docutils literal notranslate"><span class="pre">beta</span></code>）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--combination</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ct</span></code></p></td>
+<td><p>测试组合：<code class="docutils literal notranslate"><span class="pre">ct</span></code>、<code class="docutils literal notranslate"><span class="pre">bs</span></code>、<code class="docutils literal notranslate"><span class="pre">full</span></code>、<code class="docutils literal notranslate"><span class="pre">2d</span></code>、<code class="docutils literal notranslate"><span class="pre">2d_full</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--gpus</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>GPU ID，逗号分隔，或 <code class="docutils literal notranslate"><span class="pre">all</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output-dir</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">results</span></code></p></td>
+<td><p>摘要和每个算子结果文件的目录</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--build-dir</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">build</span></code></p></td>
+<td><p>CMake 构建目录路径</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--accuracy-only</span></code></p></td>
+<td><p>—</p></td>
+<td><p>仅运行精度测试</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--performance-only</span></code></p></td>
+<td><p>—</p></td>
+<td><p>仅运行性能（基准测试）测试</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--timeout</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">600</span></code></p></td>
+<td><p>每个测试的子进程超时秒数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--warmup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>基准测试预热迭代次数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--iters</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>基准测试测量迭代次数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--dump-output</span></code></p></td>
+<td><p>—</p></td>
+<td><p>将每个测试的 stdout/stderr 保存到日志文件</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--color</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>颜色模式：<code class="docutils literal notranslate"><span class="pre">auto</span></code>、<code class="docutils literal notranslate"><span class="pre">always</span></code>、<code class="docutils literal notranslate"><span class="pre">never</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-v,</span> <span class="pre">--verbose</span></code></p></td>
+<td><p>—</p></td>
+<td><p>详细输出</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id13">
+<h4>组合预设<a class="headerlink" href="#id13" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>预设</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ct</span></code></p></td>
+<td><p>快速冒烟测试 —— Cooley-Tukey 尺寸，批量 1，缩放 1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bs</span></code></p></td>
+<td><p>快速冒烟测试 —— Bluestein/Rader 尺寸，批量 1，缩放 1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p>完整一维 —— 所有 CT 尺寸 × 所有批量 × 所有缩放</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">2d</span></code></p></td>
+<td><p>快速二维 —— 选定的二维尺寸，批量 {1,4}，缩放 1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">2d_full</span></code></p></td>
+<td><p>完整二维 —— 选定的二维尺寸 × 所有批量 × 所有缩放</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id14">
+<h4>示例<a class="headerlink" href="#id14" title="Link to this heading">#</a></h4>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># 快速冒烟测试（默认）</span>
+python<span class="w"> </span>tools/run_tests.py
+
+<span class="c1"># GPU 0 上的完整测试套件</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--gpus<span class="w"> </span><span class="m">0</span>
+
+<span class="c1"># 跨 4 个 GPU 的完整套件</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--gpus<span class="w"> </span><span class="m">0</span>,1,2,3
+
+<span class="c1"># 仅精度测试，特定算子</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--ops<span class="w"> </span>c2c_1d,r2c_1d<span class="w"> </span>--accuracy-only
+
+<span class="c1"># 仅性能基准测试</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--performance-only
+</pre></div>
+</div>
+</section>
+<section id="id15">
+<h4>输出<a class="headerlink" href="#id15" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>控制台：实时进度，每个 GPU 状态</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results/summary.json</span></code> —— 顶层摘要，包含 <code class="docutils literal notranslate"><span class="pre">timestamp</span></code>、<code class="docutils literal notranslate"><span class="pre">env</span></code>、<code class="docutils literal notranslate"><span class="pre">config</span></code>、<code class="docutils literal notranslate"><span class="pre">result</span></code> 和 <code class="docutils literal notranslate"><span class="pre">summary</span></code> 部分</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results/{op_id}/accuracy_result.json</span></code> —— 每个算子的精度详情</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results/{op_id}/performance_result.json</span></code> —— 每个算子的基准测试详情</p></li>
+</ul>
+<p>如果所有精度测试通过，退出码为 <code class="docutils literal notranslate"><span class="pre">0</span></code>，任何失败则为 <code class="docutils literal notranslate"><span class="pre">1</span></code>。</p>
+</section>
+</section>
+<section id="c">
+<h3>运行 C++ 测试<a class="headerlink" href="#c" title="Link to this heading">#</a></h3>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">-DFLAGFFT_BUILD_TESTS=ON</span></code> 构建。每个测试二进制文件使用范数相对误差指标（<code class="docutils literal notranslate"><span class="pre">rel_l2</span></code>、<code class="docutils literal notranslate"><span class="pre">rel_linf</span></code>）比较 FlagFFT 输出与 cuFFT。</p>
+<section id="id16">
+<h4>测试结构<a class="headerlink" href="#id16" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>测试模式</p></th>
+<th class="head"><p>覆盖范围</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_plan</span></code></p></td>
+<td><p>计划生命周期、错误码、不支持的 API 合约</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_2d_correctness</span></code></p></td>
+<td><p>二维 C2C/Z2Z 正确性</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_c2c_{fwd,inv}_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>C2C 正向/逆向，Cooley-Tukey/Bluestein，单/多批量</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_z2z_{fwd,inv}_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>双精度复数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_r2c_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Float 实数 → 复数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_d2z_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Double 实数 → 复数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_c2r_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>复数 → float 实数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_z2d_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>双精度复数 → 双精度实数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_r2c_c2r_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>实数往返验证</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_d2z_z2d_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>双精度实数往返</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>后缀说明：<code class="docutils literal notranslate"><span class="pre">s</span></code> = 单批量，<code class="docutils literal notranslate"><span class="pre">b</span></code> = 多批量；<code class="docutils literal notranslate"><span class="pre">ct</span></code> = Cooley-Tukey，<code class="docutils literal notranslate"><span class="pre">bs</span></code> = Bluestein/Rader。</p>
+</section>
+<section id="id17">
+<h4>运行单个测试<a class="headerlink" href="#id17" title="Link to this heading">#</a></h4>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># 运行特定测试</span>
+./build/ctest/test_exec_c2c_fwd_ct_s
+
+<span class="c1"># 使用自定义参数</span>
+./build/ctest/test_exec_c2c_fwd_ct_s<span class="w"> </span>--nx<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--batch<span class="w"> </span><span class="m">64</span><span class="w"> </span>--direction<span class="w"> </span>forward
+
+<span class="c1"># 运行所有 ctest 测试</span>
+<span class="nb">cd</span><span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ctest<span class="w"> </span>--output-on-failure
+</pre></div>
+</div>
+<p>每个测试二进制文件接受：<code class="docutils literal notranslate"><span class="pre">--nx</span></code>、<code class="docutils literal notranslate"><span class="pre">--batch</span></code>、<code class="docutils literal notranslate"><span class="pre">--direction</span></code>、<code class="docutils literal notranslate"><span class="pre">--scale</span></code>、<code class="docutils literal notranslate"><span class="pre">--json-file</span></code>。</p>
+</section>
+</section>
+<section id="python">
+<h3>运行 Python 测试<a class="headerlink" href="#python" title="Link to this heading">#</a></h3>
+<p>针对 <code class="docutils literal notranslate"><span class="pre">flagfft_codegen</span></code> Python 包的测试。需要安装该包（<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>）。</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># 运行所有 Python 测试</span>
+pytest<span class="w"> </span>tests/python/<span class="w"> </span>-v
+
+<span class="c1"># 仅运行标记为 codegen 的测试</span>
+pytest<span class="w"> </span>tests/python/<span class="w"> </span>-v<span class="w"> </span>-m<span class="w"> </span>codegen
+</pre></div>
+</div>
+<p>测试涵盖 codelet 结构、内核源码生成、JIT CSV 解析以及 Bluestein/reshape/R2C 元数据。需要 Triton/TLE 的测试在依赖不可用时自动跳过。</p>
+</section>
+<section id="id18">
+<h3>配置测试<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<p>测试参数空间在 <code class="docutils literal notranslate"><span class="pre">conf/</span></code> 中定义：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">conf/operators.yaml</span></code> —— 14 个算子定义（一维/二维 × C2C/Z2Z/R2C/D2Z/C2R/Z2D，加上往返）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conf/test_matrix.yaml</span></code> —— 参数空间：11 个平滑尺寸（CT）、4 个质数/复合尺寸（Bluestein）、3 个批量大小、3 个缩放因子、6 个组合规则</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../getting_started/install.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">安装 FlagFFT</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/api-reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">FlagFFT C API 参考</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-api">使用 C API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">创建计划</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">执行变换</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">管理计划</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">数据类型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">变换类型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">支持的功能</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">计划中 / 尚未支持</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cli">使用原生 CLI</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fft">基准测试 FFT 性能</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">自动调优（计划中）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">退出码</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">运行测试</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">使用统一测试运行器</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">用法</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">组合预设</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">示例</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">输出</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c">运行 C++ 测试</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">测试结构</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">运行单个测试</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">运行 Python 测试</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">配置测试</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagfft_en/user_guide/user-guide.html">English</a></body>
+</html>

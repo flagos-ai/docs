@@ -1,0 +1,1226 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FlagFFT User Guide" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/user-guide.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="Use the C API: FlagFFT exposes a cuFFT-compatible C API in include/flagfft.h. Create Plans: Execute Transforms: Manage Plans: Data Types:,,, FlagFFT Type, C Type, Description,,, flagfftComplex, float2, Single-precision complex,, flagfftDoubleComplex, double2, Double-precision complex,, flagfftRea..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="Use the C API: FlagFFT exposes a cuFFT-compatible C API in include/flagfft.h. Create Plans: Execute Transforms: Manage Plans: Data Types:,,, FlagFFT Type, C Type, Description,,, flagfftComplex, float2, Single-precision complex,, flagfftDoubleComplex, double2, Double-precision complex,, flagfftRea..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>FlagFFT User Guide &#8212; FlagFFT Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/user-guide.64669c3a-aeaa-4317-a9ca-bf1117104c4a.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/user-guide';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/user-guide.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FlagFFT C API Reference" href="../reference/api-reference.html" />
+    <link rel="prev" title="Install FlagFFT" href="../getting_started/install.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagFFT Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagFFT Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagFFT Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">FlagFFT Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">FlagFFT Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">Getting Started with FlagFFT</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">Install FlagFFT</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/install.html">Install FlagFFT</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">FlagFFT User Guide</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/api-reference.html">FlagFFT C API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/tle-reference.html">TLE Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/user-guide.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FlagFFT User Guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-c-api">Use the C API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-plans">Create Plans</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#execute-transforms">Execute Transforms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-plans">Manage Plans</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types">Data Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-types">Transform Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-features">Supported Features</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-not-yet-supported">Planned / Not Yet Supported</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-native-cli">Use the Native CLI</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-fft-performance">Benchmark FFT Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-tune-planned">Auto-Tune (planned)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exit-codes">Exit Codes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-tests">Run Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-unified-test-runner">Use the Unified Test Runner</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#combination-presets">Combination Presets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#output">Output</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-c-tests">Run C++ Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-structure">Test Structure</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-individual-tests">Run Individual Tests</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-python-tests">Run Python Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-tests">Configure Tests</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flagfft-user-guide">
+<h1>FlagFFT User Guide<a class="headerlink" href="#flagfft-user-guide" title="Link to this heading">#</a></h1>
+<section id="use-the-c-api">
+<h2>Use the C API<a class="headerlink" href="#use-the-c-api" title="Link to this heading">#</a></h2>
+<p>FlagFFT exposes a cuFFT-compatible C API in <code class="docutils literal notranslate"><span class="pre">include/flagfft.h</span></code>.</p>
+<section id="create-plans">
+<h3>Create Plans<a class="headerlink" href="#create-plans" title="Link to this heading">#</a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">flagfftPlan1d</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">batch</span><span class="p">)</span>
+<span class="n">flagfftPlan2d</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">)</span>
+<span class="n">flagfftPlan3d</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="p">,</span><span class="w"> </span><span class="n">nz</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">)</span><span class="w">        </span><span class="c1">// NOT_SUPPORTED</span>
+<span class="n">flagfftPlanMany</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">inembed</span><span class="p">,</span><span class="w"> </span><span class="n">istride</span><span class="p">,</span><span class="w"> </span><span class="n">idist</span><span class="p">,</span>
+<span class="w">                </span><span class="n">onembed</span><span class="p">,</span><span class="w"> </span><span class="n">ostride</span><span class="p">,</span><span class="w"> </span><span class="n">odist</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">batch</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="execute-transforms">
+<h3>Execute Transforms<a class="headerlink" href="#execute-transforms" title="Link to this heading">#</a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Complex-to-Complex (single &amp; double precision)</span>
+<span class="n">flagfftExecC2C</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">)</span>
+<span class="n">flagfftExecZ2Z</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="p">)</span>
+
+<span class="c1">// Real-to-Complex (forward)</span>
+<span class="n">flagfftExecR2C</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+<span class="n">flagfftExecD2Z</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+
+<span class="c1">// Complex-to-Real (inverse)</span>
+<span class="n">flagfftExecC2R</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+<span class="n">flagfftExecZ2D</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">idata</span><span class="p">,</span><span class="w"> </span><span class="n">odata</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="manage-plans">
+<h3>Manage Plans<a class="headerlink" href="#manage-plans" title="Link to this heading">#</a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">flagfftSetStream</span><span class="p">(</span><span class="n">plan</span><span class="p">,</span><span class="w"> </span><span class="n">stream</span><span class="p">)</span><span class="w">    </span><span class="c1">// Attach a CUDA stream</span>
+<span class="n">flagfftDestroy</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span><span class="w">              </span><span class="c1">// Free plan resources</span>
+<span class="n">flagfftGetPlanDescription</span><span class="p">(</span><span class="n">plan</span><span class="p">)</span><span class="w">   </span><span class="c1">// Human-readable plan summary</span>
+</pre></div>
+</div>
+</section>
+<section id="data-types">
+<h3>Data Types<a class="headerlink" href="#data-types" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>FlagFFT Type</p></th>
+<th class="head"><p>C Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftComplex</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float2</span></code></p></td>
+<td><p>Single-precision complex</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftDoubleComplex</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">double2</span></code></p></td>
+<td><p>Double-precision complex</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftReal</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p>Single-precision real</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagfftDoubleReal</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">double</span></code></p></td>
+<td><p>Double-precision real</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="transform-types">
+<h3>Transform Types<a class="headerlink" href="#transform-types" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Type Constant</p></th>
+<th class="head"><p>Transform</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_C2C</span></code></p></td>
+<td><p>Complex → Complex</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_Z2Z</span></code></p></td>
+<td><p>Double Complex → Double Complex</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_R2C</span></code></p></td>
+<td><p>Real → Complex</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_D2Z</span></code></p></td>
+<td><p>Double Real → Double Complex</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_C2R</span></code></p></td>
+<td><p>Complex → Real</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGFFT_Z2D</span></code></p></td>
+<td><p>Double Complex → Double Real</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="supported-features">
+<h3>Supported Features<a class="headerlink" href="#supported-features" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Rank-1 arbitrary-length C2C, Z2Z</p></td>
+<td><p>Cooley-Tukey + Bluestein/Rader</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rank-1 arbitrary-length R2C, D2Z (forward)</p></td>
+<td><p>Supported</p></td>
+</tr>
+<tr class="row-even"><td><p>Rank-1 arbitrary-length C2R, Z2D (inverse)</p></td>
+<td><p>Supported</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rank-1 roundtrip (R2C→C2R, D2Z→Z2D)</p></td>
+<td><p>Supported</p></td>
+</tr>
+<tr class="row-even"><td><p>Rank-2 contiguous row-major C2C, Z2Z</p></td>
+<td><p>RTRT decomposition</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rank-2 contiguous row-major R2C, D2Z, C2R, Z2D</p></td>
+<td><p>Supported</p></td>
+</tr>
+<tr class="row-even"><td><p>Batched transforms</p></td>
+<td><p>Supported</p></td>
+</tr>
+<tr class="row-odd"><td><p>In-place and out-of-place</p></td>
+<td><p>Supported</p></td>
+</tr>
+<tr class="row-even"><td><p>CUDA stream attachment</p></td>
+<td><p>Supported</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="planned-not-yet-supported">
+<h3>Planned / Not Yet Supported<a class="headerlink" href="#planned-not-yet-supported" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Rank-3 transforms (<code class="docutils literal notranslate"><span class="pre">flagfftPlan3d</span></code>)</p></td>
+<td><p>Returns <code class="docutils literal notranslate"><span class="pre">FLAGFFT_NOT_SUPPORTED</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Rank-2 more exec algos</p></td>
+<td><p>RTRT only currently</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="use-the-native-cli">
+<h2>Use the Native CLI<a class="headerlink" href="#use-the-native-cli" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">flagfft-cli</span></code> is a native benchmark and verification tool. Build it with <code class="docutils literal notranslate"><span class="pre">-DFLAGFFT_BUILD_CLI=ON</span></code>.</p>
+<section id="benchmark-fft-performance">
+<h3>Benchmark FFT Performance<a class="headerlink" href="#benchmark-fft-performance" title="Link to this heading">#</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>flagfft-cli<span class="w"> </span>bench<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--rank</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Transform rank: <code class="docutils literal notranslate"><span class="pre">1</span></code> or <code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--api</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">c2c</span></code></p></td>
+<td><p>Transform type: <code class="docutils literal notranslate"><span class="pre">c2c</span></code>, <code class="docutils literal notranslate"><span class="pre">z2z</span></code>, <code class="docutils literal notranslate"><span class="pre">r2c</span></code>, <code class="docutils literal notranslate"><span class="pre">d2z</span></code>, <code class="docutils literal notranslate"><span class="pre">c2r</span></code>, <code class="docutils literal notranslate"><span class="pre">z2d</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--shape</span></code></p></td>
+<td><p>required</p></td>
+<td><p>Transform size(s), comma-separated: <code class="docutils literal notranslate"><span class="pre">1024</span></code>, <code class="docutils literal notranslate"><span class="pre">256x256</span></code>, <code class="docutils literal notranslate"><span class="pre">1024,2048,4096</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--batch</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Batch size</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--direction</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">forward</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">forward</span></code> or <code class="docutils literal notranslate"><span class="pre">inverse</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--placement</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">out-of-place</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">out-of-place</span></code> or <code class="docutils literal notranslate"><span class="pre">in-place</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--warmup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>Warmup iterations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--iters</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>Measurement iterations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--json</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Output results as JSON</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--print-path</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Print the execution plan decomposition path (use with <code class="docutils literal notranslate"><span class="pre">--json</span></code>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Examples:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Benchmark 1D C2C FFT of size 4096, batch 256</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--api<span class="w"> </span>c2c<span class="w"> </span>--shape<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--batch<span class="w"> </span><span class="m">256</span>
+
+<span class="c1"># Benchmark 2D Z2Z FFT</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--rank<span class="w"> </span><span class="m">2</span><span class="w"> </span>--api<span class="w"> </span>z2z<span class="w"> </span>--shape<span class="w"> </span>256x256
+
+<span class="c1"># Compare multiple sizes with JSON output</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--api<span class="w"> </span>r2c<span class="w"> </span>--shape<span class="w"> </span><span class="m">1024</span>,2048,4096,8192<span class="w"> </span>--json
+
+<span class="c1"># Print the kernel execution plan</span>
+flagfft-cli<span class="w"> </span>bench<span class="w"> </span>--api<span class="w"> </span>c2c<span class="w"> </span>--shape<span class="w"> </span><span class="m">997</span><span class="w"> </span>--print-path<span class="w"> </span>--json
+</pre></div>
+</div>
+</section>
+<section id="auto-tune-planned">
+<h3>Auto-Tune (planned)<a class="headerlink" href="#auto-tune-planned" title="Link to this heading">#</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>flagfft-cli<span class="w"> </span>tune<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<p>Currently a placeholder; exits with <code class="docutils literal notranslate"><span class="pre">FLAGFFT_NOT_SUPPORTED</span></code>.</p>
+</section>
+<section id="exit-codes">
+<h3>Exit Codes<a class="headerlink" href="#exit-codes" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Code</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>Passed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p>Failed / invalid arguments</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p>Runtime error</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">77</span></code></p></td>
+<td><p>Skipped / unsupported</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="run-tests">
+<h2>Run Tests<a class="headerlink" href="#run-tests" title="Link to this heading">#</a></h2>
+<p>FlagFFT has three layers of testing: a unified Python test runner, C++ unit tests (Google Test), and Python codegen tests (pytest).</p>
+<section id="use-the-unified-test-runner">
+<h3>Use the Unified Test Runner<a class="headerlink" href="#use-the-unified-test-runner" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tools/run_tests.py</span></code> is the primary entry point for running the full test suite. It orchestrates both accuracy tests (C++ ctest binaries comparing FlagFFT output against cuFFT) and performance benchmarks (flagfft-cli bench).</p>
+<section id="usage">
+<h4>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h4>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>tools/run_tests.py<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--ops</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Comma-separated operator IDs to test</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--op-list-file</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Path to file with one operator ID per line</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--start</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Skip operators lexicographically before this value</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--stages</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">stable</span></code></p></td>
+<td><p>Comma-separated stages to include (<code class="docutils literal notranslate"><span class="pre">stable</span></code>, <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">beta</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--combination</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ct</span></code></p></td>
+<td><p>Test combination: <code class="docutils literal notranslate"><span class="pre">ct</span></code>, <code class="docutils literal notranslate"><span class="pre">bs</span></code>, <code class="docutils literal notranslate"><span class="pre">full</span></code>, <code class="docutils literal notranslate"><span class="pre">2d</span></code>, <code class="docutils literal notranslate"><span class="pre">2d_full</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--gpus</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p>Comma-separated GPU IDs or <code class="docutils literal notranslate"><span class="pre">all</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--output-dir</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">results</span></code></p></td>
+<td><p>Directory for summary and per-operator result files</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--build-dir</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">build</span></code></p></td>
+<td><p>Path to CMake build directory</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--accuracy-only</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Run only accuracy tests</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--performance-only</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Run only performance (benchmark) tests</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--timeout</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">600</span></code></p></td>
+<td><p>Per-test subprocess timeout in seconds</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--warmup</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p>Benchmark warmup iterations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--iters</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">100</span></code></p></td>
+<td><p>Benchmark measurement iterations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--dump-output</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Save stdout/stderr of each test to log files</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--color</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">auto</span></code></p></td>
+<td><p>Color mode: <code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">always</span></code>, <code class="docutils literal notranslate"><span class="pre">never</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">-v,</span> <span class="pre">--verbose</span></code></p></td>
+<td><p>—</p></td>
+<td><p>Verbose output</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="combination-presets">
+<h4>Combination Presets<a class="headerlink" href="#combination-presets" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Preset</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ct</span></code></p></td>
+<td><p>Quick smoke test — Cooley-Tukey sizes, batch 1, scale 1.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bs</span></code></p></td>
+<td><p>Quick smoke test — Bluestein/Rader sizes, batch 1, scale 1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p>Full 1D — all CT sizes × all batches × all scales</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">2d</span></code></p></td>
+<td><p>Quick 2D — selected 2D sizes, batch {1,4}, scale 1.0</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">2d_full</span></code></p></td>
+<td><p>Full 2D — selected 2D sizes × all batches × all scales</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h4>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Quick smoke test (default)</span>
+python<span class="w"> </span>tools/run_tests.py
+
+<span class="c1"># Full test suite on GPU 0</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--gpus<span class="w"> </span><span class="m">0</span>
+
+<span class="c1"># Full suite across 4 GPUs</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--gpus<span class="w"> </span><span class="m">0</span>,1,2,3
+
+<span class="c1"># Accuracy only, specific operators</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--ops<span class="w"> </span>c2c_1d,r2c_1d<span class="w"> </span>--accuracy-only
+
+<span class="c1"># Performance benchmarks only</span>
+python<span class="w"> </span>tools/run_tests.py<span class="w"> </span>--combination<span class="w"> </span>full<span class="w"> </span>--performance-only
+</pre></div>
+</div>
+</section>
+<section id="output">
+<h4>Output<a class="headerlink" href="#output" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Console: Real-time progress with per-GPU status</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results/summary.json</span></code> — Top-level summary with <code class="docutils literal notranslate"><span class="pre">timestamp</span></code>, <code class="docutils literal notranslate"><span class="pre">env</span></code>, <code class="docutils literal notranslate"><span class="pre">config</span></code>, <code class="docutils literal notranslate"><span class="pre">result</span></code>, and <code class="docutils literal notranslate"><span class="pre">summary</span></code> sections</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results/{op_id}/accuracy_result.json</span></code> — Per-operator accuracy details</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">results/{op_id}/performance_result.json</span></code> — Per-operator benchmark details</p></li>
+</ul>
+<p>Exit code is <code class="docutils literal notranslate"><span class="pre">0</span></code> if all accuracy tests passed, <code class="docutils literal notranslate"><span class="pre">1</span></code> if any failed.</p>
+</section>
+</section>
+<section id="run-c-tests">
+<h3>Run C++ Tests<a class="headerlink" href="#run-c-tests" title="Link to this heading">#</a></h3>
+<p>Built with <code class="docutils literal notranslate"><span class="pre">-DFLAGFFT_BUILD_TESTS=ON</span></code>. Each test binary compares FlagFFT output against cuFFT using normwise relative error metrics (<code class="docutils literal notranslate"><span class="pre">rel_l2</span></code>, <code class="docutils literal notranslate"><span class="pre">rel_linf</span></code>).</p>
+<section id="test-structure">
+<h4>Test Structure<a class="headerlink" href="#test-structure" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Test Pattern</p></th>
+<th class="head"><p>Coverage</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_plan</span></code></p></td>
+<td><p>Plan lifecycle, error codes, unsupported API contracts</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_2d_correctness</span></code></p></td>
+<td><p>Rank-2 C2C/Z2Z correctness</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_c2c_{fwd,inv}_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>C2C forward/inverse, Cooley-Tukey/Bluestein, single/multi-batch</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_z2z_{fwd,inv}_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Double-precision complex</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_r2c_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Float real → complex</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_d2z_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Double real → complex</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_c2r_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Complex → float real</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_z2d_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Double complex → double real</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_r2c_c2r_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Real roundtrip validation</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_exec_d2z_z2d_{ct,bs}_{s,b}</span></code></p></td>
+<td><p>Double real roundtrip</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Suffix key: <code class="docutils literal notranslate"><span class="pre">s</span></code> = single-batch, <code class="docutils literal notranslate"><span class="pre">b</span></code> = multi-batch; <code class="docutils literal notranslate"><span class="pre">ct</span></code> = Cooley-Tukey, <code class="docutils literal notranslate"><span class="pre">bs</span></code> = Bluestein/Rader.</p>
+</section>
+<section id="run-individual-tests">
+<h4>Run Individual Tests<a class="headerlink" href="#run-individual-tests" title="Link to this heading">#</a></h4>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run a specific test</span>
+./build/ctest/test_exec_c2c_fwd_ct_s
+
+<span class="c1"># With custom parameters</span>
+./build/ctest/test_exec_c2c_fwd_ct_s<span class="w"> </span>--nx<span class="w"> </span><span class="m">4096</span><span class="w"> </span>--batch<span class="w"> </span><span class="m">64</span><span class="w"> </span>--direction<span class="w"> </span>forward
+
+<span class="c1"># Run all ctest tests</span>
+<span class="nb">cd</span><span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ctest<span class="w"> </span>--output-on-failure
+</pre></div>
+</div>
+<p>Each test binary accepts: <code class="docutils literal notranslate"><span class="pre">--nx</span></code>, <code class="docutils literal notranslate"><span class="pre">--batch</span></code>, <code class="docutils literal notranslate"><span class="pre">--direction</span></code>, <code class="docutils literal notranslate"><span class="pre">--scale</span></code>, <code class="docutils literal notranslate"><span class="pre">--json-file</span></code>.</p>
+</section>
+</section>
+<section id="run-python-tests">
+<h3>Run Python Tests<a class="headerlink" href="#run-python-tests" title="Link to this heading">#</a></h3>
+<p>Tests for the <code class="docutils literal notranslate"><span class="pre">flagfft_codegen</span></code> Python package. Requires the package installed (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code>).</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all Python tests</span>
+pytest<span class="w"> </span>tests/python/<span class="w"> </span>-v
+
+<span class="c1"># Run only codegen-marked tests</span>
+pytest<span class="w"> </span>tests/python/<span class="w"> </span>-v<span class="w"> </span>-m<span class="w"> </span>codegen
+</pre></div>
+</div>
+<p>Tests cover codelet structure, kernel source generation, JIT CSV parsing, and Bluestein/reshape/R2C metadata. Tests that require Triton/TLE are automatically skipped when dependencies are unavailable.</p>
+</section>
+<section id="configure-tests">
+<h3>Configure Tests<a class="headerlink" href="#configure-tests" title="Link to this heading">#</a></h3>
+<p>The test parameter space is defined in <code class="docutils literal notranslate"><span class="pre">conf/</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">conf/operators.yaml</span></code> — 14 operator definitions (1D/2D × C2C/Z2Z/R2C/D2Z/C2R/Z2D, plus roundtrip)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conf/test_matrix.yaml</span></code> — Parameter space: 11 smooth sizes (CT), 4 prime/composite sizes (Bluestein), 3 batch sizes, 3 scale factors, 6 combination rules</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../getting_started/install.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Install FlagFFT</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../reference/api-reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">FlagFFT C API Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-c-api">Use the C API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-plans">Create Plans</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#execute-transforms">Execute Transforms</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manage-plans">Manage Plans</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-types">Data Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transform-types">Transform Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-features">Supported Features</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planned-not-yet-supported">Planned / Not Yet Supported</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-native-cli">Use the Native CLI</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark-fft-performance">Benchmark FFT Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-tune-planned">Auto-Tune (planned)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exit-codes">Exit Codes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-tests">Run Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-unified-test-runner">Use the Unified Test Runner</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#usage">Usage</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#combination-presets">Combination Presets</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#output">Output</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-c-tests">Run C++ Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#test-structure">Test Structure</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#run-individual-tests">Run Individual Tests</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-python-tests">Run Python Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-tests">Configure Tests</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagfft_zh/user_guide/user-guide.html">中文</a></body>
+</html>

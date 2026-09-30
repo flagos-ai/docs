@@ -1,0 +1,898 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Arm64" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/arm64.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="Overview: Arm64 is the first fully implemented backend for TLE-CPU, targeting the Arm v9-A platform (NEON / SVE2 + i8mm + bf16), with reference hardware CIX P1 (CD8180, 8× Cortex-A720 big cores + 4× A520 little cores). Software baseline: Triton 3.3 / LLVM a66376b0 / PyTorch 2.10 (CPU) / Python 3...." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="Overview: Arm64 is the first fully implemented backend for TLE-CPU, targeting the Arm v9-A platform (NEON / SVE2 + i8mm + bf16), with reference hardware CIX P1 (CD8180, 8× Cortex-A720 big cores + 4× A520 little cores). Software baseline: Triton 3.3 / LLVM a66376b0 / PyTorch 2.10 (CPU) / Python 3...." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Arm64 &#8212; FlagTree Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/arm64.4234d6a4-eea5-4dd3-a57f-4a53f9fbf666.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/arm64';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/arm64.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Use TLE-CPU" href="use-tle-cpu.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagTree Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../release_notes/release-notes.html">Release Notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v070.html">FlagTree 0.7.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v060.html">FlagTree 0.6.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v050.html">FlagTree 0.5.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v040.html">FlagTree 0.4.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v030.html">FlagTree 0.3.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v020.html">FlagTree 0.2.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v010.html">FlagTree 0.1.0 release</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagTree_overview/FlagTree-overview.html">FlagTree Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagTree_overview/features.html">Features</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/compilation-architecture.html">FlagTree compilation architecture</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/common-architecture.html">Common architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html">FlagTree extensible framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-hints.html">Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-tle.html">TLE-Lite, TLE-Struct, and TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flir.html">FLIR: Unified intermediate layer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">Getting Started</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">Install FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install-arm64-cpu.html">Install on Arm64 CPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="user-guide.html">User Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="use-hints.html">Use Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-lite.html">Use TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-struct.html">Use TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-raw.html">Use TLE-Raw</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="use-tle-cpu.html">Use TLE-CPU</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/arm64.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Arm64</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arm64-lowering-path">Arm64 lowering path</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-extension-operations">TLE extension operations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extension-operations-summary">Extension Operations Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-conventions">Data conventions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-essentials-dispatch-is-performance">Design essentials: Dispatch is performance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thread-model-and-tuning">Thread model and tuning</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="arm64">
+<h1>Arm64<a class="headerlink" href="#arm64" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>Arm64 is the first fully implemented backend for TLE-CPU, targeting the Arm v9-A platform (NEON / SVE2 + i8mm + bf16), with reference hardware CIX P1 (CD8180, 8× Cortex-A720 big cores + 4× A520 little cores).</p>
+<p>Software baseline: Triton 3.3 / LLVM a66376b0 / PyTorch 2.10 (CPU) / Python 3.11.</p>
+<ul class="simple">
+<li><p><strong>Compiler layer</strong>: Arm instruction selection and thread management optimizations upstreamable to Triton-CPU, making plain <code class="docutils literal notranslate"><span class="pre">tl.dot</span></code> correct and efficient on Arm.</p></li>
+<li><p><strong>Operator layer</strong>: Encapsulating decode hotspots into 6 TLE extension operations <code class="docutils literal notranslate"><span class="pre">create_cpu_*</span></code>.</p></li>
+</ul>
+<section id="arm64-lowering-path">
+<h3>Arm64 lowering path<a class="headerlink" href="#arm64-lowering-path" title="Link to this heading">#</a></h3>
+<p>Extension operations, after passing through the TritonCPU dialect, split into two paths based on lowering:</p>
+<div class="highlight-Plain notranslate"><div class="highlight"><pre><span></span>flagtree-cpu  (TritonCPU MLIR dialect, splits into two lowering paths ↓)
+             ┌───────────┴───────────┐
+    Fused / GEMV type (6 extension ops)           General Triton Ops
+    → Call libTritonCPURuntime.so                (tl.load / tl.dot / …)
+      (precompiled NEON/SVE2 C kernels)           → LLVM codegen → ISA instructions
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Fused / GEMV type (6): Lowered to calls into the precompiled <code class="docutils literal notranslate"><span class="pre">libTritonCPURuntime.so</span></code> (NEON/SVE2 C kernels)</p></li>
+<li><p>General Triton ops (<code class="docutils literal notranslate"><span class="pre">tl.load</span> <span class="pre">/</span> <span class="pre">tl.dot</span> <span class="pre">/</span> <span class="pre">…</span></code>): Generate ISA instructions via LLVM codegen; instruction selection for i8mm / SVE2 etc. is handled by compiler layer optimizations.</p></li>
+<li><p>The Arm64 CPU backend also includes backend work to enable TLE: upstreamable Triton-CPU i8mm/BF16 instruction selection, OMP thread tuning, codegen fixes. These are orthogonal to TLE extension ops (the latter go through the runtime library, not compiler codegen).</p></li>
+</ul>
+</section>
+</section>
+<section id="tle-extension-operations">
+<h2>TLE extension operations<a class="headerlink" href="#tle-extension-operations" title="Link to this heading">#</a></h2>
+<p>The Arm64 backend registers 6 extension operations covering decode hotspots such as GEMV / normalization / activation / attention, each corresponding to a named tensor operation. Called within <code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> via <code class="docutils literal notranslate"><span class="pre">triton.language.extra.cpu.tle_ops</span></code>.</p>
+<section id="extension-operations-summary">
+<h3>Extension Operations Summary<a class="headerlink" href="#extension-operations-summary" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Extension Operation (Signature)</p></th>
+<th class="head"><p>Purpose / Semantics</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Packing</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sdot_pack_weights(b_ptr,</span> <span class="pre">b_packed_ptr,</span> <span class="pre">K,</span> <span class="pre">N)</span></code></p></td>
+<td><p>INT8 weights <code class="docutils literal notranslate"><span class="pre">[K,N]</span></code> row-major → SDOT format <code class="docutils literal notranslate"><span class="pre">[K//4,N//4,4,4]</span></code>; done once offline/at load time, reused by GEMV</p></td>
+</tr>
+<tr class="row-odd"><td><p>GEMV</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sdot_gemv(a_ptr,</span> <span class="pre">b_packed_ptr,</span> <span class="pre">c_ptr,</span> <span class="pre">K,</span> <span class="pre">N)</span></code></p></td>
+<td><p>M=1 INT8 GEMV (K-outer + NEON SDOT, N-dim OMP); <code class="docutils literal notranslate"><span class="pre">C[N]=A[K]&#64;B_packed</span></code> (int32 accumulation); calls runtime <code class="docutils literal notranslate"><span class="pre">sdot_gemv_m1_prepacked()</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>GEMV</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sdot_gemv_fused_bf16(x_ptr,</span> <span class="pre">b_packed_ptr,</span> <span class="pre">w_scale_ptr,</span> <span class="pre">out_ptr,</span> <span class="pre">K,</span> <span class="pre">N)</span></code></p></td>
+<td><p>BF16 dynamic quantization → SDOT GEMV → dequantize back to BF16 in one pass; W8A8-dynamic decode main path</p></td>
+</tr>
+<tr class="row-odd"><td><p>Normalization</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rms_norm(x_ptr,</span> <span class="pre">weight_ptr,</span> <span class="pre">out_ptr,</span> <span class="pre">D,</span> <span class="pre">eps)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">x/√(mean(x²)+eps)·weight</span></code>; single NEON kernel replaces 5 decomposed ATen ops</p></td>
+</tr>
+<tr class="row-even"><td><p>Activation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">swiglu(gate_ptr,</span> <span class="pre">up_ptr,</span> <span class="pre">out_ptr,</span> <span class="pre">N)</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">out</span> <span class="pre">=</span> <span class="pre">silu(gate)·up</span></code>; replaces 2 ATen calls</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fusion</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">flash_attn_decode(q_ptr,</span> <span class="pre">k_ptr,</span> <span class="pre">v_ptr,</span> <span class="pre">out_ptr,</span> <span class="pre">seq_len,</span> <span class="pre">head_dim,</span> <span class="pre">sm_scale,</span> <span class="pre">num_heads,</span> <span class="pre">num_kv_heads,</span> <span class="pre">stride_kn,</span> <span class="pre">stride_vn)</span></code></p></td>
+<td><p>M=1 Flash Attention, online softmax, head-dim OMP, GQA; replaces ATen SDPA fallback</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="data-conventions">
+<h3>Data conventions<a class="headerlink" href="#data-conventions" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Activation / Output</strong>: bf16; exception: <code class="docutils literal notranslate"><span class="pre">sdot_gemv</span></code> output <code class="docutils literal notranslate"><span class="pre">c_ptr</span></code> is int32.</p></li>
+<li><p><strong>Packed Weights</strong>: int8, SDOT format <code class="docutils literal notranslate"><span class="pre">[K//4,N//4,4,4]</span></code></p></li>
+<li><p><strong>Per-channel Weight Scale</strong>: fp32 <code class="docutils literal notranslate"><span class="pre">[N]</span></code>.</p></li>
+<li><p><strong>Single-thread Optimal Threshold</strong>: <code class="docutils literal notranslate"><span class="pre">rms_norm</span></code> D ≤ 4096, <code class="docutils literal notranslate"><span class="pre">swiglu</span></code> N ≤ 6144 (typical decode dimensions).</p></li>
+<li><p><strong>flash_attn Shapes</strong>: <code class="docutils literal notranslate"><span class="pre">q</span> <span class="pre">[num_heads,</span> <span class="pre">head_dim]</span></code>, <code class="docutils literal notranslate"><span class="pre">k/v</span> <span class="pre">[num_kv_heads,</span> <span class="pre">seq_len,</span> <span class="pre">head_dim]</span></code>,</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">sm_scale</span></code> typically <code class="docutils literal notranslate"><span class="pre">head_dim^-0.5</span></code>.</p>
+<ul class="simple">
+<li><p><strong>Precision</strong>: GEMV extension ops implement W8A8-dynamic (per-channel int8 weights + fp32 scale + activation dynamic quantization), quantization logic inlined in <code class="docutils literal notranslate"><span class="pre">sdot_gemv_fused_bf16</span></code>, using i8mm SDOT throughout.</p></li>
+</ul>
+</section>
+</section>
+<section id="usage-examples">
+<h2>Usage examples<a class="headerlink" href="#usage-examples" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">rms_norm</span></code> end-to-end (<code class="docutils literal notranslate"><span class="pre">&#64;triton.jit</span></code> → <code class="docutils literal notranslate"><span class="pre">create_cpu_rms_norm</span></code> → NEON runtime):</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span><span class="o">,</span><span class="w"> </span><span class="nn">triton</span><span class="o">,</span><span class="w"> </span><span class="nn">triton.language</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">triton.language.extra.cpu</span><span class="w"> </span><span class="kn">import</span> <span class="n">tle_ops</span> <span class="k">as</span> <span class="n">tle_cpu</span>
+
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rms_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">w_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">D</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">tle_cpu</span><span class="o">.</span><span class="n">rms_norm</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">w_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+
+<span class="n">D</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+<span class="n">rms_kernel</span><span class="p">[(</span><span class="mi">1</span><span class="p">,)](</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">)</span>
+<span class="c1"># Expected max err ≈ 0.0143 (bf16 precision, deterministic)</span>
+</pre></div>
+</div>
+<p>W8A8 decode main path <code class="docutils literal notranslate"><span class="pre">sdot_gemv_fused_bf16</span></code>:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">mlp_down_kernel</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">w_packed_ptr</span><span class="p">,</span> <span class="n">w_scale_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span>
+                    <span class="n">K</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">,</span> <span class="n">N</span><span class="p">:</span> <span class="n">tl</span><span class="o">.</span><span class="n">constexpr</span><span class="p">):</span>
+    <span class="n">tle_cpu</span><span class="o">.</span><span class="n">sdot_gemv_fused_bf16</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">w_packed_ptr</span><span class="p">,</span> <span class="n">w_scale_ptr</span><span class="p">,</span> <span class="n">out_ptr</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="design-essentials-dispatch-is-performance">
+<h2>Design essentials: Dispatch is performance<a class="headerlink" href="#design-essentials-dispatch-is-performance" title="Link to this heading">#</a></h2>
+<p>The decode bottleneck is often not compute power but operator dispatch count (pure ATen baseline ~ thousands of dispatches per token). Acceleration has two orthogonal axes:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Axis</p></th>
+<th class="head"><p>Approach</p></th>
+<th class="head"><p>Benefit</p></th>
+<th class="head"><p>Status</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Faster per call</p></td>
+<td><p>Op-level extension ops (<code class="docutils literal notranslate"><span class="pre">rms_norm</span></code> / <code class="docutils literal notranslate"><span class="pre">swiglu</span></code> / <code class="docutils literal notranslate"><span class="pre">sdot_gemv*</span></code> / <code class="docutils literal notranslate"><span class="pre">flash_attn_decode</span></code>)</p></td>
+<td><p>NEON/i8mm accelerates each call, each replaces several ATen ops</p></td>
+<td><p>Implemented (6 in this page)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Fewer calls</p></td>
+<td><p>Fuse entire layers/steps into one, dispatch → ≈layers → 1</p></td>
+<td><p>Eliminates dispatch overhead</p></td>
+<td><p>Should be done by CPU fusion pass, not monolithic C ops</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="thread-model-and-tuning">
+<h3>Thread model and tuning<a class="headerlink" href="#thread-model-and-tuning" title="Link to this heading">#</a></h3>
+<p><strong>Thread Model</strong>: Parallelism is self-managed by the TLE runtime. In scenarios where inference is executed through torch (e.g., HF Transformers),</p>
+<p>multi-threaded parallelism for compute-intensive parts is initiated inside the TLE runtime kernel — <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">omp</span> <span class="pre">parallel</span></code> in <code class="docutils literal notranslate"><span class="pre">runtime_*.cpp</span></code>, partitioned along the N dimension / head dimension — not through torch’s <code class="docutils literal notranslate"><span class="pre">at::parallel_for</span></code> or its intra-op thread pool. Two configurations ensure TLE’s OMP does not contend for cores with torch:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">TORCH_NUM_THREADS=1</span></code></strong>: Disables torch’s own intra-op parallelism, giving all physical cores to the TLE runtime’s OMP.</p></li>
+<li><p><strong>Single OMP runtime</strong>: <code class="docutils literal notranslate"><span class="pre">build.py</span></code> explicitly links torch’s bundled <code class="docutils literal notranslate"><span class="pre">libgomp</span></code>, ensuring only one OMP runtime exists within the process, avoiding the oversubscription scenario where “torch and runtime each spawn N OMP threads, totaling 2N contending for cores.”</p></li>
+<li><p><strong>initiation and control of thread-level parallelism rests entirely with TLE</strong>：Because above, the initiation and control of thread-level parallelism rests entirely with TLE (the OMP regions in runtime kernels); torch only handles model orchestration (Python forward pass, operator scheduling) and tensor management, not thread-level parallelism.</p></li>
+</ul>
+<p><strong>Tuning (env / core binding):</strong></p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">GOMP_SPINCOUNT=infinity</span></code></strong> (OMP threads busy-wait, no sleeping): Largest single-item decode E2E gain (measured Qwen3.5 2B/4B +33% / +39%).</p></li>
+<li><p><strong>big.LITTLE bind big cores only</strong> (<code class="docutils literal notranslate"><span class="pre">taskset</span> <span class="pre">-c</span> <span class="pre">0,1,6,7,8,9,10,11</span></code>): Little cores mixed into the OMP thread pool stall at barriers, constraining overall performance by up to 2×.</p></li>
+<li><p><strong>Memory allocator and thread affinity</strong> (pure performance items that do not change computation results): <code class="docutils literal notranslate"><span class="pre">LD_PRELOAD</span></code> jemalloc reduces lock contention and fragmentation in multi-threaded memory allocation; <code class="docutils literal notranslate"><span class="pre">OMP_PLACES=cores</span></code> + <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND=close</span></code> binds OMP threads to physical cores, preventing thread migration and maintaining cache affinity.</p></li>
+<li><p><strong>Concurrency ceiling (CIX P1 platform)</strong>: Decode has non-parallelizable serial segments (measured at ~30%). By Amdahl’s Law, as thread count N→∞ the speedup ceiling ≈ 1/0.3 ≈ 3.3×, so marginal benefit of adding threads diminishes rapidly; compounded by big.LITTLE little-core barrier penalty (see above), optimal concurrency ≈ big core count (8), exceeding it degrades performance.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="use-tle-cpu.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Use TLE-CPU</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="examples.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arm64-lowering-path">Arm64 lowering path</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-extension-operations">TLE extension operations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extension-operations-summary">Extension Operations Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-conventions">Data conventions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-examples">Usage examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-essentials-dispatch-is-performance">Design essentials: Dispatch is performance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thread-model-and-tuning">Thread model and tuning</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagtree_zh/user_guide/arm64.html">中文</a></body>
+</html>

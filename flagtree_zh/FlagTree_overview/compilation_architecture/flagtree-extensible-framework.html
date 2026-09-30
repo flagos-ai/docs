@@ -1,0 +1,758 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FlagTree 可扩展框架" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="FlagTree 可扩展框架专门设计用于支持多后端编译和三级编译器语言，如 特性 部分所述。 后端扩展 ：FlagTree 遵循基于插件的架构，每个后端自包含在 third_party/[backend_name]/ 中。每个后端实现 BaseBackend 接口，通过 add_stages() 定义其编译管线，并提供后端特定的优化和代码生成。这种设计允许在不修改核心 Triton 代码的情况下添加新的后端。, 语言和编译器优化扩展 ：对于现有的 Triton 代码，FlagTree 采用增量扩展的方式，以完全兼容原生 Triton。这些扩展包括对通用架构的以下修改：- 对现有 Trit..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="FlagTree 可扩展框架专门设计用于支持多后端编译和三级编译器语言，如 特性 部分所述。 后端扩展 ：FlagTree 遵循基于插件的架构，每个后端自包含在 third_party/[backend_name]/ 中。每个后端实现 BaseBackend 接口，通过 add_stages() 定义其编译管线，并提供后端特定的优化和代码生成。这种设计允许在不修改核心 Triton 代码的情况下添加新的后端。, 语言和编译器优化扩展 ：对于现有的 Triton 代码，FlagTree 采用增量扩展的方式，以完全兼容原生 Triton。这些扩展包括对通用架构的以下修改：- 对现有 Trit..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>FlagTree 可扩展框架 &#8212; FlagTree 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../../_static/tippy/FlagTree_overview/compilation_architecture/flagtree-extensible-framework.e284af1e-a3c7-42a9-b9a5-a8f39581326f.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'FlagTree_overview/compilation_architecture/flagtree-extensible-framework';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html" />
+    <link rel="icon" href="../../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Hints" href="features-hints.html" />
+    <link rel="prev" title="通用架构" href="common-architecture.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree 文档中心 - Home"/>
+    <img src="../../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../index.html">
+                    FlagTree 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../release_notes/release-notes.html">发布说明</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v070.html">FlagTree 0.7.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v060.html">FlagTree 0.6.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v050.html">FlagTree 0.5.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v040.html">FlagTree 0.4.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v030.html">FlagTree 0.3.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v020.html">FlagTree 0.2.0 发布</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../release_notes/release_notes_v010.html">FlagTree 0.1.0 发布</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../FlagTree-overview.html">FlagTree 概述</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../features.html">特性</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="compilation-architecture.html">FlagTree 编译架构</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="common-architecture.html">通用架构</a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">FlagTree 可扩展框架</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features-hints.html">Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="features-tle.html">TLE-Lite、TLE-Struct 和 TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flir.html">FLIR：统一中间层</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../getting_started/getting-started.html">开始使用</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/requirements.html">系统要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install.html">安装 FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/install-arm64-cpu.html">在 Arm64 CPU 上安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../user_guide/user-guide.html">用户指南</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-hints.html">使用 Hints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-lite.html">使用 TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-struct.html">使用 TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/use-tle-raw.html">使用 TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../user_guide/use-tle-cpu.html">使用 TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../user_guide/arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guide/examples.html">示例</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/FlagTree_overview/compilation_architecture/flagtree-extensible-framework.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FlagTree 可扩展框架</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flagtree">
+<h1>FlagTree 可扩展框架<a class="headerlink" href="#flagtree" title="Link to this heading">#</a></h1>
+<p>FlagTree 可扩展框架专门设计用于支持多后端编译和三级编译器语言，如<a class="reference internal" href="features.html"><span class="std std-doc">特性</span></a>部分所述。</p>
+<ul class="simple">
+<li><p><strong>后端扩展</strong>：FlagTree 遵循基于插件的架构，每个后端自包含在 <code class="docutils literal notranslate"><span class="pre">third_party/[backend_name]/</span></code> 中。每个后端实现 BaseBackend 接口，通过 <code class="docutils literal notranslate"><span class="pre">add_stages()</span></code> 定义其编译管线，并提供后端特定的优化和代码生成。这种设计允许在不修改核心 Triton 代码的情况下添加新的后端。</p></li>
+<li><p><strong>语言和编译器优化扩展</strong>：对于现有的 Triton 代码，FlagTree 采用增量扩展的方式，以完全兼容原生 Triton。这些扩展包括对通用架构的以下修改：</p>
+<ul>
+<li><p>对现有 Triton 文件的修改：FlagTree 通过修改现有文件来增量扩展 Triton 的编译管线。例如，<code class="docutils literal notranslate"><span class="pre">python/triton/runtime/jit.py</span></code> 被扩展以解析 <code class="docutils literal notranslate"><span class="pre">#&#64;hint:</span></code> 注释并路由 TLE 语法，将提示附加到 AST 节点。TTIR 方言定义文件（<code class="docutils literal notranslate"><span class="pre">.td</span></code>）被扩展了新的属性定义，以将提示编码为 <code class="docutils literal notranslate"><span class="pre">tt.load</span></code> 等操作上的 MLIR 属性。后端编译器文件（例如 <code class="docutils literal notranslate"><span class="pre">backend/compiler.py</span></code>）被扩展以注册处理提示和 TLE 操作的新优化 Pass，并与现有的 Pass 管理基础设施集成。</p></li>
+<li><p>新增文件：FlagTree 在 <code class="docutils literal notranslate"><span class="pre">third_party/tle/</span></code> 中以新文件的形式引入了完整的 TLE 模块，包括方言定义（如 <code class="docutils literal notranslate"><span class="pre">tle.dsl_region</span></code> 等操作）、转换 Pass 实现（内存空间分配、异步加载 lowering 等）、LLVM 转换 Pass 以及 Python 语言绑定。这种模块化设计使 TLE 独立于核心 Triton，同时通过扩展的 TTIR 属性和后端 Pass 注册机制进行集成，从而在不修改通用架构的情况下实现共享内存管理和流水线优化等功能。</p></li>
+</ul>
+</li>
+</ul>
+<p>对于 TLE，FlagTree 最大程度地分离了 TLE 语言扩展（<code class="docutils literal notranslate"><span class="pre">python/triton/experimental/tle/</span></code>）和 TLE MLIR 方言（<code class="docutils literal notranslate"><span class="pre">third_party/tle/</span></code>）。TLE 语言构造在 Python 中定义，并通过 AST 处理管线集成；而 TLE 方言操作在 C++/MLIR 中实现，并通过编译管线集成。这种分离使语言特性和 IR 转换能够独立演进，提高了可维护性，并使不同的后端能够在编译管线的不同阶段采用 TLE 特性。</p>
+<p>以下代码结构展示了 FlagTree 如何组织其扩展：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flagtree</span><span class="o">/</span>
+<span class="err">├──</span> <span class="n">python</span><span class="o">/</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">triton</span><span class="o">/</span>                <span class="c1"># Triton 核心（现有）</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">compiler</span><span class="o">/</span>              
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">code_generator</span><span class="o">.</span><span class="n">py</span>  <span class="c1"># [已扩展] TLE 模块调度、Hints 提取</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">compiler</span><span class="o">.</span><span class="n">py</span>       
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">language</span><span class="o">/</span>              
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">core</span><span class="o">.</span><span class="n">py</span>            <span class="c1"># [已扩展] Hints</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">semantic</span><span class="o">.</span><span class="n">py</span>        <span class="c1"># [已扩展] Hints</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">runtime</span><span class="o">/</span>               
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">jit</span><span class="o">.</span><span class="n">py</span>             <span class="c1"># [已扩展] Hints</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">experimental</span><span class="o">/</span>          <span class="c1"># 语言扩展</span>
+<span class="err">│</span>   <span class="err">│</span>       <span class="err">└──</span> <span class="n">tle</span><span class="o">/</span>               <span class="c1"># TLE（Triton 语言扩展）</span>
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">├──</span> <span class="n">language</span><span class="o">/</span>      <span class="c1"># TLE 语言定义（扩展 AST 处理）</span>
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>   <span class="err">├──</span> <span class="n">core</span><span class="o">.</span><span class="n">py</span>    <span class="c1"># TLE-Lite：核心 TLE 语言特性（例如 tle.load）</span>
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>   <span class="err">├──</span> <span class="p">[</span><span class="n">gpu</span><span class="o">/</span><span class="n">npu</span><span class="p">]</span><span class="o">/</span> <span class="c1"># TLE-Struct：GPU 特定和 NPU 特定构造</span>
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">core</span><span class="o">.</span><span class="n">py</span>    
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>   <span class="err">│</span>   <span class="err">├──</span> <span class="n">semantic</span><span class="o">.</span><span class="n">py</span> 
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">types</span><span class="o">.</span><span class="n">py</span>   
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>   <span class="err">└──</span> <span class="n">raw</span><span class="o">/</span>       <span class="c1"># TLE-Raw：原始 MLIR 编程接口</span>
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>       <span class="err">├──</span> <span class="n">core</span><span class="o">.</span><span class="n">py</span>    
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">│</span>       <span class="err">└──</span> <span class="n">semantic</span><span class="o">.</span><span class="n">py</span>
+<span class="err">│</span>   <span class="err">│</span>           <span class="err">└──</span> <span class="n">raw</span><span class="o">/</span>           <span class="c1"># TLE-Raw 实现（扩展 AST 处理）</span>
+<span class="err">│</span>   <span class="err">│</span>               <span class="err">├──</span> <span class="n">mlir</span><span class="o">/</span>      <span class="c1"># TLE-Raw 的 MLIR 代码生成</span>
+<span class="err">│</span>   <span class="err">│</span>               <span class="err">│</span>   <span class="err">├──</span> <span class="n">codegen</span><span class="o">.</span><span class="n">py</span>  
+<span class="err">│</span>   <span class="err">│</span>               <span class="err">│</span>   <span class="err">└──</span> <span class="n">runtime</span><span class="o">.</span><span class="n">py</span> 
+<span class="err">│</span>   <span class="err">│</span>               <span class="err">└──</span> <span class="n">runtime</span><span class="o">.</span><span class="n">py</span> <span class="c1"># TLE-Raw 的运行时支持</span>
+<span class="err">│</span>   <span class="err">├──</span> <span class="n">tutorials</span><span class="o">/</span>             <span class="c1"># 教程和示例（不在代码路径中）</span>
+<span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">tle</span><span class="o">/</span>                <span class="c1"># TLE 示例</span>
+<span class="err">│</span>   <span class="err">│</span>       <span class="err">├──</span> <span class="mi">01</span><span class="o">-</span><span class="n">sparse</span><span class="o">-</span><span class="n">mla</span><span class="o">.</span><span class="n">py</span>
+<span class="err">│</span>   <span class="err">│</span>       <span class="err">└──</span> <span class="n">raw</span><span class="o">/</span>            <span class="c1"># TLE-Raw 示例</span>
+<span class="err">│</span>   <span class="err">└──</span> <span class="n">test</span><span class="o">/</span>                   <span class="c1"># 测试代码（不在代码路径中）</span>
+<span class="err">│</span>       <span class="err">└──</span> <span class="n">tle</span><span class="o">/</span>                <span class="c1"># TLE 测试</span>
+<span class="err">│</span>           <span class="err">├──</span> <span class="n">integration</span><span class="o">/</span>    <span class="c1"># 集成测试</span>
+<span class="err">│</span>           <span class="err">├──</span> <span class="n">unit</span><span class="o">/</span>           <span class="c1"># 单元测试</span>
+<span class="err">│</span>           <span class="err">└──</span> <span class="n">run_tests</span><span class="o">.</span><span class="n">py</span>
+<span class="err">│</span>
+<span class="err">└──</span> <span class="n">third_party</span><span class="o">/</span>              
+    <span class="err">├──</span> <span class="p">[</span><span class="n">backend_name</span><span class="p">]</span><span class="o">/</span>       <span class="c1"># 后端特定扩展</span>
+    <span class="err">│</span>   <span class="err">├──</span> <span class="n">backend</span><span class="o">/</span>           
+    <span class="err">│</span>   <span class="err">│</span>   <span class="err">└──</span> <span class="n">compiler</span><span class="o">.</span><span class="n">py</span>    <span class="c1"># [已扩展] TLE 和 HINTS Pass 分发</span>
+    <span class="err">│</span>   <span class="err">├──</span> <span class="n">include</span><span class="o">/</span>           <span class="c1"># TTIR 方言定义（可能用属性扩展 tt.load）</span>
+    <span class="err">│</span>   <span class="err">└──</span> <span class="n">lib</span><span class="o">/</span>                           
+    <span class="err">├──</span> <span class="n">tle</span><span class="o">/</span>                  <span class="c1"># TLE MLIR 扩展</span>
+    <span class="err">│</span>   <span class="err">└──</span> <span class="n">dialect</span><span class="o">/</span>           <span class="c1"># TLE 方言实现</span>
+    <span class="err">│</span>       <span class="err">├──</span> <span class="n">include</span><span class="o">/</span><span class="n">IR</span><span class="o">/</span>    
+    <span class="err">│</span>       <span class="err">├──</span> <span class="n">lib</span><span class="o">/</span><span class="n">IR</span><span class="o">/</span>       
+    <span class="err">│</span>       <span class="err">├──</span> <span class="n">lib</span><span class="o">/</span><span class="n">Conversion</span><span class="o">/</span>  
+    <span class="err">│</span>       <span class="err">└──</span> <span class="n">lib</span><span class="o">/</span><span class="n">Transforms</span><span class="o">/</span>
+    <span class="err">└──</span> <span class="n">flir</span><span class="o">/</span>                 <span class="c1"># FLIR：FlagTree 维护的通用 Linalg，包含 HINTS Pass</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>上述代码结构仅展示了与 FlagTree 扩展相关的关键文件和目录。代码库中的许多其他文件和子目录为清晰起见已被省略。</p>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="common-architecture.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">通用架构</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="features-hints.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Hints</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../../flagtree_en/FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html">English</a></body>
+</html>

@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"#id4\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u9519\u8bef<a class=\"headerlink\" href=\"#id4\" title=\"Link to this heading\">#</a></h2><p>\u53ef\u4ee5\u4ece <code class=\"docutils literal notranslate\"><span class=\"pre\">flagquantum.errors</span></code> \u6355\u83b7\u7a33\u5b9a\u7684\u751f\u547d\u5468\u671f\u7c7b\u522b\uff1a</p>", "a[href=\"#id3\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u9762\u5411\u76ee\u6807\u7684\u7f16\u8bd1\u4e0e\u8def\u7531<a class=\"headerlink\" href=\"#id3\" title=\"Link to this heading\">#</a></h2><p>\u5f53\u5177\u4f53\u62d3\u6251\u5f88\u91cd\u8981\u65f6\uff0c\u8bf7\u63d0\u4f9b\u663e\u5f0f\u8026\u5408\u56fe\uff1a</p>", "a[href=\"#flagquantum-ir\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u7ebf\u8def\u4e0e FlagQuantum IR<a class=\"headerlink\" href=\"#flagquantum-ir\" title=\"Link to this heading\">#</a></h1><h2>\u7ebf\u8def\u6784\u5efa<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">fq.Circuit(n_qubits=...)</span></code> \u662f\u8868\u8ff0\u7ebf\u8def\u89c4\u6a21\u7684\u9996\u9009\u5199\u6cd5\u3002\u6309\u4f4d\u7f6e\u6784\u9020\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">n_wires=</span></code> \u4e0e\u65e7\u7684 <code class=\"docutils literal notranslate\"><span class=\"pre\">nqubits=</span></code> \u5199\u6cd5\u4ecd\u7136\u517c\u5bb9\uff1b\u522b\u540d\u51b2\u7a81\u4f1a\u5728\u6784\u9020\u65f6\u5931\u8d25\u3002\u8fd0\u884c\u65f6\u3001\u7f16\u8bd1\u5668\u4e0e IR \u5185\u90e8\u4f9d\u65e7\u4f7f\u7528 <em>wire</em> \u8868\u793a\u903b\u8f91\u6620\u5c04\u3002</p>", "a[href=\"#id1\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u7ebf\u8def\u6784\u5efa<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">fq.Circuit(n_qubits=...)</span></code> \u662f\u8868\u8ff0\u7ebf\u8def\u89c4\u6a21\u7684\u9996\u9009\u5199\u6cd5\u3002\u6309\u4f4d\u7f6e\u6784\u9020\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">n_wires=</span></code> \u4e0e\u65e7\u7684 <code class=\"docutils literal notranslate\"><span class=\"pre\">nqubits=</span></code> \u5199\u6cd5\u4ecd\u7136\u517c\u5bb9\uff1b\u522b\u540d\u51b2\u7a81\u4f1a\u5728\u6784\u9020\u65f6\u5931\u8d25\u3002\u8fd0\u884c\u65f6\u3001\u7f16\u8bd1\u5668\u4e0e IR \u5185\u90e8\u4f9d\u65e7\u4f7f\u7528 <em>wire</em> \u8868\u793a\u903b\u8f91\u6620\u5c04\u3002</p>", "a[href=\"#ir\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">IR \u5e8f\u5217\u5316\u4e0e\u6821\u9a8c<a class=\"headerlink\" href=\"#ir\" title=\"Link to this heading\">#</a></h2><p>FlagQuantum IR \u662f\u7248\u672c\u5316\u3001\u53ef\u5e8f\u5217\u5316\u5e76\u7ecf\u8fc7\u6821\u9a8c\u7684\u3002<code class=\"docutils literal notranslate\"><span class=\"pre\">fq.CircuitIR</span></code> \u5c5e\u4e8e\u7a33\u5b9a\u63a5\u53e3\u9762\uff0c<code class=\"docutils literal notranslate\"><span class=\"pre\">fq.IR_VERSION</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">fq.IRSerializationError</span></code> \u4e0e <code class=\"docutils literal notranslate\"><span class=\"pre\">fq.IRValidationError</span></code> \u63cf\u8ff0\u4e86\u8fd9\u4e00\u8fb9\u754c\u3002\u4e0d\u517c\u5bb9\u7684 schema \u53d8\u66f4\u9700\u8981\u663e\u5f0f\u8fc1\u79fb\u3002</p>", "a[href=\"#id2\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u4e0e\u76ee\u6807\u65e0\u5173\u7684\u4f18\u5316<a class=\"headerlink\" href=\"#id2\" title=\"Link to this heading\">#</a></h2><p>\u7f16\u8bd1\u5668\u4f18\u5316\u662f\u9762\u5411\u4e13\u5bb6\u7684\u3001\u4e0e\u76ee\u6807\u65e0\u5173\u7684\u53d8\u6362\uff0c\u8fd4\u56de\u65b0\u7684 IR \u4e14\u4e0d\u4fee\u6539\u8f93\u5165\uff1a</p>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

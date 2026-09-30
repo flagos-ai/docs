@@ -1,0 +1,1418 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Use TLE-Lite" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/use-tle-lite.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="This section introduces how to use TLE-Lite. TLE-Lite is available on trition_3.6.x branch. Memory management: You can use the following operations to manage the memory. tle.load: tle.load loads a tensor asynchronously from GMEM. It supports asynchronously hint. Tensor slicing: Splits the input t..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="This section introduces how to use TLE-Lite. TLE-Lite is available on trition_3.6.x branch. Memory management: You can use the following operations to manage the memory. tle.load: tle.load loads a tensor asynchronously from GMEM. It supports asynchronously hint. Tensor slicing: Splits the input t..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Use TLE-Lite &#8212; FlagTree Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/use-tle-lite.1ae4fbe2-a6bf-452f-8fe5-9ca6331b61f8.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/use-tle-lite';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/use-tle-lite.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Use TLE-Struct" href="use-tle-struct.html" />
+    <link rel="prev" title="Use Hints" href="use-hints.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagTree Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagTree Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagTree Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../release_notes/release-notes.html">Release Notes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v070.html">FlagTree 0.7.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v060.html">FlagTree 0.6.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v050.html">FlagTree 0.5.0 Release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v040.html">FlagTree 0.4.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v030.html">FlagTree 0.3.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v020.html">FlagTree 0.2.0 release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../release_notes/release_notes_v010.html">FlagTree 0.1.0 release</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../FlagTree_overview/FlagTree-overview.html">FlagTree Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../FlagTree_overview/features.html">Features</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/compilation-architecture.html">FlagTree compilation architecture</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/common-architecture.html">Common architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flagtree-extensible-framework.html">FlagTree extensible framework</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-hints.html">Hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/features-tle.html">TLE-Lite, TLE-Struct, and TLE-Raw</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../FlagTree_overview/compilation_architecture/flir.html">FLIR: Unified intermediate layer</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../getting_started/getting-started.html">Getting Started</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install.html">Install FlagTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/install-arm64-cpu.html">Install on Arm64 CPU</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-nv.html">💫 NVIDIA nvidia</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.html">💫 NVIDIA TileIR tileir3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-amd.html">💫 AMD amd</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-aipu.html">💫 ARM China（安谋科技）aipu3.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-enflame.html">💫 Enflame（燧原）enflame3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ascend.html">💫 Huawei Ascend（华为昇腾）ascend3.5</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.html">💫 Huixi Intelligence（辉羲智能）rpu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-hcu.html">💫 HYGON（海光信息）hcu3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.html">💫 ILUVATAR（天数智芯）iluvatar3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-metax.html">💫 MetaX（沐曦股份）metax3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-mthreads.html">💫 Moore Threads（摩尔线程）mthreads3.6</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.html">💫 SpacemiT（进迭时空）spacemit3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.html">💫 Sunrise（曦望芯科）sunrise3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.html">💫 T-Head（平头哥）ppu3.6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.html">💫 Tsingmicro（清微智能）tsingmicro3.6</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.html">💫 KLX xpu3.6</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="user-guide.html">User Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="use-hints.html">Use Hints</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Use TLE-Lite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-struct.html">Use TLE-Struct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use-tle-raw.html">Use TLE-Raw</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="use-tle-cpu.html">Use TLE-CPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="arm64.html">Arm64</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/use-tle-lite.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Use TLE-Lite</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-management">Memory management</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-load">tle.load</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-slicing">Tensor slicing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-extract-tile">tle.extract_tile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-insert-tile">tle.insert_tile</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scan-and-sort-ops">Scan and sort Ops</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-cumsum">tle.cumsum</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline">Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipe-and-stage">Pipe and stage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#producer">Producer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#consumer">Consumer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#payload-fields">Payload fields</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifecycle">Lifecycle</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">Simple example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution">Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-mesh">device mesh</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-device-mesh">tle.device_mesh</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sharding-specification">Sharding specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronization">Synchronization</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-distributed-barrier">tle.distributed_barrier</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-access">Remote access</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mesh-coordinates-and-resharding">Mesh coordinates and resharding</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-shard-id">tle.shard_id</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-reshard">tle.reshard</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-domains-of-remote-access">Target domains of remote access</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cluster-path-intra-cluster-communication-dsmem">Cluster path (intra-cluster communication, DSMEM)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-path-intra-node-inter-gpu-communication-nvlink-p2p">Device path (intra-node inter-GPU communication, NVLink P2P)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#node-path-inter-node-communication-flagcx-rdma">Node path (inter-node communication, FlagCX/RDMA)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal">tle.signal</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal-wait">tle.signal_wait</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#combined-examples">Combined examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#asynchronous-filtering-and-compaction">Asynchronous filtering and compaction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelined-tile-post-processing">Pipelined tile post-processing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-field-pipe-with-selective-readers">Multi-field pipe with selective readers</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#distributed-exchange-and-resharding">Distributed exchange and resharding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primitives-interactive-with-local-ptr">Primitives interactive with local_ptr</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="use-tle-lite">
+<h1>Use TLE-Lite<a class="headerlink" href="#use-tle-lite" title="Link to this heading">#</a></h1>
+<p>This section introduces how to use TLE-Lite. TLE-Lite is available on trition_3.6.x branch.</p>
+<section id="memory-management">
+<h2>Memory management<a class="headerlink" href="#memory-management" title="Link to this heading">#</a></h2>
+<p>You can use the following operations to manage the memory.</p>
+<section id="tle-load">
+<h3>tle.load<a class="headerlink" href="#tle-load" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.load</span></code> loads a tensor asynchronously from GMEM. It supports asynchronously hint.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="tensor-slicing">
+<h2>Tensor slicing<a class="headerlink" href="#tensor-slicing" title="Link to this heading">#</a></h2>
+<p>Splits the input tensor into a grid of sub-tiles based on the specified sub-tile shape, and extracts the sub-tile at the given coordinates.
+GPU: Supports extraction into registers and shared memory.</p>
+<section id="tle-extract-tile">
+<h3>tle.extract_tile<a class="headerlink" href="#tle-extract-tile" title="Link to this heading">#</a></h3>
+<p>Splits the input tensor into a grid of sub-tiles based on the specified sub-tile shape, and extracts the sub-tile at the given coordinates.</p>
+<p>Supports extraction into registers and shared memory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># x is [4, 4]</span>
+<span class="c1"># z is [2, 2]</span>
+<span class="c1"># Split x into a sub-tile grid with shape=[2, 2], and extract the sub-tile at [0, 0]</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">extract_tile</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-insert-tile">
+<h3>tle.insert_tile<a class="headerlink" href="#tle-insert-tile" title="Link to this heading">#</a></h3>
+<p>Splits the input tensor into a grid of sub-tiles based on the sub-tile shape, and updates the sub-tile at the specified coordinates with a new tile.</p>
+<p>Supports updates from registers and shared memory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># x is [4, 4], y is [2, 2], z is [4, 4]</span>
+<span class="c1"># Split x into sub-tiles of shape=[2, 2], update the [0, 0] sub-tile with y, and return the full [4, 4] tensor</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">insert_tile</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="scan-and-sort-ops">
+<h2>Scan and sort Ops<a class="headerlink" href="#scan-and-sort-ops" title="Link to this heading">#</a></h2>
+<p>Scan and sort Ops provide partial tensor primitives such as prefix, rank, and selection, suitable for histogram-based top-k, stream compaction, and block-level sorting and bucketing scenarios.</p>
+<p>TLE-Lite keeps these operations as high-level semantics rather than binding them to a specific hardware implementation: users describe the scan and sort intent, and the backend selects register or shared memory lowering strategies based on the hardware.</p>
+<section id="tle-cumsum">
+<h3>tle.cumsum<a class="headerlink" href="#tle-cumsum" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.cumsum(input,</span> <span class="pre">axis=0,</span> <span class="pre">reverse=False,</span> <span class="pre">dtype=None)</span></code> computes exclusive cumulative sum and total sum along the <code class="docutils literal notranslate"><span class="pre">axis</span></code> dimension in one operation.</p>
+<ul class="simple">
+<li><p><strong>Signature</strong>: <code class="docutils literal notranslate"><span class="pre">tle.cumsum(input,</span> <span class="pre">axis=0,</span> <span class="pre">reverse=False,</span> <span class="pre">dtype=None)</span></code></p></li>
+<li><p><strong>Purpose</strong>: Uses a single semantic scan op to compute both the exclusive prefix/suffix sum and total sum of a block tensor.</p></li>
+<li><p><strong>Returns</strong>: <code class="docutils literal notranslate"><span class="pre">(exclusive_sum,</span> <span class="pre">total_sum)</span></code>.</p></li>
+<li><p><strong>Typical scenarios</strong>: top-k, histogram prefix, stream compaction, and block-level partition logic requiring partial rank/offset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exclusive</span></code> has the same shape as <code class="docutils literal notranslate"><span class="pre">input</span></code>; <code class="docutils literal notranslate"><span class="pre">total</span></code> is the scalar sum of the scanned block.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reverse=True</span></code> indicates a reversed exclusive sum, suitable for suffix count in descending radix/top-k selection.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> can explicitly control the accumulation/result type. By default, narrow integers are promoted to 32-bit integers, and bfloat16 is promoted to float32.</p></li>
+<li><p>For inclusive cumulative sum, use <code class="docutils literal notranslate"><span class="pre">exclusive_sum</span> <span class="pre">+</span> <span class="pre">input</span></code>.</p></li>
+<li><p>Use explicit mask loads for invalid lanes and set inactive lanes to 0, ensuring <code class="docutils literal notranslate"><span class="pre">total_sum</span></code> only counts valid elements.</p></li>
+<li><p>Supported scope is static rank-1 block tensors with <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>; this covers the histogram and radix-selection workloads already used by TLE top-k kernels.</p></li>
+</ul>
+<p>Simple example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">exclusive</span><span class="p">,</span> <span class="n">total</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">inclusive</span> <span class="o">=</span> <span class="n">exclusive</span> <span class="o">+</span> <span class="n">x</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="pipeline">
+<h2>Pipeline<a class="headerlink" href="#pipeline" title="Link to this heading">#</a></h2>
+<section id="pipe-and-stage">
+<h3>Pipe and stage<a class="headerlink" href="#pipe-and-stage" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.pipe</span></code> describes an explicit dataflow edge between a producer and one or more consumers. It simultaneously records the shared-memory stage holding the logical chunk and the synchronization required to make that chunk visible to consumers, enabling CTA-level load/compute overlap and warp-specialized producer/consumer code to use a typed descriptor instead of manually writing multiple barriers.</p>
+<ul class="simple">
+<li><p><strong>Signature</strong>: <code class="docutils literal notranslate"><span class="pre">tle.pipe(*,</span> <span class="pre">capacity,</span> <span class="pre">scope=&quot;cta&quot;,</span> <span class="pre">name=None,</span> <span class="pre">readers=None,</span> <span class="pre">one_shot=False,</span> <span class="pre">**fields)</span></code></p></li>
+<li><p><strong>Purpose</strong>: Creates a typed pipe for explicitly describing CTA-level producer/consumer dataflow, ring-buffer stage reuse, and synchronization edges.</p></li>
+<li><p><strong>Parameters</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">capacity</span></code>: Compile-time positive integer indicating the number of pipe stages; each payload field’s first dimension must equal <code class="docutils literal notranslate"><span class="pre">capacity</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scope</span></code>: Supported value is <code class="docutils literal notranslate"><span class="pre">&quot;cta&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: Optional pipe name for IR/diagnostics; must be a string if provided.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">readers</span></code>: Optional list of reader names; omitted means default SPSC reader; passed as <code class="docutils literal notranslate"><span class="pre">(&quot;left&quot;,</span> <span class="pre">&quot;right&quot;)</span></code> for SPMC.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">one_shot</span></code>: Whether this is a single ready/full edge; suitable for startup data broadcast. <code class="docutils literal notranslate"><span class="pre">one_shot=True</span></code> does not support <code class="docutils literal notranslate"><span class="pre">close</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**fields</span></code>: One or more payload buffers, which must be shared-memory buffered tensors returned by <code class="docutils literal notranslate"><span class="pre">tle.gpu.alloc(...,</span> <span class="pre">scope=tle.gpu.smem)</span></code>, with rank &gt;= 2.</p></li>
+</ul>
+</li>
+<li><p><strong>Naming rules</strong>:</p>
+<ul>
+<li><p>Pipe field names and reader names must be valid Python identifiers.</p></li>
+<li><p>Names must not start with <code class="docutils literal notranslate"><span class="pre">_</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fields</span></code> and <code class="docutils literal notranslate"><span class="pre">readers</span></code> are reserved names.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tle.pipe(...)</span></code> returns a pipe descriptor. It owns staged payload fields and creates producer/consumer endpoints via <code class="docutils literal notranslate"><span class="pre">writer()</span></code> and <code class="docutils literal notranslate"><span class="pre">reader(...)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">capacity</span></code> stages form a ring buffer. <code class="docutils literal notranslate"><span class="pre">iter</span></code> maps to <code class="docutils literal notranslate"><span class="pre">stage</span> <span class="pre">=</span> <span class="pre">iter</span> <span class="pre">%</span> <span class="pre">capacity</span></code>, using a phase bit to distinguish reuse rounds.</p></li>
+</ul>
+</section>
+<section id="producer">
+<h3>Producer<a class="headerlink" href="#producer" title="Link to this heading">#</a></h3>
+<p>The producer holds <code class="docutils literal notranslate"><span class="pre">pipe.writer()</span></code>. It acquires a writable stage, fills all necessary fields for the logical chunk, and then commits the chunk, making the data observable to consumers.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_value.writer()</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_writer</span></code>: Creates the single writer endpoint for the current pipe.</p></li>
+<li><p>The writer always sees all payload fields.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">writer.acquire(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_slot</span></code>: Acquires a stage writable by the producer, returning a slot with the leading <code class="docutils literal notranslate"><span class="pre">capacity</span></code> dimension removed.</p></li>
+<li><p>Users should produce field data between <code class="docutils literal notranslate"><span class="pre">writer.acquire(iter)</span></code> and <code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">None</span></code>: Marks the stage as ready, visible to subscribing consumers. All field writes for the same logical chunk must complete before commit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">writer.close(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">None</span></code>: Publishes a closed stage for close-aware consumer loops to exit or switch state. Pipes with <code class="docutils literal notranslate"><span class="pre">one_shot=True</span></code> do not support <code class="docutils literal notranslate"><span class="pre">close</span></code>.</p></li>
+<li><p>Commit is the producer-side visibility boundary.</p></li>
+</ul>
+</section>
+<section id="consumer">
+<h3>Consumer<a class="headerlink" href="#consumer" title="Link to this heading">#</a></h3>
+<p>The consumer holds <code class="docutils literal notranslate"><span class="pre">pipe.reader(...)</span></code>. It waits for published chunks, reads the returned slot, and releases the stage after all reads are complete.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_value.reader(name=None,</span> <span class="pre">fields=None)</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_reader</span></code>: Creates a consumer endpoint.</p></li>
+<li><p>For SPSC pipes (<code class="docutils literal notranslate"><span class="pre">readers=None</span></code>), <code class="docutils literal notranslate"><span class="pre">name</span></code> must be omitted.</p></li>
+<li><p>For SPMC pipes (e.g., <code class="docutils literal notranslate"><span class="pre">readers=(&quot;mma&quot;,</span> <span class="pre">&quot;epilogue&quot;)</span></code>), <code class="docutils literal notranslate"><span class="pre">name</span></code> must be passed and match a declared reader.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fields</span></code> can be a non-empty, compile-time tuple/list of unique payload field names; omitted means subscribing to all fields.</p></li>
+<li><p>Field-subset consumers only narrow the endpoint view and <code class="docutils literal notranslate"><span class="pre">wait().slot</span></code>; they do not create a new pipe.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reader.wait(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">pipe_wait_result</span></code>: Waits for a stage to be ready or closed, returning the slot and closed flag.</p></li>
+<li><p>Standard consumption paths read <code class="docutils literal notranslate"><span class="pre">wait_result.slot</span></code>; check <code class="docutils literal notranslate"><span class="pre">wait_result.is_closed</span></code> only when handling closure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reader.release(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">None</span></code>: Releases the stage after consumption, allowing the producer to reuse it. Should be called after all <code class="docutils literal notranslate"><span class="pre">wait(iter).slot</span></code> reads are complete.</p></li>
+<li><p>Wait is the consumer-side visibility boundary; release is the consumer-side release signal.</p></li>
+</ul>
+</section>
+<section id="payload-fields">
+<h3>Payload fields<a class="headerlink" href="#payload-fields" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">**fields</span></code> defines the data carried by each stage. Each field is exposed on the <code class="docutils literal notranslate"><span class="pre">pipe_slot</span></code> by name, e.g., <code class="docutils literal notranslate"><span class="pre">slot.q</span></code> or <code class="docutils literal notranslate"><span class="pre">slot.scale</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_slot</span></code> also exposes <code class="docutils literal notranslate"><span class="pre">fields:</span> <span class="pre">dict[str,</span> <span class="pre">tle.gpu.buffered_tensor]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pipe_wait_result</span></code> contains <code class="docutils literal notranslate"><span class="pre">slot:</span> <span class="pre">pipe_slot</span></code> and <code class="docutils literal notranslate"><span class="pre">is_closed:</span> <span class="pre">tl.tensor</span></code>.</p></li>
+<li><p>A pipe can carry one or multiple fields. When splitting pipes, split by logical lifecycle and reader protocol, not by underlying transport.</p></li>
+<li><p>Different fields in the same slot can be produced by different mechanisms, such as TMA copy, cp.async-style copy, or <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code> + <code class="docutils literal notranslate"><span class="pre">tl.store</span></code>. Users still call <code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code> once after producing all fields for that logical chunk.</p></li>
+<li><p>Each field’s transport is inferred by the compiler from the producer-side IR; it is not a pipe attribute the user fills in, nor should it be encoded into pipe names, field names, or extra user attributes.</p></li>
+<li><p>When a reader only consumes a subset of fields, use <code class="docutils literal notranslate"><span class="pre">pipe.reader(name,</span> <span class="pre">fields=(...))</span></code> to narrow the reader view; this does not create a new token.</p></li>
+<li><p>Keep pipe-field provenance visible. Opaque shared-memory pointer escapes, untracked shared stores, or overlapping writes that cannot be proven safe will error directly, without silent fallback.</p></li>
+<li><p>NVIDIA lowering maps CTA-scoped SMEM pipes to NVWS/mbarrier synchronization. Multi-field payloads require proof of payload window, field ownership, participant count, and source-order safety at the pipe-field root granularity.</p></li>
+</ul>
+</section>
+<section id="lifecycle">
+<h3>Lifecycle<a class="headerlink" href="#lifecycle" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>SPSC pipe represents one producer publishing to one default consumer.</p></li>
+<li><p>SPMC pipe represents one producer publishing the same logical chunk to multiple named consumers, e.g., <code class="docutils literal notranslate"><span class="pre">(&quot;mma&quot;,</span> <span class="pre">&quot;epilogue&quot;)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iter</span></code> is the logical chunk ID. Within the same chunk, the producer and all participating consumers should use the same <code class="docutils literal notranslate"><span class="pre">iter</span></code>.</p></li>
+<li><p>The standard loop lifecycle is <code class="docutils literal notranslate"><span class="pre">writer.acquire(iter)</span></code> → produce fields → <code class="docutils literal notranslate"><span class="pre">writer.commit(iter)</span></code> → <code class="docutils literal notranslate"><span class="pre">reader.wait(iter)</span></code> → consume fields → <code class="docutils literal notranslate"><span class="pre">reader.release(iter)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">one_shot=True</span></code> indicates a single ready/full edge, typically used with <code class="docutils literal notranslate"><span class="pre">capacity=1</span></code>; do not rely on ring reuse or <code class="docutils literal notranslate"><span class="pre">close</span></code> in this mode.</p></li>
+</ul>
+</section>
+<section id="simple-example">
+<h3>Simple example<a class="headerlink" href="#simple-example" title="Link to this heading">#</a></h3>
+<p>Automatic software pipelining can still be triggered by <code class="docutils literal notranslate"><span class="pre">tl.range(...,</span> <span class="pre">num_stages=...)</span></code>. Explicit pipes are suited for scenarios where producer/consumer splitting needs to be visible in the program.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">stage_buf</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">capacity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"x_pipe"</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">stage_buf</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">()</span>
+<span class="n">offs</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+
+<span class="n">slot</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">k</span> <span class="o">*</span> <span class="n">BLOCK</span> <span class="o">+</span> <span class="n">offs</span><span class="p">))</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">ready</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">ready</span><span class="o">.</span><span class="n">slot</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+<span class="n">reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="distribution">
+<h2>Distribution<a class="headerlink" href="#distribution" title="Link to this heading">#</a></h2>
+<p>The Triton distributed API consists of four core parts: device mesh definition, sharding specification description, synchronization, and remote access (point-to-point communication).</p>
+<p>Low-level inter-GPU and inter-node communication is provided at different levels: the distributed primitives of TLE-Lite and TLE-Struct perform cross-device communication through FlagCX, whereas TLE-Raw is lower level, sitting at the same level as Raw, and provides device-side communication interfaces directly through NVSHMEM (see <a class="reference internal" href="use-tle-raw.html"><span class="std std-doc">Use TLE-Raw</span></a>); NVSHMEM is used only for NVIDIA GPUs.</p>
+<section id="device-mesh">
+<h3>device mesh<a class="headerlink" href="#device-mesh" title="Link to this heading">#</a></h3>
+<section id="tle-device-mesh">
+<h4>tle.device_mesh<a class="headerlink" href="#tle-device-mesh" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.device_mesh</span></code> defines the topological structure of physical devices. It is the fundamental context for all distributed operations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">device_mesh</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topology</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Initialize a DeviceMesh.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            topology (dict): A dictionary describing the hardware hierarchy.</span>
+<span class="sd">                             Keys are level names; values are either an integer (for 1D)</span>
+<span class="sd">                             or a list of tuples (for multi-dimensional levels).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_physical_ids</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># Internal storage: flattened list of physical IDs (0..N-1)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span> <span class="o">=</span> <span class="o">...</span>         <span class="c1"># Shape of the current logical view, e.g., (2, 2, 4, 2, 2, 4)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dim_names</span> <span class="o">=</span> <span class="o">...</span>     <span class="c1"># Names of the current dimensions</span>
+        <span class="c1"># Initialization and parsing logic...</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the logical shape of the current mesh."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ndim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the number of dimensions."""</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Flatten the mesh into 1D. Commonly used for ring-based communication patterns.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        Support slicing operations and return a sub-mesh.</span>
+<span class="sd">        Supports standard slices (slice objects) and integer indexing.</span>
+<span class="sd">        """</span>
+        <span class="c1"># Compute new shape and selected physical IDs after slicing</span>
+        <span class="c1"># ...</span>
+        <span class="k">return</span> <span class="n">sub_mesh</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"DeviceMesh(shape=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape</span><span class="si">}</span><span class="s2">, names=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dim_names</span><span class="si">}</span><span class="s2">)"</span>
+
+
+<span class="c1"># Define a complex hardware hierarchy</span>
+<span class="n">topology</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Inter-node level (2x2 = 4 nodes)</span>
+    <span class="s2">"node"</span><span class="p">:</span> <span class="p">[(</span><span class="s2">"node_x"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s2">"node_y"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+    <span class="c1"># Intra-node GPUs (4 devices)</span>
+    <span class="s2">"device"</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="c1"># Intra-GPU clusters (2x2)</span>
+    <span class="s2">"block_cluster"</span><span class="p">:</span> <span class="p">[(</span><span class="s2">"cluster_x"</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="s2">"cluster_y"</span><span class="p">,</span> <span class="mi">2</span><span class="p">)],</span>
+    <span class="c1"># Blocks within each cluster (4 blocks)</span>
+    <span class="s2">"block"</span><span class="p">:</span> <span class="mi">4</span>
+<span class="p">}</span>
+
+<span class="c1"># mesh.shape -&gt; (2, 2, 4, 2, 2, 4)</span>
+<span class="c1"># Total size = 256</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">device_mesh</span><span class="p">(</span><span class="n">topology</span><span class="o">=</span><span class="n">topology</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="sharding-specification">
+<h3>Sharding specification<a class="headerlink" href="#sharding-specification" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.sharding</span></code> is used to declare the current distribution state of a tensor across a Device Mesh. The splits list describes how each dimension of the tensor is partitioned over the mesh, while the partials list indicates whether the tensor is in a partial-sum state. Any mesh axes not explicitly mentioned are treated as broadcast (replicated).</p>
+<ul class="simple">
+<li><p>tle.S(axis): Split — indicates that the tensor dimension is partitioned along the specified mesh axis.</p></li>
+<li><p>tle.B: Broadcast/Replicate — indicates that the tensor dimension is fully replicated (i.e., not split) along any mesh axes not explicitly referenced.</p></li>
+<li><p>tle.P(axis): Partial — indicates that the tensor holds only a partial value (e.g., a partial sum) and must be reduced along the specified mesh axis to obtain the complete result.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">sharding</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">splits</span><span class="p">,</span> <span class="n">partials</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Annotation: Used only to annotate the tensor's layout state.</span>
+<span class="sd">    It does not generate any runtime code but guides the compiler for subsequent optimizations or correctness checks.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">tensor</span>
+
+
+<span class="c1"># Define a sharding spec where:</span>
+<span class="c1"># - axis 0 is split across the "cluster" dimension (specifically over ["cluster_x", "cluster_y"]),</span>
+<span class="c1"># - axis 1 is split across the "device" dimension,</span>
+<span class="c1"># - and the tensor is in a partial state along the "block" dimension (requiring a reduce to resolve).</span>
+<span class="n">x_shard</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="p">[[</span><span class="s2">"cluster_x"</span><span class="p">,</span> <span class="s2">"cluster_y"</span><span class="p">],</span> <span class="s2">"device"</span><span class="p">],</span>
+    <span class="n">partial</span><span class="o">=</span><span class="p">[</span><span class="s2">"block"</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a sharded tensor using the above sharding specification</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">make_sharded_tensor</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">x_shard</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<section id="synchronization">
+<h3>Synchronization<a class="headerlink" href="#synchronization" title="Link to this heading">#</a></h3>
+<p>In complex distributed operators—such as Ring-AllReduce or pipelined execution with independent row/column communication—we often need to synchronize only thread blocks within the same “row” or “column,” rather than across the entire cluster. A global synchronization would introduce unnecessary waiting overhead.
+This API supports sub-mesh synchronization, meaning that within a large physical cluster, we can define multiple logical “communication groups” and perform synchronization independently within each group.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    If a sub-mesh is passed, only devices within that sub-mesh are synchronized.</span>
+<span class="sd">    Devices outside the sub-mesh should treat this instruction as a no-op </span>
+<span class="sd">    (or the compiler should ensure their control flow never reaches this point).</span>
+<span class="sd">    """</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<section id="tle-distributed-barrier">
+<h4>tle.distributed_barrier<a class="headerlink" href="#tle-distributed-barrier" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.distributed_barrier</span></code> synchronize only the set of devices corresponding to the given mesh or sub-mesh.</p>
+<p>Read from neighboring shards (ring-style exchange).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>
+<span class="n">next_device</span> <span class="o">=</span> <span class="p">(</span><span class="n">device_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">mesh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">remote_x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="remote-access">
+<h3>Remote access<a class="headerlink" href="#remote-access" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.remote</span></code> is used to obtain a handle to a tensor located on another device. This corresponds to point-to-point communication or direct memory access (e.g., RDMA/NVLink Load). It enables kernels to explicitly access data from a specific shard.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remote</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">shard_id</span><span class="p">,</span> <span class="n">scope</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Obtains a handle to a Remote Tensor residing on a specific device shard.</span>
+
+<span class="sd">    :param tensor: A logically distributed tensor (already annotated with tle.sharding).</span>
+<span class="sd">    :param shard_id: tuple. The coordinates of the target device within the Device Mesh.</span>
+<span class="sd">                     For example, if mesh=(2,4) and shard_id=(0, 3), this refers to GPU #3 on node #0.</span>
+<span class="sd">    :return: RemoteTensor. Supports operations such as load, store, etc.</span>
+<span class="sd">    """</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tle.remote</span></code>: Explicitly read from or write to remote shards.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>
+<span class="n">next_device</span> <span class="o">=</span> <span class="p">(</span><span class="n">device_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">mesh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">remote_x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="mesh-coordinates-and-resharding">
+<h3>Mesh coordinates and resharding<a class="headerlink" href="#mesh-coordinates-and-resharding" title="Link to this heading">#</a></h3>
+<section id="tle-shard-id">
+<h4>tle.shard_id<a class="headerlink" href="#tle-shard-id" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Signature: <code class="docutils literal notranslate"><span class="pre">tle.shard_id(mesh,</span> <span class="pre">axis)</span></code></p></li>
+<li><p>Meaning: returns the coordinate of the current program along the given mesh axis.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">axis</span></code> can be an axis name (such as <code class="docutils literal notranslate"><span class="pre">&quot;node&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cluster_x&quot;</span></code>) or an axis index.</p></li>
+<li><p>Typical use: constructing peer shard IDs for ring exchange, staged all-reduce, and cluster cooperative computation.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">device_mesh</span><span class="p">({</span><span class="s2">"node"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+<span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>      <span class="c1"># 0..1</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>  <span class="c1"># 0..3</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-reshard">
+<h4>tle.reshard<a class="headerlink" href="#tle-reshard" title="Link to this heading">#</a></h4>
+<p>Distribution-state conversion. This interface is still a reserved entry point in the current version and is not implemented yet (calling it raises <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>). The recommended flow is: define the topology with <code class="docutils literal notranslate"><span class="pre">tle.device_mesh</span></code>, annotate the distribution state with <code class="docutils literal notranslate"><span class="pre">tle.sharding</span></code>, perform distribution-state conversion with <code class="docutils literal notranslate"><span class="pre">tle.reshard</span></code>, and keep computation kernels on the logical tensor view.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x_full</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">reshard</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">[],</span> <span class="n">partial</span><span class="o">=</span><span class="p">[]))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="target-domains-of-remote-access">
+<h3>Target domains of remote access<a class="headerlink" href="#target-domains-of-remote-access" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">tle.remote</span></code> obtains an access handle to a data shard on another device, corresponding to point-to-point communication or direct memory access (RDMA/NVLink Load). The current implementation distinguishes three target domains by <code class="docutils literal notranslate"><span class="pre">space</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">remote</span><span class="p">(</span><span class="n">tensor</span><span class="p">,</span> <span class="n">shard_id</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"cluster"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+           <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coopkind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">netidx</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tensor</span></code>: required. For the cluster path, a shared-memory pointer or a buffered_tensor; for the device / node paths, the <code class="docutils literal notranslate"><span class="pre">DistributedRtContext</span></code> returned by <code class="docutils literal notranslate"><span class="pre">tle.create_dist_tensor</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">shard_id</span></code>: required. A compile-time int or a runtime int32 scalar; for the cluster path it is the target Block id, for the device path the intra-node peer rank, and for the node path the world rank. Compile-time mesh coordinates must be paired with <code class="docutils literal notranslate"><span class="pre">scope</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scope</span></code>: a <code class="docutils literal notranslate"><span class="pre">device_mesh</span></code>; required when <code class="docutils literal notranslate"><span class="pre">shard_id</span></code> is given in mesh-coordinate form.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">space</span></code>: <code class="docutils literal notranslate"><span class="pre">&quot;cluster&quot;</span></code> (default), <code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;node&quot;</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code>: optional for the cluster path, inferred from the input when omitted; required for the device / node paths.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code>: required for the device path; unsupported for the cluster / node paths.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coopkind</span></code> / <code class="docutils literal notranslate"><span class="pre">netidx</span></code>: available on the node path only.</p></li>
+</ul>
+<section id="cluster-path-intra-cluster-communication-dsmem">
+<h4>Cluster path (intra-cluster communication, DSMEM)<a class="headerlink" href="#cluster-path-intra-cluster-communication-dsmem" title="Link to this heading">#</a></h4>
+<p>Targets shared-memory access across Blocks within the same thread-block cluster (CTA cluster) on Hopper and later architectures; this is the path taken when <code class="docutils literal notranslate"><span class="pre">space</span></code> is omitted. Two kinds of input are supported:</p>
+<ul class="simple">
+<li><p>a shared-memory pointer (scalar or tensor): returns the remote pointer in the cluster address space directly, usable with <code class="docutils literal notranslate"><span class="pre">tl.load</span></code> / <code class="docutils literal notranslate"><span class="pre">tl.store</span></code>, preserving the shape when the input is a block tensor;</p></li>
+<li><p>a TLE buffered_tensor: returns a remote-marked buffer, whose remote pointer view is then materialized with <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr(...)</span></code>.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">shard_id</span></code> is the id of the target Block inside the cluster; when <code class="docutils literal notranslate"><span class="pre">scope</span></code> is passed, coordinates are linearized from the mesh and the launch cluster dimensions are inferred from the mesh (this requires <code class="docutils literal notranslate"><span class="pre">num_ctas=1</span></code>, one program mapping to one Block). For pointers already in the cluster-shared space, <code class="docutils literal notranslate"><span class="pre">shard_id=0</span></code> returns local access directly. The cluster / device paths do not support the node-specific parameters <code class="docutils literal notranslate"><span class="pre">coopkind</span></code> / <code class="docutils literal notranslate"><span class="pre">netidx</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># smem here is a buffered_tensor, for example returned by tle.gpu.alloc</span>
+<span class="n">remote_smem</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">smem</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">remote_ptr</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">remote_smem</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_ptr</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="device-path-intra-node-inter-gpu-communication-nvlink-p2p">
+<h4>Device path (intra-node inter-GPU communication, NVLink P2P)<a class="headerlink" href="#device-path-intra-node-inter-gpu-communication-nvlink-p2p" title="Link to this heading">#</a></h4>
+<p>Targets direct memory access between GPUs within the same node over a FlagCX-registered window (symmetric memory) (NVLink P2P). As with the node path, <code class="docutils literal notranslate"><span class="pre">tensor</span></code> takes the <code class="docutils literal notranslate"><span class="pre">DistributedRtContext</span></code> returned by <code class="docutils literal notranslate"><span class="pre">create_dist_tensor</span></code>, but the returned pointer is a remote pointer in the ordinary global address space and <code class="docutils literal notranslate"><span class="pre">offset</span></code> is required — it specifies the element offset within the remote window (a Python int or a scalar integer tensor, normalized to i64 internally).</p>
+<p>The key difference from the node path: the device-path remote pointer is an ordinary global pointer, so subsequent <code class="docutils literal notranslate"><span class="pre">tl.load</span></code> / <code class="docutils literal notranslate"><span class="pre">tl.store</span></code> support arbitrary tiled / multi-dimensional accesses, with no “contiguous transfers only” restriction; the offset base is fixed once by <code class="docutils literal notranslate"><span class="pre">offset</span></code>, after which pointer arithmetic behaves like ordinary global pointers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">remote_base</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">scatter_ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"device"</span><span class="p">,</span>
+                         <span class="n">dtype</span><span class="o">=</span><span class="n">input_ptr</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">element_ty</span><span class="p">,</span>
+                         <span class="n">shard_id</span><span class="o">=</span><span class="n">target_rank</span><span class="p">,</span>
+                         <span class="n">offset</span><span class="o">=</span><span class="n">SCATTER_NODE_SLICE_OFFSET_ELEMS</span> <span class="o">+</span> <span class="n">source_slot_offset_elems</span><span class="p">)</span>
+<span class="n">scatter_ptrs</span> <span class="o">=</span> <span class="p">(</span><span class="n">remote_base</span> <span class="o">+</span>
+                <span class="p">(</span><span class="n">scatter_row</span> <span class="o">+</span> <span class="n">row_offs</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">input_col</span> <span class="o">+</span> <span class="n">col_offs</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">scatter_ptrs</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">scatter_row_mask</span> <span class="o">&amp;</span> <span class="n">col_mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="node-path-inter-node-communication-flagcx-rdma">
+<h4>Node path (inter-node communication, FlagCX/RDMA)<a class="headerlink" href="#node-path-inter-node-communication-flagcx-rdma" title="Link to this heading">#</a></h4>
+<p>Targets point-to-point transfers across nodes, with the data plane based on FlagCX-registered memory (symmetric window). The current version supports contiguous data transfers only; note the following before use:</p>
+<ul class="simple">
+<li><p>The host side must first register the communication buffer into the FlagCX symmetric-memory window with <code class="docutils literal notranslate"><span class="pre">tle.create_dist_tensor(comm_buf)</span></code>, and pass the returned <code class="docutils literal notranslate"><span class="pre">DistributedRtContext</span></code> into the kernel as a kernel argument; inter-device scatter and inter-node P2P can share the same registered window. The buffer used on the local side must be the same buffer registered by that context, passed to the kernel directly as a global pointer argument.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code> is required; the <code class="docutils literal notranslate"><span class="pre">offset</span></code> parameter is not supported — offsets must be added to the returned pointer.</p></li>
+<li><p>Transfer shapes are restricted: a scalar copy transfers one element at a time; a tensor copy must reuse the same contiguous range <code class="docutils literal notranslate"><span class="pre">tl.arange(0,</span> <span class="pre">N)</span></code> on both sides, and the mask may only be omitted or reuse the same shared-prefix mask <code class="docutils literal notranslate"><span class="pre">offsets</span> <span class="pre">&lt;</span> <span class="pre">valid_n</span></code> (<code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">&lt;=</span> <span class="pre">valid_n</span> <span class="pre">&lt;=</span> <span class="pre">N</span></code>).</p></li>
+<li><p>The amount of data in a single transfer is limited by the compiler tensor size: the element count N of one transfer must be a power of two and must not exceed <code class="docutils literal notranslate"><span class="pre">33554432</span></code> (2^25); exceeding it is a compile-time error. To transfer more data, split it into chunks and call load/store repeatedly in a loop, one chunk per iteration.</p></li>
+<li><p>The load result must be consumed directly and only by the paired store; the two must be in the same basic block, with the load before the store, and no memory access, atomic operation, barrier, or other communication operation in between; exactly one side must use a node remote pointer.</p></li>
+<li><p>Sparse access, multi-dimensional tiled load/store, strided access, ranges with a non-zero start, and mismatched ranges on the two sides are unsupported — these are rejected at compile time, and dynamic violations trigger a device assert.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coopkind</span></code> supports <code class="docutils literal notranslate"><span class="pre">thread</span></code> / <code class="docutils literal notranslate"><span class="pre">warp</span></code> / <code class="docutils literal notranslate"><span class="pre">block</span></code>, defaulting to <code class="docutils literal notranslate"><span class="pre">block</span></code> (the whole CTA convergently issues a single transfer); <code class="docutils literal notranslate"><span class="pre">netidx</span></code> is the index of an existing network context and must be a compile-time integer in the range <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">INT32_MAX]</span></code>.</p></li>
+<li><p>The device side has no <code class="docutils literal notranslate"><span class="pre">rank()</span></code> / <code class="docutils literal notranslate"><span class="pre">num_ranks()</span></code>, so the topology is passed into the kernel by the host as constexpr; <code class="docutils literal notranslate"><span class="pre">shard_id</span></code> is best passed directly as a host-precomputed world rank int, but a mesh-coordinate tuple + <code class="docutils literal notranslate"><span class="pre">scope</span></code> also works (resolved to a world rank through <code class="docutils literal notranslate"><span class="pre">physical_ids</span></code>). On the node path <code class="docutils literal notranslate"><span class="pre">scope</span></code> does not affect the launch configuration.</p></li>
+</ul>
+<p>Usage: first obtain a remote pointer to the peer node with <code class="docutils literal notranslate"><span class="pre">tle.remote</span></code>, then complete the transfer with a pair of load/store; the transfer direction is determined by the positions of the load and store:</p>
+<ul class="simple">
+<li><p><strong>PUT (local → remote)</strong>: load from the local buffer first, then store to the remote pointer; the data is written from this node to the remote node.</p></li>
+<li><p><strong>GET (remote → local)</strong>: written exactly symmetrically to PUT with the direction reversed — load from the remote pointer, then store into the local buffer; the data is read back from the remote node.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># PUT: local load + remote store</span>
+<span class="n">remote_dst</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"node"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+                        <span class="n">shard_id</span><span class="o">=</span><span class="n">remote_rank</span><span class="p">,</span> <span class="n">coopkind</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">GroupKind</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">)</span>
+<span class="n">offsets</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK_SIZE</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">offsets</span> <span class="o">&lt;</span> <span class="n">nelems</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">comm_buf</span> <span class="o">+</span> <span class="n">src_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">remote_dst</span> <span class="o">+</span> <span class="n">dst_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+<span class="c1"># GET: remote load + local store</span>
+<span class="n">remote_src</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"node"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span>
+                        <span class="n">shard_id</span><span class="o">=</span><span class="n">remote_rank</span><span class="p">,</span> <span class="n">coopkind</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">GroupKind</span><span class="o">.</span><span class="n">BLOCK</span><span class="p">)</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_src</span> <span class="o">+</span> <span class="n">src_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">comm_buf</span> <span class="o">+</span> <span class="n">dst_offset</span> <span class="o">+</span> <span class="n">offsets</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Common incorrect forms:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong: multi-dimensional / tiled access</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">remote_dst</span> <span class="o">+</span> <span class="n">rows</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">cols</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>  <span class="c1"># rejected at compile time</span>
+<span class="c1"># Reason: the node path lowers the load/store pair into a single RDMA put/get,</span>
+<span class="c1"># and the interface only supports contiguous data (1D linear ranges), so it</span>
+<span class="c1"># cannot express the discrete addresses of a 2D tile.</span>
+
+<span class="c1"># Wrong: passing the offset to remote</span>
+<span class="n">remote_dst</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">"node"</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">DTYPE</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1024</span><span class="p">)</span>  <span class="c1"># error</span>
+<span class="c1"># Reason: on the node path tle.remote only resolves the target peer and returns a</span>
+<span class="c1"># pointer to the peer window base; source/destination offsets are expressed by the</span>
+<span class="c1"># src_offset / dst_offset of the subsequent load/store.</span>
+
+<span class="c1"># Wrong: mismatched ranges on the two sides, or a mask that is not a shared prefix</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">local</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">remote</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">M</span><span class="p">),</span> <span class="n">vals</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask2</span><span class="p">)</span>  <span class="c1"># rejected</span>
+<span class="c1"># Reason: the transfer length and both offsets are derived jointly from the pointer</span>
+<span class="c1"># expressions of the load and store; when the ranges / masks on the two sides differ,</span>
+<span class="c1"># how much is transferred and from where to where cannot be determined, so the</span>
+<span class="c1"># compiler rejects it.</span>
+</pre></div>
+</div>
+</section>
+<section id="tle-signal">
+<h4>tle.signal<a class="headerlink" href="#tle-signal" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.signal</span></code> atomically updates the synchronization slot of a remote peer. This primitive only sends a signal; it transfers no data and does not wait for completion on the receiving side.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">signal</span><span class="p">(</span><span class="n">device_dptr</span><span class="p">,</span> <span class="n">peer</span><span class="p">,</span> <span class="n">slot_id</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">"inc"</span><span class="p">,</span>
+          <span class="n">space</span><span class="o">=</span><span class="s2">"intra_node"</span><span class="p">,</span> <span class="n">group_kind</span><span class="o">=</span><span class="s2">"block"</span><span class="p">,</span> <span class="n">context_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+          <span class="n">scope</span><span class="o">=</span><span class="s2">"system"</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">op=&quot;inc&quot;</span></code> increments the target signal slot by one; <code class="docutils literal notranslate"><span class="pre">op=&quot;add&quot;</span></code> adds <code class="docutils literal notranslate"><span class="pre">value</span></code> to the target signal slot, in which case <code class="docutils literal notranslate"><span class="pre">value</span></code> must be provided and must be omitted for the former. <code class="docutils literal notranslate"><span class="pre">space</span></code> selects the communication scope (<code class="docutils literal notranslate"><span class="pre">intra_node</span></code>, <code class="docutils literal notranslate"><span class="pre">inter_node</span></code>, or <code class="docutils literal notranslate"><span class="pre">world</span></code>) and <code class="docutils literal notranslate"><span class="pre">peer</span></code> is the rank within that scope. <code class="docutils literal notranslate"><span class="pre">context_idx</span></code> selects a pre-allocated network context. <code class="docutils literal notranslate"><span class="pre">scope</span></code> controls the visibility of the signal operation to threads on the node: <code class="docutils literal notranslate"><span class="pre">&quot;system&quot;</span></code> means visible to all threads on all devices, <code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code> means visible only to threads on the current device; <code class="docutils literal notranslate"><span class="pre">&quot;device&quot;</span></code> is only meaningful in single-node scenarios, and <code class="docutils literal notranslate"><span class="pre">&quot;system&quot;</span></code> is the right choice in most cases. With <code class="docutils literal notranslate"><span class="pre">group_kind=&quot;block&quot;</span></code> (the default), all threads in the CTA must execute the operation convergently; the whole group issues a single remote update.</p>
+</section>
+<section id="tle-signal-wait">
+<h4>tle.signal_wait<a class="headerlink" href="#tle-signal-wait" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">tle.signal_wait</span></code> waits for a local synchronization slot to reach a target value.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">signal_wait</span><span class="p">(</span><span class="n">device_dptr</span><span class="p">,</span> <span class="n">slot_id</span><span class="p">,</span> <span class="n">wait_kind</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">group_kind</span><span class="o">=</span><span class="s2">"block"</span><span class="p">,</span> <span class="n">context_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">"acquire"</span><span class="p">):</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">wait_kind</span></code> selects the wait mode: <code class="docutils literal notranslate"><span class="pre">&quot;signal&quot;</span></code> waits for the slot value to reach <code class="docutils literal notranslate"><span class="pre">target</span></code>; <code class="docutils literal notranslate"><span class="pre">&quot;counter&quot;</span></code> waits for the counter in the slot to reach <code class="docutils literal notranslate"><span class="pre">target</span></code>; <code class="docutils literal notranslate"><span class="pre">&quot;shadow&quot;</span></code> reads the target value from the shadow buffer maintained locally at runtime and therefore requires <code class="docutils literal notranslate"><span class="pre">target</span></code> to be omitted. <code class="docutils literal notranslate"><span class="pre">slot_id</span></code> shares the same signal-slot namespace as <code class="docutils literal notranslate"><span class="pre">tle.signal</span></code>. The semantics of <code class="docutils literal notranslate"><span class="pre">group_kind</span></code> and <code class="docutils literal notranslate"><span class="pre">context_idx</span></code> match <code class="docutils literal notranslate"><span class="pre">tle.signal</span></code>. <code class="docutils literal notranslate"><span class="pre">order</span></code> constrains the memory order of the wait operation; since <code class="docutils literal notranslate"><span class="pre">tle.signal_wait</span></code> is a read operation, only <code class="docutils literal notranslate"><span class="pre">&quot;relaxed&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;acquire&quot;</span></code> are allowed, and the default <code class="docutils literal notranslate"><span class="pre">&quot;acquire&quot;</span></code> is the right choice in most cases.</p>
+</section>
+</section>
+<section id="combined-examples">
+<h3>Combined examples<a class="headerlink" href="#combined-examples" title="Link to this heading">#</a></h3>
+<section id="asynchronous-filtering-and-compaction">
+<h4>Asynchronous filtering and compaction<a class="headerlink" href="#asynchronous-filtering-and-compaction" title="Link to this heading">#</a></h4>
+<p>Combines <code class="docutils literal notranslate"><span class="pre">tle.load</span></code> and <code class="docutils literal notranslate"><span class="pre">tle.cumsum</span></code>: a tile is read in with a masked asynchronous load, active flags are derived from a predicate, and <code class="docutils literal notranslate"><span class="pre">tle.cumsum</span></code> finally produces the compact write-back offsets and the active total for the current block.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pid</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">program_id</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">offs</span> <span class="o">=</span> <span class="n">pid</span> <span class="o">*</span> <span class="n">BLOCK</span> <span class="o">+</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BLOCK</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">offs</span> <span class="o">&lt;</span> <span class="n">n_elements</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">offs</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">other</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">keep</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">mask</span>
+<span class="n">active</span> <span class="o">=</span> <span class="n">keep</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+
+<span class="n">write_offsets</span><span class="p">,</span> <span class="n">active_total</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">active</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">block_base</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">block_offsets_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">)</span>
+
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span> <span class="o">+</span> <span class="n">block_base</span> <span class="o">+</span> <span class="n">write_offsets</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">keep</span><span class="p">)</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">block_counts_ptr</span> <span class="o">+</span> <span class="n">pid</span><span class="p">,</span> <span class="n">active_total</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="pipelined-tile-post-processing">
+<h4>Pipelined tile post-processing<a class="headerlink" href="#pipelined-tile-post-processing" title="Link to this heading">#</a></h4>
+<p>Combines <code class="docutils literal notranslate"><span class="pre">tle.pipe</span></code>, shared-memory pointer views, and tensor slicing. The producer writes global tiles into shared memory in stages; the consumer reads a ready stage, applies a local transformation to one sub-tile, and writes the updated full tile back to the output.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tile_buf</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="n">BM</span><span class="p">,</span> <span class="n">BN</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span><span class="n">capacity</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"post_pipe"</span><span class="p">,</span> <span class="n">tile</span><span class="o">=</span><span class="n">tile_buf</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">()</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">()</span>
+
+<span class="n">rows</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="n">cols</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BN</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">):</span>
+    <span class="n">slot</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">x_ptr</span> <span class="o">+</span> <span class="n">tile_offset</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">mask</span><span class="o">=</span><span class="n">tile_mask</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">other</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">is_async</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">tile</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)),</span> <span class="n">vals</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tl</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_tiles</span><span class="p">):</span>
+    <span class="n">ready</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">tile</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">ready</span><span class="o">.</span><span class="n">slot</span><span class="o">.</span><span class="n">tile</span><span class="p">,</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">)))</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">extract_tile</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">BM</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">BN</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">sub</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">insert_tile</span><span class="p">(</span><span class="n">sub</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">out_ptr</span> <span class="o">+</span> <span class="n">tile_offset</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">),</span> <span class="n">tile</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">tile_mask</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">))</span>
+    <span class="n">reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-field-pipe-with-selective-readers">
+<h4>Multi-field pipe with selective readers<a class="headerlink" href="#multi-field-pipe-with-selective-readers" title="Link to this heading">#</a></h4>
+<p>Combines a multi-field pipe payload with reader field subsets. A single pipe slot carries both the tile produced by TMA and a locally written scale vector; the MMA reader subscribes only to the tile, while the epilogue reader consumes both the tile and the scale.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">q</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">([</span><span class="n">PIPE_CAPACITY</span><span class="p">,</span> <span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">)</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">alloc</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">PIPE_CAPACITY</span><span class="p">,</span> <span class="n">BM</span><span class="p">],</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">tl</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="n">scope</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">smem</span><span class="p">,</span>
+    <span class="n">nv_mma_shared_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">pipe</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">pipe</span><span class="p">(</span>
+    <span class="n">capacity</span><span class="o">=</span><span class="n">PIPE_CAPACITY</span><span class="p">,</span>
+    <span class="n">scope</span><span class="o">=</span><span class="s2">"cta"</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"multi_field_inputs"</span><span class="p">,</span>
+    <span class="n">readers</span><span class="o">=</span><span class="p">(</span><span class="s2">"mma"</span><span class="p">,</span> <span class="s2">"epilogue"</span><span class="p">),</span>
+    <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">writer</span><span class="p">()</span>
+<span class="n">mma_reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="s2">"mma"</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s2">"q"</span><span class="p">,))</span>
+<span class="n">epilogue_reader</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="s2">"epilogue"</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="s2">"q"</span><span class="p">,</span> <span class="s2">"scale"</span><span class="p">))</span>
+
+<span class="n">slot</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">q_desc</span><span class="p">,</span> <span class="n">slot</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="p">[</span><span class="n">BM</span><span class="p">,</span> <span class="n">BK</span><span class="p">],</span> <span class="p">[</span><span class="n">q_block</span><span class="p">,</span> <span class="n">k_block</span><span class="p">])</span>
+<span class="n">tl</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">),)),</span> <span class="n">scale_values</span><span class="p">)</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">q_ready</span> <span class="o">=</span> <span class="n">mma_reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">slot</span>
+<span class="n">q_tile</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">q_ready</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+<span class="n">mma_reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+<span class="n">epilogue_ready</span> <span class="o">=</span> <span class="n">epilogue_reader</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">slot</span>
+<span class="n">q_for_epilogue</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">epilogue_ready</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+<span class="n">scale_tile</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">tle</span><span class="o">.</span><span class="n">gpu</span><span class="o">.</span><span class="n">local_ptr</span><span class="p">(</span><span class="n">epilogue_ready</span><span class="o">.</span><span class="n">scale</span><span class="p">,</span> <span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">BM</span><span class="p">),)))</span>
+<span class="n">epilogue_reader</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="distributed-exchange-and-resharding">
+<h4>Distributed exchange and resharding<a class="headerlink" href="#distributed-exchange-and-resharding" title="Link to this heading">#</a></h4>
+<p>Combines <code class="docutils literal notranslate"><span class="pre">tle.device_mesh</span></code>, <code class="docutils literal notranslate"><span class="pre">tle.sharding</span></code>, <code class="docutils literal notranslate"><span class="pre">tle.shard_id</span></code>, <code class="docutils literal notranslate"><span class="pre">tle.remote</span></code>, <code class="docutils literal notranslate"><span class="pre">tle.distributed_barrier</span></code>, and <code class="docutils literal notranslate"><span class="pre">tle.reshard</span></code>. The current shard reads the tile of a neighboring device to complete a ring-style exchange, then constructs a replicated view for local computation.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mesh</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">device_mesh</span><span class="p">({</span><span class="s2">"node"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">:</span> <span class="mi">4</span><span class="p">})</span>
+<span class="n">x_spec</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">[</span><span class="s2">"device"</span><span class="p">],</span> <span class="n">partial</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">make_sharded_tensor</span><span class="p">(</span><span class="n">x_ptr</span><span class="p">,</span> <span class="n">sharding</span><span class="o">=</span><span class="n">x_spec</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">M</span><span class="p">,</span> <span class="n">K</span><span class="p">])</span>
+
+<span class="n">node_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"node"</span><span class="p">)</span>
+<span class="n">device_rank</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">shard_id</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="s2">"device"</span><span class="p">)</span>
+<span class="n">next_device</span> <span class="o">=</span> <span class="p">(</span><span class="n">device_rank</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">mesh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">neighbor_x</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">remote</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">shard_id</span><span class="o">=</span><span class="p">(</span><span class="n">node_rank</span><span class="p">,</span> <span class="n">next_device</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">tle</span><span class="o">.</span><span class="n">distributed_barrier</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">neighbor_vals</span> <span class="o">=</span> <span class="n">tl</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">neighbor_x</span><span class="p">)</span>
+
+<span class="n">x_full</span> <span class="o">=</span> <span class="n">tle</span><span class="o">.</span><span class="n">reshard</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">tle</span><span class="o">.</span><span class="n">sharding</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="p">[],</span> <span class="n">partial</span><span class="o">=</span><span class="p">[]))</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">local_compute</span><span class="p">(</span><span class="n">x_full</span><span class="p">,</span> <span class="n">neighbor_vals</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="primitives-interactive-with-local-ptr">
+<h2>Primitives interactive with local_ptr<a class="headerlink" href="#primitives-interactive-with-local-ptr" title="Link to this heading">#</a></h2>
+<p>The following APIs are used together with <code class="docutils literal notranslate"><span class="pre">tle.gpu.local_ptr</span></code>. For more information, see <a class="reference internal" href="use-tle-struct.html"><span class="std std-doc">Use TLE-Struct</span></a>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.load</span></code>（for local_ptr）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.store</span></code>（for local_ptr）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tl.atomic_add</span></code>/<code class="docutils literal notranslate"><span class="pre">and</span></code>/<code class="docutils literal notranslate"><span class="pre">cas</span></code>/<code class="docutils literal notranslate"><span class="pre">max</span></code>/<code class="docutils literal notranslate"><span class="pre">min</span></code>/<code class="docutils literal notranslate"><span class="pre">or</span></code>/<code class="docutils literal notranslate"><span class="pre">xchg</span></code>/<code class="docutils literal notranslate"><span class="pre">xor</span></code>（for local_ptr）</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="use-hints.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Use Hints</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="use-tle-struct.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Use TLE-Struct</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-management">Memory management</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-load">tle.load</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-slicing">Tensor slicing</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-extract-tile">tle.extract_tile</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-insert-tile">tle.insert_tile</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scan-and-sort-ops">Scan and sort Ops</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-cumsum">tle.cumsum</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline">Pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pipe-and-stage">Pipe and stage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#producer">Producer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#consumer">Consumer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#payload-fields">Payload fields</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lifecycle">Lifecycle</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">Simple example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distribution">Distribution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-mesh">device mesh</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-device-mesh">tle.device_mesh</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sharding-specification">Sharding specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronization">Synchronization</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-distributed-barrier">tle.distributed_barrier</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-access">Remote access</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mesh-coordinates-and-resharding">Mesh coordinates and resharding</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-shard-id">tle.shard_id</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-reshard">tle.reshard</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#target-domains-of-remote-access">Target domains of remote access</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cluster-path-intra-cluster-communication-dsmem">Cluster path (intra-cluster communication, DSMEM)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#device-path-intra-node-inter-gpu-communication-nvlink-p2p">Device path (intra-node inter-GPU communication, NVLink P2P)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#node-path-inter-node-communication-flagcx-rdma">Node path (inter-node communication, FlagCX/RDMA)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal">tle.signal</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tle-signal-wait">tle.signal_wait</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#combined-examples">Combined examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#asynchronous-filtering-and-compaction">Asynchronous filtering and compaction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pipelined-tile-post-processing">Pipelined tile post-processing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-field-pipe-with-selective-readers">Multi-field pipe with selective readers</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#distributed-exchange-and-resharding">Distributed exchange and resharding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#primitives-interactive-with-local-ptr">Primitives interactive with local_ptr</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagtree_zh/user_guide/use-tle-lite.html">中文</a></body>
+</html>

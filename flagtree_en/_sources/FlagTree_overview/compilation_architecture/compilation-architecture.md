@@ -1,0 +1,13 @@
+# FlagTree compilation architecture
+
+FlagTree retains Triton's core architecture but introduces an extensible framework. This framework is specifically designed to support multi-backend compilation and three-level compiler languages, as mentioned in the [Features](features.md/) section.
+
+
+```{toctree}
+common-architecture.md
+flagtree-extensible-framework.md
+features-hints.md
+features-tle.md
+flir.md
+
+```
