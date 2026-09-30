@@ -15,13 +15,12 @@
       - Added the `tle.gpu.buffered_tensor.slot` and `tle.gpu.buffered_tensor.reshape` ops. Supported on NVIDIA.
       - Added the `init_value` and `alias_offset_bytes` parameters to `tle.gpu.alloc`. Supported on NVIDIA.
     - TLE-Raw:
-      - Added the `library` and `compiler` parameters, enabling NVSHMEM device-side interfaces to be inlined into TLE-Raw kernels via `@dialect(..., library="nvshmem", compiler="clang")`. Supported on NVIDIA.
+      - Added the `library` and `compiler` parameters, enabling NVSHMEM device-side interfaces to be inlined into TLE-Raw kernels via `@dialect(..., library="nvshmem")`. Supported on NVIDIA.
 
   - Backends:
-    - Added the following backend integrations (based on Triton 3.6) and added CI/CD: [tileir](/getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.md) (NVIDIA TileIR), [ppu](/getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.md) (T-Head), and [spacemit](/getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.md) (SpacemiT).
-    - Upgraded the following backends to Triton 3.6 and added CI/CD: [sunrise](/getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.md), [xpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.md), [iluvatar](/getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.md), and [tsingmicro](/getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.md).
-    - Added TLE support for the [amd](/getting_started/multi-backend-prebuilt-docker-image-install/install-amd.md) backend and added CI/CD.
-    - [rpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.md) (Huixi Intelligence, Triton 3.6) is also supported. On the 3.3.x branch, [ARM64 CPU](/getting_started/install-arm64-cpu.md) provides [TLE-CPU](/user_guide/use-tle-cpu.md).
+    - Added the following backend integrations (based on Triton 3.6): [tileir](/getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.md) (NVIDIA TileIR), [ppu](/getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.md) (T-Head), and [spacemit](/getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.md) (SpacemiT).
+    - Upgraded the following backends to Triton 3.6: [sunrise](/getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.md), [xpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.md), [iluvatar](/getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.md), and [tsingmicro](/getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.md).
+    - Added TLE support for the [amd](/getting_started/multi-backend-prebuilt-docker-image-install/install-amd.md) backend.
     - [ARM64 CPU](/getting_started/flagtree-cpu.md) provides a CPU backend based on Triton 3.7.2, validated on Linux Arm64 with a vector-add kernel and FlagGems W4A8 operator tests.
 
 - **DevTools (Debugger & Profiler)**

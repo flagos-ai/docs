@@ -167,7 +167,7 @@ NVSHMEM 相关的 host 侧准备工作由 `triton.experimental.tle.raw.nvshmem.u
 - `01-simple-shift`：最小的 NVSHMEM 设备端 put 示例，演示 dialect 声明与 host/device 两侧的配合。
 - `02-allgather-gemm`：基于 NVSHMEM 的 all-gather GEMM（含 benchmark）。
 - `03-gemm-allreduce`：基于 NVSHMEM multimem 的 GEMM + all-reduce。
-- `04-cuda-ipc-allreduce`：基于 CUDA IPC 的 all-reduce（含 benchmark），使用不带 `library="nvshmem"` 的 CUDA 方言。
+- `04-cuda-ipc-allreduce`：基于 CUDA IPC 的 all-reduce（含 benchmark）。
 
 ### 处理流程
 

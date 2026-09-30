@@ -18,10 +18,9 @@
       - 新增 `library` 与 `compiler` 参数，支持通过 `@dialect(..., library="nvshmem", compiler="clang")` 将 NVSHMEM 设备端接口内联进 TLE-Raw kernel。在 NVIDIA 上支持。
 
   - 后端：
-    - 新增以下后端集成（基于 Triton 3.6）并新增 CI/CD：[tileir](/getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.md)（NVIDIA TileIR）、[ppu](/getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.md)（平头哥）和 [spacemit](/getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.md)（进迭时空）。
-    - 将以下后端升级至 Triton 3.6 并新增 CI/CD：[sunrise](/getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.md)、[xpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.md)、[iluvatar](/getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.md) 和 [tsingmicro](/getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.md)。
-    - 为 [amd](/getting_started/multi-backend-prebuilt-docker-image-install/install-amd.md) 后端新增 TLE 支持并新增 CI/CD。
-    - 另外还支持 [rpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.md)（辉羲智能，Triton 3.6）。在 3.3.x 分支上，[ARM64 CPU](/getting_started/install-arm64-cpu.md) 提供 [TLE-CPU](/user_guide/use-tle-cpu.md)。
+    - 新增以下后端集成（基于 Triton 3.6）：[tileir](/getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.md)（NVIDIA TileIR）、[ppu](/getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.md)（平头哥）和 [spacemit](/getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.md)（进迭时空）。
+    - 将以下后端升级至 Triton 3.6：[sunrise](/getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.md)、[xpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.md)、[iluvatar](/getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.md) 和 [tsingmicro](/getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.md)。
+    - 为 [amd](/getting_started/multi-backend-prebuilt-docker-image-install/install-amd.md) 后端新增 TLE 支持。
     - [ARM64 CPU](/getting_started/flagtree-cpu.md) 基于 Triton 3.7.2 提供 CPU 后端，已在 Linux Arm64 上通过 vector-add kernel 与 FlagGems W4A8 算子测试验证。
 
 - **DevTools（调试器与性能分析器）**

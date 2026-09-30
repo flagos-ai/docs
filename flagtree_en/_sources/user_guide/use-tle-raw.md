@@ -167,7 +167,7 @@ Full examples are in `python/tutorials/tle/raw/nvshmem/`:
 - `01-simple-shift`: the minimal NVSHMEM device-side put example, showing the dialect declaration and how host and device sides cooperate.
 - `02-allgather-gemm`: all-gather GEMM over NVSHMEM (with a benchmark).
 - `03-gemm-allreduce`: GEMM plus all-reduce over NVSHMEM multimem.
-- `04-cuda-ipc-allreduce`: all-reduce over CUDA IPC (with a benchmark), using the CUDA dialect without `library="nvshmem"`.
+- `04-cuda-ipc-allreduce`: all-reduce over CUDA IPC (with a benchmark).
 
 ### Processing flow
 
