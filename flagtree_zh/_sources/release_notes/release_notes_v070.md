@@ -22,6 +22,7 @@
     - 将以下后端升级至 Triton 3.6 并新增 CI/CD：[sunrise](/getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.md)、[xpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.md)、[iluvatar](/getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.md) 和 [tsingmicro](/getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.md)。
     - 为 [amd](/getting_started/multi-backend-prebuilt-docker-image-install/install-amd.md) 后端新增 TLE 支持并新增 CI/CD。
     - 另外还支持 [rpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.md)（辉羲智能，Triton 3.6）。在 3.3.x 分支上，[ARM64 CPU](/getting_started/install-arm64-cpu.md) 提供 [TLE-CPU](/user_guide/use-tle-cpu.md)。
+    - [ARM64 CPU](/getting_started/flagtree-cpu.md) 基于 Triton 3.7.2 提供 CPU 后端，已在 Linux Arm64 上通过 vector-add kernel 与 FlagGems W4A8 算子测试验证。
 
 - **DevTools（调试器与性能分析器）**
   - FlagPrism（[flagos-ai/FlagPrism](https://github.com/flagos-ai/FlagPrism)）为 Triton 程序提供调试与性能分析工具，包含 `flagtree.debugger` 与 `flagtree.profiler`，以 `third_party/FlagPrism` 子模块集成在 FlagTree 中。先支持部分后端：华为昇腾、天数智芯、摩尔线程。

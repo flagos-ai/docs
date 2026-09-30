@@ -88,6 +88,7 @@ For installing FlagTree on different backends from source, see the following lis
 - [Tsingmicro](/getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.md)
 - [KLX](/getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.md)
 - [ARM64 CPU](/getting_started/install-arm64-cpu.md)
+- [ARM64 CPU (Triton 3.7.2)](/getting_started/flagtree-cpu.md)
 
 ## Option 3: Install wheel package
 

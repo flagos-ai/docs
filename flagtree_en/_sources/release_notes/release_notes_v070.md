@@ -22,6 +22,7 @@
     - Upgraded the following backends to Triton 3.6 and added CI/CD: [sunrise](/getting_started/multi-backend-prebuilt-docker-image-install/install-sunrise.md), [xpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-xpu.md), [iluvatar](/getting_started/multi-backend-prebuilt-docker-image-install/install-iluvatar.md), and [tsingmicro](/getting_started/multi-backend-prebuilt-docker-image-install/install-tsingmicro.md).
     - Added TLE support for the [amd](/getting_started/multi-backend-prebuilt-docker-image-install/install-amd.md) backend and added CI/CD.
     - [rpu](/getting_started/multi-backend-prebuilt-docker-image-install/install-rpu.md) (Huixi Intelligence, Triton 3.6) is also supported. On the 3.3.x branch, [ARM64 CPU](/getting_started/install-arm64-cpu.md) provides [TLE-CPU](/user_guide/use-tle-cpu.md).
+    - [ARM64 CPU](/getting_started/flagtree-cpu.md) provides a CPU backend based on Triton 3.7.2, validated on Linux Arm64 with a vector-add kernel and FlagGems W4A8 operator tests.
 
 - **DevTools (Debugger & Profiler)**
   - FlagPrism ([flagos-ai/FlagPrism](https://github.com/flagos-ai/FlagPrism)) provides debugging and performance-analysis tools for Triton programs, containing `flagtree.debugger` and `flagtree.profiler`, and is integrated into FlagTree as the `third_party/FlagPrism` submodule. It initially supports a subset of backends: Huawei Ascend, Iluvatar, and Moore Threads.

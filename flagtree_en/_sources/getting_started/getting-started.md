@@ -8,6 +8,7 @@ This section covers the requirements for installing and running FlagTree and gui
 requirements.md
 install.md
 install-arm64-cpu.md
+flagtree-cpu.md
 multi-backend-prebuilt-docker-image-install/install-nv.md
 multi-backend-prebuilt-docker-image-install/install-tileir.md
 multi-backend-prebuilt-docker-image-install/install-amd.md
