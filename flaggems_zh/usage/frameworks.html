@@ -1,0 +1,913 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="与常用框架的集成" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="usage/frameworks.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="为了帮助用户将 FlagGems 集成到真实世界的使用场景中，我们提供一些示例， 展示如何与某些被广泛使用的深度学习框架集成。 这些集成需要极少的代码变更，能够保留原来的工作流结构。 如果你对完整的示例感兴趣，可以参阅源代码仓库中的 examples/ 目录。 1. Hugging Face Transformers: 与 Hugging Face 的 transformers 库 集成相对而言比较简单直接。 在推理阶段，你可以启用 FlagGems 加速而不必更改模型或者分词器的逻辑。 下面是一个高度简化的例子： 这种模式可以确保在生成输出的过程中使用到的所有兼容算子都会被自动加速。 ..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="为了帮助用户将 FlagGems 集成到真实世界的使用场景中，我们提供一些示例， 展示如何与某些被广泛使用的深度学习框架集成。 这些集成需要极少的代码变更，能够保留原来的工作流结构。 如果你对完整的示例感兴趣，可以参阅源代码仓库中的 examples/ 目录。 1. Hugging Face Transformers: 与 Hugging Face 的 transformers 库 集成相对而言比较简单直接。 在推理阶段，你可以启用 FlagGems 加速而不必更改模型或者分词器的逻辑。 下面是一个高度简化的例子： 这种模式可以确保在生成输出的过程中使用到的所有兼容算子都会被自动加速。 ..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>与常用框架的集成 &#8212; FlagGems 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=bd3843ac" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=2f47175f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/tabulator.min.js?v=52b524e6"></script>
+    <script src="../_static/js/benchmark.js?v=bfe1f9a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/usage/frameworks.cbcb9e0b-0338-4c4a-9d0e-c6facf0c4f91.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/frameworks';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/usage/frameworks.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="使用 FlagGems 模块构造自己的模型" href="modules.html" />
+    <link rel="prev" title="多 GPU 与分布式环境" href="distributed.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="9月 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagGems 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagGems 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagGems 简介
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">快速开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/install.html">安装 FlagGems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">概览</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/features.html">功能特性概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/platforms.html">支持的硬件平台</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/pointwise-dynamic.html">关于逐点动态算子</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">使用指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">基本用法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selective.html">选择性启用算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">启用调试日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">使用实验性质的算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="non-nvidia.html">在非英伟达（NVIDIA）硬件上使用 FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distributed.html">多 GPU 与分布式环境</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">与常用框架的集成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">使用 FlagGems 模块构造自己的模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning.html">基于预优化实现 FlagGems 的更好性能</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">使用 C++ 封装的算子获得更好的性能</a></li>
+<li class="toctree-l1"><a class="reference internal" href="precision.html">精度检查（实验性功能）</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">性能测试与优化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">性能测试概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/benchmark.html">FlagGems 中的性能基准测试</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/results.html">性能测试结果</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/database.html">性能数据库后端</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">测试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../testing/unittest.html">测试 Python 算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/coverage.html">单元测试覆盖率</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参考信息</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references/operators.html">算子列表</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/operators-search.html">算子搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/changelog.html">变更历史</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/experimental.html">FlagGems 实验性算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/project_structure.html">项目源码结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/release.html">关于打包与发布</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../references/test/index.html">测试报告</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../references/test/coverage/index.html">单元测试覆盖率</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../references/test/unit/index.html">单元测试摘要</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260609-summary.html">Test Results - 20260609-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260604-summary.html">Test Results - 20260604-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260603-summary.html">Test Results - 20260603-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260526-summary.html">Test Results - 20260526-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260525-summary.html">Test Results - 20260525-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260505-summary.html">Test Results - 20260505-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260329-summary.html">Test Results - 20260329-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260328-summary.html">Test Results - 20260328-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260327-summary.html">Test Results - 20260327-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260326-summary.html">Test Results - 20260326-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260325-summary.html">Test Results - 20260325-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260324-summary.html">Test Results - 20260324-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260323-summary.html">Test Results - 20260323-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260322-summary.html">Test Results - 20260322-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260321-summary.html">Test Results - 20260321-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260320-summary.html">Test Results - 20260320-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260319-summary.html">Test Results - 20260319-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260318-summary.html">Test Results - 20260318-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260317-summary.html">Test Results - 20260317-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260316-summary.html">Test Results - 20260316-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260315-summary.html">Test Results - 20260315-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260314-summary.html">Test Results - 20260314-summary</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参与项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contribution/overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/backend.html">添加一种新的后端</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/cpp-wrapper.html">添加 C++ 封装的算子</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/usage/frameworks.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>与常用框架的集成</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hugging-face-transformers">1. Hugging Face Transformers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm">2. vLLM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-pytorch">2.1 替换 vLLM 中的标准 PyTorch 算子</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.2 替换特定于 vLLM 的定制算子</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2.3 完整的示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#megatron-lm">3. Megatron-LM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3.1 建议的集成点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scope-and-limitations">3.2 Scope and Limitations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">3.2 范围与局限性</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="id1">
+<h1>与常用框架的集成<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>为了帮助用户将 <em>FlagGems</em> 集成到真实世界的使用场景中，我们提供一些示例，
+展示如何与某些被广泛使用的深度学习框架集成。
+这些集成需要极少的代码变更，能够保留原来的工作流结构。</p>
+<p>如果你对完整的示例感兴趣，可以参阅源代码仓库中的
+<a class="reference external" href="https://github.com/flagos-ai/FlagGems/tree/master/examples"><code class="docutils literal notranslate"><span class="pre">examples/</span></code></a>
+目录。</p>
+<section id="hugging-face-transformers">
+<h2>1. Hugging Face Transformers<a class="headerlink" href="#hugging-face-transformers" title="Link to this heading">#</a></h2>
+<p>与 Hugging Face 的 <a class="reference external" href="https://github.com/huggingface/transformers"><code class="docutils literal notranslate"><span class="pre">transformers</span></code> 库</a>
+集成相对而言比较简单直接。
+在推理阶段，你可以启用 <em>FlagGems</em> 加速而不必更改模型或者分词器的逻辑。</p>
+<p>下面是一个高度简化的例子：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+
+<span class="c1"># 加载分词器和模型</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">"sharpbai/Llama-2-7b-hf"</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">"sharpbai/Llama-2-7b-hf"</span><span class="p">)</span>
+
+<span class="c1"># 将模型放到正确的设备上并设置 eval 模式</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">flag_gems</span><span class="o">.</span><span class="n">device</span>
+<span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+<span class="c1"># 准备输入并在启用了 flag_gems 的情况下执行推理任务</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">"pt"</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">flag_gems</span><span class="o">.</span><span class="n">use_gems</span><span class="p">():</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_beams</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这种模式可以确保在生成输出的过程中使用到的所有兼容算子都会被自动加速。
+你可以在项目源码树的如下路径中找到其他例子。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/model_llama_test.py</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/model_llava_test.py</span></code></p></li>
+</ul>
+</section>
+<section id="vllm">
+<h2>2. vLLM<a class="headerlink" href="#vllm" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/vllm-project/vllm">vLLM</a>是一个吞吐量很高的推理引擎，
+其设计目标是高效地提供大语言模型服务。
+vLLM 支持 Paged Attention（一种带缓存的注意力机制）、Continuous Batching
+（一种提高算力和带宽利用率的任务队列优化机制）以及对内存管理的优化。</p>
+<p><em>FlagGems</em> 可以被集成到 vLLM 中用来替换标准的 PyTorch （<code class="docutils literal notranslate"><span class="pre">aten</span></code>）算子以及
+vLLM 内部的定制内核。</p>
+<section id="vllm-pytorch">
+<h3>2.1 替换 vLLM 中的标准 PyTorch 算子<a class="headerlink" href="#vllm-pytorch" title="Link to this heading">#</a></h3>
+<p>为了加速 vLLM 中用到的标准的 PyTorch 算子（如 <code class="docutils literal notranslate"><span class="pre">add</span></code>、<code class="docutils literal notranslate"><span class="pre">masked_fill</span></code> 等），
+你可以使用与其他框架相同的办法。
+通过在模型初始化或者推理任务启动之前调用 <code class="docutils literal notranslate"><span class="pre">flag_gems.enable()</span></code>，
+你可以替换掉所有兼容的 PyTorch <code class="docutils literal notranslate"><span class="pre">aten</span></code> 算子，包括那些在 vLLM 中被间接调用的算子。</p>
+</section>
+<section id="id2">
+<h3>2.2 替换特定于 vLLM 的定制算子<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>为了进一步优化 vLLM 内部的内核，<em>FlagGems</em> 提供了一个额外的 API：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flag_gems</span><span class="o">.</span><span class="n">apply_gems_patches_to_vllm</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这一 API 能够对特定于 vLLM 的某些 C++ 或 Triton 算子进行打补丁操作，
+注入 <em>FlagGems</em> 的实现逻辑。当 <code class="docutils literal notranslate"><span class="pre">verbose</span></code> 被设置为 <code class="docutils literal notranslate"><span class="pre">True</span></code> 时，
+API 调用会记录哪些函数被替换，如下例所示：</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Patched RMSNorm.forward_cuda with FLAGGEMS custom_gems_rms_forward_cuda
+Patched RotaryEmbedding.forward_cuda with FLAGGEMS custom_gems_rope_forward_cuda
+Patched SiluAndMul.forward_cuda with FLAGGEMS custom_gems_silu_and_mul
+</pre></div>
+</div>
+<p>当你希望更全面地使用 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 算子进行替换时，可以采取这种方式。</p>
+</section>
+<section id="id3">
+<h3>2.3 完整的示例<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">vllm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LLM</span><span class="p">,</span> <span class="n">SamplingParams</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+
+<span class="c1"># 第一步：启用对 PyTorch（ATen）算子的加速</span>
+<span class="n">flag_gems</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+<span class="c1"># 第二步（可选）： 对 vLLM 的定制算子进行打补丁操作</span>
+<span class="n">flag_gems</span><span class="o">.</span><span class="n">apply_gems_patches_to_vllm</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 第三步：和平时一样使用 vLLM</span>
+<span class="n">llm</span> <span class="o">=</span> <span class="n">LLM</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="s2">"sharpbai/Llama-2-7b-hf"</span><span class="p">)</span>
+<span class="n">sampling_params</span> <span class="o">=</span> <span class="n">SamplingParams</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="n">llm</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="s2">"Tell me a joke."</span><span class="p">,</span> <span class="n">sampling_params</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="megatron-lm">
+<h2>3. Megatron-LM<a class="headerlink" href="#megatron-lm" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/NVIDIA/Megatron-LM">Megatron-LM</a> 是一个针对大规模语言模型的预训练、
+调优作了高度优化的床架。由于框架内部紧耦合了一些定制的训练回路和内部工具，
+将 <em>FlagGems</em> 集成到 Megatron-LM 需要一些更有针对性的操作。</p>
+<p>由于 Megatron-LM 中的训练回路与其分布式数据加载、梯度累积、流水线并行紧密绑定，
+我们建议仅对其前向和反向计算阶段应用 <em>FlagGems</em> 算子加速。</p>
+<section id="id4">
+<h3>3.1 建议的集成点<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>在 Megatron-LM 中使用 FlagGems 的最可靠方式是修改位于
+<a class="reference external" href="https://github.com/NVIDIA/Megatron-LM/blob/v2.6/megatron/training.py#L347"><code class="docutils literal notranslate"><span class="pre">megatron/training.py</span></code></a>
+文件中的 <code class="docutils literal notranslate"><span class="pre">train_step</span></code> 函数。具体而言，用 <code class="docutils literal notranslate"><span class="pre">flag_gems.enable()</span></code> 生成一个上下文，
+将对 <code class="docutils literal notranslate"><span class="pre">forward_backward_func()</span></code> 的调用封装在里面。如下面的代码段所示：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">forward_step_func</span><span class="p">,</span> <span class="n">data_iterator</span><span class="p">,</span>
+               <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">lr_scheduler</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Single training step."""</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">get_args</span><span class="p">()</span>
+    <span class="n">timers</span> <span class="o">=</span> <span class="n">get_timers</span><span class="p">()</span>
+
+    <span class="c1"># Set grad to zero.</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">DDP_impl</span> <span class="o">==</span> <span class="s1">'local'</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">use_contiguous_buffers_in_local_ddp</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">partition</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+            <span class="n">partition</span><span class="o">.</span><span class="n">zero_grad_buffer</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+    <span class="c1"># 启用 flag_gems 执行前向计算</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+    <span class="k">with</span> <span class="n">flag_gems</span><span class="o">.</span><span class="n">use_gems</span><span class="p">():</span>
+      <span class="n">forward_backward_func</span> <span class="o">=</span> <span class="n">get_forward_backward_func</span><span class="p">()</span>
+      <span class="n">losses_reduced</span> <span class="o">=</span> <span class="n">forward_backward_func</span><span class="p">(</span>
+          <span class="n">forward_step_func</span><span class="p">,</span> <span class="n">data_iterator</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
+          <span class="n">optimizer</span><span class="p">,</span> <span class="n">timers</span><span class="p">,</span> <span class="n">forward_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+      <span class="p">)</span>
+
+    <span class="c1"># Empty unused memory</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">empty_unused_memory_level</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>这种注入方式可以确保只有在执行前向和反向计算逻辑时才会执行 <em>FlagGems</em> 加速的算子，
+其他的诸如数据加载和优化等步骤都保留不变。</p>
+<p>&lt;!</p>
+</section>
+<section id="scope-and-limitations">
+<h3>3.2 Scope and Limitations<a class="headerlink" href="#scope-and-limitations" title="Link to this heading">#</a></h3>
+<p>–&gt;</p>
+</section>
+<section id="id5">
+<h3>3.2 范围与局限性<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>[!WARNING]
+<strong>警告</strong></p>
+<p>Megatron-LM 项目变更非常频繁，演化速度很快。在寻找集成点的时候要格外小心。</p>
+</div></blockquote>
+<p>尽管在大多数框架中，调用 <code class="docutils literal notranslate"><span class="pre">flag_gems.enable()</span></code> 就足够了，我们还是发现如果在
+Megatron-LM 流水线的早期阶段（尤其是数据加载阶段）启用加速算子的话，
+可能会产生一些意外的行为。
+为了确保系统稳定性不受影响，我们建议用上下文管理器（context manager）的方式来调用
+<code class="docutils literal notranslate"><span class="pre">flag_gems.use_gems()</span></code>，并且仅应用到其计算阶段。</p>
+<p>如果你希望针对更大范围的组件（例如优化器、预处理逻辑）进行加速，
+你可以尝试使用 <code class="docutils literal notranslate"><span class="pre">flag_gems.enable()</span></code> 在全局作用域启用加速算子。
+不过这种方式没有经过彻底的测试，可能需要基于你所使用的 Megatron-LM
+版本开展一些额外的验证工作。</p>
+<p>我们欢迎社区在这方面<a class="reference internal" href="../contribution/overview.html"><span class="doc std std-doc">贡献</span></a> 你的想法 -
+请考虑通过登记问题或者提交 PR 的方式帮助我们，实现对 Megatron-LM
+的更大范围的集成。</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="distributed.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">多 GPU 与分布式环境</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="modules.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">使用 FlagGems 模块构造自己的模型</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hugging-face-transformers">1. Hugging Face Transformers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm">2. vLLM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-pytorch">2.1 替换 vLLM 中的标准 PyTorch 算子</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2.2 替换特定于 vLLM 的定制算子</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2.3 完整的示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#megatron-lm">3. Megatron-LM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">3.1 建议的集成点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scope-and-limitations">3.2 Scope and Limitations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">3.2 范围与局限性</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 9月 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flaggems_en/usage/frameworks.html">English</a></body>
+</html>

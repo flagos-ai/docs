@@ -1,0 +1,1329 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Change History" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="references/changelog.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="v5.4: Release date: 2026-09-28 Part of FlagOS 2.2., Added tooling feature: Op Diff, Added KernelGen operators: argsort, isneginf, special_bessel_j1, igammac_, special_logsumexp, special_bessel_y1, bernoulli, not_equal, pdist, norm, randint_like, reflection_pad3d, reflection_pad3d_backward,_batch_..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="v5.4: Release date: 2026-09-28 Part of FlagOS 2.2., Added tooling feature: Op Diff, Added KernelGen operators: argsort, isneginf, special_bessel_j1, igammac_, special_logsumexp, special_bessel_y1, bernoulli, not_equal, pdist, norm, randint_like, reflection_pad3d, reflection_pad3d_backward,_batch_..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Change History &#8212; FlagGems Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=bd3843ac" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/tabulator.min.js?v=52b524e6"></script>
+    <script src="../_static/js/benchmark.js?v=bfe1f9a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/references/changelog.6549991d-9591-4036-9301-dd1581bca672.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'references/changelog';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/references/changelog.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FlagGems Experimental Operators" href="experimental.html" />
+    <link rel="prev" title="Operator Search" href="operators-search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagGems Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagGems Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagGems Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/install.html">Installing FlagGems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/features.html">Features Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/platforms.html">Platforms Supported</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/pointwise-dynamic.html">Pointwise Dynamic Operators</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../usage/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/basic.html">Enabling FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/selective.html">Selective Operator Enablement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">Enable Debug Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/experimental.html">Using Experimental Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/non-nvidia.html">Running FlagGems on Non-NVIDIA Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/distributed.html">Multi-GPU Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/frameworks.html">Integration with Popular Frameworks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/modules.html">Building Custom Models Using FlagGems modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/tuning.html">Achieving Optimal Performance with FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/cpp.html">Using C+±Based Operators for Optimal Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/precision.html">Precision Checking (Experimental)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">Performance Benchmarking Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/benchmark.html">Performance Benchmarking in FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/results.html">Benchmark Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/database.html">Performance Datadase Backends</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Testing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../testing/unittest.html">Testing Python Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/coverage.html">Unit-test coverage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operators.html">Operator List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators-search.html">Operator Search</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Change History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">FlagGems Experimental Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release.html">Packaging</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="test/index.html">Test Reports</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="test/coverage/index.html">UT Coverage</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="test/unit/index.html">UT Summary</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260609-summary.html">Test Results - 20260609-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260604-summary.html">Test Results - 20260604-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260603-summary.html">Test Results - 20260603-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260526-summary.html">Test Results - 20260526-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260525-summary.html">Test Results - 20260525-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260505-summary.html">Test Results - 20260505-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260329-summary.html">Test Results - 20260329-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260328-summary.html">Test Results - 20260328-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260327-summary.html">Test Results - 20260327-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260326-summary.html">Test Results - 20260326-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260325-summary.html">Test Results - 20260325-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260324-summary.html">Test Results - 20260324-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260323-summary.html">Test Results - 20260323-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260322-summary.html">Test Results - 20260322-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260321-summary.html">Test Results - 20260321-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260320-summary.html">Test Results - 20260320-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260319-summary.html">Test Results - 20260319-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260318-summary.html">Test Results - 20260318-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260317-summary.html">Test Results - 20260317-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260316-summary.html">Test Results - 20260316-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260315-summary.html">Test Results - 20260315-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test/unit/summaries/20260314-summary.html">Test Results - 20260314-summary</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribution</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contribution/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/backend.html">Adding a New Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/cpp-wrapper.html">Add a C++ Wrapped Operator</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/references/changelog.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Change History</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v5-4">v5.4</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v5-3">v5.3</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v5-0">v5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v4-2">v4.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v4-1">v4.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v4-0">v4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v3-0">v3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v2-2">v2.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v2-1">v2.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v2-0">v2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-0">v1.0</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="change-history">
+<h1>Change History<a class="headerlink" href="#change-history" title="Link to this heading">#</a></h1>
+<section id="v5-4">
+<h2>v5.4<a class="headerlink" href="#v5-4" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2026-09-28</p>
+<ul class="simple">
+<li><p>Part of FlagOS 2.2.</p></li>
+<li><p>Added tooling feature:
+<code class="docutils literal notranslate"><span class="pre">Op</span> <span class="pre">Diff</span></code></p></li>
+<li><p>Added KernelGen operators:
+<code class="docutils literal notranslate"><span class="pre">argsort</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isneginf</span></code>,
+<code class="docutils literal notranslate"><span class="pre">special_bessel_j1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">igammac_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">special_logsumexp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">special_bessel_y1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bernoulli</span></code>,
+<code class="docutils literal notranslate"><span class="pre">not_equal</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pdist</span></code>,
+<code class="docutils literal notranslate"><span class="pre">norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">randint_like</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reflection_pad3d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reflection_pad3d_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">_batch_norm_no_update</span></code>,
+<code class="docutils literal notranslate"><span class="pre">_cdist_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">renorm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">remainder</span></code>,
+<code class="docutils literal notranslate"><span class="pre">add_rms_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clamp_max</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fractional_max_pool2d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">special_airy_ai</span></code>,
+<code class="docutils literal notranslate"><span class="pre">digamma</span></code></p></li>
+<li><p>Added SiliconFlow operators:
+<code class="docutils literal notranslate"><span class="pre">upsample_linear1d_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">geometric</span></code>,
+<code class="docutils literal notranslate"><span class="pre">geometric_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">_scaled_mm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">_scaled_grouped_mm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">segment_reduce</span></code>,
+<code class="docutils literal notranslate"><span class="pre">_segment_reduce_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nanmedian</span></code>,
+<code class="docutils literal notranslate"><span class="pre">unique_dim</span></code>,
+<code class="docutils literal notranslate"><span class="pre">searchsorted</span></code>,
+<code class="docutils literal notranslate"><span class="pre">index_reduce_</span></code></p></li>
+<li><p>Added large-model and fused operators:
+<code class="docutils literal notranslate"><span class="pre">flash_mla_with_kvcache</span></code>,
+<code class="docutils literal notranslate"><span class="pre">BeamSearchScore</span></code>,
+<code class="docutils literal notranslate"><span class="pre">MatmulBiasActivation</span></code></p></li>
+</ul>
+</section>
+<section id="v5-3">
+<h2>v5.3<a class="headerlink" href="#v5-3" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2026-06-24</p>
+<ul class="simple">
+<li><p>Part of FlagOS 2.1.</p></li>
+<li><p>Added FlagTune features for selected matmul operators:
+simple extensible FlagTune API,
+<code class="docutils literal notranslate"><span class="pre">mm</span></code> tuning with <code class="docutils literal notranslate"><span class="pre">GROUP_M</span></code></p></li>
+<li><p>Added and optimized FP8 and MoE kernels:
+FP8 block-wise <code class="docutils literal notranslate"><span class="pre">bmm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fp8_einsum</span></code>,
+optimized fused MoE kernel,
+<code class="docutils literal notranslate"><span class="pre">router_gemm</span></code>,
+fused Marlin MoE</p></li>
+<li><p>Added large-model fused operators:
+<code class="docutils literal notranslate"><span class="pre">fused_deepseek_v4_qnorm_rope_kv_rope_quant_insert</span></code></p></li>
+<li><p>Added neural network operator:
+<code class="docutils literal notranslate"><span class="pre">affine_grid_generator</span></code></p></li>
+<li><p>Improved NVIDIA backend:
+migrated SQMMA descriptor usage to the Triton 3.6 TensorDescriptor API,
+bumped Triton to 3.6,
+bumped PyTorch for the NVIDIA backend</p></li>
+<li><p>Improved backend and setup support for Spacemit and Enflame.</p></li>
+<li><p>Added QUICK_MODE support to reduce test suite runtime.</p></li>
+</ul>
+</section>
+<section id="v5-0">
+<h2>v5.0<a class="headerlink" href="#v5-0" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2026-03-26</p>
+<ul class="simple">
+<li><p>Added math operators:
+<code class="docutils literal notranslate"><span class="pre">absolute</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">acos</span></code>,
+<code class="docutils literal notranslate"><span class="pre">arcsinh</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">arcsinh_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">arcsinh.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">arctanh_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">asinh_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">ceil</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ceil_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ceil.out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">diagmma_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">equal</span></code>,
+<code class="docutils literal notranslate"><span class="pre">floor_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">fmin</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">fmin.out</span></code> (<em>generated</em>)
+<code class="docutils literal notranslate"><span class="pre">hardswish_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">hypot</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">i0</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">i0_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">i0.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">log1p_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">logaddexp</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">logaddexp.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">logical_and_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">logical_or_</span></code>
+<code class="docutils literal notranslate"><span class="pre">logit</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">logit_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">logit.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">sgn_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">sinh_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">special_i1</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">special_i1.out</span></code> (<em>generated</em>)</p></li>
+<li><p>Added BLAS operator:
+<code class="docutils literal notranslate"><span class="pre">bmm.out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cutlass_scaled_mm_sm_90</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tril</span></code> (<em>generated</em>)</p></li>
+<li><p>Added MoE operators:
+<code class="docutils literal notranslate"><span class="pre">dispatch_fused_moe_kernel</span></code>,
+<code class="docutils literal notranslate"><span class="pre">grouped_topk</span></code>,
+<code class="docutils literal notranslate"><span class="pre">inplace_fused_experts</span></code>,
+<code class="docutils literal notranslate"><span class="pre">outplace_fused_experts</span></code></p></li>
+<li><p>Added distribution operator:
+<code class="docutils literal notranslate"><span class="pre">normal_</span></code>,</p></li>
+<li><p>Added neural network operators:
+<code class="docutils literal notranslate"><span class="pre">_upsample_nearest_exact1d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">apply_repetition_penalties</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">chunk_gated_delta_rule_fwd</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dswiglu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">embedding_dense_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fused_recurrent_gated_delta_rule_fwd</span></code>,
+<code class="docutils literal notranslate"><span class="pre">hardsigmoid</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">hardsigmoid.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">nll_loss_nd_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nll_loss_nd_forward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">one_hot</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pixel_unshuffle</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">pixel_unshuffle.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">prelu</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">reflection_pad1d</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">reflection_pad1d.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">reflection_pad2d</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">reflection_pad2d.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">relu6</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">swiglu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">triu_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">unfold_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">upsample_bicubic2d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">upsample_linear1d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">upsample_nearest1d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">upsample_nearest3d</span></code></p></li>
+<li><p>Added tensor operators:
+<code class="docutils literal notranslate"><span class="pre">_functional_sym_constrain_range_for_size</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">alias_copy</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">alias_copy.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">fill.Scalar_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fill.Tensor_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lift_fresh_copy</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">replication_pad1d</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">replication_pad1d.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">replication_pad3d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rrelu_with_noise_backward</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">selu</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">selu_</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">slice_backward</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">softshrink</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">softshrink.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">t_copy</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">t_copy.out</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">unfold_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">zero</span></code> (<em>generated</em>),
+<code class="docutils literal notranslate"><span class="pre">zero_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">zero.out</span></code> (<em>generated</em>)</p></li>
+<li><p>Removed reduction operator <code class="docutils literal notranslate"><span class="pre">moe_sum</span></code>.</p></li>
+<li><p>Added reduction operators:
+<code class="docutils literal notranslate"><span class="pre">bincount</span></code></p></li>
+<li><p>Added DSA operators:
+<code class="docutils literal notranslate"><span class="pre">spare_mla_fwd</span></code></p></li>
+</ul>
+</section>
+<section id="v4-2">
+<h2>v4.2<a class="headerlink" href="#v4-2" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2026-01-04</p>
+<ul class="simple">
+<li><p>This release contains 216 operators, see <a class="reference internal" href="#../reference/operators"><span class="xref myst">Operator List</span></a></p></li>
+<li><p>Added neural network operators:
+<code class="docutils literal notranslate"><span class="pre">avg_pool2d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">avg_pool2d_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dgeglu</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">dreglu</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">geglu</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">reglu</span></code> (<em>alpha</em>),</p></li>
+<li><p>Added BLAS operators:
+<code class="docutils literal notranslate"><span class="pre">baddbmm</span></code>,</p></li>
+<li><p>Added convolution operators:
+<code class="docutils literal notranslate"><span class="pre">conv1d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">conv2d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">conv3d</span></code>,</p></li>
+<li><p>Added tensor operator:
+<code class="docutils literal notranslate"><span class="pre">copy_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">masked_scatter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">masked_scatter_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">per_token_group_quant_fp8</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">scatter_add_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">to_copy</span></code>.</p></li>
+<li><p>Added reduction operator:
+<code class="docutils literal notranslate"><span class="pre">moe_sum</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scaled_softmax_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scaled_softmax_forward</span></code>,</p></li>
+<li><p>Added math operator:
+<code class="docutils literal notranslate"><span class="pre">exp_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tan</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tan_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">true_divide_out</span></code>,</p></li>
+<li><p>Promoted tensor operator <code class="docutils literal notranslate"><span class="pre">continuous</span></code> to beta stage.</p></li>
+<li><p>Promoted reduction operator <code class="docutils literal notranslate"><span class="pre">index</span></code> to stable stage.</p></li>
+<li><p>The previous <code class="docutils literal notranslate"><span class="pre">upsample</span></code> operator is now split into
+<code class="docutils literal notranslate"><span class="pre">upsample_nearest2d</span></code> and <code class="docutils literal notranslate"><span class="pre">upsample_bicubic2d_aa</span></code></p></li>
+</ul>
+</section>
+<section id="v4-1">
+<h2>v4.1<a class="headerlink" href="#v4-1" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2025-11-01</p>
+<ul class="simple">
+<li><p>Added two fused RWKV operators:
+<code class="docutils literal notranslate"><span class="pre">rwkv_ka_fusion</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rwkv_mm_sparsity</span></code></p></li>
+<li><p>Adopted by the RWKV project in <a class="reference external" href="https://github.com/BlinkDL/Albatross/tree/main/faster_251101">BlinkDL/Albatross:faster_251101</a></p></li>
+</ul>
+</section>
+<section id="v4-0">
+<h2>v4.0<a class="headerlink" href="#v4-0" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2025-10-31</p>
+<ul class="simple">
+<li><p>Supports 202 operators in total.</p></li>
+<li><p>Added linear algebra operators:
+<code class="docutils literal notranslate"><span class="pre">addcdiv</span></code>,
+<code class="docutils literal notranslate"><span class="pre">addcmul</span></code>,
+<code class="docutils literal notranslate"><span class="pre">addmv</span></code>,
+<code class="docutils literal notranslate"><span class="pre">addmv_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">addr</span></code></p></li>
+<li><p>Added BLAS operators:
+<code class="docutils literal notranslate"><span class="pre">addmm_out</span></code></p></li>
+<li><p>Added math operators:
+<code class="docutils literal notranslate"><span class="pre">atan</span></code>,
+<code class="docutils literal notranslate"><span class="pre">atan_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bitwise_left_shift</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bitwise_right_shift</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clamp_min</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clamp_min_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">exp2</span></code>,
+<code class="docutils literal notranslate"><span class="pre">exp2_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sqrt_</span></code></p></li>
+<li><p>Added neural network operators:
+<code class="docutils literal notranslate"><span class="pre">celu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">celu_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">elu_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">elu_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">get_scheduler_metadata</span></code>,
+<code class="docutils literal notranslate"><span class="pre">glu_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">moe_align_block_size</span></code>,
+<code class="docutils literal notranslate"><span class="pre">softplus</span></code></p></li>
+<li><p>Added reduction operators:
+<code class="docutils literal notranslate"><span class="pre">index</span></code> (<em>beta</em>),
+<code class="docutils literal notranslate"><span class="pre">std</span></code>,
+<code class="docutils literal notranslate"><span class="pre">trace</span></code></p></li>
+<li><p>Added tensor operators:
+<code class="docutils literal notranslate"><span class="pre">index_add_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">logspace</span></code>,
+<code class="docutils literal notranslate"><span class="pre">max_pool2d_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">max_pool2d_with_indices</span></code>,
+<code class="docutils literal notranslate"><span class="pre">topk_softmax</span></code></p></li>
+<li><p>Triton JIT C++ runtime now ships precompiled kernels for:
+<code class="docutils literal notranslate"><span class="pre">add</span></code>,
+<code class="docutils literal notranslate"><span class="pre">addmm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">argmax</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bmm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bmm_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cat</span></code>,
+<code class="docutils literal notranslate"><span class="pre">contiguous</span></code>,
+<code class="docutils literal notranslate"><span class="pre">embedding</span></code>,
+<code class="docutils literal notranslate"><span class="pre">exponential_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fill</span></code>,
+<code class="docutils literal notranslate"><span class="pre">flash_attn_varlen_func</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fused_add_rms_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">max</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nonzero</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reshape_and_cache</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reshape_and_cache_flash</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rms_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rms_norm_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rotary_embedding</span></code>,
+<code class="docutils literal notranslate"><span class="pre">softmax</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sum</span></code>,
+<code class="docutils literal notranslate"><span class="pre">topk</span></code>,
+<code class="docutils literal notranslate"><span class="pre">zeros</span></code></p></li>
+</ul>
+</section>
+<section id="v3-0">
+<h2>v3.0<a class="headerlink" href="#v3-0" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2025-07-14</p>
+<ul class="simple">
+<li><p>Support 184 operators in total, including custom operators used in large model inference</p></li>
+<li><p>New hardware platforms supported:
+Ascend, AIPU, etc.</p></li>
+<li><p>Added compatibility with the vLLM framework, with the inference verification of DeepSeek model passed</p></li>
+<li><p>Added BLAS operator:
+<code class="docutils literal notranslate"><span class="pre">dot</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mm_out</span></code></p></li>
+<li><p>Added tensor operators:
+<code class="docutils literal notranslate"><span class="pre">index_put_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scatter_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sort_stable</span></code></p></li>
+<li><p>Added linear algebra operators:
+<code class="docutils literal notranslate"><span class="pre">lerp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sum_dim_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sum_out</span></code></p></li>
+<li><p>Added math operators:
+<code class="docutils literal notranslate"><span class="pre">angle</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nan_to_num</span></code>,
+<code class="docutils literal notranslate"><span class="pre">polar</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tanh_backward</span></code></p></li>
+<li><p>Added reduction operators:
+<code class="docutils literal notranslate"><span class="pre">cummax</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cumsum_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">eye</span></code>,
+<code class="docutils literal notranslate"><span class="pre">index</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">layer_norm_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">softmax_backward</span></code></p></li>
+<li><p>Added neural network operators:
+<code class="docutils literal notranslate"><span class="pre">batch_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">batch_norm_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dropout_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">embedding_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">flash_attention_forward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gelu_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">glu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">group_norm_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">log_softmax</span></code> (<em>stable</em>),
+<code class="docutils literal notranslate"><span class="pre">log_softmax_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sigmoid_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">silu_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">threshold</span></code>,
+<code class="docutils literal notranslate"><span class="pre">threshold_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">weight_norm_interface_backward</span></code></p></li>
+<li><p>Removed neural network operator:
+<code class="docutils literal notranslate"><span class="pre">cross_entropy_loss</span></code>,
+<code class="docutils literal notranslate"><span class="pre">instance_norm</span></code></p></li>
+<li><p>Removed linear algebra operators:
+<code class="docutils literal notranslate"><span class="pre">outer</span></code> (<em>fused</em>),</p></li>
+</ul>
+</section>
+<section id="v2-2">
+<h2>v2.2<a class="headerlink" href="#v2-2" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2025-04-17</p>
+<ul class="simple">
+<li><p>Added BLAS operators:
+<code class="docutils literal notranslate"><span class="pre">vdot</span></code></p></li>
+<li><p>Added tensor operators:
+<code class="docutils literal notranslate"><span class="pre">cat</span></code>,
+<code class="docutils literal notranslate"><span class="pre">constant_pad_nd</span></code>,
+<code class="docutils literal notranslate"><span class="pre">contiguous</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">diag</span></code>,
+<code class="docutils literal notranslate"><span class="pre">diag_embed</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fill</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fill_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">hstack</span></code>,
+<code class="docutils literal notranslate"><span class="pre">index_add</span></code>,
+<code class="docutils literal notranslate"><span class="pre">index_put</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">kron</span></code>,
+<code class="docutils literal notranslate"><span class="pre">linspace</span></code>,
+<code class="docutils literal notranslate"><span class="pre">masked_fill</span></code>,
+<code class="docutils literal notranslate"><span class="pre">masked_fill_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">quantile</span></code>,
+<code class="docutils literal notranslate"><span class="pre">repeat_interleave_self_tensor</span></code>,
+<code class="docutils literal notranslate"><span class="pre">repeat_interleave_tensor</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scatter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">select_scatter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">slice_scatter</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sort</span></code>,
+<code class="docutils literal notranslate"><span class="pre">stack</span></code>,
+<code class="docutils literal notranslate"><span class="pre">vstack</span></code>,
+<code class="docutils literal notranslate"><span class="pre">where_out</span></code> (<em>stable</em>),</p></li>
+<li><p>Added linear algebra operators:
+<code class="docutils literal notranslate"><span class="pre">diagonal_backward</span></code></p></li>
+<li><p>Added convolution operators:
+<code class="docutils literal notranslate"><span class="pre">_conv_depthwise2d</span></code>,</p></li>
+<li><p>Added neural network operators:
+<code class="docutils literal notranslate"><span class="pre">_upsample_bicubic2d_aa</span></code>,
+<code class="docutils literal notranslate"><span class="pre">elu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gelu_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">instance_norm</span></code> (<em>fused</em>),
+<code class="docutils literal notranslate"><span class="pre">mse_loss</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nll_loss_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nll_loss_forward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nll_loss2d_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nll_loss2d_forward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">relu_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scaled_dot_product_attention</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scaled_dot_product_attention_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">scaled_dot_product_attention_forward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sigmoid_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">silu_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">upsample_nearest2d</span></code>,
+<code class="docutils literal notranslate"><span class="pre">weight_norm_interface</span></code>,</p></li>
+<li><p>Added math operators:
+<code class="docutils literal notranslate"><span class="pre">abs_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">add_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bitwise_and_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bitwise_not_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bitwise_or_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clamp_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cos_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">div_mode_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">exp_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">floor_divide_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">log</span></code>,
+<code class="docutils literal notranslate"><span class="pre">log_sigmoid</span></code>,
+<code class="docutils literal notranslate"><span class="pre">logical_and</span></code>,
+<code class="docutils literal notranslate"><span class="pre">logical_not</span></code>,
+<code class="docutils literal notranslate"><span class="pre">logical_or</span></code>,
+<code class="docutils literal notranslate"><span class="pre">logical_xor</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mul_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pow_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reciprocal_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">remainder</span></code>,
+<code class="docutils literal notranslate"><span class="pre">remainder_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rsqrt_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sin_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sub_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tanh_</span></code>,</p></li>
+<li><p>Added reduction operators:
+<code class="docutils literal notranslate"><span class="pre">argmin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">count_nonzero</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cummin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gather</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gather_backward</span></code>,</p></li>
+<li><p>Added science operators:
+<code class="docutils literal notranslate"><span class="pre">erf_</span></code>,</p></li>
+<li><p>Added distribution operators:
+<code class="docutils literal notranslate"><span class="pre">randperm</span></code>,</p></li>
+</ul>
+</section>
+<section id="v2-1">
+<h2>v2.1<a class="headerlink" href="#v2-1" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2024-09-05</p>
+<ul class="simple">
+<li><p>Added Tensor operators:
+<code class="docutils literal notranslate"><span class="pre">_unique2</span></code>,
+<code class="docutils literal notranslate"><span class="pre">arange</span></code>,
+<code class="docutils literal notranslate"><span class="pre">flip</span></code>,
+<code class="docutils literal notranslate"><span class="pre">full</span></code>,
+<code class="docutils literal notranslate"><span class="pre">full_like</span></code>,
+<code class="docutils literal notranslate"><span class="pre">index_select</span></code>,
+<code class="docutils literal notranslate"><span class="pre">masked_fill</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">masked_select</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ones</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ones_like</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pad</span></code>,
+<code class="docutils literal notranslate"><span class="pre">repeat</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tile</span></code>,
+<code class="docutils literal notranslate"><span class="pre">unique</span></code>,
+<code class="docutils literal notranslate"><span class="pre">where</span></code>,
+<code class="docutils literal notranslate"><span class="pre">zeros</span></code>,
+<code class="docutils literal notranslate"><span class="pre">zeros_like</span></code></p></li>
+<li><p>support neural network operator:
+<code class="docutils literal notranslate"><span class="pre">embedding</span></code></p></li>
+<li><p>support basic math operators:
+<code class="docutils literal notranslate"><span class="pre">allclose</span></code>,
+<code class="docutils literal notranslate"><span class="pre">floor_divide</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isclose</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isfinite</span></code>,
+<code class="docutils literal notranslate"><span class="pre">maximum</span></code>,
+<code class="docutils literal notranslate"><span class="pre">minimum</span></code>,
+<code class="docutils literal notranslate"><span class="pre">true_divide</span></code>,
+<code class="docutils literal notranslate"><span class="pre">trunc_divide</span></code></p></li>
+<li><p>support distribution operators:
+<code class="docutils literal notranslate"><span class="pre">exponential_</span></code>,
+<code class="docutils literal notranslate"><span class="pre">multinomial</span></code>,
+<code class="docutils literal notranslate"><span class="pre">nonzero</span></code>,
+<code class="docutils literal notranslate"><span class="pre">normal</span></code>,
+<code class="docutils literal notranslate"><span class="pre">topk</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rand</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rand_like</span></code>,
+<code class="docutils literal notranslate"><span class="pre">randn</span></code>,
+<code class="docutils literal notranslate"><span class="pre">randn_like</span></code>,
+<code class="docutils literal notranslate"><span class="pre">topk</span></code>,
+<code class="docutils literal notranslate"><span class="pre">uniform_</span></code></p></li>
+<li><p>Added science operators:
+<code class="docutils literal notranslate"><span class="pre">erf</span></code>,
+<code class="docutils literal notranslate"><span class="pre">resolve_conj</span></code>,
+<code class="docutils literal notranslate"><span class="pre">resolve_neg</span></code></p></li>
+</ul>
+</section>
+<section id="v2-0">
+<h2>v2.0<a class="headerlink" href="#v2-0" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2024-05-31</p>
+<ul class="simple">
+<li><p>Added BLAS operators:
+<code class="docutils literal notranslate"><span class="pre">mv</span></code>,
+<code class="docutils literal notranslate"><span class="pre">outer</span></code></p></li>
+<li><p>Added math operators:
+<code class="docutils literal notranslate"><span class="pre">bitwise_and</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bitwise_not</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bitwise_or</span></code>,
+<code class="docutils literal notranslate"><span class="pre">clamp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cos</span></code>,
+<code class="docutils literal notranslate"><span class="pre">eq</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ge</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isinf</span></code>,
+<code class="docutils literal notranslate"><span class="pre">isnan</span></code>,
+<code class="docutils literal notranslate"><span class="pre">le</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">ne</span></code>,
+<code class="docutils literal notranslate"><span class="pre">neg</span></code>,
+<code class="docutils literal notranslate"><span class="pre">or</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sigmoid</span></code>
+<code class="docutils literal notranslate"><span class="pre">sin</span></code>,
+<code class="docutils literal notranslate"><span class="pre">tanh</span></code>,</p></li>
+<li><p>Added reduction operators:
+<code class="docutils literal notranslate"><span class="pre">all</span></code>,
+<code class="docutils literal notranslate"><span class="pre">amax</span></code>,
+<code class="docutils literal notranslate"><span class="pre">any</span></code>,
+<code class="docutils literal notranslate"><span class="pre">argmax</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cross_entropy_loss</span></code>,
+<code class="docutils literal notranslate"><span class="pre">group_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">log_softmax</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">max</span></code>,
+<code class="docutils literal notranslate"><span class="pre">min</span></code>,
+<code class="docutils literal notranslate"><span class="pre">prod</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rms_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rms_norm_backward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rms_norm_forward</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sum</span></code>,
+<code class="docutils literal notranslate"><span class="pre">var_mean</span></code>,
+<code class="docutils literal notranslate"><span class="pre">vector_norm</span></code>,</p></li>
+<li><p>Added neural network operators:
+<code class="docutils literal notranslate"><span class="pre">apply_rotary_position_embedding</span></code>,
+<code class="docutils literal notranslate"><span class="pre">fused_add_rms_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gelu_and_mul</span></code>,
+<code class="docutils literal notranslate"><span class="pre">outer</span></code> (<em>alpha</em>),
+<code class="docutils literal notranslate"><span class="pre">silu_and_mul</span></code>,
+<code class="docutils literal notranslate"><span class="pre">silu_and_mul_out</span></code>,
+<code class="docutils literal notranslate"><span class="pre">skip_layer_norm</span></code></p></li>
+</ul>
+</section>
+<section id="v1-0">
+<h2>v1.0<a class="headerlink" href="#v1-0" title="Link to this heading">#</a></h2>
+<p><strong>Release date</strong>: 2024-05-10</p>
+<ul class="simple">
+<li><p>Added BLAS operators:
+<code class="docutils literal notranslate"><span class="pre">addmm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bmm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mm</span></code></p></li>
+<li><p>Added math operators:
+<code class="docutils literal notranslate"><span class="pre">abs</span></code>,
+<code class="docutils literal notranslate"><span class="pre">add</span></code>,
+<code class="docutils literal notranslate"><span class="pre">div</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dropout</span></code>,
+<code class="docutils literal notranslate"><span class="pre">exp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">gelu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mul</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pow</span></code>,
+<code class="docutils literal notranslate"><span class="pre">reciprocal</span></code>,
+<code class="docutils literal notranslate"><span class="pre">relu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rsqrt</span></code>,
+<code class="docutils literal notranslate"><span class="pre">silu</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sub</span></code>,
+<code class="docutils literal notranslate"><span class="pre">triu</span></code></p></li>
+<li><p>Added reduction operators:
+<code class="docutils literal notranslate"><span class="pre">cumsum</span></code>,
+<code class="docutils literal notranslate"><span class="pre">layer_norm</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mean</span></code>,
+<code class="docutils literal notranslate"><span class="pre">softmax</span></code></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="operators-search.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Operator Search</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="experimental.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">FlagGems Experimental Operators</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v5-4">v5.4</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v5-3">v5.3</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v5-0">v5.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v4-2">v4.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v4-1">v4.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v4-0">v4.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v3-0">v3.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v2-2">v2.2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v2-1">v2.1</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v2-0">v2.0</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v1-0">v1.0</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flaggems_zh/references/changelog.html">中文</a></body>
+</html>

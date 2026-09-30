@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"#source-code\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Source Code<a class=\"headerlink\" href=\"#source-code\" title=\"Link to this heading\">#</a></h2>", "a[href=\"#labels\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Labels<a class=\"headerlink\" href=\"#labels\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">aten</span></code></p>", "a[href=\"#aten-mapping\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">ATen Mapping<a class=\"headerlink\" href=\"#aten-mapping\" title=\"Link to this heading\">#</a></h2>", "a[href=\"#description\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Description<a class=\"headerlink\" href=\"#description\" title=\"Link to this heading\">#</a></h2><p>Adds all values from the tensor <code class=\"docutils literal notranslate\"><span class=\"pre\">src</span></code> into <code class=\"docutils literal notranslate\"><span class=\"pre\">self</span></code> at the indices specified\nin the <code class=\"docutils literal notranslate\"><span class=\"pre\">index</span></code> tensor in a similar fashion as <code class=\"docutils literal notranslate\"><span class=\"pre\">scatter_()</span></code>.\nFor each value in <code class=\"docutils literal notranslate\"><span class=\"pre\">src</span></code>, it is added to an index in <code class=\"docutils literal notranslate\"><span class=\"pre\">self</span></code> which is specified\nby its index in <code class=\"docutils literal notranslate\"><span class=\"pre\">src</span></code> for <code class=\"docutils literal notranslate\"><span class=\"pre\">dimension</span> <span class=\"pre\">!=</span> <span class=\"pre\">dim</span></code> and by the corresponding value\nin <code class=\"docutils literal notranslate\"><span class=\"pre\">index</span></code> for <code class=\"docutils literal notranslate\"><span class=\"pre\">dimension</span> <span class=\"pre\">=</span> <span class=\"pre\">dim</span></code>.</p>", "a[href=\"#scatter-add\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">scatter_add_<a class=\"headerlink\" href=\"#scatter-add\" title=\"Link to this heading\">#</a></h1><p><strong>Kind:</strong> Tensor | <strong>Stage:</strong> stable | <strong>Since:</strong> 4.2</p>", "a[href=\"#tests\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Tests<a class=\"headerlink\" href=\"#tests\" title=\"Link to this heading\">#</a></h2>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

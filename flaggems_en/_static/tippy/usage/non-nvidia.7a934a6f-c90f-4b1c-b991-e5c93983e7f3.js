@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"#unified-usage-interface\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">2. Unified usage interface<a class=\"headerlink\" href=\"#unified-usage-interface\" title=\"Link to this heading\">#</a></h2><p>Regardless of the underlying hardware, the usage of <code class=\"docutils literal notranslate\"><span class=\"pre\">flag_gems</span></code> remains exactly the same.\nThere is no need to modify application code when switching from NVIDIA to non-NVIDIA platforms.</p><p>Once you have imported <code class=\"docutils literal notranslate\"><span class=\"pre\">flag_gems</span></code> into your code and\n<a class=\"reference internal\" href=\"#../basic/#enabling-flaggems\"><span class=\"xref myst\">enabled <em>FlagGems</em> acceleration</span></a>,\nthe operator dispatch mechanism will automatically route operator invocations\nto the correct implementation for the backend.\nThis provides a consistent developer experience across different environments.</p>", "a[href=\"#supported-platforms\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">1. Supported platforms<a class=\"headerlink\" href=\"#supported-platforms\" title=\"Link to this heading\">#</a></h2><p>FlagGems supports a range of AI chips/platforms beyond NVIDIA.\nFor an up-to-date list of validated platforms, please refer to\n<a class=\"reference internal\" href=\"../overview/platforms.html\"><span class=\"doc std std-doc\">Supported Platforms</span></a></p>", "a[href=\"../overview/platforms.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">Platforms Supported<a class=\"headerlink\" href=\"#platforms-supported\" title=\"Link to this heading\">#</a></h1><p><em>FlagGems</em> supports 10+ backends. The currently supported platforms and\ntheir capabilities are listed blow:</p>", "a[href=\"#running-flaggems-on-non-nvidia-hardware\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">Running FlagGems on Non-NVIDIA Hardware<a class=\"headerlink\" href=\"#running-flaggems-on-non-nvidia-hardware\" title=\"Link to this heading\">#</a></h1><h2>1. Supported platforms<a class=\"headerlink\" href=\"#supported-platforms\" title=\"Link to this heading\">#</a></h2><p>FlagGems supports a range of AI chips/platforms beyond NVIDIA.\nFor an up-to-date list of validated platforms, please refer to\n<a class=\"reference internal\" href=\"../overview/platforms.html\"><span class=\"doc std std-doc\">Supported Platforms</span></a></p>", "a[href=\"#backend-auto-detection-and-manual-setting\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">4. Backend auto-detection and manual setting<a class=\"headerlink\" href=\"#backend-auto-detection-and-manual-setting\" title=\"Link to this heading\">#</a></h2><p>By default, <em>FlagGems</em> automatically detects the current hardware backend during runtime\nand selects the corresponding implementation.\nIn most cases, no manual configuration is required because everything just works\nout of the box.</p><p>If the builtin auto-detection mechanism fails or there are compatibility issues\nin your environment, you can manually set the target backend to ensure correct runtime behaviors.\nTo do this, set the following environment variable before running your code:</p>", "a[href=\"#platform-requirements\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">3. Platform requirements<a class=\"headerlink\" href=\"#platform-requirements\" title=\"Link to this heading\">#</a></h2><p>Although the usage pattern remains unchanged, there are some prerequisites\nwhen running <em>FlagGems</em> on non-NVIDIA platforms.\nThe <em>PyTorch</em> and the <em>Triton</em> compiler have to be installed and\nproperly configured on the target platform.</p><p>There are two common ways to obtain compatible builds:</p>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

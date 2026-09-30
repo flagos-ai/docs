@@ -1,0 +1,1075 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Pointwise Dynamic Operators" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="overview/pointwise-dynamic.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="1. Pointwise operations: Pointwise operators are trivial to parallelize. Most parallel programming guides begin with pointwise addition between 2 contiguous vectors. For vector_add in Triton, it is simple to implement a task partitioning schema that each CTA reads a contiguous range from each inp..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="1. Pointwise operations: Pointwise operators are trivial to parallelize. Most parallel programming guides begin with pointwise addition between 2 contiguous vectors. For vector_add in Triton, it is simple to implement a task partitioning schema that each CTA reads a contiguous range from each inp..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Pointwise Dynamic Operators &#8212; FlagGems Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=bd3843ac" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/tabulator.min.js?v=52b524e6"></script>
+    <script src="../_static/js/benchmark.js?v=bfe1f9a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/overview/pointwise-dynamic.a4a8e36d-e47c-47fe-8877-2cf5d668a9a3.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'overview/pointwise-dynamic';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/overview/pointwise-dynamic.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Overview" href="../usage/overview.html" />
+    <link rel="prev" title="Platforms Supported" href="platforms.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagGems Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagGems Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagGems Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/install.html">Installing FlagGems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="features.html">Features Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="platforms.html">Platforms Supported</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Pointwise Dynamic Operators</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../usage/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/basic.html">Enabling FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/selective.html">Selective Operator Enablement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">Enable Debug Logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/experimental.html">Using Experimental Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/non-nvidia.html">Running FlagGems on Non-NVIDIA Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/distributed.html">Multi-GPU Deployment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/frameworks.html">Integration with Popular Frameworks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/modules.html">Building Custom Models Using FlagGems modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/tuning.html">Achieving Optimal Performance with FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/cpp.html">Using C+±Based Operators for Optimal Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/precision.html">Precision Checking (Experimental)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">Performance Benchmarking Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/benchmark.html">Performance Benchmarking in FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/results.html">Benchmark Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/database.html">Performance Datadase Backends</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Testing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../testing/unittest.html">Testing Python Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/coverage.html">Unit-test coverage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references/operators.html">Operator List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/operators-search.html">Operator Search</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/changelog.html">Change History</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/experimental.html">FlagGems Experimental Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/project_structure.html">Project Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/release.html">Packaging</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../references/test/index.html">Test Reports</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../references/test/coverage/index.html">UT Coverage</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../references/test/unit/index.html">UT Summary</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260609-summary.html">Test Results - 20260609-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260604-summary.html">Test Results - 20260604-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260603-summary.html">Test Results - 20260603-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260526-summary.html">Test Results - 20260526-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260525-summary.html">Test Results - 20260525-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260505-summary.html">Test Results - 20260505-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260329-summary.html">Test Results - 20260329-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260328-summary.html">Test Results - 20260328-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260327-summary.html">Test Results - 20260327-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260326-summary.html">Test Results - 20260326-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260325-summary.html">Test Results - 20260325-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260324-summary.html">Test Results - 20260324-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260323-summary.html">Test Results - 20260323-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260322-summary.html">Test Results - 20260322-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260321-summary.html">Test Results - 20260321-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260320-summary.html">Test Results - 20260320-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260319-summary.html">Test Results - 20260319-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260318-summary.html">Test Results - 20260318-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260317-summary.html">Test Results - 20260317-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260316-summary.html">Test Results - 20260316-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260315-summary.html">Test Results - 20260315-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260314-summary.html">Test Results - 20260314-summary</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contribution</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contribution/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/backend.html">Adding a New Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/cpp-wrapper.html">Add a C++ Wrapped Operator</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/overview/pointwise-dynamic.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Pointwise Dynamic Operators</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pointwise-operations">1. Pointwise operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-generation">2. Code generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metadata-computation">3. Metadata Computation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caching-and-dispatching">4. Caching and dispatching</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-pointwise-dynamic-decorator">5. Use the <code class="docutils literal notranslate"><span class="pre">@pointwise_dynamic</span></code> decorator</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic">5.1 Basic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-non-tensor">5.2 Tensor/Non-Tensor</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-dtypes">5.3 Output dtypes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#number-of-outputs">5.4 Number of outputs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-pointwisedynamicfunction">6. Use <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">6.1 Basic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-place-operation-output-arguments">6.2 In-place Operation &amp; Output arguments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-instantiation">6.3 Manual Instantiation</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="pointwise-dynamic-operators">
+<h1>Pointwise Dynamic Operators<a class="headerlink" href="#pointwise-dynamic-operators" title="Link to this heading">#</a></h1>
+<section id="pointwise-operations">
+<h2>1. Pointwise operations<a class="headerlink" href="#pointwise-operations" title="Link to this heading">#</a></h2>
+<p>Pointwise operators are trivial to parallelize.
+Most parallel programming guides begin with pointwise addition
+between 2 contiguous vectors.
+For <a class="reference external" href="https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html#sphx-glr-getting-started-tutorials-01-vector-add-py"><code class="docutils literal notranslate"><span class="pre">vector_add</span></code> in Triton</a>,
+it is simple to implement a task partitioning schema that each CTA reads a contiguous range
+from each input vector and writes to a contiguous range of the output vector.</p>
+<p>However, actual use caes for pointwise operators may be more complicated.</p>
+<ul class="simple">
+<li><p>The input tensors might be contiguous: they may be contiguous in memory
+but not in a row-major order;
+or they may not be dense; or they may have internal overlapping.</p></li>
+<li><p>The input tensors may have arbitrary and/or different number of dimensions.
+It is not always possible to view them as contiguous vectors of the same shape.</p></li>
+<li><p>The input tensors may have different but broadcastable shapes;</p></li>
+<li><p>The inputs may be a mixture of tensors and non-tensor inputs;</p></li>
+<li><p>Different pointwise operators share common logic to compute indices,
+while it is tedious to rewrite them over-and-over for each operator.</p></li>
+</ul>
+<p>We propose an approach that is based on code generation to solve these problems.
+The principles of our design are:</p>
+<ul class="simple">
+<li><p>Pointwise operations are generally memory-bound, so avoid copying tensors to make them contiguous vectors;</p></li>
+<li><p>Pointwise operators should support inputs of arbitrary and/or different ranks, sizes, strides,
+broadcasting inputs, mixing tensor and non-tensors;</p></li>
+<li><p>Different pointwise operators should share common internal facilities, either as a library,
+or as a template-based code generation mechanism, to reduce boilerplate code.</p></li>
+<li><p>The common internal facilities should be configurable for adaption of different backends.</p></li>
+</ul>
+<p>The result is a decorator <code class="docutils literal notranslate"><span class="pre">&#64;pointwise_dynamic</span></code>.
+It provides a common wrapper for pointwise operator and a mechanism to generate triton kernels
+and corresponding wrappers based on the operation and the input configureations.</p>
+</section>
+<section id="code-generation">
+<h2>2. Code generation<a class="headerlink" href="#code-generation" title="Link to this heading">#</a></h2>
+<p>The basic usage of <code class="docutils literal notranslate"><span class="pre">pointwise_dynamic</span></code> is using it to decorate a <code class="docutils literal notranslate"><span class="pre">triton.jit</span></code> function
+that has return value, which is used to map inputs to outputs.
+The JIT function is similar to a function with <code class="docutils literal notranslate"><span class="pre">__device__</span></code> declaration specifier,
+a function that can be called from device.
+And we generate a triton jit function to call it, which acts like a CUDA kernel
+(a function with <code class="docutils literal notranslate"><span class="pre">__global__</span></code> declaration specifier) that loads and stores data at global memory.</p>
+<p>In order to support input tensors of different ranks, shapes and/or  strides,
+we pass the shape of the output tensor (which is also the task-space for pointwise operation) ,
+and the strides of each tensor at every dimension.
+The shape and strides are unpacked and passed to kernel as integers.
+Due to the lack of support for tuple as arguments to Triton kernels,
+we have to generate different kernels for different number of integers in the shape and strides.
+Although Triton supports tuple as arguments since version 3.3, it does not support all operations on tuples
+such as indexing, iteration and so on.</p>
+<p>In the Triton kernel, we map indices in task-space to the tensor multi-index based on the shape of the task space.
+We then map them from tensor multi-index to memory offsets on each tensor according to its strides at each dimension.
+For example, for a binary add operation of tensor of shape <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">3)</span></code> and <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">3)</span></code>, the task space is <code class="docutils literal notranslate"><span class="pre">(2,</span> <span class="pre">3)</span></code>,
+then task-id 4 is mapped to <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">1)</span></code> in the task space.
+Say that the strides for the <code class="docutils literal notranslate"><span class="pre">lhs</span></code> are <code class="docutils literal notranslate"><span class="pre">(3,</span> <span class="pre">1)</span></code>, the memory offset at the tensor is <code class="docutils literal notranslate"><span class="pre">4</span></code>,
+and the strides for the rhs are <code class="docutils literal notranslate"><span class="pre">(1,</span> <span class="pre">2)</span></code>, thus the memory offset for it is <code class="docutils literal notranslate"><span class="pre">3</span></code>.</p>
+<p>For tensors with broadcastable but different shapes, we first broadcast those shapes
+to get the shape of task space and view each tensors as the task shape,
+which returns new tensors that share the same storage, but with new strides w.r.t the new shape.</p>
+<p>In most cases, you can treat the decorated Triton JIT function as a scalar function that represents the operation.
+But keep in mind that the generated kernels call the decorated function with <code class="docutils literal notranslate"><span class="pre">tl.tensor</span></code>s as inputs.
+So avoid using <code class="docutils literal notranslate"><span class="pre">tl.tensor</span></code>s as conditions in control flow (<code class="docutils literal notranslate"><span class="pre">if</span></code> or <code class="docutils literal notranslate"><span class="pre">while</span></code>),
+since Triton does not support non-scalar tensors as condition.</p>
+<p>In the description above, we map task indices (integer) to memory offsets of each tensors,
+since we view tasks in pointwise operation as a 1d-tensor and partitions it for each CTA.
+We also have other task-space and partitioning schema, but for briefness, it is omitted here.</p>
+<p>In addition to kernels, we also generate wrappers for the corresponding kernel.
+The wrapper expect the outputs has the right shape, stride, dtype and device meta data,
+and is ready for the computation.</p>
+</section>
+<section id="metadata-computation">
+<h2>3. Metadata Computation<a class="headerlink" href="#metadata-computation" title="Link to this heading">#</a></h2>
+<p>Since pointwise operators shares similar logic at meta data computation,
+which has been implemented as a common function used by all <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code>s.
+It involes:</p>
+<ul class="simple">
+<li><p><em>shape inference</em>: infer the output shape by broadcasting input tensor shape;</p></li>
+<li><p><em>ouput layout inference</em>: infer an appropriate layout (stride order) for output tensors if necessary;</p></li>
+<li><p><em>type promotion</em>: infer output dtypes according to prescribed rules;</p></li>
+<li><p><em>device inference</em>: infer the output device and the device to launch the kernel.</p></li>
+<li><p><em>output allocation</em>.</p></li>
+<li><p><em>infer the rank of the task-space</em>.
+This is a factor related to the code generation which depends on the arguments.
+It also involes trying to reduce the dimension of task-space to <code class="docutils literal notranslate"><span class="pre">1</span></code>
+when all pre-allocated tensors are dense and non-overlapping and have the same size
+and stride for each dimension.</p></li>
+</ul>
+<p>Pre-allocated output tensors can also be passed into <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunctions</span></code>.
+In the cases where there are pre-allocated tensors in output tensors, the shape, layout,
+dtype and device of theses pre-allocated tensors are respected and checked.</p>
+<p>The metadata computation can also be skipped, but when doing so you should ensure that
+the outputs have correct metadata and are pre-allocated, and you have to provide the rank of the task-space.</p>
+</section>
+<section id="caching-and-dispatching">
+<h2>4. Caching and dispatching<a class="headerlink" href="#caching-and-dispatching" title="Link to this heading">#</a></h2>
+<p>The decorator <code class="docutils literal notranslate"><span class="pre">&#64;pointwise_dynamic</span></code> returns a <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code> object,
+which servers as the proxy to all the decorated function.
+It caches call the generated python modules and dispatches to them.</p>
+<p>The dispatch result depends only on the rank of the task-space, rather than the shape of the task-space.</p>
+</section>
+<section id="use-the-pointwise-dynamic-decorator">
+<h2>5. Use the <code class="docutils literal notranslate"><span class="pre">&#64;pointwise_dynamic</span></code> decorator<a class="headerlink" href="#use-the-pointwise-dynamic-decorator" title="Link to this heading">#</a></h2>
+<section id="basic">
+<h3>5.1 Basic<a class="headerlink" href="#basic" title="Link to this heading">#</a></h3>
+<p>Decorating the pointwise operator function with <code class="docutils literal notranslate"><span class="pre">pointwise_dynamic</span></code> can save the manual handling of
+tensor addressing, tensor read/write, parallel tiling, tensor broadcasting, dynamic dimensions,
+non-contiguous storage, type promotion, etc.</p>
+<p>For example, in the following code, you only need to provide a Triton JIT function
+describing the computational logic (the Payload), the decorated function can then
+take torch tesors as inputs and outputs, and support broadcasting, type-promotion, etc.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pointwise_dynamic</span><span class="p">(</span><span class="n">promotion_methods</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"COMPLEX_TO_FLOAT"</span><span class="p">)])</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">abs_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tl</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Since the decorated function does not provide enough information for the code generation,
+we supply other necessary information by passing arguemnts to <code class="docutils literal notranslate"><span class="pre">pointwise_dynamic</span></code>.</p>
+</section>
+<section id="tensor-non-tensor">
+<h3>5.2 Tensor/Non-Tensor<a class="headerlink" href="#tensor-non-tensor" title="Link to this heading">#</a></h3>
+<p>By default, <code class="docutils literal notranslate"><span class="pre">&#64;pointwise_dynamic</span></code> treats each arguemnt as tensor, and generates code to load/store them.
+But it can be configured by passing a list of boolean values to the parameter <code class="docutils literal notranslate"><span class="pre">is_tensor</span></code>
+to indicate whether the corresponding argument is tensor or nor.</p>
+<p>For non-tensor arguments, its type can be specfied by passing <code class="docutils literal notranslate"><span class="pre">dtypes</span></code> to the decorator, although not required.
+For tensor arguments, the corresponding value in <code class="docutils literal notranslate"><span class="pre">dtypes</span></code> is ignored, since its dtype is dynamic
+and Triton can dispatch according to it.</p>
+<p>For example, in the following code, the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> parameter is defined as a non-tensor floating point number,
+while the <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> parameters are defined as tensors.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pointwise_dynamic</span><span class="p">(</span>
+    <span class="n">is_tensor</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span>
+    <span class="n">dtypes</span><span class="o">=</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">promotion_methods</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"DEFAULT"</span><span class="p">)]</span>
+<span class="p">)</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">alpha</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"cuda"</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">"cuda"</span><span class="p">)</span>
+<span class="n">add_func</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="output-dtypes">
+<h3>5.3 Output dtypes<a class="headerlink" href="#output-dtypes" title="Link to this heading">#</a></h3>
+<p>For pointwise operators to allocate outputs with correct dtype, <code class="docutils literal notranslate"><span class="pre">promotion_methods</span></code> is required.
+Since the output dtype may be depedent on the input dtypes with some rules,
+specifying the rule is more expressive than providing output dtypes directly.</p>
+<p><code class="docutils literal notranslate"><span class="pre">promotion_methods</span></code> is a list of tuples (one per output), each of which consists of
+several argument indices and a promotion method.
+An argument index (an integer) is used to indicate the position of the argument,
+which is dependent by the promotion method.
+The promotion method (an enum or string) denotes the method of type promotion.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> is the default rule for type promotion, which is suitable for most numeric operations;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NO_OPMATH</span></code> means copy data type as-is, which is suitable for non-numeric operation, like data-copy.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">INT_TO_FLOAT</span></code> promotes integer to float.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ALWAYS_BOOL</span></code> always promote to boolean value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">COMPLEX_TO_FLOAT</span></code> promotes a complex number to float.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BOOL_TO_LONG</span></code> promotes a boolean value to long integer.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ELEMENTWISE_TYPE_PROMOTION_KIND</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">DEFAULT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span>
+    <span class="n">NO_OPMATH</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
+    <span class="n">INT_TO_FLOAT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,)</span>
+    <span class="n">ALWAYS_BOOL</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+    <span class="n">COMPLEX_TO_FLOAT</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,)</span>
+    <span class="n">BOOL_TO_LONG</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)</span>
+</pre></div>
+</div>
+<p>Examples：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Promotion Method</p></th>
+<th class="head"><p>Sample operators</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">add</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">NO_OPMATH</span></code></p></td>
+<td><p><code class="docutils literal notranslate"> <span class="pre">where</span></code>、<code class="docutils literal notranslate"><span class="pre">nextafter</span></code>、<code class="docutils literal notranslate"><span class="pre">cat</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">INT_TO_FLOAT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">sin</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ALWAYS_BOOL</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">eq</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">COMPLEX_TO_FLOAT</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">abs</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">BOOL_TO_LONG</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">pow</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="number-of-outputs">
+<h3>5.4 Number of outputs<a class="headerlink" href="#number-of-outputs" title="Link to this heading">#</a></h3>
+<p>For pointwise operations with multiple output tensors, we need to inform <code class="docutils literal notranslate"><span class="pre">pointwise_dynamic</span></code>
+about the number of outputs so it could generate code to store the output tensors.
+For number of inputs, it can be inferred from the length of <code class="docutils literal notranslate"><span class="pre">is_tensor</span></code> of <code class="docutils literal notranslate"><span class="pre">dtypes</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pointwise_dynamic</span><span class="p">(</span>
+    <span class="n">promotion_methods</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">"DEFAULT"</span><span class="p">),</span>
+        <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">"DEFAULT"</span><span class="p">),</span>
+    <span class="p">],</span>
+    <span class="n">num_outputs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">polar_kernel</span><span class="p">(</span><span class="nb">abs</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
+    <span class="n">real</span> <span class="o">=</span> <span class="nb">abs</span> <span class="o">*</span> <span class="n">tl</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+    <span class="n">imag</span> <span class="o">=</span> <span class="nb">abs</span> <span class="o">*</span> <span class="n">tl</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">real</span><span class="p">,</span> <span class="n">imag</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="use-pointwisedynamicfunction">
+<h2>6. Use <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code><a class="headerlink" href="#use-pointwisedynamicfunction" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>6.1 Basic<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code> can be called with the same function signature as the decorated function,
+as shown in previous examples.</p>
+</section>
+<section id="in-place-operation-output-arguments">
+<h3>6.2 In-place Operation &amp; Output arguments<a class="headerlink" href="#in-place-operation-output-arguments" title="Link to this heading">#</a></h3>
+<p>Since <code class="docutils literal notranslate"><span class="pre">&#64;pointwise_dynamic</span></code> generates wrappers that take outputs as arguments,
+we can use it to implement inplace-operations.
+For all <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code>s, you can pass output parameters to it using keyword arguments.
+To discriminate between input arguments and output arguments, we follow a simple rule that
+all input arguments must be passed by position and all output arguments must be passed
+using keyword arguments.</p>
+<p>The output parameters are named as <code class="docutils literal notranslate"><span class="pre">out{output_index}</span></code>.
+Since the decorated function does not have name for return values,
+we simply use the naming rule by suffixing <code class="docutils literal notranslate"><span class="pre">out</span></code> with output index.</p>
+<p>We can implement inplace operations with it. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pointwise_dynamic</span><span class="p">(</span><span class="n">is_tensor</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="n">promotion_methods</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"DEFAULT"</span><span class="p">)])</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">alpha</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">add_func</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">out0</span><span class="o">=</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can also pass pre-allocated outputs tensor, which is not in the input tensors.
+For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pointwise_dynamic</span><span class="p">(</span><span class="n">is_tensor</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">],</span> <span class="n">promotion_methods</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"DEFAULT"</span><span class="p">)])</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">alpha</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">add_func</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note that in these cases, you have to ensure that the output has the right metadata.</p>
+</section>
+<section id="manual-instantiation">
+<h3>6.3 Manual Instantiation<a class="headerlink" href="#manual-instantiation" title="Link to this heading">#</a></h3>
+<p>For some operations you may want to skip the metadata computation, especially the process
+to reduce the rank of task space, and prepare all inputs and outputs manually.
+You can call the <code class="docutils literal notranslate"><span class="pre">instantiate()</span></code> method of <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code> with a specific task rank
+to get a specific cached function and call it directly.</p>
+<p>For example, the <code class="docutils literal notranslate"><span class="pre">flip</span></code> operator is not a pointwise operator in the sense that
+each element in the output only depends on the element in the inputs at the corresponding position.
+But if we can create a view of the input tensor with negative strides and shifted data pointer,
+it can be framed as a pointwise copy. That is how we implement it with <code class="docutils literal notranslate"><span class="pre">pointwise_dynamic</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pointwise_dynamic</span><span class="p">(</span><span class="n">is_tensor</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">],</span> <span class="n">promotion_methods</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"DEFAULT"</span><span class="p">)])</span>
+<span class="nd">@triton</span><span class="o">.</span><span class="n">jit</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">copy_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">flip</span><span class="p">(</span><span class="n">A</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">dims</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="n">strides</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">stride</span><span class="p">())</span>
+    <span class="n">flip_dims_b</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">A</span><span class="o">.</span><span class="n">stride</span><span class="p">()]</span>
+    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">dims</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="n">dim</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="n">A</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="ow">and</span> <span class="n">dim</span> <span class="o">&lt;</span> <span class="n">A</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+        <span class="p">),</span> <span class="s2">"Dimension out of range (expected to be in range of [</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">], but got </span><span class="si">{}</span><span class="s2">)"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">-</span><span class="n">A</span><span class="o">.</span><span class="n">dim</span><span class="p">(),</span> <span class="n">A</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dim</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">flip_dims_b</span><span class="p">[</span>
+            <span class="n">dim</span>
+        <span class="p">],</span> <span class="s2">"dim </span><span class="si">{}</span><span class="s2"> appears multiple times in the list of dims"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+        <span class="n">flip_dims_b</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">flip_dims_b</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">flip_dims_b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">A</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">A</span><span class="o">.</span><span class="n">stride</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">offset</span> <span class="o">+=</span> <span class="n">strides</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">strides</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">strides</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">A</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">A</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="c1"># a flipped view of A</span>
+    <span class="n">flipped_A</span> <span class="o">=</span> <span class="n">StridedBuffer</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+
+    <span class="n">overload</span> <span class="o">=</span> <span class="n">copy_func</span><span class="o">.</span><span class="n">instantiate</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+    <span class="n">overload</span><span class="p">(</span><span class="n">flipped_A</span><span class="p">,</span> <span class="n">out0</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="platforms.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Platforms Supported</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../usage/overview.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Overview</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pointwise-operations">1. Pointwise operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-generation">2. Code generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metadata-computation">3. Metadata Computation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#caching-and-dispatching">4. Caching and dispatching</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-the-pointwise-dynamic-decorator">5. Use the <code class="docutils literal notranslate"><span class="pre">@pointwise_dynamic</span></code> decorator</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic">5.1 Basic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tensor-non-tensor">5.2 Tensor/Non-Tensor</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-dtypes">5.3 Output dtypes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#number-of-outputs">5.4 Number of outputs</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-pointwisedynamicfunction">6. Use <code class="docutils literal notranslate"><span class="pre">PointwiseDynamicFunction</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">6.1 Basic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-place-operation-output-arguments">6.2 In-place Operation &amp; Output arguments</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-instantiation">6.3 Manual Instantiation</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flaggems_zh/overview/pointwise-dynamic.html">中文</a></body>
+</html>

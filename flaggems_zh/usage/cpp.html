@@ -1,0 +1,1046 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="使用 C++ 封装的算子获得更好的性能" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="usage/cpp.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="使用 FlagGems 时的另一条高级的优化路径是针对所选的操作使用其中的 C++ 封装的算子 。 尽管 Triton 内核通常能够给出相当不错的计算性能，Triton 本身是使用 Python 实现的 DSL。 这意味着算子的定义以及算子的运行时派发机制都是用 Python 编写的， 因此在延迟非常敏感或者对吞吐要求极为苛刻的场景下会存在 不可忽视的性能开销 。 为了解决这一问题， FlagGems 提供了一套 C++ 运行时解决方案，用 C++ 语言来实现算子的封装逻辑、注册机制和运行时管理，与此同时仍然复用下层的 Triton 内核来完成实际计算。 这种方法能够保留 Triton ..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="使用 FlagGems 时的另一条高级的优化路径是针对所选的操作使用其中的 C++ 封装的算子 。 尽管 Triton 内核通常能够给出相当不错的计算性能，Triton 本身是使用 Python 实现的 DSL。 这意味着算子的定义以及算子的运行时派发机制都是用 Python 编写的， 因此在延迟非常敏感或者对吞吐要求极为苛刻的场景下会存在 不可忽视的性能开销 。 为了解决这一问题， FlagGems 提供了一套 C++ 运行时解决方案，用 C++ 语言来实现算子的封装逻辑、注册机制和运行时管理，与此同时仍然复用下层的 Triton 内核来完成实际计算。 这种方法能够保留 Triton ..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>使用 C++ 封装的算子获得更好的性能 &#8212; FlagGems 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=bd3843ac" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=2f47175f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/tabulator.min.js?v=52b524e6"></script>
+    <script src="../_static/js/benchmark.js?v=bfe1f9a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/usage/cpp.6c72784b-1e69-4290-a568-5f4198080c86.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/cpp';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/usage/cpp.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="精度检查（实验性功能）" href="precision.html" />
+    <link rel="prev" title="基于预优化实现 FlagGems 的更好性能" href="tuning.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="9月 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagGems 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagGems 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagGems 简介
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">快速开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/install.html">安装 FlagGems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">概览</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/features.html">功能特性概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/platforms.html">支持的硬件平台</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/pointwise-dynamic.html">关于逐点动态算子</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">使用指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basic.html">基本用法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="selective.html">选择性启用算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugging.html">启用调试日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">使用实验性质的算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="non-nvidia.html">在非英伟达（NVIDIA）硬件上使用 FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distributed.html">多 GPU 与分布式环境</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frameworks.html">与常用框架的集成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">使用 FlagGems 模块构造自己的模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuning.html">基于预优化实现 FlagGems 的更好性能</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">使用 C++ 封装的算子获得更好的性能</a></li>
+<li class="toctree-l1"><a class="reference internal" href="precision.html">精度检查（实验性功能）</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">性能测试与优化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">性能测试概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/benchmark.html">FlagGems 中的性能基准测试</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/results.html">性能测试结果</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/database.html">性能数据库后端</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">测试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../testing/unittest.html">测试 Python 算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/coverage.html">单元测试覆盖率</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参考信息</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references/operators.html">算子列表</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/operators-search.html">算子搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/changelog.html">变更历史</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/experimental.html">FlagGems 实验性算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/project_structure.html">项目源码结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/release.html">关于打包与发布</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../references/test/index.html">测试报告</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../references/test/coverage/index.html">单元测试覆盖率</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../references/test/unit/index.html">单元测试摘要</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260609-summary.html">Test Results - 20260609-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260604-summary.html">Test Results - 20260604-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260603-summary.html">Test Results - 20260603-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260526-summary.html">Test Results - 20260526-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260525-summary.html">Test Results - 20260525-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260505-summary.html">Test Results - 20260505-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260329-summary.html">Test Results - 20260329-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260328-summary.html">Test Results - 20260328-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260327-summary.html">Test Results - 20260327-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260326-summary.html">Test Results - 20260326-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260325-summary.html">Test Results - 20260325-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260324-summary.html">Test Results - 20260324-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260323-summary.html">Test Results - 20260323-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260322-summary.html">Test Results - 20260322-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260321-summary.html">Test Results - 20260321-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260320-summary.html">Test Results - 20260320-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260319-summary.html">Test Results - 20260319-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260318-summary.html">Test Results - 20260318-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260317-summary.html">Test Results - 20260317-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260316-summary.html">Test Results - 20260316-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260315-summary.html">Test Results - 20260315-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260314-summary.html">Test Results - 20260314-summary</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参与项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contribution/overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/backend.html">添加一种新的后端</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/cpp-wrapper.html">添加 C++ 封装的算子</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/usage/cpp.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>使用 C++ 封装的算子获得更好的性能</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 架构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2. 安装与启用</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">3. C++ 算子的四种调用方式</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#torch-ops-flag-gems">3.1 通过 <code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code>（自定义算子名字空间）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aten-dispatcher-torch">3.2 通过 ATen 直接替换（在 dispatcher 层面透明接管 <code class="docutils literal notranslate"><span class="pre">torch.*</span></code>）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-operators-pybind-dispatcher">3.3 通过 <code class="docutils literal notranslate"><span class="pre">c_operators</span></code> pybind 模块（直连、不经 dispatcher）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-api-flag-gems-gtest">3.4 通过原生 C++ API（<code class="docutils literal notranslate"><span class="pre">flag_gems::</span></code> 函数与 GTest）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">小结</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">参考：目前支持的 C++ 封装的算子</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="c">
+<h1>使用 C++ 封装的算子获得更好的性能<a class="headerlink" href="#c" title="Link to this heading">#</a></h1>
+<p>使用 <em>FlagGems</em> 时的另一条高级的优化路径是针对所选的操作使用其中的<strong>C++ 封装的算子</strong>。
+尽管 Triton 内核通常能够给出相当不错的计算性能，Triton 本身是使用 Python 实现的 DSL。
+这意味着算子的定义以及算子的运行时派发机制都是用 Python 编写的，
+因此在延迟非常敏感或者对吞吐要求极为苛刻的场景下会存在<strong>不可忽视的性能开销</strong>。</p>
+<p>为了解决这一问题，<em>FlagGems</em> 提供了一套 C++ 运行时解决方案，用 C++
+语言来实现算子的封装逻辑、注册机制和运行时管理，与此同时仍然复用下层的 Triton 内核来完成实际计算。
+这种方法能够保留 Triton 中内核级别的效率，同时大幅降低 Python 语言相关的性能开销，
+使得用户能够与底层的 CUDA 工作流进行更为紧密的集成，提升整体的推理性能。</p>
+<section id="id1">
+<h2>1. 架构<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p><em>FlagGems</em> 中 C++ 封装的算子构建于
+<a class="reference external" href="https://github.com/flagos-ai/libtriton_jit"><code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code></a> 之上。
+<code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 是一个多后端的 Triton JIT C++ 运行时，它在 C++ 中重新实现了
+Triton JIT 运行时逻辑（参数特化、内核缓存和发射），
+而实际的 kernel 编译仍然委托给上游的 Triton 编译器完成。</p>
+<p>在这一整套技术栈中：</p>
+<ul class="simple">
+<li><p>Triton 内核（<code class="docutils literal notranslate"><span class="pre">*.py</span></code>）仍然是设备端计算的唯一源头；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 负责 JIT 特化、内核缓存以及特定后端的 kernel 发射，
+目前已支持 <strong>NVIDIA（CUDA）</strong>、<strong>摩尔线程（MUSA）</strong>、<strong>华为昇腾（NPU）</strong>
+与<strong>天数智芯（IX）</strong> 四种后端；</p></li>
+<li><p><em>FlagGems</em> 的 C++ 封装算子（位于 <code class="docutils literal notranslate"><span class="pre">lib/</span></code> 目录下，例如 <code class="docutils literal notranslate"><span class="pre">rms_norm.cpp</span></code>、<code class="docutils literal notranslate"><span class="pre">mm.cpp</span></code>）
+以 C++ 实现张量元数据处理、形状/类型提升以及参数准备，最后通过
+<code class="docutils literal notranslate"><span class="pre">libtriton_jit::TritonJITFunction</span></code> 调用 Triton 内核；</p></li>
+<li><p>在封装算子之上，<em>FlagGems</em> 还提供两个面向 Python 的扩展模块
+（<code class="docutils literal notranslate"><span class="pre">src/flag_gems/csrc/cstub.cpp</span></code> 与 <code class="docutils literal notranslate"><span class="pre">src/flag_gems/csrc/aten_patch.cpp</span></code>）
+以及一个可安装的 C++ 库目标（<code class="docutils literal notranslate"><span class="pre">FlagGems::operators</span></code>），
+它们共同把同一份 C++ 封装通过<strong>四种不同的调用方式</strong>暴露给上层用户
+（详见<a class="reference internal" href="#id3">§3 C++ 算子的四种调用方式</a>）。</p></li>
+</ul>
+<p>无论最终走的是哪一种调用方式，<strong>包装器（wrapper）本身的逻辑都在 C++ 中执行</strong>
+（张量元数据处理、参数类型与特化判定、kernel 缓存查找与启动参数准备等），
+这部分 Python 开销被无条件消除，同时底层计算仍然复用相同的 Triton 内核。</p>
+<p>而 <strong>PyTorch dispatcher 的开销</strong>是否也能被省掉，则取决于所选的调用路径：</p>
+<ul class="simple">
+<li><p>经过 dispatcher 的路径（<code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code>、以及 ATen 直接替换）
+仍然要付出常规的 dispatcher 代价；不过由于 dispatcher 背后挂的是
+C++ 实现而不是 Python 包装器，整体的 boxed-call 开销仍然比纯 Python
+自定义算子小得多。</p></li>
+<li><p>绕过 dispatcher 的路径（<code class="docutils literal notranslate"><span class="pre">c_operators</span></code> pybind 模块、原生 C++ API）
+则完全没有 dispatcher 开销；其中原生 C++ API
+还会在调用路径上进一步消除 Python 解释器本身的参与。</p></li>
+</ul>
+<p>各种方式的具体权衡参见<a class="reference internal" href="#id3">§3 C++ 算子的四种调用方式</a>。</p>
+</section>
+<section id="id2">
+<h2>2. 安装与启用<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>想让 C++ wrapper <strong>全量生效</strong>，需要同时满足以下两步：</p>
+<ol class="arabic">
+<li><p><strong>编译安装时：打开 C++ 扩展并以 Release 构建</strong></p>
+<p>从源码安装，至少传入 <code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_BUILD_C_EXTENSIONS=ON</span></code> 与
+<code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Release</span></code>（后者保证 FlagGems 与随同构建的
+<code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 都按目标平台开启优化，否则 wrapper 会明显变慢）：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DFLAGGEMS_BUILD_C_EXTENSIONS=ON -DCMAKE_BUILD_TYPE=Release"</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<blockquote>
+<div><p>[!NOTE]
+如果上述命令构建失败，可以尝试加上 <code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code>，
+让 pip 复用当前环境中已安装的 PyTorch 以及
+<code class="docutils literal notranslate"><span class="pre">requirements_&lt;backend&gt;.txt</span></code> 预装的构建依赖。</p>
+</div></blockquote>
+<p>其他可选参数：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_BACKEND=&lt;CUDA|IX|MUSA|NPU&gt;</span></code>：选择目标后端（默认 <code class="docutils literal notranslate"><span class="pre">CUDA</span></code>）；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_BUILD_POINTWISE_DYNAMIC_CPP=ON</span></code>：编译 <code class="docutils literal notranslate"><span class="pre">add</span></code>/<code class="docutils literal notranslate"><span class="pre">div</span></code>/<code class="docutils literal notranslate"><span class="pre">fill</span></code>
+这几个 pointwise dynamic 算子；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_BUILD_CTESTS=ON</span></code>：编译 <code class="docutils literal notranslate"><span class="pre">ctests/</span></code> 下的 GTest 用例
+（验证 §3.4 原生 C++ API 的唯一手段）；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_USE_EXTERNAL_TRITON_JIT=ON</span> <span class="pre">-DTritonJIT_ROOT=&lt;path&gt;</span></code>：
+使用外部预装的 <code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code>。</p></li>
+</ul>
+<p>完整的各后端示例与 <code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 细节，参见
+<a class="reference internal" href="#../../getting-started/install/#install-from-source"><span class="xref myst">安装指南</span></a>。</p>
+</li>
+<li><p><strong>运行时：<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">USE_C_EXTENSION=1</span></code></strong></p>
+<p>只装上 C++ 扩展<strong>还不够</strong>。<code class="docutils literal notranslate"><span class="pre">src/flag_gems/config.py</span></code>
+把一部分上层行为挂在这个环境变量上——不设它，下面这些路径会悄悄走 Python 回退：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>路径 / 行为</p></th>
+<th class="head text-center"><p>编译好就可用</p></th>
+<th class="head text-center"><p>还需 <code class="docutils literal notranslate"><span class="pre">USE_C_EXTENSION=1</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>§3.1 <code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code></p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>—</p></td>
+</tr>
+<tr class="row-odd"><td><p>§3.3 <code class="docutils literal notranslate"><span class="pre">c_operators</span></code> pybind</p></td>
+<td class="text-center"><p>✅</p></td>
+<td class="text-center"><p>—</p></td>
+</tr>
+<tr class="row-even"><td><p>§3.2 ATen 直接替换（<code class="docutils literal notranslate"><span class="pre">aten_patch</span></code>）</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flag_gems.enable()</span></code> 的 C++ 分支</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">GemsRMSNorm</span></code> 等 <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> 的 C++ 分支</p></td>
+<td class="text-center"><p>❌</p></td>
+<td class="text-center"><p>✅</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>所以正常使用请：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">USE_C_EXTENSION</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>快速验证</strong></p>
+<p>下面这个片段可以一次性检查 Python 侧能看到的三条路径：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">flag_gems</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flag_gems</span><span class="w"> </span><span class="kn">import</span> <span class="n">c_operators</span><span class="p">,</span> <span class="n">aten_patch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flag_gems.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">has_c_extension</span><span class="p">,</span> <span class="n">use_c_extension</span>
+
+<span class="k">assert</span> <span class="n">has_c_extension</span><span class="p">,</span> <span class="s2">"C++ extension was not built"</span>
+<span class="k">assert</span> <span class="n">use_c_extension</span><span class="p">,</span> <span class="s2">"please `export USE_C_EXTENSION=1`"</span>
+<span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">flag_gems</span><span class="p">,</span> <span class="s2">"mm"</span><span class="p">),</span> <span class="s2">"§3.1 torch.ops.flag_gems.* not registered"</span>
+<span class="k">assert</span> <span class="n">aten_patch</span><span class="o">.</span><span class="n">get_registered_ops</span><span class="p">(),</span> <span class="s2">"§3.2 no ATen op has been replaced"</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">c_operators</span><span class="o">.</span><span class="n">mm</span>                                                 <span class="c1"># §3.3</span>
+</pre></div>
+</div>
+<p>§3.4 原生 C++ API 无法从 Python 观察；要验证它，需要编译时加
+<code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_BUILD_CTESTS=ON</span></code>，然后运行 <code class="docutils literal notranslate"><span class="pre">ctest</span></code>：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">BUILD_DIR</span><span class="o">=</span><span class="k">$(</span>ls<span class="w"> </span>-d<span class="w"> </span>build/*/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+ctest<span class="w"> </span>--test-dir<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>--output-on-failure
+</pre></div>
+</div>
+<blockquote>
+<div><p>[!NOTE]
+手动单独跑某个 test 二进制时（例如
+<code class="docutils literal notranslate"><span class="pre">&quot;${BUILD_DIR}/ctests/test_triton_mm&quot;</span></code>），需要
+<code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">FLAGGEMS_SOURCE_DIR=$(pwd)/src/flag_gems</span></code>，
+C++ 运行时才能找到 Triton 内核的 <code class="docutils literal notranslate"><span class="pre">.py</span></code> 源文件；
+通过 <code class="docutils literal notranslate"><span class="pre">ctest</span></code> 跑会自动设置。</p>
+</div></blockquote>
+</li>
+<li><p><strong>典型使用场景</strong></p>
+<p>在前两步都完成的前提下，下面两种写法都会<strong>自动优先使用 C++ 封装算子</strong>，
+无需修改调用点：</p>
+<ul class="simple">
+<li><p><strong>补丁模式 <code class="docutils literal notranslate"><span class="pre">flag_gems.enable()</span></code></strong>：monkey-patch <code class="docutils literal notranslate"><span class="pre">torch.*</span></code> 接口，
+当 <code class="docutils literal notranslate"><span class="pre">use_c_extension</span> <span class="pre">==</span> <span class="pre">True</span></code> 时 patch 后的函数走
+<code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code>（§3.1），否则回退到 Python 实现。</p></li>
+<li><p><strong>用 FlagGems 的 <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> 类搭模型</strong>：例如
+<a class="reference external" href="https://github.com/flagos-ai/FlagGems/blob/v4.2.0/src/flag_gems/modules/normalization.py"><code class="docutils literal notranslate"><span class="pre">flag_gems.modules.GemsRMSNorm</span></code></a>，
+内部已经内置「C++ 可用就走 <code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code>，否则走 Python」
+的分支判断。参考
+<a class="reference external" href="https://github.com/flagos-ai/FlagGems/blob/v4.2.0/src/flag_gems/modules/normalization.py#L33"><code class="docutils literal notranslate"><span class="pre">gems_rms_forward</span></code> 的实现</a>。</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="id3">
+<h2>3. C++ 算子的四种调用方式<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>C++ 扩展构建完成之后，同一份底层 C++ 封装算子实际上可以通过<strong>四种</strong>
+不同的方式被调用。这几种方式面向不同的使用场景，并且分别有着不同的 dispatcher 开销。</p>
+<section id="torch-ops-flag-gems">
+<h3>3.1 通过 <code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code>（自定义算子名字空间）<a class="headerlink" href="#torch-ops-flag-gems" title="Link to this heading">#</a></h3>
+<p>所有 C++ 封装算子都会在 <code class="docutils literal notranslate"><span class="pre">src/flag_gems/csrc/cstub.cpp</span></code> 中通过
+<code class="docutils literal notranslate"><span class="pre">TORCH_LIBRARY(flag_gems,</span> <span class="pre">m)</span></code> 注册为 PyTorch 的<strong>自定义算子（custom op）</strong>，
+归入 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 名字空间。你可以在 Python 中显式地调用它们，
+从而绕过所有 patch 逻辑与 Python 侧的回退路径：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">fused_add_rms_norm</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">out</span>    <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">flag_gems</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="aten-dispatcher-torch">
+<h3>3.2 通过 ATen 直接替换（在 dispatcher 层面透明接管 <code class="docutils literal notranslate"><span class="pre">torch.*</span></code>）<a class="headerlink" href="#aten-dispatcher-torch" title="Link to this heading">#</a></h3>
+<p>对于其中的一部分算子，<em>FlagGems</em> 还会在 <code class="docutils literal notranslate"><span class="pre">src/flag_gems/csrc/aten_patch.cpp</span></code>
+中使用 <code class="docutils literal notranslate"><span class="pre">TORCH_LIBRARY_IMPL(aten,</span> <span class="pre">&lt;dispatch_key&gt;,</span> <span class="pre">m)</span></code> 把 C++ 实现
+<strong>直接注册到 <code class="docutils literal notranslate"><span class="pre">aten::</span></code> 名字空间</strong>。具体的 dispatch key 按后端选择：</p>
+<ul class="simple">
+<li><p>对于 NVIDIA CUDA 与天数智芯（IX）使用 <code class="docutils literal notranslate"><span class="pre">CUDA</span></code>；</p></li>
+<li><p>对于华为昇腾（NPU）与摩尔线程（MUSA）使用 <code class="docutils literal notranslate"><span class="pre">PrivateUse1</span></code>。</p></li>
+</ul>
+<p>由于注册是直接发生在 PyTorch 的 dispatcher 中的，
+在受支持的设备上调用标准的 PyTorch API（例如 <code class="docutils literal notranslate"><span class="pre">torch.nonzero(x)</span></code>、
+<code class="docutils literal notranslate"><span class="pre">x.copy_(y)</span></code>）时，会<strong>透明地派发到 FlagGems 的 C++ 实现</strong>，
+完全不需要在 Python 层做 monkey patch。
+这是对一个已有模型做加速时门槛最低的一条路径。</p>
+<blockquote>
+<div><p>[!NOTE]
+由于 <code class="docutils literal notranslate"><span class="pre">TORCH_LIBRARY_IMPL</span></code> 在模块导入时就会执行，
+这种方式所替换的算子集合在构建期就已经确定，
+目前还不支持在运行时对单个算子作启用/禁用控制。</p>
+</div></blockquote>
+</section>
+<section id="c-operators-pybind-dispatcher">
+<h3>3.3 通过 <code class="docutils literal notranslate"><span class="pre">c_operators</span></code> pybind 模块（直连、不经 dispatcher）<a class="headerlink" href="#c-operators-pybind-dispatcher" title="Link to this heading">#</a></h3>
+<p>同样的一组 C++ 封装算子在 <code class="docutils literal notranslate"><span class="pre">src/flag_gems/csrc/cstub.cpp</span></code> 中还会通过
+<code class="docutils literal notranslate"><span class="pre">PYBIND11_MODULE(c_operators,</span> <span class="pre">…)</span></code> 导出为一个 Python 扩展模块：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">flag_gems</span><span class="w"> </span><span class="kn">import</span> <span class="n">c_operators</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">c_operators</span><span class="o">.</span><span class="n">mm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">c_operators</span><span class="o">.</span><span class="n">fused_add_rms_norm</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">residual</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>这一路径<strong>完全绕开了 PyTorch 的 dispatcher</strong>，因此是从 Python 调用
+FlagGems C++ 算子开销最低的方式。它最适合用在延迟非常敏感的
+microbenchmark，或者内循环中 dispatcher 开销已经能被测量出来的场景。</p>
+</section>
+<section id="c-api-flag-gems-gtest">
+<h3>3.4 通过原生 C++ API（<code class="docutils literal notranslate"><span class="pre">flag_gems::</span></code> 函数与 GTest）<a class="headerlink" href="#c-api-flag-gems-gtest" title="Link to this heading">#</a></h3>
+<p>每一个封装算子本身都是一个普通的 C++ 函数，位于 <code class="docutils literal notranslate"><span class="pre">flag_gems::</span></code> 名字空间，
+在 <code class="docutils literal notranslate"><span class="pre">include/flag_gems/operators.h</span></code> 中声明，并随安装出的 CMake 目标
+<code class="docutils literal notranslate"><span class="pre">FlagGems::operators</span></code> 一起发布。下游的 C++ 代码可以直接链接该目标并调用：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">"flag_gems/operators.h"</span>
+
+<span class="n">at</span><span class="o">::</span><span class="n">Tensor</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flag_gems</span><span class="o">::</span><span class="n">mm_tensor</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="n">at</span><span class="o">::</span><span class="n">Tensor</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">flag_gems</span><span class="o">::</span><span class="n">rms_norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">weight</span><span class="p">,</span><span class="w"> </span><span class="n">eps</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>仓库中 <code class="docutils literal notranslate"><span class="pre">ctests/</span></code> 下的 GTest 用例（例如 <code class="docutils literal notranslate"><span class="pre">ctests/test_triton_mm.cpp</span></code>）正是以这种方式调用 FlagGems 的算子的。
+当你希望把 FlagGems 嵌入到一个非 Python 的 C++ 应用中，或者需要写 C++ 单元测试时，这就是合适的路径。</p>
+</section>
+<section id="id4">
+<h3>小结<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>调用方式</p></th>
+<th class="head"><p>入口</p></th>
+<th class="head"><p>经 dispatcher</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TORCH_LIBRARY(flag_gems,</span> <span class="pre">…)</span></code></p></td>
+<td><p>是</p></td>
+</tr>
+<tr class="row-odd"><td><p>ATen 直接替换</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TORCH_LIBRARY_IMPL(aten,</span> <span class="pre">…)</span></code></p></td>
+<td><p>是</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flag_gems.c_operators</span></code> pybind</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">PYBIND11_MODULE(c_operators,</span> <span class="pre">…)</span></code></p></td>
+<td><p>否</p></td>
+</tr>
+<tr class="row-odd"><td><p>原生 C++ API</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">operators.h</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">flag_gems::*</span></code></p></td>
+<td><p>否</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id5">
+<h2>参考：目前支持的 C++ 封装的算子<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>以下算子目前在 <em>FlagGems</em> 中提供了 C++ 封装实现。</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">add</span></code>（pointwise dynamic C++）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">div</span></code>（pointwise dynamic C++）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fill</span></code>（pointwise dynamic C++）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">addmm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bmm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cat</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">contiguous</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">copy</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">embedding</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exponential_</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">zeros</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">argmax</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sum</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">softmax</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sort</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">topk</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nonzero</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rms_norm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fused_add_rms_norm</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rotary_embedding</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flash_attn_varlen_func</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reshape_and_cache_flash</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rwkv_mm_sparsity</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rwkv_ka_fusion</span></code></p></li>
+</ul>
+<blockquote>
+<div><p>[!NOTE]
+标注为 <em>pointwise dynamic C++</em> 的算子仅在启用 CMake 选项
+<code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_BUILD_POINTWISE_DYNAMIC_CPP=ON</span></code> 时才会被编译；
+详情参阅<a class="reference internal" href="#../../getting-started/install/#install-from-source"><span class="xref myst">安装指南</span></a>。</p>
+</div></blockquote>
+<p>作为持续性能优化工作的一部分，我们一直在努力扩大这一列表。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tuning.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">基于预优化实现 FlagGems 的更好性能</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="precision.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">精度检查（实验性功能）</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 架构</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">2. 安装与启用</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">3. C++ 算子的四种调用方式</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#torch-ops-flag-gems">3.1 通过 <code class="docutils literal notranslate"><span class="pre">torch.ops.flag_gems.*</span></code>（自定义算子名字空间）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aten-dispatcher-torch">3.2 通过 ATen 直接替换（在 dispatcher 层面透明接管 <code class="docutils literal notranslate"><span class="pre">torch.*</span></code>）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-operators-pybind-dispatcher">3.3 通过 <code class="docutils literal notranslate"><span class="pre">c_operators</span></code> pybind 模块（直连、不经 dispatcher）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-api-flag-gems-gtest">3.4 通过原生 C++ API（<code class="docutils literal notranslate"><span class="pre">flag_gems::</span></code> 函数与 GTest）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">小结</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">参考：目前支持的 C++ 封装的算子</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 9月 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flaggems_en/usage/cpp.html">English</a></body>
+</html>

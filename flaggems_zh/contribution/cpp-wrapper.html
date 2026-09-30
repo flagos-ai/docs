@@ -1,0 +1,789 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="添加 C++ 封装的算子" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="contribution/cpp-wrapper.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="要添加一个 C++ 封装的算子，你需要首先在安装 FlagGems 时启用 C++ 扩展能力特性。 请参阅 FlagGems 安装 文档， 了解如何在安装 flag_gems 时启用 C++ 扩展的详细步骤。 1. 编写封装层 {#write-the-wrapper}: 按照如下步骤添加一个新的 C++ 封装的算子： 在 include/flag_gems/operators.h 文件中为算子添加函数原型声明；, 在 lib/&lt;op_name&gt;.cpp 文件中添加算子的函数实现；, 修改 lib/CMakeLists.txt 文件，包含新的算子；, 在 src/flag_ge..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="要添加一个 C++ 封装的算子，你需要首先在安装 FlagGems 时启用 C++ 扩展能力特性。 请参阅 FlagGems 安装 文档， 了解如何在安装 flag_gems 时启用 C++ 扩展的详细步骤。 1. 编写封装层 {#write-the-wrapper}: 按照如下步骤添加一个新的 C++ 封装的算子： 在 include/flag_gems/operators.h 文件中为算子添加函数原型声明；, 在 lib/&lt;op_name&gt;.cpp 文件中添加算子的函数实现；, 修改 lib/CMakeLists.txt 文件，包含新的算子；, 在 src/flag_ge..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>添加 C++ 封装的算子 &#8212; FlagGems 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=bd3843ac" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=2f47175f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/tabulator.min.js?v=52b524e6"></script>
+    <script src="../_static/js/benchmark.js?v=bfe1f9a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/contribution/cpp-wrapper.514846af-c352-4da7-88a8-0484a39ecaca.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'contribution/cpp-wrapper';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/contribution/cpp-wrapper.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="添加一种新的后端" href="backend.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="9月 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagGems 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagGems 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagGems 简介
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">快速开始</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting-started/install.html">安装 FlagGems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">概览</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/features.html">功能特性概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/platforms.html">支持的硬件平台</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/pointwise-dynamic.html">关于逐点动态算子</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">使用指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../usage/overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/basic.html">基本用法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/selective.html">选择性启用算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">启用调试日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/experimental.html">使用实验性质的算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/non-nvidia.html">在非英伟达（NVIDIA）硬件上使用 FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/distributed.html">多 GPU 与分布式环境</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/frameworks.html">与常用框架的集成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/modules.html">使用 FlagGems 模块构造自己的模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/tuning.html">基于预优化实现 FlagGems 的更好性能</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/cpp.html">使用 C++ 封装的算子获得更好的性能</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/precision.html">精度检查（实验性功能）</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">性能测试与优化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">性能测试概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/benchmark.html">FlagGems 中的性能基准测试</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/results.html">性能测试结果</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/database.html">性能数据库后端</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">测试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../testing/unittest.html">测试 Python 算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/coverage.html">单元测试覆盖率</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参考信息</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references/operators.html">算子列表</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/operators-search.html">算子搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/changelog.html">变更历史</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/experimental.html">FlagGems 实验性算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/project_structure.html">项目源码结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/release.html">关于打包与发布</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../references/test/index.html">测试报告</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../references/test/coverage/index.html">单元测试覆盖率</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../references/test/unit/index.html">单元测试摘要</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260609-summary.html">Test Results - 20260609-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260604-summary.html">Test Results - 20260604-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260603-summary.html">Test Results - 20260603-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260526-summary.html">Test Results - 20260526-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260525-summary.html">Test Results - 20260525-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260505-summary.html">Test Results - 20260505-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260329-summary.html">Test Results - 20260329-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260328-summary.html">Test Results - 20260328-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260327-summary.html">Test Results - 20260327-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260326-summary.html">Test Results - 20260326-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260325-summary.html">Test Results - 20260325-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260324-summary.html">Test Results - 20260324-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260323-summary.html">Test Results - 20260323-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260322-summary.html">Test Results - 20260322-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260321-summary.html">Test Results - 20260321-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260320-summary.html">Test Results - 20260320-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260319-summary.html">Test Results - 20260319-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260318-summary.html">Test Results - 20260318-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260317-summary.html">Test Results - 20260317-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260316-summary.html">Test Results - 20260316-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260315-summary.html">Test Results - 20260315-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260314-summary.html">Test Results - 20260314-summary</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参与项目</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend.html">添加一种新的后端</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">添加 C++ 封装的算子</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/contribution/cpp-wrapper.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>添加 C++ 封装的算子</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-wrapper">1. 编写封装层 {#write-the-wrapper}</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-test-cases">2. 编写测试用例  {#write-test-cases}</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">3. 运行 C++ 测试用例</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pr">4. 为你的代码提交 PR</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="c">
+<h1>添加 C++ 封装的算子<a class="headerlink" href="#c" title="Link to this heading">#</a></h1>
+<p>要添加一个 C++ 封装的算子，你需要首先在安装 FlagGems 时启用 C++ 扩展能力特性。
+请参阅<a class="reference internal" href="#../getting-started/installation"><span class="xref myst">FlagGems 安装</span></a>文档，
+了解如何在安装 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 时启用 C++ 扩展的详细步骤。</p>
+<section id="write-the-wrapper">
+<h2>1. 编写封装层 {#write-the-wrapper}<a class="headerlink" href="#write-the-wrapper" title="Link to this heading">#</a></h2>
+<p>按照如下步骤添加一个新的 C++ 封装的算子：</p>
+<ul>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">include/flag_gems/operators.h</span></code> 文件中为算子添加函数原型声明；</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">lib/&lt;op_name&gt;.cpp</span></code> 文件中添加算子的函数实现；</p></li>
+<li><p>修改 <code class="docutils literal notranslate"><span class="pre">lib/CMakeLists.txt</span></code> 文件，包含新的算子；</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">src/flag_gems/csrc/cstub.cpp</span></code> 文件中为算子添加 Python 绑定逻辑；</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">triton_src/</span></code> 下面为算子添加 <code class="docutils literal notranslate"><span class="pre">triton_jit</span></code> 函数；</p>
+<blockquote>
+<div><p>[!TIP]
+<strong>提示</strong></p>
+<p>目前我们使用一个专门的目录来存放 <code class="docutils literal notranslate"><span class="pre">triton_jit</span></code> 函数。
+将来我们会复用 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 目录下 Python 代码中的 <code class="docutils literal notranslate"><span class="pre">triton_jit</span></code> 函数。</p>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="write-test-cases">
+<h2>2. 编写测试用例  {#write-test-cases}<a class="headerlink" href="#write-test-cases" title="Link to this heading">#</a></h2>
+<p>FlagGems 使用 <code class="docutils literal notranslate"><span class="pre">ctest</span></code> 和 <code class="docutils literal notranslate"><span class="pre">googletest</span></code> 来执行 C++ 代码的单元测试。
+在完成 C++ 封装的算子实现之后，你需要为其添加对应的 C++ 测试用例。
+你的测试用例应该添加到 <code class="docutils literal notranslate"><span class="pre">ctests/test_triton_&lt;xxx&gt;.cpp</span></code> 文件中，
+并且在 <code class="docutils literal notranslate"><span class="pre">ctests/CMakeLists.txt</span></code> 中列出测试用例文件。
+最后，构建你的测试代码并使用 <a class="reference internal" href="#../testing/ctests"><span class="xref myst">C++ 测试</span></a>文档中所给方法来执行测试。</p>
+</section>
+<section id="id1">
+<h2>3. 运行 C++ 测试用例<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>如果你在构造 FlagGems 时将 cmake 选项 <code class="docutils literal notranslate"><span class="pre">FLAGGEMS_BUILD_CTESTS</span></code> 设置为 <code class="docutils literal notranslate"><span class="pre">ON</span></code>，
+进而启用了 C++ 扩展，那么你就可以使用下面的命令在 <code class="docutils literal notranslate"><span class="pre">FlagGems/build/cpython-3xx</span></code>
+目录下运行 ctest。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>.
+</pre></div>
+</div>
+<p>上面这条命令会运行 <code class="docutils literal notranslate"><span class="pre">ctests/</span></code> 目录下的所有测试用例文件。
+你也可以使用下面的命令来运行一个指定的测试用例，同时启用日志信息输出：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ctest<span class="w"> </span>-V<span class="w"> </span>—R<span class="w"> </span>&lt;regex&gt;
+</pre></div>
+</div>
+<p>其中</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-R</span> <span class="pre">&lt;regex&gt;</span></code>：运行名字与所给的正则表达式匹配的所有测试用例；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-V</span></code>：启用详尽（verbose）输出模式，打印每个测试的详细输出，
+测试用例写入到标准输出（stdout）或标准错误输出（stderr）的所有消息。</p></li>
+</ul>
+<p>例如：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">TORCH_CPP_LOG_LEVEL</span><span class="o">=</span>INFO<span class="w"> </span>ctest<span class="w"> </span>-V<span class="w"> </span>-R<span class="w"> </span>test_triton_reduction
+</pre></div>
+</div>
+<p>我们也使用 PyTorch 的 Aten 日志机制，所以你需要设置环境变量
+<code class="docutils literal notranslate"><span class="pre">TORCH_CPP_LOG_LEVEL=INFO</span></code> 才能获得 <code class="docutils literal notranslate"><span class="pre">libtorch_example</span></code> 中的更多日志信息。</p>
+</section>
+<section id="pr">
+<h2>4. 为你的代码提交 PR<a class="headerlink" href="#pr" title="Link to this heading">#</a></h2>
+<p>当所有一切都工作正常时，该到提交拉去请求（Pull Request，PR）的时候了。
+在提交 PR 时，我们希望你在针对算子所做的工作提供简要描述之外，
+能够在 PR 描述中包含端到端的性能测试数据以方便评审。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="backend.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">添加一种新的后端</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-the-wrapper">1. 编写封装层 {#write-the-wrapper}</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#write-test-cases">2. 编写测试用例  {#write-test-cases}</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">3. 运行 C++ 测试用例</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pr">4. 为你的代码提交 PR</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 9月 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flaggems_en/contribution/cpp-wrapper.html">English</a></body>
+</html>

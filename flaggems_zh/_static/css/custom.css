@@ -1,0 +1,271 @@
+/* docs-sphinx/_static/css/custom.css */
+
+/* FlagGems Documentation Custom Styles */
+
+/* ---------- Sidebar spacing (symmetric, desktop only) ---------- */
+
+@media (min-width: 992px) {
+    /* Left sidebar (navigation tree) */
+    .bd-sidebar-primary {
+        padding-left: 0.75rem;   /* left edge to nav tree */
+        padding-right: 0.5rem;   /* nav tree to main content */
+    }
+
+    /* Right sidebar (TOC) */
+    .bd-sidebar-secondary {
+        padding-right: 0.75rem;  /* right edge to TOC */
+        padding-left: 0.5rem;    /* TOC to main content */
+    }
+
+    /* Main content area */
+    .bd-content {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Global container */
+    .container-fluid {
+        max-width: 1400px;
+    }
+}
+
+/* Operator List Table */
+.operator-list {
+    width: 100%;
+    font-size: 0.85em;
+    margin-bottom: 1em;
+}
+
+/* Hide right sidebar and expand width on operators, benchmark, and summary pages */
+#operator-table ~ .bd-sidebar-secondary,
+body:has(#operator-table) .bd-sidebar-secondary,
+body:has(#benchmark-results) .bd-sidebar-secondary,
+body:has(#ut-summary) .bd-sidebar-secondary,
+body:has([id^="test-results-"]) .bd-sidebar-secondary {
+    display: none !important;
+}
+
+body:has(#operator-table) .bd-article-container,
+body:has(#benchmark-results) .bd-article-container,
+body:has(#ut-summary) .bd-article-container,
+body:has([id^="test-results-"]) .bd-article-container {
+    padding-right: 0 !important;
+    max-width: none !important;
+}
+
+body:has(#operator-table) .bd-content .bd-article,
+body:has(#benchmark-results) .bd-content .bd-article,
+body:has(#ut-summary) .bd-content .bd-article,
+body:has([id^="test-results-"]) .bd-content .bd-article {
+    max-width: none !important;
+}
+
+body:has(#operator-table) .pst-scrollable-table-container {
+    overflow-x: auto;
+}
+
+.operator-list th {
+    background-color: var(--pst-color-surface);
+    font-weight: bold;
+    text-align: left;
+    padding: 0.5em;
+    position: sticky;
+    top: 0;
+}
+
+.operator-list td {
+    padding: 0.4em 0.5em;
+    border-bottom: 1px solid var(--pst-color-border);
+}
+
+.operator-list td code {
+    background: transparent;
+    padding: 0;
+    color: var(--pst-color-primary);
+    font-family: monospace;
+}
+
+/* Benchmark Table */
+.benchmark-table {
+    width: 100%;
+    font-size: 0.85em;
+    overflow-x: auto;
+}
+
+/* Benchmark Tabs */
+.benchmark-tabs {
+    margin: 1em 0;
+    display: flex;
+    gap: 0.5em;
+}
+
+.benchmark-tabs button {
+    padding: 0.5em 1em;
+    border: 1px solid var(--pst-color-border);
+    border-radius: 4px;
+    background: var(--pst-color-surface);
+    cursor: pointer;
+}
+
+.benchmark-tabs button:hover {
+    background: var(--pst-color-primary);
+    color: white;
+}
+
+.benchmark-tabs button.active {
+    background: var(--pst-color-primary);
+    color: white;
+    border-color: var(--pst-color-primary);
+}
+
+/* Benchmark Panels */
+.benchmark-panel {
+    display: none;
+    padding: 1em;
+    border: 1px solid var(--pst-color-border);
+    border-radius: 4px;
+    margin-top: 0.5em;
+}
+
+.benchmark-panel.active {
+    display: block;
+}
+
+.benchmark-panel p {
+    margin-bottom: 1em;
+}
+
+.benchmark-table th {
+    background-color: var(--pst-color-surface);
+    text-align: left;
+    padding: 0.4em;
+}
+
+.benchmark-table td {
+    padding: 0.3em 0.4em;
+}
+
+.benchmark-table td literal {
+    font-family: monospace;
+}
+
+/* Tab Styling (sphinx-design) */
+.sd-tab-set {
+    margin: 1em 0;
+    border: 1px solid var(--pst-color-border);
+    border-radius: 4px;
+}
+
+.sd-tab-label {
+    font-weight: 500;
+    padding: 0.5em 1em;
+}
+
+.sd-tab-item {
+    padding: 1em;
+}
+
+/* Admonition styling */
+.admonition {
+    margin: 1em 0;
+    padding: 0.5em 1em;
+    border-radius: 4px;
+}
+
+.admonition.note {
+    background-color: var(--pst-color-info-bg);
+    border-left: 4px solid var(--pst-color-info);
+}
+
+.admonition.warning {
+    background-color: var(--pst-color-warning-bg);
+    border-left: 4px solid var(--pst-color-warning);
+}
+
+/* Code blocks */
+.highlight {
+    margin: 1em 0;
+}
+
+/* Links */
+a.reference {
+    color: var(--pst-color-primary);
+}
+
+a.reference:hover {
+    text-decoration: underline;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .operator-list,
+    .benchmark-table {
+        font-size: 0.8em;
+    }
+
+    .operator-list th,
+    .benchmark-table th {
+        padding: 0.3em;
+    }
+
+    .operator-list td,
+    .benchmark-table td {
+        padding: 0.2em 0.3em;
+    }
+}
+
+/* Dark theme specific */
+[data-theme="dark"] .operator-list th {
+    background-color: #1a1a2e;
+}
+
+/* Operator category list table */
+.operator-category-table {
+    width: 100%;
+    font-size: 0.85em;
+    margin-bottom: 2em;
+}
+
+.operator-category-table th {
+    background-color: var(--pst-color-surface);
+    font-weight: bold;
+    text-align: left;
+    padding: 0.5em;
+    position: sticky;
+    top: 0;
+}
+
+.operator-category-table td {
+    padding: 0.4em 0.5em;
+    border-bottom: 1px solid var(--pst-color-border);
+    vertical-align: top;
+}
+
+.operator-category-table td code {
+    background: var(--pst-color-surface);
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: inherit;
+    font-family: monospace;
+}
+
+.operator-category-table td:first-child {
+    white-space: nowrap;
+    width: 15%;
+}
+
+.operator-category-table td:last-child {
+    color: var(--pst-color-text-muted);
+}
+
+[data-theme="dark"] .operator-category-table th {
+    background-color: #1a1a2e;
+}
+
+[data-theme="dark"] .operator-category-table td code {
+    background: #2a2a3e;
+}
+
+[data-theme="dark"] .benchmark-table th {
+    background-color: #1a1a2e;
+}

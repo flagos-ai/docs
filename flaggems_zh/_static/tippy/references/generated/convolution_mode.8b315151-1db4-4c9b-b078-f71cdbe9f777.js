@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"#tests\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Tests<a class=\"headerlink\" href=\"#tests\" title=\"Link to this heading\">#</a></h2>", "a[href=\"#labels\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Labels<a class=\"headerlink\" href=\"#labels\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">aten</span></code>, <code class=\"docutils literal notranslate\"><span class=\"pre\">KernelGen</span></code></p>", "a[href=\"#description\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Description<a class=\"headerlink\" href=\"#description\" title=\"Link to this heading\">#</a></h2><p>Low-level dispatcher backing the string-padding form of convolution.\nGiven an input, a weight, an optional bias, stride, a string padding mode\n(<code class=\"docutils literal notranslate\"><span class=\"pre\">valid</span></code> or <code class=\"docutils literal notranslate\"><span class=\"pre\">same</span></code>), dilation and groups, it computes the N-D convolution\nby dispatching to the FlagGems <code class=\"docutils literal notranslate\"><span class=\"pre\">conv1d</span></code>/<code class=\"docutils literal notranslate\"><span class=\"pre\">conv2d</span></code>/<code class=\"docutils literal notranslate\"><span class=\"pre\">conv3d</span></code> Triton kernels\nbased on the spatial dimensionality of the weight tensor. <code class=\"docutils literal notranslate\"><span class=\"pre\">same</span></code> padding\nrequires unit strides.</p>", "a[href=\"#source-code\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Source Code<a class=\"headerlink\" href=\"#source-code\" title=\"Link to this heading\">#</a></h2>", "a[href=\"#convolution-mode\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">convolution_mode<a class=\"headerlink\" href=\"#convolution-mode\" title=\"Link to this heading\">#</a></h1><p><strong>Kind:</strong> Convolution | <strong>Stage:</strong> alpha | <strong>Since:</strong> 5.4</p>", "a[href=\"#aten-mapping\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">ATen Mapping<a class=\"headerlink\" href=\"#aten-mapping\" title=\"Link to this heading\">#</a></h2>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

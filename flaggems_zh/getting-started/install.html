@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="安装 FlagGems" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting-started/install.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="1. 环境准备: 你必须确保为自己的硬件正确地安装了内核态的驱动程序和用户空间的 SDK 或工具链， 并且均已配置正确，工作正常。无论是 NVIDIA 平台还是其他 AI 加速器硬件， 这一点都适用。, 你必须确保已经在节点上安装了合适的 Python 版本。目前建议的版本是 Python 3.10。 在将来这一建议版本可能会不同，并且，如果你在使用 非 NVIDIA 硬件平台 ， 厂商可能对可以使用的 Python 版本有额外的约束。, 你可能需要在安装 FlagGems 之前先安装 PyTorch 、 Triton 等软件环境。 如果你在使用 非 NVIDIA 硬件平台 来运行 Fl..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="1. 环境准备: 你必须确保为自己的硬件正确地安装了内核态的驱动程序和用户空间的 SDK 或工具链， 并且均已配置正确，工作正常。无论是 NVIDIA 平台还是其他 AI 加速器硬件， 这一点都适用。, 你必须确保已经在节点上安装了合适的 Python 版本。目前建议的版本是 Python 3.10。 在将来这一建议版本可能会不同，并且，如果你在使用 非 NVIDIA 硬件平台 ， 厂商可能对可以使用的 Python 版本有额外的约束。, 你可能需要在安装 FlagGems 之前先安装 PyTorch 、 Triton 等软件环境。 如果你在使用 非 NVIDIA 硬件平台 来运行 Fl..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>安装 FlagGems &#8212; FlagGems 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=bd3843ac" />
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=2f47175f"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/tabulator.min.js?v=52b524e6"></script>
+    <script src="../_static/js/benchmark.js?v=bfe1f9a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting-started/install.ce3193e0-dd03-4194-935f-46fefcf1ecf9.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting-started/install';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting-started/install.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="功能特性概览" href="../overview/features.html" />
+    <link rel="prev" title="FlagGems 简介" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="9月 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagGems 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagGems 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagGems 简介
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">快速开始</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">安装 FlagGems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">概览</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/features.html">功能特性概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/platforms.html">支持的硬件平台</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/pointwise-dynamic.html">关于逐点动态算子</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">使用指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../usage/overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/basic.html">基本用法</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/selective.html">选择性启用算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">启用调试日志</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/experimental.html">使用实验性质的算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/non-nvidia.html">在非英伟达（NVIDIA）硬件上使用 FlagGems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/distributed.html">多 GPU 与分布式环境</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/frameworks.html">与常用框架的集成</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/modules.html">使用 FlagGems 模块构造自己的模型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/tuning.html">基于预优化实现 FlagGems 的更好性能</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/cpp.html">使用 C++ 封装的算子获得更好的性能</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/precision.html">精度检查（实验性功能）</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">性能测试与优化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">性能测试概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/benchmark.html">FlagGems 中的性能基准测试</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/results.html">性能测试结果</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/database.html">性能数据库后端</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">测试</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../testing/unittest.html">测试 Python 算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing/coverage.html">单元测试覆盖率</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参考信息</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../references/operators.html">算子列表</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/operators-search.html">算子搜索</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/changelog.html">变更历史</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/experimental.html">FlagGems 实验性算子</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/project_structure.html">项目源码结构</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/release.html">关于打包与发布</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../references/test/index.html">测试报告</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../references/test/coverage/index.html">单元测试覆盖率</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../references/test/unit/index.html">单元测试摘要</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260609-summary.html">Test Results - 20260609-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260604-summary.html">Test Results - 20260604-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260603-summary.html">Test Results - 20260603-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260526-summary.html">Test Results - 20260526-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260525-summary.html">Test Results - 20260525-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260505-summary.html">Test Results - 20260505-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260329-summary.html">Test Results - 20260329-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260328-summary.html">Test Results - 20260328-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260327-summary.html">Test Results - 20260327-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260326-summary.html">Test Results - 20260326-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260325-summary.html">Test Results - 20260325-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260324-summary.html">Test Results - 20260324-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260323-summary.html">Test Results - 20260323-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260322-summary.html">Test Results - 20260322-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260321-summary.html">Test Results - 20260321-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260320-summary.html">Test Results - 20260320-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260319-summary.html">Test Results - 20260319-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260318-summary.html">Test Results - 20260318-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260317-summary.html">Test Results - 20260317-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260316-summary.html">Test Results - 20260316-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260315-summary.html">Test Results - 20260315-summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../references/test/unit/summaries/20260314-summary.html">Test Results - 20260314-summary</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">参与项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contribution/overview.html">概述</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/backend.html">添加一种新的后端</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution/cpp-wrapper.html">添加 C++ 封装的算子</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting-started/install.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>安装 FlagGems</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 环境准备</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pypi">2. 从 PyPI 安装</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-from-source">3. 从源码构建、安装 {#install-from-source}</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">3.1 克隆源代码</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree">3.2 安装 FlagTree</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">3.3 安装软件包</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c">3.3.1 带 C++ 扩展特性的安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#python">3.3.2 仅安装 Python 软件包</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">4. 参考资料</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pip-pip-options">4.1 常用的 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 选项 {#pip-options}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-isolation">4.2 关于构建隔离 {#build-isolation}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cmake-cmake-options">4.3 关于 CMake 选项 {#cmake-options}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scikit-build-core-scikit-build-core-options">4.4 <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code> 选项  {#scikit-build-core-options}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#libtriton-jit-libtriton-jit">4.5 关于 <code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 库   {#libtriton-jit}</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="flaggems">
+<h1>安装 FlagGems<a class="headerlink" href="#flaggems" title="Link to this heading">#</a></h1>
+<section id="id1">
+<h2>1. 环境准备<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>你必须确保为自己的硬件正确地安装了内核态的驱动程序和用户空间的 SDK 或工具链，
+并且均已配置正确，工作正常。无论是 NVIDIA 平台还是其他 AI 加速器硬件，
+这一点都适用。</p></li>
+<li><p>你必须确保已经在节点上安装了合适的 Python 版本。目前建议的版本是 Python 3.10。
+在将来这一建议版本可能会不同，并且，如果你在使用
+<a class="reference internal" href="../usage/non-nvidia.html"><span class="doc std std-doc">非 NVIDIA 硬件平台</span></a>，
+厂商可能对可以使用的 Python 版本有额外的约束。</p></li>
+<li><p>你可能需要在安装 <em>FlagGems</em> 之前先安装 <a class="reference external" href="https://github.com/pytorch/pytorch">PyTorch</a>、
+<a class="reference external" href="https://github.com/triton-lang/triton">Triton</a> 等软件环境。</p>
+<p>如果你在使用<a class="reference internal" href="../usage/non-nvidia.html"><span class="doc std std-doc">非 NVIDIA 硬件平台</span></a>来运行
+<em>FlagGems</em> 以及你的工作负载，则你可能需要安装针对这类平台<strong>定制、裁剪过的</strong>
+PyTorch、Triton 软件包。</p>
+</li>
+<li><p>如果你想尝试将将 <em>FlagGems</em> <a class="reference internal" href="#../frameworks/#vllm"><span class="xref myst">与 VLLM 集成</span></a>，
+则需要安装 <a class="reference external" href="https://github.com/vllm-project/vllm">vLLM</a>，或者厂商定制版本
+（如果有的话）。</p></li>
+</ul>
+</section>
+<section id="pypi">
+<h2>2. 从 PyPI 安装<a class="headerlink" href="#pypi" title="Link to this heading">#</a></h2>
+<p>你可以使用自己常用的 Python 包管理器（例如 <code class="docutils literal notranslate"><span class="pre">pip</span></code>）从 <a class="reference external" href="https://pypi.org/project/flag-gems/">PyPI</a>
+安装 <em>FlagGem</em> 的软件包：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>flag_gems
+</pre></div>
+</div>
+<blockquote>
+<div><p>[!INFO]
+<strong>提示</strong></p>
+<p>这种纯 Python 包的安装方式仅安装 <em>FlagGems</em> 中用 Python 实现的算子。
+如果需要安装 C++ 封装的算子，你必须采用
+<a class="reference internal" href="#install-from-source"><span class="xref myst">从源码构建安装</span></a>方式。</p>
+</div></blockquote>
+</section>
+<section id="install-from-source">
+<h2>3. 从源码构建、安装 {#install-from-source}<a class="headerlink" href="#install-from-source" title="Link to this heading">#</a></h2>
+<p>与很多其他开源软件类似，<em>FlagGems</em> 支持从源码构建、安装。</p>
+<section id="id2">
+<h3>3.1 克隆源代码<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/FlagGems
+<span class="nb">cd</span><span class="w"> </span>FlagGems/
+</pre></div>
+</div>
+</section>
+<section id="flagtree">
+<h3>3.2 安装 FlagTree<a class="headerlink" href="#flagtree" title="Link to this heading">#</a></h3>
+<p>如果你希望使用原生的 Triton 编译器而不是 <em>FlagTree</em>，可以跳过这一步。</p>
+<p><a class="reference external" href="https://github.com/flagos-ai/FlagTree">FlagTree</a> 是一个针对多种
+AI 平台的、开源的统一编译器。在安装 FlagTree 之前，请先阅读 FlagTree
+项目的运行环境需求。</p>
+<p><code class="docutils literal notranslate"><span class="pre">requirements_&lt;backend&gt;.txt</span></code> 文件已经包含 FlagTree 以及构建依赖
+（如 <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code>、<code class="docutils literal notranslate"><span class="pre">pybind11</span></code>、<code class="docutils literal notranslate"><span class="pre">ninja</span></code>、<code class="docutils literal notranslate"><span class="pre">cmake</span></code>），
+可以通过以下命令一起安装。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/requirements_nvidia.txt
+</pre></div>
+</div>
+<blockquote>
+<div><p>[!TIP]
+<strong>提示</strong></p>
+<ul class="simple">
+<li><p>对于<a class="reference internal" href="../usage/non-nvidia.html"><span class="doc std std-doc">非 NVIDIA 平台</span></a>，
+你必须<strong>使用</strong> <code class="docutils literal notranslate"><span class="pre">requirements/</span></code> 目录下的其他
+<code class="docutils literal notranslate"><span class="pre">requirements_&lt;backend&gt;.txt</span></code> 文件。</p></li>
+<li><p>我们正在努力简化这一安装步骤。请持续关注。</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>3.3 安装软件包<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p><em>FlagGems</em> 既可以作为纯 Python 软件包来安装，也支持带 C++ 扩展特性的安装。
+C++ 扩展特性仍然是一种实验性特性，所以如果你计划在生产环境中使用，
+请确保在开始使用之前进行必要的评估测试。</p>
+</section>
+<section id="c">
+<h3>3.3.1 带 C++ 扩展特性的安装<a class="headerlink" href="#c" title="Link to this heading">#</a></h3>
+<p>如果你不打算启用 C++ 封装的算子，可以跳过这一步。</p>
+<p>如要构建、安装 <em>FlagGems</em> 中的 C++ 扩展特性，则必须在安装过程中为 CMake
+指定选项 <code class="docutils literal notranslate"><span class="pre">-DFLAGGEMS_BUILD_C_EXTENSION=ON</span></code>。你可以通过设置 <code class="docutils literal notranslate"><span class="pre">SKBUILD_CMAKE_ARGS</span></code>
+或者 <code class="docutils literal notranslate"><span class="pre">CMAKE_ARGS</span></code> 环境变量这两种方式来为 CMake 提供参数。
+下面的命令以可编辑模式（Editable Mode）安装 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 包，同时使用
+<code class="docutils literal notranslate"><span class="pre">CMAKE_ARGS</span></code> 环境变量来启用 C++ 扩展特性：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DFLAGGEMS_BUILD_C_EXTENSIONS=ON -DCMAKE_BUILD_TYPE=Release"</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<blockquote>
+<div><p>[!TIP]
+建议显式指定 <code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=Release</span></code>。
+若不指定构建类型，<code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 及 <code class="docutils literal notranslate"><span class="pre">FlagGems</span></code> 自身的 C++
+代码都不会针对所选目标平台启用编译器优化（<code class="docutils literal notranslate"><span class="pre">-O3</span> <span class="pre">-DNDEBUG</span></code> 等），
+从而导致 C++ wrapper 的执行时间明显变长，拉低 C++ 封装算子的整体性能。</p>
+</div></blockquote>
+<blockquote>
+<div><p>[!NOTE]
+若构建失败（例如依赖冲突或 pip 无法定位已安装的 PyTorch），
+可在 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> 命令上加 <code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code>，让 pip
+复用当前环境中已装好的 PyTorch 以及 <code class="docutils literal notranslate"><span class="pre">requirements_&lt;backend&gt;.txt</span></code>
+预装的构建依赖。更多细节参见 <a class="reference internal" href="#build-isolation"><span class="xref myst">§4.2 关于构建隔离</span></a>。</p>
+</div></blockquote>
+<p>上面的命令默认构建 <strong>CUDA</strong> 后端。如需构建其他后端或启用 pointwise 动态 C++ 模块，
+请传递相应的 CMake 选项。以下是各平台的编译示例：</p>
+<p><strong>NVIDIA CUDA（启用 pointwise 动态 C++ 支持）</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DFLAGGEMS_BUILD_C_EXTENSIONS=ON -DCMAKE_BUILD_TYPE=Release"</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p><strong>天数智芯 CoreX (IX)</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">LIBRARY_PATH</span><span class="o">=</span>&lt;corex-install-dir&gt;/lib64:<span class="nv">$LIBRARY_PATH</span>
+<span class="c1">#export LIBRARY_PATH=/usr/local/corex/lib64:$LIBRARY_PATH</span>
+<span class="nv">CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DFLAGGEMS_BACKEND=IX -DFLAGGEMS_BUILD_C_EXTENSIONS=ON -DCMAKE_BUILD_TYPE=Release"</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p><strong>摩尔线程 (MUSA)</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MUSA_HOME</span><span class="o">=</span>&lt;musa-install-dir&gt;
+<span class="c1">#export MUSA_HOME=/usr/local/musa-xxx</span>
+<span class="nv">CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DFLAGGEMS_BACKEND=MUSA -DFLAGGEMS_BUILD_C_EXTENSIONS=ON -DCMAKE_BUILD_TYPE=Release"</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p><strong>华为昇腾 (NPU)</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DFLAGGEMS_BACKEND=NPU -DFLAGGEMS_BUILD_C_EXTENSIONS=ON -DCMAKE_BUILD_TYPE=Release"</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>注意，上面的命令会安装 <a class="reference external" href="https://github.com/flagos-ai/libtriton_jit">libtriton_jit 库</a>，
+并且安装方式是克隆其 GIT 仓库并从源码来安装。</p>
+<p>关于命令行选项的更详细的信息，你可以参考以下小节：</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cmake-options"><span class="xref myst">CMake 选项</span></a>.</p></li>
+<li><p><a class="reference internal" href="#pip-options"><span class="xref myst">pip 选项</span></a>.</p></li>
+<li><p><a class="reference internal" href="#build-isolation"><span class="xref myst">构建隔离（build isolation）</span></a></p></li>
+<li><p><a class="reference internal" href="#libtriton-jit"><span class="xref myst">安装 libtriton_jit</span></a></p></li>
+</ul>
+<section id="python">
+<h4>3.3.2 仅安装 Python 软件包<a class="headerlink" href="#python" title="Link to this heading">#</a></h4>
+<p>你可以将 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 作为纯 Python 软件包来安装。
+如果你希望直接使用 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code>，无意对其实现作任何修改或定制，
+可以将其安装到你的 Python 运行环境中：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>这种安装方式类似于 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">flag_gems</span></code> 命令所完成的动作。
+唯一的区别是在这里你所使用的不是预先构建好的 Python wheel 发行包，
+而是从项目的源代码来安装。</p>
+<p>如果你在参与 <em>FlagGems</em> 的开发或测评、优化工作，例如开发新的算子，
+或者执行一些类似的开发、测试工作，你可以通过在命令行中指定 <code class="docutils literal notranslate"><span class="pre">-e</span></code>
+参数完成<strong>可编辑的</strong>安装部署，如下例所示：</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+<p>关于一些 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 的常用选项，你可以在 <a class="reference internal" href="#pip-options"><span class="xref myst">pip 选项参考资料</span></a>
+一节中阅读一些详细说明。</p>
+</section>
+</section>
+</section>
+<section id="id4">
+<h2>4. 参考资料<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="pip-pip-options">
+<h3>4.1 常用的 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 选项 {#pip-options}<a class="headerlink" href="#pip-pip-options" title="Link to this heading">#</a></h3>
+<p>一些经常使用的 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 命令行选项包括：</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>：显示配置与构建过程的详细日志信息。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span></code>：执行<strong>可编辑模式的</strong>安装部署。需要注意的是，在可编辑的部署环境中，
+C++ 部分的代码（头文件、库、cmake 包文件等等）都会被安装到 Python
+（可以是虚拟环境）的 <code class="docutils literal notranslate"><span class="pre">site-packages</span></code> 目录下，而 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 包中的
+Python 代码会继续存放在当前目录下。包安装程序会在 <code class="docutils literal notranslate"><span class="pre">site-packages</span></code>
+目录下安装一个加载器来找到 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 的 Python 代码。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code>：指示 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 在构建项目时<strong>不要</strong>创建独立的虚拟环境
+（即 virtualenv 或者缩写为 venv）。这一选项通常用于可编辑模式的安装部署。
+需要注意的是，如果在构建时不使用隔离环境，你必须手动完成构造依赖项的安装。
+更多的细节可参阅<a class="reference internal" href="#build-isolation"><span class="xref myst">构建隔离</span></a>小节。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--no-deps</span></code>：指示 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 不要安装依赖包。
+如果你不希望 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 更新已经安装部署的依赖包时，这一选项是有用的。</p></li>
+</ol>
+</section>
+<section id="build-isolation">
+<h3>4.2 关于构建隔离 {#build-isolation}<a class="headerlink" href="#build-isolation" title="Link to this heading">#</a></h3>
+<p>根据社区 <a class="reference external" href="https://peps.python.org/pep-0517/#recommendations-for-build-frontends-non-normative">PEP 517</a> 所给的倡议，
+诸如 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 或者其他一些较新的构建前端（build frontend）一般会使用隔离环境来构建软件包。
+构建过程会创建一个<strong>虚拟环境（Virtual Environment）</strong>，并在该环境中安装构建的需求，
+之后才会启动软件包的构建过程。</p>
+<p>如果你不希望使用构建隔离（通常是指可编辑模式的安装），可以为 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>
+命令指定 <code class="docutils literal notranslate"><span class="pre">--no-build-isolation</span></code> 参数。设置这一参数之后，安装程序会在识别出依赖项后，
+尽可能复用系统上已经安装了的、版本兼容的软件包。
+这也意味着作为用户的你要在自己的环境中预先安装 <code class="docutils literal notranslate"><span class="pre">build-requirements</span></code> 的内容。
+如果不启用构建隔离，你需要查阅 <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> 文件中的 <code class="docutils literal notranslate"><span class="pre">[build-system.requires]</span></code>
+小节，手动安装其中列举的软件包。</p>
+</section>
+<section id="cmake-cmake-options">
+<h3>4.3 关于 CMake 选项 {#cmake-options}<a class="headerlink" href="#cmake-cmake-options" title="Link to this heading">#</a></h3>
+<p>如前所述，在构建、安装 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 时，你可以通过环境变量 <code class="docutils literal notranslate"><span class="pre">SKBUILD_CMAKE_ARGS</span></code>
+或 <code class="docutils literal notranslate"><span class="pre">CMAKE_ARGS</span></code> 向 CMake 传递参数选项。
+需要注意的是，对于环境变量 <code class="docutils literal notranslate"><span class="pre">SKBUILD_CMAKE_ARGS</span></code> 而言，如果需要指定多个参数选项，
+这些参数要使用分号（<code class="docutils literal notranslate"><span class="pre">:</span></code>）隔开；对于 <code class="docutils literal notranslate"><span class="pre">CMAKE_ARGS</span></code>，多个选项要使用空格来分隔。
+造成这一差别的主要原因是 <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code> 与其前身 <code class="docutils literal notranslate"><span class="pre">scikit-build</span></code>
+之间存在不兼容的变更。</p>
+<p>用来配置 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 安装的 CMake 选项如下：</p>
+<table>
+<thead>
+<tr>
+  <th>选项</th><th>描述</th><th>默认值</th>
+<tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>FLAGGEMS_USE_EXTERNAL_TRITON_JIT</code></td>
+  <td>
+    是否使用外部的 <a href="#libtriton-jit">Triton JIT 库</a>。
+  </td>
+  <td><code>OFF</code></td>
+</tr>
+<tr>                                      |
+  <td><code>FLAGGEMS_USE_EXTERNAL_PYBIND11</code></td>
+  <td>
+    是否使用外部的 `pybind11` 库。
+  </td>
+  <td><code>ON</code></td>
+</tr>
+<tr>                                      |
+  <td><code>FLAGGEMS_BUILD_C_EXTENSIONS</code></td>
+  <td>
+    是否构建 C++ 扩展。以开发模式安装时建议启用此选项。
+  </td>
+  <td><code>ON</code></td>
+</tr>
+<tr>
+  <td><code>FLAGGEMS_BUILD_CTESTS</code></td>
+  <td>
+    是否构建 C++ 扩展的单元测试。
+  </td>
+  <td>取值为 <code>FLAGGEMS_BUILD_C_EXTENSIONS</code></td>
+</tr>
+<tr>
+  <td><code>FLAGGEMS_INSTALL</code></td>
+  <td>
+    是否安装 FlagGems 的 CMake 包。建议以开发模式安装时启用此选项。
+  </td>
+  <td>ON</td>
+</tr>
+<tr>
+  <td><code>FLAGGEMS_BACKEND</code></td>
+  <td>
+    目标后端平台。合法取值为 <code>CUDA</code>、<code>IX</code>、<code>MUSA</code> 和 <code>NPU</code>。
+  </td>
+  <td><code>CUDA</code></td>
+</tr>
+<tr>
+  <td><code>FLAGGEMS_BUILD_POINTWISE_DYNAMIC_CPP</code></td>
+  <td>
+    是否构建 pointwise 动态 C++ 支持模块。
+  </td>
+  <td><code>OFF</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="scikit-build-core-scikit-build-core-options">
+<h3>4.4 <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code> 选项  {#scikit-build-core-options}<a class="headerlink" href="#scikit-build-core-scikit-build-core-options" title="Link to this heading">#</a></h3>
+<p>工具 <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code> 是一个<strong>构建后端（Build Backend）</strong>，用来桥接 CMake
+和 Python 这两个构建系统，进而简化使用 CMake 来构建 Python 模块的过程。
+用来配置 <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code> 的一些常用环境变量包括：</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SKBUILD_CMAKE_BUILD_TYPE</span></code>：用来配置项目的构建类型。
+合法的取值包括 <code class="docutils literal notranslate"><span class="pre">Release</span></code>、<code class="docutils literal notranslate"><span class="pre">Debug</span></code>、<code class="docutils literal notranslate"><span class="pre">RelWithDebInfo</span></code> 和 <code class="docutils literal notranslate"><span class="pre">MinSizeRel</span></code> 等。</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SKBUILD_BUILD_DIR</span></code>：用来设置项目的构建目录。
+默认取值为 <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> 文件中定义的 <code class="docutils literal notranslate"><span class="pre">build/{cache_tag}</span></code>。</p></li>
+</ol>
+</section>
+<section id="libtriton-jit-libtriton-jit">
+<h3>4.5 关于 <code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 库   {#libtriton-jit}<a class="headerlink" href="#libtriton-jit-libtriton-jit" title="Link to this heading">#</a></h3>
+<p><em>FlagGems</em> 的 C++ 扩展特性依赖于 <a class="reference external" href="https://github.com/flagos-ai/libtriton_jit/">TritonJIT</a>，
+一个用 C++ 来实现 Triton JIT 运行时的库。利用 TritonJIT，我们可以在 C++
+代码中调用 Triton 的 JIT 函数。
+如果在构建、安装 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> 时使用外部的 TritonJIT 库，
+就意味着你需要单独构建并安装它，从而满足 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code> CMake 构建的前提条件；
+之后要使用 <code class="docutils literal notranslate"><span class="pre">-DTritonJIT_ROOT=&lt;安装路径&gt;</span></code> 选项将安装位置告知 CMake。</p>
+<p>例如，下面的命令会启动一个可编辑的安装动作，
+并且使用在 <code class="docutils literal notranslate"><span class="pre">/usr/local/lib/libtriton_jit</span></code> 下已经安装好的外部 <em>TritonJIT</em> 实例。</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">CMAKE_ARGS</span><span class="o">=</span><span class="s2">"-DFLAGGEMS_BUILD_C_EXTENSIONS=ON -DFLAGGEMS_USE_EXTERNAL_TRITON_JIT=ON -DTritonJIT_ROOT=/usr/local/lib/libtriton_jit"</span><span class="w"> </span><span class="se">\</span>
+pip<span class="w"> </span>install<span class="w"> </span>-v<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">FlagGems 简介</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../overview/features.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">功能特性概览</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 环境准备</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pypi">2. 从 PyPI 安装</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#install-from-source">3. 从源码构建、安装 {#install-from-source}</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">3.1 克隆源代码</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree">3.2 安装 FlagTree</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">3.3 安装软件包</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c">3.3.1 带 C++ 扩展特性的安装</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#python">3.3.2 仅安装 Python 软件包</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">4. 参考资料</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pip-pip-options">4.1 常用的 <code class="docutils literal notranslate"><span class="pre">pip</span></code> 选项 {#pip-options}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-isolation">4.2 关于构建隔离 {#build-isolation}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cmake-cmake-options">4.3 关于 CMake 选项 {#cmake-options}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scikit-build-core-scikit-build-core-options">4.4 <code class="docutils literal notranslate"><span class="pre">scikit-build-core</span></code> 选项  {#scikit-build-core-options}</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#libtriton-jit-libtriton-jit">4.5 关于 <code class="docutils literal notranslate"><span class="pre">libtriton_jit</span></code> 库   {#libtriton-jit}</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 9月 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flaggems_en/getting-started/install.html">English</a></body>
+</html>
