@@ -1,0 +1,1357 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="User Guide" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user-guide.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="Environment configuration: Refer to the environment setup section in the Getting Started page. Installation and compilation: Refer to Getting Started for FlagCX compilation and installation. API Reference: Device Handle Management: FlagCX introduces a device handle API that separates device/CCL a..." />
+<meta property="og:image" content="_images/correct_performance_test_output.png" />
+<meta property="og:image:alt" content="correct_performance_test_output.png" />
+<meta name="description" content="Environment configuration: Refer to the environment setup section in the Getting Started page. Installation and compilation: Refer to Getting Started for FlagCX compilation and installation. API Reference: Device Handle Management: FlagCX introduces a device handle API that separates device/CCL a..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>User Guide &#8212; FlagCX Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="_static/tippy/user-guide.04063313-d3f0-4949-8fee-8406d629b248.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user-guide.html" />
+    <link rel="icon" href="_static/favicon.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tests" href="testing.html" />
+    <link rel="prev" title="Build and Installation" href="build.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="_static/logo-en-light.svg" class="logo__image only-light" alt="FlagCX Documentation - Home"/>
+    <img src="_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagCX Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    FlagCX Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="flagcx_overview/flagcx-overview.html">Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/backend-support.html">Backend support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/application-integration.html">Application integration</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build and Installation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Tests</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">⤵️ Application Integration Guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="paddle/README.html">Training Models with Paddle and FlagCX</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia.html">Guide for using paddle with FlagCX on nvidia GPU environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/iluvatar.html">Guide for using paddle with FlagCX on iluvatar machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/kunlun.html">Guide for using paddle with FlagCX on XPU machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia-iluvatar-hetero-train.html">Guide for training on nvidia and iluvatar GPUs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">FlagCX Environment Variables</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user-guide.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>User Guide</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-configuration">Environment configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-and-compilation">Installation and compilation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-handle-management">Device Handle Management</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-apis-recommended">New APIs (Recommended)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-apis">Deprecated APIs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#changed-apis">Changed APIs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#removed-apis">Removed APIs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homogeneous-tests-using-flagcx">Homogeneous tests using FlagCX</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#communication-api-test">Communication API test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#torch-api-test">Torch API test</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homogeneous-training-with-flagcx-flagscale">Homogeneous training with FlagCX + FlagScale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#heterogeneous-tests-using-flagcx">Heterogeneous tests using FlagCX</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unirunner-mode">UniRunner mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sided-rdma-operations">One-sided RDMA operations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-registration">Buffer Registration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sided-api">One-Sided API</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p-engine">P2P Engine</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#engine-lifecycle">Engine Lifecycle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-management">Connection Management</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-registration">Memory Registration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sided-operations">One-Sided Operations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nccl-wrapper-plugin">NCCL wrapper plugin</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Communication API test</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
+<section id="environment-configuration">
+<h2>Environment configuration<a class="headerlink" href="#environment-configuration" title="Link to this heading">#</a></h2>
+<p>Refer to the environment setup section in the <a class="reference internal" href="getting-started.html"><span class="std std-doc">Getting Started</span></a> page.</p>
+</section>
+<section id="installation-and-compilation">
+<h2>Installation and compilation<a class="headerlink" href="#installation-and-compilation" title="Link to this heading">#</a></h2>
+<p>Refer to <a class="reference internal" href="getting-started.html"><span class="std std-doc">Getting Started</span></a> for FlagCX compilation and installation.</p>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h2>
+<section id="device-handle-management">
+<h3>Device Handle Management<a class="headerlink" href="#device-handle-management" title="Link to this heading">#</a></h3>
+<p>FlagCX introduces a device handle API that separates device/CCL adaptor lifecycle from communicator management. The previous <code class="docutils literal notranslate"><span class="pre">flagcxHandlerGroup</span></code> approach is now deprecated.</p>
+<section id="new-apis-recommended">
+<h4>New APIs (Recommended)<a class="headerlink" href="#new-apis-recommended" title="Link to this heading">#</a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Initialize device handle — loads device/CCL adaptor plugins</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxDeviceHandleInit</span><span class="p">(</span><span class="n">flagcxDeviceHandle_t</span><span class="w"> </span><span class="o">*</span><span class="n">devHandle</span><span class="p">);</span>
+
+<span class="c1">// Free device handle — finalizes device/CCL adaptor plugins</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxDeviceHandleFree</span><span class="p">(</span><span class="n">flagcxDeviceHandle_t</span><span class="w"> </span><span class="n">devHandle</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>Usage pattern:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">flagcxDeviceHandle_t</span><span class="w"> </span><span class="n">devHandle</span><span class="p">;</span>
+<span class="n">flagcxDeviceHandleInit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">devHandle</span><span class="p">);</span>
+<span class="c1">// ... use device operations (setDevice, getDeviceCount, etc.) ...</span>
+<span class="n">flagcxCommInitRank</span><span class="p">(</span><span class="o">&amp;</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">nranks</span><span class="p">,</span><span class="w"> </span><span class="n">uniqueId</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">);</span>
+<span class="c1">// ... communication operations ...</span>
+<span class="n">flagcxCommDestroy</span><span class="p">(</span><span class="n">comm</span><span class="p">);</span>
+<span class="n">flagcxDeviceHandleFree</span><span class="p">(</span><span class="n">devHandle</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="deprecated-apis">
+<h4>Deprecated APIs<a class="headerlink" href="#deprecated-apis" title="Link to this heading">#</a></h4>
+<p>The following APIs are deprecated and will be removed in a future release:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Deprecated - use flagcxDeviceHandleInit/Free instead</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">flagcxHandlerGroup</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">flagcxUniqueId_t</span><span class="w"> </span><span class="n">uniqueId</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flagcxComm_t</span><span class="w"> </span><span class="n">comm</span><span class="p">;</span>
+<span class="w">  </span><span class="n">flagcxDeviceHandle_t</span><span class="w"> </span><span class="n">devHandle</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxHandleInit</span><span class="p">(</span><span class="n">flagcxHandlerGroup_t</span><span class="w"> </span><span class="o">*</span><span class="n">handler</span><span class="p">);</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxHandleFree</span><span class="p">(</span><span class="n">flagcxHandlerGroup_t</span><span class="w"> </span><span class="n">handler</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="changed-apis">
+<h4>Changed APIs<a class="headerlink" href="#changed-apis" title="Link to this heading">#</a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Parameter is now passed by value, not pointer</span>
+<span class="c1">// Old: flagcxGetUniqueId(flagcxUniqueId_t *uniqueId);</span>
+<span class="c1">// New:</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxGetUniqueId</span><span class="p">(</span><span class="n">flagcxUniqueId_t</span><span class="w"> </span><span class="n">uniqueId</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Note: The caller must provide a valid pointer to a flagcxUniqueId struct.</p>
+</section>
+<section id="removed-apis">
+<h4>Removed APIs<a class="headerlink" href="#removed-apis" title="Link to this heading">#</a></h4>
+<p>The following API has been removed from the public interface:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">flagcxCommFifoBuffer()</span></code> — No longer part of public API</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="homogeneous-tests-using-flagcx">
+<h2>Homogeneous tests using FlagCX<a class="headerlink" href="#homogeneous-tests-using-flagcx" title="Link to this heading">#</a></h2>
+<section id="communication-api-test">
+<h3>Communication API test<a class="headerlink" href="#communication-api-test" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Build and Installation</p>
+<p>Refer to the Communication API test build and installation section in <a class="reference internal" href="getting-started.html"><span class="std std-doc">Getting Started</span></a>.</p>
+</li>
+<li><p>Communication API Test</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>--allow-run-as-root<span class="w"> </span>-np<span class="w"> </span><span class="m">2</span><span class="w"> </span>./test_allreduce<span class="w"> </span>-b<span class="w"> </span>128K<span class="w"> </span>-e<span class="w"> </span>4G<span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w"> </span>-p<span class="w"> </span><span class="m">1</span>
+</pre></div>
+</div>
+<p><strong>Description</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">test_allreduce</span></code> is a performance benchmark for AllReduce operations built on MPI and FlagCX.
+Each MPI process is bound to a single GPU.
+The program runs warm-up iterations followed by timed measurements across a user-defined range of
+message sizes (minimum, maximum, and step).</p></li>
+<li><p>For every message size, the benchmark reports:</p>
+<ul>
+<li><p>Average latency</p></li>
+<li><p>Estimated bandwidth</p></li>
+<li><p>Buffer fragments for correctness verification</p></li>
+</ul>
+</li>
+</ul>
+<p>For example, running <code class="docutils literal notranslate"><span class="pre">test_allreduce</span></code> with 2 MPI processes on 2 GPUs starts from 128 KiB and
+doubles the message size each step (128 KiB, 256 KiB, 512 KiB, 1 MiB …) up to 4 GiB.
+For each size, the benchmark records bandwidth, latency, and correctness results.</p>
+</li>
+<li><p>Correct Performance Test Output</p>
+<p><a href="_images/correct_performance_test_output.png" data-lightbox="image-set">
+<img alt="correct_performance_test_output.png" src="_images/correct_performance_test_output.png" /></a>
+</p>
+</li>
+<li><p>Issues Encountered During Execution</p>
+<ul>
+<li><p>During execution, you may see an assertion warning when OpenMPI attempts to establish a connection
+via InfiniBand (openib BTL) but cannot find an available CPC (Connection Protocol).
+In this case, the IB port is disabled automatically.This warning does not affect the performance test results.</p>
+<p><a href="_images/issues_encountered_during_execution.png" data-lightbox="image-set">
+<img alt="issues_encountered_during_execution.png" src="_images/issues_encountered_during_execution.png" /></a>
+</p>
+<p><strong>Solution</strong></p>
+<p>To suppress this warning, disable <code class="docutils literal notranslate"><span class="pre">openib</span></code> and fall back to TCP by adding the following option
+to your <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> command.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>--mca<span class="w"> </span>btl<span class="w"> </span>^openib
+</pre></div>
+</div>
+</li>
+<li><p><strong>MPI Error Warning</strong></p>
+<p>If you encounter an MPI error during execution, there are two possible solutions:</p>
+<p><strong>Check Local MPI Installation</strong></p>
+<ul class="simple">
+<li><p>Verify your local MPI installation path and set the appropriate environment variables.</p></li>
+</ul>
+<p><strong>Install MPI</strong></p>
+<ul>
+<li><p>If MPI is not installed or the local installation is not suitable, download and install MPI.</p></li>
+<li><p>Follow the instructions below:</p>
+<div class="highlight-Plain notranslate"><div class="highlight"><pre><span></span>wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.6.tar.gz  
+tar -zxf openmpi-4.1.6.tar.gz  
+cd openmpi-4.1.6  
+##Configure and Build 
+./configure --prefix=/usr/local/mpi make -j$(nproc) sudo make install
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="torch-api-test">
+<h3>Torch API test<a class="headerlink" href="#torch-api-test" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Build and installation</p>
+<p>Refer to <a class="reference internal" href="getting-started.html"><span class="std std-doc">Getting Started</span></a> for instructions on building and installing the Torch API test.</p>
+</li>
+<li><p>Torch API test execution</p>
+<p>The test case is located in the build/installation directory.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>./example/example.py
+</pre></div>
+</div>
+<p>The test script <code class="docutils literal notranslate"><span class="pre">run.sh</span></code> sets environment variables and device IDs according to the current platform.
+You may need to modify these variables to match your hardware setup.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># Check if the debug flag is set</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"debug"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG</span><span class="o">=</span>INFO
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG_SUBSYS</span><span class="o">=</span>ALL
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FlagCX debug information enabled."</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="nb">unset</span><span class="w"> </span>FLAGCX_DEBUG
+<span class="w">    </span><span class="nb">unset</span><span class="w"> </span>FLAGCX_DEBUG_SUBSYS
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FlagCX debug information disabled."</span>
+<span class="k">fi</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_IB_HCA</span><span class="o">=</span>mlx5
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_ENABLE_TOPO_DETECT</span><span class="o">=</span>TRUE
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG</span><span class="o">=</span>INFO
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG_SUBSYS</span><span class="o">=</span>ALL
+<span class="nb">export</span><span class="w"> </span><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1
+<span class="c1"># Need to preload customized gloo library specified for FlagCX linkage</span>
+<span class="c1"># export LD_PRELOAD=/usr/local/lib/libgloo.so</span>
+<span class="c1"># export LD_PRELOAD=/usr/local/nccl/build/lib/libnccl.so</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TORCH_DISTRIBUTED_DETAIL</span><span class="o">=</span>DEBUG
+<span class="nv">CMD</span><span class="o">=</span><span class="s1">'torchrun --nproc_per_node 2 --nnodes=1 --node_rank=0 --master_addr="localhost" --master_port=8281 example.py'</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$CMD</span>
+<span class="nb">eval</span><span class="w"> </span><span class="nv">$CMD</span>
+</pre></div>
+</div>
+<p>The arguments for <code class="docutils literal notranslate"><span class="pre">torchrun</span></code> are as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nproc_per_node</span></code>: Number of processes to launch on the current machine.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nnodes</span></code>: Total number of nodes participating in the training.
+For homogeneous mode testing, set this to 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">node_rank</span></code>: The rank of the current node among all nodes, starting from 0.
+For homogeneous mode testing, set this to 0.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">master_addr</span></code>: Address (hostname or IP) of the master node.
+For homogeneous mode testing, set this to <code class="docutils literal notranslate"><span class="pre">&quot;localhost&quot;</span></code> is okay.
+For heterogeneous mode testing, specify the reachable IP or hostname of the master node.
+It is assumed that the address is reachable from all nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">master_port</span></code>: Port used by the master node to establish the process group.
+All nodes must use the same port, and the port has to be available on all nodes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">example.py</span></code>: Torch API test script.</p></li>
+<li><p>Refer to <a class="reference internal" href="environment-variables.html"><span class="std std-doc">Environment Variables</span></a> for the usage of the various <code class="docutils literal notranslate"><span class="pre">FLAGCX_XXX</span></code> environment variables.</p></li>
+</ul>
+</li>
+<li><p>Sample screenshot from a correct performance test</p>
+<p><a href="_images/sample_screenshot_of_correct_performance_test.png" data-lightbox="image-set">
+<img alt="sample_screenshot_of_correct_performance_test.png" src="_images/sample_screenshot_of_correct_performance_test.png" /></a>
+</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="homogeneous-training-with-flagcx-flagscale">
+<h2>Homogeneous training with FlagCX + FlagScale<a class="headerlink" href="#homogeneous-training-with-flagcx-flagscale" title="Link to this heading">#</a></h2>
+<p>The following steps shows an example in which we run the LLaMA3-8B model on Nvidia A800 GPUs.</p>
+<ol class="arabic">
+<li><p>Build and installation</p>
+<p>Refer to the Environment Setup and Build &amp; Installation section in the <a class="reference internal" href="getting-started.html"><span class="std std-doc">Getting Started</span></a> page.</p>
+</li>
+<li><p>Data preparation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">FlagScale</span>
+<span class="n">mkdir</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>A small portion of processed data from the Pile dataset (bin and idx files) is provided: <code class="docutils literal notranslate"><span class="pre">pile_wikipedia_demo</span></code>.
+Copy it to the <code class="docutils literal notranslate"><span class="pre">FlagScale/data</span></code> directory.</p>
+</li>
+<li><p>Model configuration 1</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">FlagScale</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">llama3</span><span class="o">/</span><span class="n">conf</span><span class="o">/</span> 
+<span class="n">vi</span> <span class="n">train</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>The directory contains the following files:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">train/</span></code> — Training scripts and related files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train.yaml</span></code> — Configuration file for <strong>homogeneous training</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">train.yaml</span></code> file contains four main sections: <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">experiment</span></code>, <code class="docutils literal notranslate"><span class="pre">action</span></code>, and <code class="docutils literal notranslate"><span class="pre">hydra</span></code>.
+For most cases, you only need to modify the <code class="docutils literal notranslate"><span class="pre">defaults</span></code> and <code class="docutils literal notranslate"><span class="pre">experiment</span></code> sections.</p>
+<ul>
+<li><p>Modify <code class="docutils literal notranslate"><span class="pre">defaults</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">train</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">XXXX</span>
+</pre></div>
+</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">XXXX</span></code> with <code class="docutils literal notranslate"><span class="pre">8b</span></code>.</p>
+</li>
+<li><p>Modify <code class="docutils literal notranslate"><span class="pre">experiment</span></code></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">exp_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./outputs_llama3_8b</span>
+</pre></div>
+</div>
+<p>This specifies the output directory for distributed training results.</p>
+</li>
+<li><p>Modify <code class="docutils literal notranslate"><span class="pre">runner</span></code> settings under <code class="docutils literal notranslate"><span class="pre">experiment</span></code></p>
+<ul>
+<li><p><strong>hostfile</strong>: For a homogeneous (single-node) mode test, comment out the <code class="docutils literal notranslate"><span class="pre">hostfile</span></code> line.
+Only configure it for heterogeneous (multi-node) mode setups.</p></li>
+<li><p><strong>envs</strong>: Set GPU device IDs using <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code>, for example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">CUDA_VISIBLE_DEVICES</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0,1,2,3,4,5,6,7</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_hetero.yaml</span></code> — Configuration file for <strong>heterogeneous training</strong></p></li>
+</ul>
+</li>
+<li><p>Model Configuration 2</p>
+<p>The model configuration files (<code class="docutils literal notranslate"><span class="pre">xxx.yaml</span></code>) corresponding to different dataset sizes
+are located in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> directory.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>FlagScale/examples/llama3/conf/train<span class="w"> </span>
+vi<span class="w"> </span>8b.yaml<span class="w"> </span>
+</pre></div>
+</div>
+<ul>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">8b.yaml</span></code></strong> <strong>Configuration File</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">8b.yaml</span></code> file contains three main sections: system, model, and data.</p>
+<p><strong>System Section</strong></p>
+<p>Add the following line to enable distributed training with FlagCX:</p>
+<div class="highlight-Plain notranslate"><div class="highlight"><pre><span></span>distributed_backend: flagcx
+</pre></div>
+</div>
+<p><strong>Model Section</strong></p>
+<p>Configure the training parameters.Use <code class="docutils literal notranslate"><span class="pre">train_samples</span></code> and <code class="docutils literal notranslate"><span class="pre">global_batch_size</span></code> to determine the number of steps:</p>
+<div class="highlight-Plain notranslate"><div class="highlight"><pre><span></span>step = train_samples / global_batch_size
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>It is recommended to set it as an integer.
+</pre></div>
+</div>
+<p><strong>Data Section</strong></p>
+<p>Modify the following parameters:</p>
+<ul class="simple">
+<li><p><strong>data_path</strong>: Set this to the <code class="docutils literal notranslate"><span class="pre">cache</span></code> directory under the data prepared in the previous step.</p></li>
+<li><p><strong>tokenizer_path</strong>: Download the tokenizer from the official website corresponding to your model and set the path here.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Download tokenizer</p>
+<p>Download the tokenizer corresponding to the model.
+The files are available at: <a class="reference external" href="https://www.modelscope.cn/models/LLM-Research/Meta-Llama-3-8B-Instruct/files?utm_source=chatgpt.com">Meta-LLaMA-3-8B-Instruct Tokenizer</a>.</p>
+<p>It is recommended to download the tokenizer via the command line.
+Place the downloaded tokenizer files in the path specified by <code class="docutils literal notranslate"><span class="pre">tokenizer_path</span></code> in your configuration (<code class="docutils literal notranslate"><span class="pre">8b.yaml</span></code>).</p>
+<p>For example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>FlagScale/examples/llama3
+modelscope<span class="w"> </span>download<span class="w"> </span>--model<span class="w"> </span>LLM-Research/Meta-Llama-3-8B-Instruct<span class="w"> </span><span class="o">[</span>XXXX<span class="o">]</span><span class="w"> </span>--local_dir<span class="w"> </span>./
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">[XXXX]</span></code> in the above command refers to the tokenizer files corresponding to Meta-LLaMA-3-8B-Instruct.
+The content could be, for example:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tokenizer.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tokenizer_config.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">config.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">configuration.json</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">generation_config.json</span></code></p></li>
+</ul>
+<p>These files should be placed in the directory specified by <code class="docutils literal notranslate"><span class="pre">tokenizer_path</span></code> in your configuration (<code class="docutils literal notranslate"><span class="pre">8b.yaml</span></code>).</p>
+</li>
+<li><p>Distributed training</p>
+<p>To start a distributed training:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>FlagScale
+python<span class="w"> </span>run.py<span class="w"> </span>--config-path<span class="w"> </span>./examples/llama3/conf<span class="w"> </span>--config-name<span class="w"> </span>train<span class="w"> </span><span class="nv">action</span><span class="o">=</span>run<span class="w"> </span>
+</pre></div>
+</div>
+<p>To stop the training:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run.py<span class="w"> </span>--config-path<span class="w"> </span>./examples/llama3/conf<span class="w"> </span>--config-name<span class="w"> </span>train<span class="w"> </span><span class="nv">action</span><span class="o">=</span>stop<span class="w"> </span>
+</pre></div>
+</div>
+<p>After starting distributed training, the configuration information will be printed,
+and a run script will be generated at:</p>
+<div class="highlight-Plain notranslate"><div class="highlight"><pre><span></span>flagscale/outputs_llama3_8b/logs/scripts/host_0_localhost_run.sh
+</pre></div>
+</div>
+<p>The training output files can be found under <code class="docutils literal notranslate"><span class="pre">flagscale/outputs_llama3_8b</span></code>.</p>
+<p><strong>Notes:</strong></p>
+<ul>
+<li><p>You can inspect the run script to verify the commands and environment settings used for the training.</p></li>
+<li><p>All logs and model checkpoints will be saved under the output directory.</p>
+<p><a href="_images/distributed_training.png" data-lightbox="image-set">
+<img alt="distributed_training.png" src="_images/distributed_training.png" /></a>
+</p>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="heterogeneous-tests-using-flagcx">
+<h2>Heterogeneous tests using FlagCX<a class="headerlink" href="#heterogeneous-tests-using-flagcx" title="Link to this heading">#</a></h2>
+<section id="unirunner-mode">
+<h3>UniRunner mode<a class="headerlink" href="#unirunner-mode" title="Link to this heading">#</a></h3>
+<p>FlagCX provides a unified heterogeneous communication mode called <strong>uniRunner</strong>, which implements 11 chip-decoupled collective communication algorithms. To enable uniRunner mode, set the following environment variable before launching your application:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_USE_HETERO_COMM</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>UniRunner supports all standard collective operations (AllReduce, AllGather, ReduceScatter, Broadcast, Reduce, Gather, Scatter, AlltoAll, AlltoAllv, Send, Recv) across heterogeneous hardware.</p>
+<p>For kernel-based communication with Device API (available on NVIDIA and Hygon), you also need:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_MEM_ENABLE</span><span class="o">=</span><span class="m">1</span>
+</pre></div>
+</div>
+<p>Refer to <a class="reference internal" href="environment-variables.html"><span class="std std-doc">Environment Variables</span></a> for the full list of UniRunner-specific configuration variables (prefixed with <code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_*</span></code>).</p>
+</section>
+<section id="one-sided-rdma-operations">
+<h3>One-sided RDMA operations<a class="headerlink" href="#one-sided-rdma-operations" title="Link to this heading">#</a></h3>
+<p>FlagCX supports one-sided RDMA operations for heterogeneous communicators backed by RDMA-capable network adaptors. These operations require prior buffer registration.</p>
+<section id="buffer-registration">
+<h4>Buffer Registration<a class="headerlink" href="#buffer-registration" title="Link to this heading">#</a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Register a buffer for one-sided RDMA operations (Get/Put/PutValue)</span>
+<span class="c1">// Collective: ALL ranks in the communicator must call</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxOneSideRegister</span><span class="p">(</span><span class="n">flagcxComm_t</span><span class="w"> </span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buff</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+
+<span class="c1">// Register a signal buffer for one-sided RDMA operations</span>
+<span class="c1">// ptrType: FLAGCX_PTR_CUDA for device memory, FLAGCX_PTR_HOST for host-pinned memory</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxOneSideSignalRegister</span><span class="p">(</span><span class="n">flagcxComm_t</span><span class="w"> </span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buff</span><span class="p">,</span>
+<span class="w">                                           </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ptrType</span><span class="p">);</span>
+
+<span class="c1">// Register a host-pinned staging buffer for PutValue operations</span>
+<span class="c1">// Must be called after flagcxOneSideSignalRegister</span>
+<span class="n">flagcxResult_t</span><span class="w"> </span><span class="nf">flagcxOneSideStagingRegister</span><span class="p">(</span><span class="n">flagcxComm_t</span><span class="w"> </span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buff</span><span class="p">,</span>
+<span class="w">                                            </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><strong>Alternative registration via window:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Allocate memory</span>
+<span class="n">flagcxMemAlloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+
+<span class="c1">// Register as a window for one-sided operations</span>
+<span class="n">flagcxCommWindowRegister</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">ptr</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">win</span><span class="p">,</span><span class="w"> </span><span class="n">FLAGCX_WIN_DEFAULT</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="one-sided-api">
+<h4>One-Sided API<a class="headerlink" href="#one-sided-api" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>API</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxGet</span></code></p></td>
+<td><p>RDMA READ: pull data from a remote peer’s buffer into local buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxPut</span></code></p></td>
+<td><p>RDMA WRITE: push data from local buffer to remote peer’s buffer</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxBatchPut</span></code></p></td>
+<td><p>Batch RDMA WRITE: optimized for multiple small transfers</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxPutSignal</span></code></p></td>
+<td><p>RDMA WRITE + ATOMIC: write data, then atomically increment a remote signal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxPutValue</span></code></p></td>
+<td><p>Write immediate value to remote buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxSignal</span></code></p></td>
+<td><p>Signal only: atomically increment a remote signal</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxWaitSignal</span></code></p></td>
+<td><p>Wait until a local signal reaches the expected value</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxReadCounter</span></code></p></td>
+<td><p>Read the current global RMA completion counter</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flagcxWaitCounter</span></code></p></td>
+<td><p>Block until the RMA completion counter reaches target</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Example - Async RDMA with completion counter:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">before</span><span class="p">;</span>
+<span class="n">flagcxReadCounter</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">before</span><span class="p">);</span>
+<span class="n">flagcxPut</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">peer</span><span class="p">,</span><span class="w"> </span><span class="n">srcOffset</span><span class="p">,</span><span class="w"> </span><span class="n">dstOffset</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">srcMrIdx</span><span class="p">,</span><span class="w"> </span><span class="n">dstMrIdx</span><span class="p">);</span>
+<span class="n">flagcxWaitCounter</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">before</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// Wait for the Put to complete</span>
+</pre></div>
+</div>
+<p><strong>Cleanup:</strong></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">flagcxCommWindowDeregister</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">win</span><span class="p">);</span>
+<span class="n">flagcxMemFree</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>See <code class="docutils literal notranslate"><span class="pre">flagcx/include/flagcx.h</span></code> for the full API signatures and parameter documentation.</p>
+</section>
+</section>
+<section id="p2p-engine">
+<h3>P2P Engine<a class="headerlink" href="#p2p-engine" title="Link to this heading">#</a></h3>
+<p>The FlagCX P2P Engine provides a point-to-point engine interface for one-sided RDMA operations, designed for integration with transfer frameworks such as NIXL.</p>
+<section id="key-features">
+<h4>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Connection management (connect/accept to remote peers)</p></li>
+<li><p>Memory registration for RDMA operations</p></li>
+<li><p>One-sided READ/WRITE (RDMA Get/Put)</p></li>
+<li><p>Vectored and batched operations</p></li>
+<li><p>Two-sided send/recv</p></li>
+<li><p>Notification system for out-of-band signaling</p></li>
+<li><p>IPC helpers for intra-node GPU memory sharing</p></li>
+</ul>
+</section>
+<section id="engine-lifecycle">
+<h4>Engine Lifecycle<a class="headerlink" href="#engine-lifecycle" title="Link to this heading">#</a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Create and initialize a P2P engine instance</span>
+<span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="nf">flagcxP2pEngineCreate</span><span class="p">();</span>
+
+<span class="c1">// Destroy the engine instance</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">flagcxP2pEngineDestroy</span><span class="p">(</span><span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="n">engine</span><span class="p">);</span>
+
+<span class="c1">// Stop the accept thread</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">flagcxP2pEngineStopAccept</span><span class="p">(</span><span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="n">engine</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="connection-management">
+<h4>Connection Management<a class="headerlink" href="#connection-management" title="Link to this heading">#</a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Connect to a remote peer</span>
+<span class="n">FlagcxP2pConn</span><span class="w"> </span><span class="o">*</span><span class="nf">flagcxP2pEngineConnect</span><span class="p">(</span><span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="n">engine</span><span class="p">,</span>
+<span class="w">                                      </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">ipAddr</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">remoteGpuIdx</span><span class="p">,</span>
+<span class="w">                                      </span><span class="kt">int</span><span class="w"> </span><span class="n">remotePort</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">sameProcess</span><span class="p">);</span>
+
+<span class="c1">// Accept an incoming connection (blocking)</span>
+<span class="n">FlagcxP2pConn</span><span class="w"> </span><span class="o">*</span><span class="nf">flagcxP2pEngineAccept</span><span class="p">(</span><span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="n">engine</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">ipAddrBuf</span><span class="p">,</span>
+<span class="w">                                     </span><span class="kt">size_t</span><span class="w"> </span><span class="n">ipAddrBufLen</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">remoteGpuIdx</span><span class="p">);</span>
+
+<span class="c1">// Check if connection is intra-node (IPC-eligible)</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">flagcxP2pEngineConnIsLocal</span><span class="p">(</span><span class="n">FlagcxP2pConn</span><span class="w"> </span><span class="o">*</span><span class="n">conn</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="memory-registration">
+<h4>Memory Registration<a class="headerlink" href="#memory-registration" title="Link to this heading">#</a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// Register a memory region for RDMA</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">flagcxP2pEngineReg</span><span class="p">(</span><span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="n">engine</span><span class="p">,</span><span class="w"> </span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">FlagcxP2pMr</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mrId</span><span class="p">);</span>
+
+<span class="c1">// Deregister a memory region</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">flagcxP2pEngineMrDestroy</span><span class="p">(</span><span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="n">engine</span><span class="p">,</span><span class="w"> </span><span class="n">FlagcxP2pMr</span><span class="w"> </span><span class="n">mr</span><span class="p">);</span>
+
+<span class="c1">// Prepare RDMA descriptor for a registered region</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">flagcxP2pEnginePrepareDesc</span><span class="p">(</span><span class="n">FlagcxP2pEngine</span><span class="w"> </span><span class="o">*</span><span class="n">engine</span><span class="p">,</span><span class="w"> </span><span class="n">FlagcxP2pMr</span><span class="w"> </span><span class="n">mr</span><span class="p">,</span>
+<span class="w">                               </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">descBuf</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="one-sided-operations">
+<h4>One-Sided Operations<a class="headerlink" href="#one-sided-operations" title="Link to this heading">#</a></h4>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// One-sided read (non-blocking)</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">flagcxP2pEngineRead</span><span class="p">(</span><span class="n">FlagcxP2pConn</span><span class="w"> </span><span class="o">*</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">FlagcxP2pMr</span><span class="w"> </span><span class="n">mr</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span>
+<span class="w">                        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">FlagcxP2pRdmaDesc</span><span class="w"> </span><span class="n">desc</span><span class="p">,</span>
+<span class="w">                        </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">transferId</span><span class="p">);</span>
+
+<span class="c1">// One-sided write (non-blocking)</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">flagcxP2pEngineWrite</span><span class="p">(</span><span class="n">FlagcxP2pConn</span><span class="w"> </span><span class="o">*</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">FlagcxP2pMr</span><span class="w"> </span><span class="n">mr</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="p">,</span>
+<span class="w">                         </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">FlagcxP2pRdmaDesc</span><span class="w"> </span><span class="n">desc</span><span class="p">,</span>
+<span class="w">                         </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">transferId</span><span class="p">);</span>
+
+<span class="c1">// Check transfer completion</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">flagcxP2pEngineXferStatus</span><span class="p">(</span><span class="n">FlagcxP2pConn</span><span class="w"> </span><span class="o">*</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">transferId</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="environment-variables.html"><span class="std std-doc">environment-variables.md</span></a> for P2P Engine configuration variables (<code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_*</span></code>).</p>
+</section>
+</section>
+<section id="nccl-wrapper-plugin">
+<h3>NCCL wrapper plugin<a class="headerlink" href="#nccl-wrapper-plugin" title="Link to this heading">#</a></h3>
+<p>For NVIDIA platforms, FlagCX provides an NCCL wrapper plugin that builds a drop-in <code class="docutils literal notranslate"><span class="pre">libnccl.so</span></code>. This allows any NCCL-based application (PyTorch, DeepSpeed, Megatron-LM) to transparently use FlagCX without code changes:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build the wrapper</span>
+<span class="nb">cd</span><span class="w"> </span>FlagCX/plugin/nccl
+make<span class="w"> </span><span class="nv">NCCL_HOME</span><span class="o">=</span>/path/to/nccl<span class="w"> </span><span class="nv">CUDA_HOME</span><span class="o">=</span>/path/to/cuda
+
+<span class="c1"># Use with any NCCL application</span>
+<span class="nv">LD_PRELOAD</span><span class="o">=</span>./build/lib/libnccl.so<span class="w"> </span>python<span class="w"> </span>your_training_script.py
+</pre></div>
+</div>
+<p>The wrapper intercepts NCCL API calls and routes them through FlagCX. A thread-local recursive guard prevents infinite recursion when FlagCX’s internal NCCL adaptor calls back into NCCL.</p>
+<p>Prerequisites: FlagCX built and installed, CUDA toolkit, and real NCCL &gt;= 2.27. See <code class="docutils literal notranslate"><span class="pre">plugin/nccl/README.md</span></code> for full details.</p>
+</section>
+<section id="id1">
+<h3>Communication API test<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Build and Installation</p>
+<p>Refer to the <a class="reference internal" href="getting-started.html"><span class="std std-doc">Getting Started</span></a> documentation for instructions on
+environment setup, creating symbolic links, and how to build and install the software.</p>
+</li>
+<li><p>Verify MPICH Installation</p>
+<p>To check if MPICH has been installed:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/workspace/mpich-4.2.3
+</pre></div>
+</div>
+</li>
+<li><p>Makefile and environment variable configuration</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Navigate to the Communication API test directory
+cd /root/FlagCX/test/perf 
+
+# Open the Makefile
+vi Makefile
+    # Modify the MPI path to match the one used in step 2
+    MPI_HOME ?= /workspace/mpich-4.2.3/build/ 
+:q # Save and exit
+
+# Configure environment variables
+export LD_LIBRARY_PATH=/workspace/mpich-4.2.3/build/lib:$LD_LIBRARY_PATH
+</pre></div>
+</div>
+</li>
+<li><p>Heterogeneous Communication API Test</p>
+<ul>
+<li><p>Ensure that Host 1, Host 2, … are all configured as described above and
+can correctly run the homogeneous Communication API test on their respective platforms.</p></li>
+<li><p>Verify that the ports on Host 1, Host 2, … are <code class="docutils literal notranslate"><span class="pre">&lt;xxx&gt;</span></code> and keep them consistent across all hosts.</p></li>
+<li><p>Before running the heterogeneous Communication API test script on Host 1,
+configure the port number environment variable:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">HYDRA_LAUNCHER_EXTRA_ARGS</span><span class="o">=</span><span class="s2">"-p 8010"</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">8010</span></code> should match the configuration set during SSH passwordless login.</p>
+</li>
+<li><p>Run the heterogeneous Communication API test script on Host 1:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./run.sh
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>/workspace/mpich-4.2.3/build/bin/mpirun<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-np<span class="w"> </span><span class="m">2</span><span class="w"> </span>-hosts<span class="w"> </span><span class="m">10</span>.1.15.233:1,10.1.15.67:1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-env<span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/workspace/mpich-4.2.3/build/bin<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-env<span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/workspace/mpich-4.2.3/build/lib:/root/FlagCX/build/lib:/usr/local/mpi/lib/:/opt/maca/ompi/lib<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-env<span class="w"> </span><span class="nv">FLAGCX_IB_HCA</span><span class="o">=</span>mlx5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-env<span class="w"> </span><span class="nv">FLAGCX_ENABLE_TOPO_DETECT</span><span class="o">=</span>TRUE<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-env<span class="w"> </span><span class="nv">FLAGCX_DEBUG</span><span class="o">=</span>INFO<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-env<span class="w"> </span><span class="nv">FLAGCX_DEBUG_SUBSYS</span><span class="o">=</span>INIT<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>/root/FlagCX/test/perf/test_allreduce<span class="w"> </span>-b<span class="w"> </span>128K<span class="w"> </span>-e<span class="w"> </span>4G<span class="w"> </span>-f<span class="w"> </span><span class="m">2</span><span class="w"> </span>-w<span class="w"> </span><span class="m">5</span><span class="w"> </span>-n<span class="w"> </span><span class="m">100</span><span class="w"> </span>-p<span class="w"> </span><span class="m">1</span><span class="sb">`</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Refer to <a class="reference internal" href="environment-variables.html"><span class="std std-doc">Environment Variables</span></a> for the meaning and usage of <code class="docutils literal notranslate"><span class="pre">FLAGCX_XXX</span></code> environment variables.</p></li>
+</ul>
+</li>
+<li><p><strong>Note:</strong> When using two GPUs per node in the heterogeneous Communication API test, some warnings may indicate that each node only has 1 GPU active. In this case, FlagCX will skip GPU-to-GPU AllReduce and fall back to host-based communication.</p>
+<ul>
+<li><p>As a result, GPU utilization may show 0%, and the overall AllReduce runtime may be much longer.</p></li>
+<li><p>However, the computation results are correct, and this behavior is expected.</p></li>
+<li><p>To fully utilize GPU acceleration for heterogeneous testing, use 2+2 GPUs (4 GPUs total) across the nodes.</p>
+<p><a href="_images/heterogeneous_communication_api_test.png" data-lightbox="image-set">
+<img alt="heterogeneous_communication_api_test.png" src="_images/heterogeneous_communication_api_test.png" /></a>
+</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="build.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Build and Installation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="testing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tests</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-configuration">Environment configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-and-compilation">Installation and compilation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-handle-management">Device Handle Management</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#new-apis-recommended">New APIs (Recommended)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-apis">Deprecated APIs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#changed-apis">Changed APIs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#removed-apis">Removed APIs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homogeneous-tests-using-flagcx">Homogeneous tests using FlagCX</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#communication-api-test">Communication API test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#torch-api-test">Torch API test</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#homogeneous-training-with-flagcx-flagscale">Homogeneous training with FlagCX + FlagScale</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#heterogeneous-tests-using-flagcx">Heterogeneous tests using FlagCX</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unirunner-mode">UniRunner mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sided-rdma-operations">One-sided RDMA operations</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-registration">Buffer Registration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sided-api">One-Sided API</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p-engine">P2P Engine</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features">Key Features</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#engine-lifecycle">Engine Lifecycle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-management">Connection Management</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-registration">Memory Registration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sided-operations">One-Sided Operations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#nccl-wrapper-plugin">NCCL wrapper plugin</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Communication API test</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../flagcx_zh/user-guide.html">中文</a></body>
+</html>

@@ -1,0 +1,769 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="发布说明" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="CHANGELOG.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="[2026/09] 发布 v.0.14.0:- 添加 SHMEM Device API 支持，并提供 USE_SHMEM 和 SHMEM_HOME 构建控制项。, 添加 Scalar IR 和 Unified IR 的 Device API 测试覆盖，包括拆分后的节点内和节点间测试目标。, 添加 ACCL/Barex 网络适配器支持和 PPU 后端集成控制项。, 扩展 PyTorch 插件构建检测，支持 PPU 和规范的 USE_ILUVATAR 后端标志。, 更新 Iluvatar 构建标志文档：新构建应使用 USE_ILUVATAR ； USE_ILUVATAR_COREX 仅作为弃..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="[2026/09] 发布 v.0.14.0:- 添加 SHMEM Device API 支持，并提供 USE_SHMEM 和 SHMEM_HOME 构建控制项。, 添加 Scalar IR 和 Unified IR 的 Device API 测试覆盖，包括拆分后的节点内和节点间测试目标。, 添加 ACCL/Barex 网络适配器支持和 PPU 后端集成控制项。, 扩展 PyTorch 插件构建检测，支持 PPU 和规范的 USE_ILUVATAR 后端标志。, 更新 Iluvatar 构建标志文档：新构建应使用 USE_ILUVATAR ； USE_ILUVATAR_COREX 仅作为弃..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>发布说明 &#8212; FlagCX 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="_static/tippy/CHANGELOG.6f01a898-8d68-4396-820d-df0c92d7e347.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'CHANGELOG';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/CHANGELOG.html" />
+    <link rel="icon" href="_static/favicon.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="概述" href="flagcx_overview/flagcx-overview.html" />
+    <link rel="prev" title="FlagCX 文档" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="_static/logo-en-light.svg" class="logo__image only-light" alt="FlagCX 文档中心 - Home"/>
+    <img src="_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagCX 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    FlagCX 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="flagcx_overview/flagcx-overview.html">概述</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/backend-support.html">后端支持</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/application-integration.html">应用集成</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">构建与安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">用户指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">测试</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">⤵️ 应用集成指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="paddle/README.html">使用 Paddle 和 FlagCX 训练模型</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia.html">在 NVIDIA GPU 环境下使用 Paddle 和 FlagCX 指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/iluvatar.html">在天数智芯机器上使用 Paddle 和 FlagCX 指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/kunlun.html">在昆仑芯 XPU 机器上使用 Paddle 和 FlagCX 指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia-iluvatar-hetero-train.html">在 NVIDIA 和天数智芯 GPU 上训练指南</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考资料</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="environment-variables.html">FlagCX 环境变量</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/CHANGELOG.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>发布说明</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="id1">
+<h1>发布说明<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p><strong>[2026/09]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.14.0">v.0.14.0</a>:</p>
+<ul>
+<li><p>添加 SHMEM Device API 支持，并提供 <code class="docutils literal notranslate"><span class="pre">USE_SHMEM</span></code> 和 <code class="docutils literal notranslate"><span class="pre">SHMEM_HOME</span></code> 构建控制项。</p></li>
+<li><p>添加 Scalar IR 和 Unified IR 的 Device API 测试覆盖，包括拆分后的节点内和节点间测试目标。</p></li>
+<li><p>添加 ACCL/Barex 网络适配器支持和 PPU 后端集成控制项。</p></li>
+<li><p>扩展 PyTorch 插件构建检测，支持 PPU 和规范的 <code class="docutils literal notranslate"><span class="pre">USE_ILUVATAR</span></code> 后端标志。</p></li>
+<li><p>更新 Iluvatar 构建标志文档：新构建应使用 <code class="docutils literal notranslate"><span class="pre">USE_ILUVATAR</span></code>；<code class="docutils literal notranslate"><span class="pre">USE_ILUVATAR_COREX</span></code> 仅作为弃用的兼容别名保留。</p></li>
+<li><p>将 Device IR 路径中的 lane-mask ABI 扩展为 64 位。</p></li>
+<li><p>更新打包和依赖处理，包括 NVIDIA/NCCL 包装器使用场景下的 NCCL 2.27 文档版本下限。</p></li>
+</ul>
+</li>
+<li><p><strong>[2026/06]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.13.0">v.0.13.0</a>:</p>
+<ul>
+<li><p>引入 FlagCX P2P 引擎，用于单边 RDMA 操作，专为与 NIXL 等传输框架集成而设计。</p></li>
+<li><p>添加 IBRC P2P 适配器，支持基于 InfiniBand 的 P2P 通信。</p></li>
+<li><p>重构 Device API，增加对称内存（symmem）和多播支持。</p></li>
+<li><p>为 Device API 操作添加多 FIFO 支持。</p></li>
+<li><p>引入设备指针 API，用于 Triton 集成。</p></li>
+<li><p>弃用 <code class="docutils literal notranslate"><span class="pre">flagcxHandlerGroup</span></code>，改用独立的 <code class="docutils literal notranslate"><span class="pre">flagcxDeviceHandle</span></code> 生命周期管理。</p></li>
+<li><p>添加新的单边 RDMA 操作：<code class="docutils literal notranslate"><span class="pre">flagcxPut</span></code>、<code class="docutils literal notranslate"><span class="pre">flagcxBatchPut</span></code>、<code class="docutils literal notranslate"><span class="pre">flagcxReadCounter</span></code>、<code class="docutils literal notranslate"><span class="pre">flagcxWaitCounter</span></code>。</p></li>
+<li><p>优化 RMA 代理，通过批量单边 PUT 操作提高 RDMA 吞吐量。</p></li>
+</ul>
+</li>
+<li><p><strong>[2026/05]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.12.0">v.0.12.0</a>:</p>
+<ul>
+<li><p>添加 Sunrise AI 加速器支持，包括设备适配器 <code class="docutils literal notranslate"><span class="pre">ptpuAdaptor</span></code> 和 CCL 适配器 <code class="docutils literal notranslate"><span class="pre">pcclAdaptor</span></code>。</p></li>
+<li><p>扩展 PyTorch 插件对 PCCL 后端的支持。</p></li>
+<li><p>重构单边内存注册，采用全局句柄索引和 HeteroComm 隔离。</p></li>
+<li><p>添加 P2P 拓扑管理器，优化点对点通信。</p></li>
+<li><p>重构 P2P 零拷贝实现。</p></li>
+<li><p>为 Device API 添加设备端传输支持。</p></li>
+<li><p>添加 traits 抽象和 DeviceAPI，实现统一的厂商/回退支持。</p></li>
+<li><p>添加 bootstrap 扩展，增强汇合能力。</p></li>
+<li><p>将 C++17 特性替换为 C++11 等效实现，提高兼容性。</p></li>
+</ul>
+</li>
+<li><p><strong>[2026/03]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.11.0">v.0.11.0</a>:</p>
+<ul>
+<li><p>在异构平台上启用基于内核的通信，包括 NVIDIA 和 Hygon。</p></li>
+<li><p>添加主机端和设备端单边通信语义支持。</p></li>
+<li><p>引入适配器插件支持，支持动态加载用户定义的 Device、CCL 和 Net 适配器实现。</p></li>
+</ul>
+</li>
+<li><p><strong>[2026/02]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.10.0">v.0.10.0</a>:</p>
+<ul>
+<li><p>在 uniRunner 模式下实现 11 个芯片解耦的集合通信算法。</p></li>
+<li><p>重构设备节点内/节点间 API，并在 NVIDIA 平台上集成 NCCL Device API 支持。</p></li>
+<li><p>增强易用性，支持 pip 安装 FlagCX，并提供 NCCL 包装插件以便在 NVIDIA 平台上无缝采用。</p></li>
+</ul>
+</li>
+<li><p><strong>[2026/01]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.9.0">v.0.9.0</a>:</p>
+<ul>
+<li><p>添加 Enflame 支持，包括 <code class="docutils literal notranslate"><span class="pre">topsAdaptor</span></code> 和 <code class="docutils literal notranslate"><span class="pre">ecclAdaptor</span></code>。</p></li>
+<li><p>扩展 flagcxCCLAdaptor 以支持对称操作。</p></li>
+<li><p>在 ncclAdaptor 中引入 NCCL Device API，支持自定义 AllReduce 操作。</p></li>
+<li><p>重构 <code class="docutils literal notranslate"><span class="pre">glooAdaptor</span></code>，支持 TCP 和 IB 传输，并自动检测网卡。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/12]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.8.0">v.0.8.0</a>:</p>
+<ul>
+<li><p>启用节点内零拷贝，提高小消息数据传输效率。</p></li>
+<li><p>在 uniRunner 模式下支持朴素的 AllReduce 实现，采用以 CPU 为中心、设备辅助的算法。</p></li>
+<li><p>通过新 API flagcxHeteroPut 和 flagcxHeteroPutSignal 添加单边通信原语。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/11]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.7.0">v.0.7.0</a>:</p>
+<ul>
+<li><p>添加 TsingMicro 支持，包括设备适配器 <code class="docutils literal notranslate"><span class="pre">tsmicroAdaptor</span></code> 和 CCL 适配器 <code class="docutils literal notranslate"><span class="pre">tcclAdaptor</span></code>。</p></li>
+<li><p>实现实验性的无内核非归约集合通信（<em>SendRecv</em>、<em>AlltoAll</em>、<em>AlltoAllv</em>、<em>Broadcast</em>、<em>Gather</em>、<em>Scatter</em>、<em>AllGather</em>），使用设备缓冲区 IPC/RDMA。</p></li>
+<li><p>在 NVIDIA、MetaX 和 Hygon 平台上启用自动调优，<em>AllReduce</em>、<em>AllGather</em>、<em>ReduceScatter</em> 和 <em>AlltoAll</em> 性能提升 1.02×–1.26×。</p></li>
+<li><p>增强 <code class="docutils literal notranslate"><span class="pre">flagcxNetAdaptor</span></code>，添加单边原语（<code class="docutils literal notranslate"><span class="pre">put</span></code>、<code class="docutils literal notranslate"><span class="pre">putSignal</span></code>、<code class="docutils literal notranslate"><span class="pre">waitValue</span></code>）和重传支持，提高可靠性。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/10]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.6.0">v.0.6.0</a>:</p>
+<ul>
+<li><p>实现设备缓冲区 IPC 通信，支持节点内 <em>SendRecv</em> 操作。</p></li>
+<li><p>引入设备发起、主机启动的设备端原语，支持直接从设备进行基于内核的通信。</p></li>
+<li><p>增强自动调优，MetaX 平台上 <em>AllReduce</em> 操作性能提升 50%。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/09]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.5.0">v.0.5.0</a>:</p>
+<ul>
+<li><p>添加 AMD GPU 支持，包括设备适配器 <code class="docutils literal notranslate"><span class="pre">hipAdaptor</span></code> 和 CCL 适配器 <code class="docutils literal notranslate"><span class="pre">rcclAdaptor</span></code>。</p></li>
+<li><p>引入 <code class="docutils literal notranslate"><span class="pre">flagcxNetAdaptor</span></code> 统一网络后端，目前支持 socket、IBRC、UCX 和 IBUC（实验性）。</p></li>
+<li><p>启用零拷贝设备缓冲区 RDMA（用户缓冲区 RDMA），提升小消息性能。</p></li>
+<li><p>通过 <code class="docutils literal notranslate"><span class="pre">flagcxTuner</span></code> 支持同构场景下的自动调优。</p></li>
+<li><p>在 CI/CD 中添加 PyTorch API 测试自动化。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/08]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.4.0">v.0.4.0</a>:</p>
+<ul>
+<li><p>支持 ERNIE4.5（百度）在 NVIDIA 和 Iluvatar GPU 上使用 Paddle + FlagCX 进行异构训练。</p></li>
+<li><p>改进任意网卡配置下的异构通信，部署更加稳健灵活。</p></li>
+<li><p>引入实验性网络插件接口，扩展支持 IBRC 和 SOCKET。设备缓冲区注册现在可以通过 DMA-BUF 完成。</p></li>
+<li><p>添加 InterOp 级 DSL，支持自定义 C2C 算法设计。</p></li>
+<li><p>在 <code class="docutils literal notranslate"><span class="pre">docs/</span></code> 下提供用户文档。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/07]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.3.0">v.0.3.0</a>:</p>
+<ul>
+<li><p>集成三个额外的原生通信库：HCCL（华为）、MUSACCL（摩尔线程）和 MPI。</p></li>
+<li><p>通过流水线优化增强异构集合通信操作。</p></li>
+<li><p>引入设备端函数支持设备缓冲区 RDMA，补充现有的主机端函数。</p></li>
+<li><p>提供全栈开源解决方案 FlagScale + FlagCX，实现高效的异构预填充-解码分离。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/05]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.2.0">v.0.2.0</a>:</p>
+<ul>
+<li><p>集成 3 个额外的原生通信库，包括 MCCL（摩尔线程）、XCCL（Mellanox）和 DUCCL（BAAI）。</p></li>
+<li><p>改进 11 个异构集合通信操作，支持自动拓扑检测和单网卡/多网卡环境。</p></li>
+</ul>
+</li>
+<li><p><strong>[2025/04]</strong> 发布 <a class="reference external" href="https://github.com/flagos-ai/FlagCX/releases/tag/v0.1.0">v.0.1.0</a>:</p>
+<ul>
+<li><p>添加 5 个原生通信库，包括 NCCL（NVIDIA）、IXCCL（Iluvatar）和 CNCL（寒武纪）的 CCL 适配器，以及主机 CCL 适配器 GLOO 和 Bootstrap。</p></li>
+<li><p>使用 C2C（集群到集群）算法支持 11 个异构集合通信操作。</p></li>
+<li><p>提供全栈开源解决方案 FlagScale + FlagCX，实现高效异构训练。</p></li>
+<li><p>原生集成到 PaddlePaddle <a class="reference external" href="https://github.com/PaddlePaddle/Paddle/tree/v3.0.0">v3.0.0</a>，支持动态图和静态图。</p></li>
+</ul>
+</li>
+</ul>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">FlagCX 文档</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="flagcx_overview/flagcx-overview.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">概述</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../flagcx_en/CHANGELOG.html">English</a></body>
+</html>

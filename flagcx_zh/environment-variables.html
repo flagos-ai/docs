@@ -1,0 +1,1446 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FlagCX 环境变量" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="environment-variables.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本文档提供 FlagCX 中使用的所有环境变量的综合参考。 目录: FlagCX 环境变量- 目录, 调试与日志, 通信模式, 缓冲区与内存, 代理与运行时, P2P 引擎配置, 拓扑配置, 调优器配置, HybridRunner 配置, UniRunner 配置, 网络配置- InfiniBand (IB) 设置, IB 重传, Socket 网络, UCX 网络, Gloo 网络, ACCL/Barex 和 PPU 集成., 插件配置, 其他, 注意事项.. 调试与日志:,,, 变量, 默认值, 描述,,, FLAGCX_DEBUG, 无, 设置调试日志级别。可选值：VERSION、..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="本文档提供 FlagCX 中使用的所有环境变量的综合参考。 目录: FlagCX 环境变量- 目录, 调试与日志, 通信模式, 缓冲区与内存, 代理与运行时, P2P 引擎配置, 拓扑配置, 调优器配置, HybridRunner 配置, UniRunner 配置, 网络配置- InfiniBand (IB) 设置, IB 重传, Socket 网络, UCX 网络, Gloo 网络, ACCL/Barex 和 PPU 集成., 插件配置, 其他, 注意事项.. 调试与日志:,,, 变量, 默认值, 描述,,, FLAGCX_DEBUG, 无, 设置调试日志级别。可选值：VERSION、..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>FlagCX 环境变量 &#8212; FlagCX 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="_static/tippy/environment-variables.63cc8734-92ad-4b61-9ab9-5f9b922bd601.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'environment-variables';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/environment-variables.html" />
+    <link rel="icon" href="_static/favicon.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="在 NVIDIA 和天数智芯 GPU 上训练指南" href="paddle/nvidia-iluvatar-hetero-train.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="_static/logo-en-light.svg" class="logo__image only-light" alt="FlagCX 文档中心 - Home"/>
+    <img src="_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagCX 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    FlagCX 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="flagcx_overview/flagcx-overview.html">概述</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/backend-support.html">后端支持</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/application-integration.html">应用集成</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">快速开始</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">构建与安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">用户指南</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">测试</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">⤵️ 应用集成指南</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="paddle/README.html">使用 Paddle 和 FlagCX 训练模型</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia.html">在 NVIDIA GPU 环境下使用 Paddle 和 FlagCX 指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/iluvatar.html">在天数智芯机器上使用 Paddle 和 FlagCX 指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/kunlun.html">在昆仑芯 XPU 机器上使用 Paddle 和 FlagCX 指南</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia-iluvatar-hetero-train.html">在 NVIDIA 和天数智芯 GPU 上训练指南</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考资料</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">FlagCX 环境变量</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/environment-variables.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FlagCX 环境变量</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">调试与日志</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">通信模式</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">缓冲区与内存</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">代理与运行时</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p">P2P 引擎配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">拓扑配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">调优器配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hybridrunner">HybridRunner 配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unirunner">UniRunner 配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">网络配置</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infiniband-ib">InfiniBand (IB) 设置</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ib">IB 重传</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#socket">Socket 网络</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ucx">UCX 网络</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gloo">Gloo 网络</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accl-barex-ppu">ACCL/Barex 和 PPU 集成</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">插件配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">其他</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">注意事项</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flagcx">
+<h1>FlagCX 环境变量<a class="headerlink" href="#flagcx" title="Link to this heading">#</a></h1>
+<p>本文档提供 FlagCX 中使用的所有环境变量的综合参考。</p>
+<section id="id1">
+<h2>目录<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#flagcx-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="xref myst">FlagCX 环境变量</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#%E7%9B%AE%E5%BD%95"><span class="xref myst">目录</span></a></p></li>
+<li><p><a class="reference internal" href="#%E8%B0%83%E8%AF%95%E4%B8%8E%E6%97%A5%E5%BF%97"><span class="xref myst">调试与日志</span></a></p></li>
+<li><p><a class="reference internal" href="#%E9%80%9A%E4%BF%A1%E6%A8%A1%E5%BC%8F"><span class="xref myst">通信模式</span></a></p></li>
+<li><p><a class="reference internal" href="#%E7%BC%93%E5%86%B2%E5%8C%BA%E4%B8%8E%E5%86%85%E5%AD%98"><span class="xref myst">缓冲区与内存</span></a></p></li>
+<li><p><a class="reference internal" href="#%E4%BB%A3%E7%90%86%E4%B8%8E%E8%BF%90%E8%A1%8C%E6%97%B6"><span class="xref myst">代理与运行时</span></a></p></li>
+<li><p><a class="reference internal" href="#p2p-%E5%BC%95%E6%93%8E%E9%85%8D%E7%BD%AE"><span class="xref myst">P2P 引擎配置</span></a></p></li>
+<li><p><a class="reference internal" href="#%E6%8B%93%E6%89%91%E9%85%8D%E7%BD%AE"><span class="xref myst">拓扑配置</span></a></p></li>
+<li><p><a class="reference internal" href="#%E8%B0%83%E4%BC%98%E5%99%A8%E9%85%8D%E7%BD%AE"><span class="xref myst">调优器配置</span></a></p></li>
+<li><p><a class="reference internal" href="#hybridrunner-%E9%85%8D%E7%BD%AE"><span class="xref myst">HybridRunner 配置</span></a></p></li>
+<li><p><a class="reference internal" href="#unirunner-%E9%85%8D%E7%BD%AE"><span class="xref myst">UniRunner 配置</span></a></p></li>
+<li><p><a class="reference internal" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="xref myst">网络配置</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#infiniband-ib-%E8%AE%BE%E7%BD%AE"><span class="xref myst">InfiniBand (IB) 设置</span></a></p></li>
+<li><p><a class="reference internal" href="#ib-%E9%87%8D%E4%BC%A0"><span class="xref myst">IB 重传</span></a></p></li>
+<li><p><a class="reference internal" href="#socket-%E7%BD%91%E7%BB%9C"><span class="xref myst">Socket 网络</span></a></p></li>
+<li><p><a class="reference internal" href="#ucx-%E7%BD%91%E7%BB%9C"><span class="xref myst">UCX 网络</span></a></p></li>
+<li><p><a class="reference internal" href="#gloo-%E7%BD%91%E7%BB%9C"><span class="xref myst">Gloo 网络</span></a></p></li>
+<li><p><a class="reference internal" href="#acclbarex-%E5%92%8C-ppu-%E9%9B%86%E6%88%90"><span class="xref myst">ACCL/Barex 和 PPU 集成</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#%E6%8F%92%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="xref myst">插件配置</span></a></p></li>
+<li><p><a class="reference internal" href="#%E5%85%B6%E4%BB%96"><span class="xref myst">其他</span></a></p></li>
+<li><p><a class="reference internal" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="xref myst">注意事项</span></a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h2>调试与日志<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEBUG</span></code></p></td>
+<td><p>无</p></td>
+<td><p>设置调试日志级别。可选值：VERSION、WARN、INFO、ABORT、TRACE</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEBUG_SUBSYS</span></code></p></td>
+<td><p>INIT,ENV</p></td>
+<td><p>逗号分隔的调试子系统列表。使用 ^ 前缀进行反转。可选值：INIT、COLL、P2P、SHM、NET、GRAPH、TUNING、ENV、ALLOC、CALL、PROXY、NVLS、BOOTSTRAP、REG、ALL</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEBUG_FILE</span></code></p></td>
+<td><p>stdout</p></td>
+<td><p>调试日志输出文件。支持 %h（主机名）、%p（进程ID）占位符</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_WARN_ENABLE_DEBUG_INFO</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，在警告上启用扩展调试信息</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SET_THREAD_NAME</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用设置线程名称以便调试</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id3">
+<h2>通信模式<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_HOST_COMM</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，使用主机通信模式</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_HETERO_COMM</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用 uniRunner 模式</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_COMM_ID</span></code></p></td>
+<td><p>无</p></td>
+<td><p>指定用于 bootstrap 的通信 ID。设置后，rank 0 将创建根节点</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_HOSTID</span></code></p></td>
+<td><p>无</p></td>
+<td><p>覆盖用于主机哈希的主机标识符字符串</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_CLUSTER_SPLIT_LIST</span></code></p></td>
+<td><p>无</p></td>
+<td><p>逗号分隔的集群拆分计数列表（如 2,4,8），启用 hybridRunner 模式</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id4">
+<h2>缓冲区与内存<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NET_BUFFER_SIZE</span></code></p></td>
+<td><p>67108864 (64MB)</p></td>
+<td><p>网络缓冲区大小（字节）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NET_CHUNK_SIZE</span></code></p></td>
+<td><p>4194304 (4MB)</p></td>
+<td><p>网络分块大小（字节）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_BUFFER_SIZE</span></code></p></td>
+<td><p>67108864 (64MB)</p></td>
+<td><p>P2P 缓冲区大小（字节）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_CHUNK_SIZE</span></code></p></td>
+<td><p>16777216 (16MB)</p></td>
+<td><p>P2P 分块大小（字节）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SEMAPHORE_BUFFER_POOL_CAPACITY</span></code></p></td>
+<td><p>32</p></td>
+<td><p>信号量缓冲池容量</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_KERNEL_FIFO_CAPACITY</span></code></p></td>
+<td><p>128</p></td>
+<td><p>内核 FIFO 容量</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_REDUCE_FIFO_CAPACITY</span></code></p></td>
+<td><p>128</p></td>
+<td><p>Reduce 操作 FIFO 容量</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_MEM_ENABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用通过设备适配器进行内存分配</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DMABUF_ENABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用内存注册的 DMA-BUF 支持</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>代理与运行时<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_RUNTIME_PROXY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用运行时代理模式</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_PROGRESS_APPENDOP_FREQ</span></code></p></td>
+<td><p>8</p></td>
+<td><p>进度循环中追加操作的频率</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，禁用 P2P 传输</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_SCHEDULE_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，禁用 P2P 调度优化</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEVICE_FUNC_PATH</span></code></p></td>
+<td><p>无</p></td>
+<td><p>异步内核加载的设备函数库路径</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_RMA_QUEUE_SIZE</span></code></p></td>
+<td><p>256</p></td>
+<td><p>RMA 代理线程的每个对等节点环形缓冲区深度。必须是 2 的幂</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_RMA_BATCH_MAX</span></code></p></td>
+<td><p>256</p></td>
+<td><p>在单个 <code class="docutils literal notranslate"><span class="pre">iputBatch</span></code> 调用中批量的 RDMA PUT 描述符的最大数量</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="p2p">
+<h2>P2P 引擎配置<a class="headerlink" href="#p2p" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_QPS_PER_CONN</span></code></p></td>
+<td><p>4</p></td>
+<td><p>每个 P2P 连接的 QP 连接数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_WORKERS_PER_POOL</span></code></p></td>
+<td><p>4</p></td>
+<td><p>每个池的工作线程数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_SHARD_COUNT</span></code></p></td>
+<td><p>8</p></td>
+<td><p>负载分片的分片数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_CQ_DEPTH</span></code></p></td>
+<td><p>4096</p></td>
+<td><p>完成队列深度</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_WR_PER_POST</span></code></p></td>
+<td><p>256</p></td>
+<td><p>每次 post 的最大工作请求数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_REQUESTS</span></code></p></td>
+<td><p>256</p></td>
+<td><p>最大未完成请求数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_BATCH_POLL_SIZE</span></code></p></td>
+<td><p>64</p></td>
+<td><p>完成轮询的批量大小</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_SLICE_SIZE</span></code></p></td>
+<td><p>1073741824 (1GB)</p></td>
+<td><p>大传输的分片大小</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_FRAGMENT_LIMIT</span></code></p></td>
+<td><p>4096 (4KB)</p></td>
+<td><p>分片的片段限制</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_SGE</span></code></p></td>
+<td><p>4</p></td>
+<td><p>最大分散/聚集元素数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_INLINE</span></code></p></td>
+<td><p>64</p></td>
+<td><p>最大内联数据大小</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_IB_PORT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>InfiniBand 端口号</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_GID_INDEX</span></code></p></td>
+<td><p>-1</p></td>
+<td><p>RoCE 的 GID 索引（-1 = 自动检测）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MTU</span></code></p></td>
+<td><p>4096</p></td>
+<td><p>IB 传输的 MTU 大小</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_IB_TC</span></code></p></td>
+<td><p>-1</p></td>
+<td><p>IB 流量类别（-1 = 关闭）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_RETRY_CNT</span></code></p></td>
+<td><p>7</p></td>
+<td><p>失败操作的重试次数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_NOTIF_MAX_PEERS</span></code></p></td>
+<td><p>64</p></td>
+<td><p>最大通知对等节点数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_DEST_DEV_AFFINITY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用目标设备亲和性</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>注意</strong>：这些变量用于配置 FlagCX P2P 引擎以支持单边 RDMA 操作，主要用于与 NIXL 等传输框架集成。</p>
+</section>
+<hr class="docutils" />
+<section id="id6">
+<h2>拓扑配置<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TOPO_FILE</span></code></p></td>
+<td><p>无</p></td>
+<td><p>网络/GPU 拓扑的 XML 拓扑文件路径</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TOPO_DUMP_FILE</span></code></p></td>
+<td><p>无</p></td>
+<td><p>将发现的拓扑导出为 XML 的路径</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_INTERSERVER_ROUTE_FILE</span></code></p></td>
+<td><p>无</p></td>
+<td><p>服务器间路由配置文件路径</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TOPO_DETECTION_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，禁用拓扑检测</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id7">
+<h2>调优器配置<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_TUNER</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用内部调优器</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_COMM_TAG</span></code></p></td>
+<td><p>无</p></td>
+<td><p>从配置列表中指定要使用的通信器标签</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_SEARCH_NLOOPS</span></code></p></td>
+<td><p>5</p></td>
+<td><p>调优器搜索的循环次数（最少 5 次）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_CONFIG_ID</span></code></p></td>
+<td><p>无</p></td>
+<td><p>当前调优器配置 ID（用于 FlagScale 调优）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_BEST_CONFIG_ID</span></code></p></td>
+<td><p>无</p></td>
+<td><p>最佳调优器配置 ID（用于 FlagScale 调优）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_DONE</span></code></p></td>
+<td><p>无</p></td>
+<td><p>调优完成时设置为 1（由系统设置）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNE_FILE</span></code></p></td>
+<td><p>无</p></td>
+<td><p>调优文件路径</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNE_GROUP_IDX</span></code></p></td>
+<td><p>无</p></td>
+<td><p>调优组索引</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNING_WITH_FLAGSCALE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用与 FlagScale 一起调优</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TUNNING_WITH_SINGLE_COMM</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，使用单个通信器进行调优（注意：无 FLAGCX_ 前缀）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="hybridrunner">
+<h2>HybridRunner 配置<a class="headerlink" href="#hybridrunner" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO</span></code></p></td>
+<td><p>Sequential</p></td>
+<td><p>C2C 算法选择。可选值：RING_PIPELINED、XML_INPUT</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_EXPORT_PATH</span></code></p></td>
+<td><p>无</p></td>
+<td><p>导出算法 XML 文件的目录路径</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_EXPORT_PREFIX</span></code></p></td>
+<td><p>无</p></td>
+<td><p>导出的算法 XML 文件的前缀</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_IMPORT_PATH</span></code></p></td>
+<td><p>无</p></td>
+<td><p>导入算法 XML 文件的目录路径</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_IMPORT_PREFIX</span></code></p></td>
+<td><p>无</p></td>
+<td><p>导入的算法 XML 文件的前缀</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_SEARCH_GRANULARITY</span></code></p></td>
+<td><p>无</p></td>
+<td><p>C2C 算法搜索的粒度</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="unirunner">
+<h2>UniRunner 配置<a class="headerlink" href="#unirunner" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_EVENT_POOL_SIZE</span></code></p></td>
+<td><p>1024</p></td>
+<td><p>P2P 事件池大小</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NSLICES</span></code></p></td>
+<td><p>1</p></td>
+<td><p>uniRunner 的分片数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NTHREADS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>uniRunner 每个块的线程数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NBLOCKS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>uniRunner 的块数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_USE_LOCRED</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，在 uniRunner 中使用本地归约</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_USE_RINGAG</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，在 uniRunner 中使用环形 allgather</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_USE_SLICEDAR</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，在 uniRunner 中使用分片 allreduce</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NREDSLICES</span></code></p></td>
+<td><p>0</p></td>
+<td><p>uniRunner 的归约分片数（0 = 自动）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_REDSLICESIZE</span></code></p></td>
+<td><p>65536</p></td>
+<td><p>uniRunner 的归约分片大小（字节）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id8">
+<h2>网络配置<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<section id="infiniband-ib">
+<h3>InfiniBand (IB) 设置<a class="headerlink" href="#infiniband-ib" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，禁用 InfiniBand</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_HCA</span></code></p></td>
+<td><p>无</p></td>
+<td><p>指定要使用的 IB HCA 设备</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_GID_INDEX</span></code></p></td>
+<td><p>-1</p></td>
+<td><p>RoCE 的 GID 索引。-1 表示自动检测</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ROCE_VERSION_NUM</span></code></p></td>
+<td><p>2</p></td>
+<td><p>使用的 RoCE 版本号</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_TIMEOUT</span></code></p></td>
+<td><p>18</p></td>
+<td><p>IB 超时值（指数级，实际超时 = 4.096us * 2^值）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRY_CNT</span></code></p></td>
+<td><p>7</p></td>
+<td><p>IB 重试次数</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_PKEY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>IB 分区键索引</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_USE_INLINE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，为小消息启用内联数据</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_SL</span></code></p></td>
+<td><p>0</p></td>
+<td><p>IB 服务级别</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_TC</span></code></p></td>
+<td><p>0</p></td>
+<td><p>IB 流量类别</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_AR_THRESHOLD</span></code></p></td>
+<td><p>8192</p></td>
+<td><p>启用自适应路由的阈值（字节）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_PCI_RELAXED_ORDERING</span></code></p></td>
+<td><p>2</p></td>
+<td><p>PCI 宽松排序模式。0=关闭、1=开启、2=自动</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ADAPTIVE_ROUTING</span></code></p></td>
+<td><p>-2</p></td>
+<td><p>自适应路由设置。-2=自动、-1=关闭、0+=开启并使用该值</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_MERGE_VFS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>设置为 1 时，合并虚拟功能</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_MERGE_NICS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>设置为 1 时，将多个网卡合并为一个逻辑设备</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_QPS_PER_CONNECTION</span></code></p></td>
+<td><p>1</p></td>
+<td><p>每个连接的队列对数量</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_SPLIT_DATA_ON_QPS</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，在 QP 间分割数据</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ADDR_FAMILY</span></code></p></td>
+<td><p>无</p></td>
+<td><p>IB 地址族。可选值：AF_IB、AF_INET、AF_INET6</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ADDR_RANGE</span></code></p></td>
+<td><p>无</p></td>
+<td><p>IB 连接的 IP 地址范围</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_GDR_FLUSH_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，禁用 GDR 刷新操作</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IBUC_SPLIT_DATA_ON_QPS</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，为 IBUC 在 QP 间分割数据</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ib">
+<h3>IB 重传<a class="headerlink" href="#ib" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_ENABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，启用软件重传</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_TIMEOUT</span></code></p></td>
+<td><p>5000</p></td>
+<td><p>最小 RTO 超时（微秒）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_MAX_RETRY</span></code></p></td>
+<td><p>10</p></td>
+<td><p>最大重传重试次数</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_ACK_INTERVAL</span></code></p></td>
+<td><p>16</p></td>
+<td><p>重传的 ACK 间隔</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_MAX_OUTSTANDING</span></code></p></td>
+<td><p>16</p></td>
+<td><p>最大未完成请求数</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="socket">
+<h3>Socket 网络<a class="headerlink" href="#socket" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SOCKET_FAMILY</span></code></p></td>
+<td><p>自动</p></td>
+<td><p>Socket 地址族。可选值：AF_INET（IPv4）、AF_INET6（IPv6）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SOCKET_IFNAME</span></code></p></td>
+<td><p>自动</p></td>
+<td><p>要使用的网络接口名称。使用 ^ 前缀排除，= 精确匹配</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NSOCKS_PERTHREAD</span></code></p></td>
+<td><p>-2</p></td>
+<td><p>每个线程的 socket 数量（-2=自动）</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SOCKET_NTHREADS</span></code></p></td>
+<td><p>-2</p></td>
+<td><p>socket 线程数量（-2=自动）</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_FORCE_NET_SOCKET</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，强制使用 socket 网络而非 IB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ucx">
+<h3>UCX 网络<a class="headerlink" href="#ucx" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UCX_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，禁用 UCX 网络</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UCX_TLS</span></code></p></td>
+<td><p>无</p></td>
+<td><p>要使用的 UCX 传输层。如果未设置，则回退到 UCX_TLS</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UCX_CUDA_DISABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>设置为 1 时，禁用 UCX CUDA 支持</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gloo">
+<h3>Gloo 网络<a class="headerlink" href="#gloo" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_GLOO_IB_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>设置为 1 时，为 Gloo 传输禁用 IB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="accl-barex-ppu">
+<h3>ACCL/Barex 和 PPU 集成<a class="headerlink" href="#accl-barex-ppu" title="Link to this heading">#</a></h3>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">USE_ACCL_BAREX=1</span></code> 构建 ACCL/Barex 网络适配器。PPU 集成通常使用 <code class="docutils literal notranslate"><span class="pre">USE_PPU=1</span> <span class="pre">USE_ACCL_BAREX=1</span></code>；具体集成环境还可能选择 <code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_TRANSPORT=accl</span></code>、启用 <code class="docutils literal notranslate"><span class="pre">FLAGCX_MEM_ENABLE=1</span></code>，并通过 <code class="docutils literal notranslate"><span class="pre">FLAGCX_VMM_ENABLE=0</span></code> 禁用虚拟内存。这些设置是特定集成环境的前置条件，并非通用默认值。</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id9">
+<h2>插件配置<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEVICE_ADAPTOR_PLUGIN</span></code></p></td>
+<td><p>无</p></td>
+<td><p>设备适配器插件共享库路径</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NET_ADAPTOR_PLUGIN</span></code></p></td>
+<td><p>无</p></td>
+<td><p>网络适配器插件共享库路径</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_CCL_ADAPTOR_PLUGIN</span></code></p></td>
+<td><p>无</p></td>
+<td><p>CCL 适配器插件共享库路径</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id10">
+<h2>其他<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>变量</p></th>
+<th class="head"><p>默认值</p></th>
+<th class="head"><p>描述</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IGNORE_CPU_AFFINITY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>（已注释）设置为 1 时，忽略 CPU 亲和性</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id11">
+<h2>注意事项<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>布尔变量通常使用 0 表示假/禁用，1 表示真/启用</p></li>
+<li><p>默认值为 -2 的变量通常表示”自动检测”行为</p></li>
+<li><p>使用 FLAGCX_PARAM 宏时，FLAGCX_ 前缀会自动添加到变量名</p></li>
+<li><p>某些变量可能仅在初始化时生效</p></li>
+<li><p>调试日志会显著影响性能；在生产环境中请谨慎使用</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="paddle/nvidia-iluvatar-hetero-train.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">在 NVIDIA 和天数智芯 GPU 上训练指南</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">目录</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">调试与日志</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">通信模式</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">缓冲区与内存</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">代理与运行时</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p">P2P 引擎配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">拓扑配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">调优器配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hybridrunner">HybridRunner 配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unirunner">UniRunner 配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">网络配置</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infiniband-ib">InfiniBand (IB) 设置</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ib">IB 重传</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#socket">Socket 网络</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ucx">UCX 网络</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gloo">Gloo 网络</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accl-barex-ppu">ACCL/Barex 和 PPU 集成</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">插件配置</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">其他</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">注意事项</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../flagcx_en/environment-variables.html">English</a></body>
+</html>

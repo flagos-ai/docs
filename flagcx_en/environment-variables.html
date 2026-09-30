@@ -1,0 +1,1475 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FlagCX Environment Variables" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="environment-variables.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="This document provides a comprehensive reference for all environment variables used in FlagCX. Table of Contents: FlagCX Environment Variables- Table of Contents, Debug and Logging, Communication Mode, Buffer and Memory, Proxy and Runtime, Topology Configuration, Tuner Configuration, HybridRunner..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="This document provides a comprehensive reference for all environment variables used in FlagCX. Table of Contents: FlagCX Environment Variables- Table of Contents, Debug and Logging, Communication Mode, Buffer and Memory, Proxy and Runtime, Topology Configuration, Tuner Configuration, HybridRunner..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>FlagCX Environment Variables &#8212; FlagCX Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="_static/tippy/environment-variables.48b7bee3-365b-4770-9fc7-83fb8b261959.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'environment-variables';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/environment-variables.html" />
+    <link rel="icon" href="_static/favicon.svg"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Guide for training on nvidia and iluvatar GPUs" href="paddle/nvidia-iluvatar-hetero-train.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="_static/logo-en-light.svg" class="logo__image only-light" alt="FlagCX Documentation - Home"/>
+    <img src="_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagCX Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    FlagCX Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="flagcx_overview/flagcx-overview.html">Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/backend-support.html">Backend support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flagcx_overview/application-integration.html">Application integration</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build.html">Build and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Tests</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">⤵️ Application Integration Guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="paddle/README.html">Training Models with Paddle and FlagCX</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia.html">Guide for using paddle with FlagCX on nvidia GPU environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/iluvatar.html">Guide for using paddle with FlagCX on iluvatar machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/kunlun.html">Guide for using paddle with FlagCX on XPU machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paddle/nvidia-iluvatar-hetero-train.html">Guide for training on nvidia and iluvatar GPUs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 References</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">FlagCX Environment Variables</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/environment-variables.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FlagCX Environment Variables</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-and-logging">Debug and Logging</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#communication-mode">Communication Mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-and-memory">Buffer and Memory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proxy-and-runtime">Proxy and Runtime</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p-engine-configuration">P2P Engine Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accl-barex-transport">ACCL/Barex transport</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topology-configuration">Topology Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tuner-configuration">Tuner Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hybridrunner-configuration">HybridRunner Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unirunner-configuration">UniRunner Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-configuration">Network Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infiniband-ib-settings">InfiniBand (IB) Settings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ib-retransmission">IB Retransmission</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#socket-network">Socket Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ucx-network">UCX Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gloo-network">Gloo Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accl-barex-and-ppu-integration">ACCL/Barex and PPU Integration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plugin-configuration">Plugin Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous">Miscellaneous</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flagcx-environment-variables">
+<h1>FlagCX Environment Variables<a class="headerlink" href="#flagcx-environment-variables" title="Link to this heading">#</a></h1>
+<p>This document provides a comprehensive reference for all environment variables used in FlagCX.</p>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#flagcx-environment-variables"><span class="xref myst">FlagCX Environment Variables</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#table-of-contents"><span class="xref myst">Table of Contents</span></a></p></li>
+<li><p><a class="reference internal" href="#debug-and-logging"><span class="xref myst">Debug and Logging</span></a></p></li>
+<li><p><a class="reference internal" href="#communication-mode"><span class="xref myst">Communication Mode</span></a></p></li>
+<li><p><a class="reference internal" href="#buffer-and-memory"><span class="xref myst">Buffer and Memory</span></a></p></li>
+<li><p><a class="reference internal" href="#proxy-and-runtime"><span class="xref myst">Proxy and Runtime</span></a></p></li>
+<li><p><a class="reference internal" href="#topology-configuration"><span class="xref myst">Topology Configuration</span></a></p></li>
+<li><p><a class="reference internal" href="#tuner-configuration"><span class="xref myst">Tuner Configuration</span></a></p></li>
+<li><p><a class="reference internal" href="#hybridrunner-configuration"><span class="xref myst">HybridRunner Configuration</span></a></p></li>
+<li><p><a class="reference internal" href="#unirunner-configuration"><span class="xref myst">UniRunner Configuration</span></a></p></li>
+<li><p><a class="reference internal" href="#network-configuration"><span class="xref myst">Network Configuration</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#infiniband-ib-settings"><span class="xref myst">InfiniBand (IB) Settings</span></a></p></li>
+<li><p><a class="reference internal" href="#ib-retransmission"><span class="xref myst">IB Retransmission</span></a></p></li>
+<li><p><a class="reference internal" href="#socket-network"><span class="xref myst">Socket Network</span></a></p></li>
+<li><p><a class="reference internal" href="#ucx-network"><span class="xref myst">UCX Network</span></a></p></li>
+<li><p><a class="reference internal" href="#gloo-network"><span class="xref myst">Gloo Network</span></a></p></li>
+<li><p><a class="reference internal" href="#acclbarex-and-ppu-integration"><span class="xref myst">ACCL/Barex and PPU Integration</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#plugin-configuration"><span class="xref myst">Plugin Configuration</span></a></p></li>
+<li><p><a class="reference internal" href="#miscellaneous"><span class="xref myst">Miscellaneous</span></a></p></li>
+<li><p><a class="reference internal" href="#notes"><span class="xref myst">Notes</span></a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="debug-and-logging">
+<h2>Debug and Logging<a class="headerlink" href="#debug-and-logging" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEBUG</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Set debug logging level. Values: VERSION, WARN, INFO, ABORT, TRACE</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEBUG_SUBSYS</span></code></p></td>
+<td><p>INIT,ENV</p></td>
+<td><p>Comma-separated list of debug subsystems. Prefix with ^ to invert. Values: INIT, COLL, P2P, SHM, NET, GRAPH, TUNING, ENV, ALLOC, CALL, PROXY, NVLS, BOOTSTRAP, REG, ALL</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEBUG_FILE</span></code></p></td>
+<td><p>stdout</p></td>
+<td><p>Output file for debug logs. Supports %h (hostname), %p (pid) placeholders</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_WARN_ENABLE_DEBUG_INFO</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables extended debug info on warnings</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SET_THREAD_NAME</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables setting thread names for debugging</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="communication-mode">
+<h2>Communication Mode<a class="headerlink" href="#communication-mode" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_HOST_COMM</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, uses host communication mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_HETERO_COMM</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables uniRunner mode</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_COMM_ID</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Specifies the communication ID for bootstrap. When set, rank 0 will create the root</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_HOSTID</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Override the host identifier string for host hashing</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_CLUSTER_SPLIT_LIST</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Comma-separated list of cluster split counts (e.g., 2,4,8), enabling hybridRunner mode</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="buffer-and-memory">
+<h2>Buffer and Memory<a class="headerlink" href="#buffer-and-memory" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NET_BUFFER_SIZE</span></code></p></td>
+<td><p>67108864 (64MB)</p></td>
+<td><p>Network buffer size in bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NET_CHUNK_SIZE</span></code></p></td>
+<td><p>4194304 (4MB)</p></td>
+<td><p>Network chunk size in bytes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_BUFFER_SIZE</span></code></p></td>
+<td><p>67108864 (64MB)</p></td>
+<td><p>P2P buffer size in bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_CHUNK_SIZE</span></code></p></td>
+<td><p>16777216 (16MB)</p></td>
+<td><p>P2P chunk size in bytes</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SEMAPHORE_BUFFER_POOL_CAPACITY</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Capacity of semaphore buffer pool</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_KERNEL_FIFO_CAPACITY</span></code></p></td>
+<td><p>128</p></td>
+<td><p>Kernel FIFO capacity</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_REDUCE_FIFO_CAPACITY</span></code></p></td>
+<td><p>128</p></td>
+<td><p>Reduce operation FIFO capacity</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_MEM_ENABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables memory allocation via device adaptor</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DMABUF_ENABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables DMA-BUF support for memory registration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="proxy-and-runtime">
+<h2>Proxy and Runtime<a class="headerlink" href="#proxy-and-runtime" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_RUNTIME_PROXY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables runtime proxy mode</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_PROGRESS_APPENDOP_FREQ</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Frequency of append operation in progress loop</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, disables P2P transport</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_SCHEDULE_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, disables P2P scheduling optimization</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEVICE_FUNC_PATH</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to device function library for async kernel loading</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_RMA_QUEUE_SIZE</span></code></p></td>
+<td><p>256</p></td>
+<td><p>Per-peer circular buffer depth for the RMA proxy thread. Must be a power of two</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_RMA_BATCH_MAX</span></code></p></td>
+<td><p>256</p></td>
+<td><p>Maximum number of RDMA PUT descriptors batched into a single <code class="docutils literal notranslate"><span class="pre">iputBatch</span></code> call</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="p2p-engine-configuration">
+<h2>P2P Engine Configuration<a class="headerlink" href="#p2p-engine-configuration" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_QPS_PER_CONN</span></code></p></td>
+<td><p>4</p></td>
+<td><p>QP connections per P2P connection</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_WORKERS_PER_POOL</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Worker threads per pool</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_SHARD_COUNT</span></code></p></td>
+<td><p>8</p></td>
+<td><p>Shard count for load distribution</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_CQ_DEPTH</span></code></p></td>
+<td><p>4096</p></td>
+<td><p>Completion queue depth</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_WR_PER_POST</span></code></p></td>
+<td><p>256</p></td>
+<td><p>Maximum work requests per post</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_REQUESTS</span></code></p></td>
+<td><p>256</p></td>
+<td><p>Maximum outstanding requests</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_BATCH_POLL_SIZE</span></code></p></td>
+<td><p>64</p></td>
+<td><p>Batch poll size for completions</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_SLICE_SIZE</span></code></p></td>
+<td><p>1073741824 (1GB)</p></td>
+<td><p>Slice size for large transfers</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_FRAGMENT_LIMIT</span></code></p></td>
+<td><p>4096 (4KB)</p></td>
+<td><p>Fragment limit for slicing</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_SGE</span></code></p></td>
+<td><p>4</p></td>
+<td><p>Maximum scatter-gather elements</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MAX_INLINE</span></code></p></td>
+<td><p>64</p></td>
+<td><p>Maximum inline data size</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_IB_PORT</span></code></p></td>
+<td><p>1</p></td>
+<td><p>InfiniBand port number</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_GID_INDEX</span></code></p></td>
+<td><p>-1</p></td>
+<td><p>GID index for RoCE (-1 = auto-detect)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_MTU</span></code></p></td>
+<td><p>4096</p></td>
+<td><p>MTU size for IB transfers</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_IB_TC</span></code></p></td>
+<td><p>-1</p></td>
+<td><p>IB traffic class (-1 = off)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_RETRY_CNT</span></code></p></td>
+<td><p>7</p></td>
+<td><p>Retry count for failed operations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_NOTIF_MAX_PEERS</span></code></p></td>
+<td><p>64</p></td>
+<td><p>Maximum notification peers</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_DEST_DEV_AFFINITY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables destination device affinity</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Note</strong>: These variables configure the FlagCX P2P Engine for one-sided RDMA operations, primarily used when integrating with transfer frameworks like NIXL.</p>
+<section id="accl-barex-transport">
+<h3>ACCL/Barex transport<a class="headerlink" href="#accl-barex-transport" title="Link to this heading">#</a></h3>
+<p>Environment variables change runtime behavior without rebuilding the library. The following settings apply only to deployments that build and use the ACCL/Barex transport adaptor:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_TRANSPORT</span></code></p></td>
+<td><p>Set to <code class="docutils literal notranslate"><span class="pre">accl</span></code> to select the ACCL/Barex path when the adaptor is available.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_ACCL_MAX_MR_MB</span></code></p></td>
+<td><p>Limits ACCL/Barex registered-memory chunking. <code class="docutils literal notranslate"><span class="pre">0</span></code> disables this limit.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_VMM_ENABLE</span></code></p></td>
+<td><p>The current ACCL/Barex integration path requires <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Build the adaptor with <code class="docutils literal notranslate"><span class="pre">USE_ACCL_BAREX=1</span></code>. These are deployment-specific settings, not universal defaults.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="topology-configuration">
+<h2>Topology Configuration<a class="headerlink" href="#topology-configuration" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TOPO_FILE</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to XML topology file for network/GPU topology</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TOPO_DUMP_FILE</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to dump discovered topology as XML</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_INTERSERVER_ROUTE_FILE</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to inter-server routing configuration file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TOPO_DETECTION_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, disables topology detection</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="tuner-configuration">
+<h2>Tuner Configuration<a class="headerlink" href="#tuner-configuration" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_TUNER</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables the internal tuner</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_USE_COMM_TAG</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Specifies a communicator tag to use from config list</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_SEARCH_NLOOPS</span></code></p></td>
+<td><p>5</p></td>
+<td><p>Number of loops for tuner search (minimum 5)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_CONFIG_ID</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Current tuner configuration ID (for FlagScale tuning)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_BEST_CONFIG_ID</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Best tuner configuration ID (for FlagScale tuning)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNER_DONE</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Set to 1 when tuning is complete (set by system)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNE_FILE</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to tune file</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNE_GROUP_IDX</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Tune group index</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_TUNING_WITH_FLAGSCALE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables tuning with FlagScale</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TUNNING_WITH_SINGLE_COMM</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, uses a single communicator for tuning (note: no FLAGCX_ prefix)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="hybridrunner-configuration">
+<h2>HybridRunner Configuration<a class="headerlink" href="#hybridrunner-configuration" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO</span></code></p></td>
+<td><p>Sequential</p></td>
+<td><p>C2C algorithm selection. Values: RING_PIPELINED, XML_INPUT</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_EXPORT_PATH</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Directory path to export algorithm XML files</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_EXPORT_PREFIX</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Prefix for exported algorithm XML files</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_IMPORT_PATH</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Directory path to import algorithm XML files</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_ALGO_IMPORT_PREFIX</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Prefix for imported algorithm XML files</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_C2C_SEARCH_GRANULARITY</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Granularity for C2C algorithm search</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="unirunner-configuration">
+<h2>UniRunner Configuration<a class="headerlink" href="#unirunner-configuration" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_EVENT_POOL_SIZE</span></code></p></td>
+<td><p>1024</p></td>
+<td><p>Size of P2P event pool</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NSLICES</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Number of slices for uniRunner</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NTHREADS</span></code></p></td>
+<td><p>32</p></td>
+<td><p>Number of threads per block for uniRunner</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NBLOCKS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Number of blocks for uniRunner</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_USE_LOCRED</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, uses local reduction in uniRunner</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_USE_RINGAG</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, uses ring allgather in uniRunner</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_USE_SLICEDAR</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, uses sliced allreduce in uniRunner</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_NREDSLICES</span></code></p></td>
+<td><p>0</p></td>
+<td><p>Number of reduction slices for uniRunner (0 = auto)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UNIRUNNER_REDSLICESIZE</span></code></p></td>
+<td><p>65536</p></td>
+<td><p>Reduction slice size in bytes for uniRunner</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="network-configuration">
+<h2>Network Configuration<a class="headerlink" href="#network-configuration" title="Link to this heading">#</a></h2>
+<section id="infiniband-ib-settings">
+<h3>InfiniBand (IB) Settings<a class="headerlink" href="#infiniband-ib-settings" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, disables InfiniBand</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_HCA</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Specifies which IB HCA devices to use</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_GID_INDEX</span></code></p></td>
+<td><p>-1</p></td>
+<td><p>GID index for RoCE. -1 means auto-detect</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ROCE_VERSION_NUM</span></code></p></td>
+<td><p>2</p></td>
+<td><p>RoCE version number to use</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_TIMEOUT</span></code></p></td>
+<td><p>18</p></td>
+<td><p>IB timeout value (exponential, actual timeout = 4.096us * 2^value)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRY_CNT</span></code></p></td>
+<td><p>7</p></td>
+<td><p>Number of IB retry attempts</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_PKEY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>IB partition key index</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_USE_INLINE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables inline data for small messages</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_SL</span></code></p></td>
+<td><p>0</p></td>
+<td><p>IB Service Level</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_TC</span></code></p></td>
+<td><p>0</p></td>
+<td><p>IB Traffic Class</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_AR_THRESHOLD</span></code></p></td>
+<td><p>8192</p></td>
+<td><p>Threshold (bytes) above which adaptive routing is enabled</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_PCI_RELAXED_ORDERING</span></code></p></td>
+<td><p>2</p></td>
+<td><p>PCI relaxed ordering mode. 0=off, 1=on, 2=auto</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ADAPTIVE_ROUTING</span></code></p></td>
+<td><p>-2</p></td>
+<td><p>Adaptive routing setting. -2=auto, -1=off, 0+=on with value</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_MERGE_VFS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>When set to 1, merges Virtual Functions</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_MERGE_NICS</span></code></p></td>
+<td><p>1</p></td>
+<td><p>When set to 1, merges multiple NICs into one logical device</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_QPS_PER_CONNECTION</span></code></p></td>
+<td><p>1</p></td>
+<td><p>Number of Queue Pairs per connection</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_SPLIT_DATA_ON_QPS</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, splits data across QPs</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ADDR_FAMILY</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Address family for IB. Values: AF_IB, AF_INET, AF_INET6</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_ADDR_RANGE</span></code></p></td>
+<td><p>None</p></td>
+<td><p>IP address range for IB connections</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_GDR_FLUSH_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, disables GDR flush operations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IBUC_SPLIT_DATA_ON_QPS</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, splits data across QPs for IBUC</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ib-retransmission">
+<h3>IB Retransmission<a class="headerlink" href="#ib-retransmission" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_ENABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, enables software retransmission</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_TIMEOUT</span></code></p></td>
+<td><p>5000</p></td>
+<td><p>Minimum RTO timeout in microseconds</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_MAX_RETRY</span></code></p></td>
+<td><p>10</p></td>
+<td><p>Maximum number of retransmission retries</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_RETRANS_ACK_INTERVAL</span></code></p></td>
+<td><p>16</p></td>
+<td><p>ACK interval for retransmission</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IB_MAX_OUTSTANDING</span></code></p></td>
+<td><p>16</p></td>
+<td><p>Maximum outstanding requests</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="socket-network">
+<h3>Socket Network<a class="headerlink" href="#socket-network" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SOCKET_FAMILY</span></code></p></td>
+<td><p>Auto</p></td>
+<td><p>Socket address family. Values: AF_INET (IPv4), AF_INET6 (IPv6)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SOCKET_IFNAME</span></code></p></td>
+<td><p>Auto</p></td>
+<td><p>Network interface name(s) to use. Prefix with ^ to exclude, = for exact match</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NSOCKS_PERTHREAD</span></code></p></td>
+<td><p>-2</p></td>
+<td><p>Number of sockets per thread (-2=auto)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_SOCKET_NTHREADS</span></code></p></td>
+<td><p>-2</p></td>
+<td><p>Number of socket threads (-2=auto)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_FORCE_NET_SOCKET</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, forces socket network instead of IB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="ucx-network">
+<h3>UCX Network<a class="headerlink" href="#ucx-network" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UCX_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, disables UCX network</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UCX_TLS</span></code></p></td>
+<td><p>None</p></td>
+<td><p>UCX transport layers to use. Falls back to UCX_TLS if not set</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_UCX_CUDA_DISABLE</span></code></p></td>
+<td><p>1</p></td>
+<td><p>When set to 1, disables UCX CUDA support</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gloo-network">
+<h3>Gloo Network<a class="headerlink" href="#gloo-network" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_GLOO_IB_DISABLE</span></code></p></td>
+<td><p>0</p></td>
+<td><p>When set to 1, disables IB support for Gloo transport</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="accl-barex-and-ppu-integration">
+<h3>ACCL/Barex and PPU Integration<a class="headerlink" href="#accl-barex-and-ppu-integration" title="Link to this heading">#</a></h3>
+<p>Build the ACCL/Barex network adaptor with <code class="docutils literal notranslate"><span class="pre">USE_ACCL_BAREX=1</span></code>. The PPU integration commonly uses <code class="docutils literal notranslate"><span class="pre">USE_PPU=1</span> <span class="pre">USE_ACCL_BAREX=1</span></code>; integration environments may also select <code class="docutils literal notranslate"><span class="pre">FLAGCX_P2P_TRANSPORT=accl</span></code>, enable <code class="docutils literal notranslate"><span class="pre">FLAGCX_MEM_ENABLE=1</span></code>, and disable virtual memory with <code class="docutils literal notranslate"><span class="pre">FLAGCX_VMM_ENABLE=0</span></code>. These settings are integration prerequisites, not universal defaults.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="plugin-configuration">
+<h2>Plugin Configuration<a class="headerlink" href="#plugin-configuration" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_DEVICE_ADAPTOR_PLUGIN</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to device adaptor plugin shared library</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_NET_ADAPTOR_PLUGIN</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to network adaptor plugin shared library</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_CCL_ADAPTOR_PLUGIN</span></code></p></td>
+<td><p>None</p></td>
+<td><p>Path to CCL adaptor plugin shared library</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">FLAGCX_IGNORE_CPU_AFFINITY</span></code></p></td>
+<td><p>0</p></td>
+<td><p>(Commented out) When set to 1, ignores CPU affinity</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Boolean variables generally use 0 for false/disabled and 1 for true/enabled</p></li>
+<li><p>Variables with default -2 typically indicate “auto-detect” behavior</p></li>
+<li><p>The FLAGCX_ prefix is automatically added to variable names when using the FLAGCX_PARAM macro</p></li>
+<li><p>Some variables may only take effect at initialization time</p></li>
+<li><p>Debug logging can significantly impact performance; use with caution in production</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="paddle/nvidia-iluvatar-hetero-train.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Guide for training on nvidia and iluvatar GPUs</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debug-and-logging">Debug and Logging</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#communication-mode">Communication Mode</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-and-memory">Buffer and Memory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proxy-and-runtime">Proxy and Runtime</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#p2p-engine-configuration">P2P Engine Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accl-barex-transport">ACCL/Barex transport</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#topology-configuration">Topology Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tuner-configuration">Tuner Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hybridrunner-configuration">HybridRunner Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unirunner-configuration">UniRunner Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#network-configuration">Network Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infiniband-ib-settings">InfiniBand (IB) Settings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ib-retransmission">IB Retransmission</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#socket-network">Socket Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ucx-network">UCX Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gloo-network">Gloo Network</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accl-barex-and-ppu-integration">ACCL/Barex and PPU Integration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plugin-configuration">Plugin Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous">Miscellaneous</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">Notes</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../flagcx_zh/environment-variables.html">中文</a></body>
+</html>

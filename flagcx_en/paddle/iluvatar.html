@@ -1,0 +1,871 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Guide for using paddle with FlagCX on iluvatar machines" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="paddle/iluvatar.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="Environment setup: prepare a docker container on Iluvatar machines, start the docker container, clone PaddleCustomDevice, clone FlagCX. Compile paddle with FlagCX: cd into iluvatar_gpu directory, modify default build script to enable compiling with FlagCX- In build_paddle.sh alt text set BUILD_WI..." />
+<meta property="og:image" content="_images/iluvatar_build_paddle.png" />
+<meta property="og:image:alt" content="alt text" />
+<meta name="description" content="Environment setup: prepare a docker container on Iluvatar machines, start the docker container, clone PaddleCustomDevice, clone FlagCX. Compile paddle with FlagCX: cd into iluvatar_gpu directory, modify default build script to enable compiling with FlagCX- In build_paddle.sh alt text set BUILD_WI..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Guide for using paddle with FlagCX on iluvatar machines &#8212; FlagCX Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/paddle/iluvatar.3e7d3ab1-d547-48f9-ad88-66773b7a12b9.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'paddle/iluvatar';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/paddle/iluvatar.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Guide for using paddle with FlagCX on XPU machines" href="kunlun.html" />
+    <link rel="prev" title="Guide for using paddle with FlagCX on nvidia GPU environment" href="nvidia.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagCX Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagCX Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagCX Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../flagcx_overview/flagcx-overview.html">Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../flagcx_overview/backend-support.html">Backend support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../flagcx_overview/application-integration.html">Application integration</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build.html">Build and Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user-guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html">Tests</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">⤵️ Application Integration Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="README.html">Training Models with Paddle and FlagCX</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="nvidia.html">Guide for using paddle with FlagCX on nvidia GPU environment</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Guide for using paddle with FlagCX on iluvatar machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kunlun.html">Guide for using paddle with FlagCX on XPU machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nvidia-iluvatar-hetero-train.html">Guide for training on nvidia and iluvatar GPUs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 References</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../environment-variables.html">FlagCX Environment Variables</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/paddle/iluvatar.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Guide for using paddle with FlagCX on iluvatar machines</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">Environment setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compile-paddle-with-flagcx">Compile paddle with FlagCX</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#train-model-using-paddle-flagcx">Train model using paddle + FlagCX</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="guide-for-using-paddle-with-flagcx-on-iluvatar-machines">
+<h1>Guide for using paddle with FlagCX on iluvatar machines<a class="headerlink" href="#guide-for-using-paddle-with-flagcx-on-iluvatar-machines" title="Link to this heading">#</a></h1>
+<section id="environment-setup">
+<h2>Environment setup<a class="headerlink" href="#environment-setup" title="Link to this heading">#</a></h2>
+<ol class="arabic">
+<li><p>prepare a docker container on Iluvatar machines</p></li>
+<li><p>start the docker container</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="o">[</span>container_name<span class="o">]</span><span class="w"> </span>bash
+</pre></div>
+</div>
+</li>
+<li><p>clone PaddleCustomDevice</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/PaddlePaddle/PaddleCustomDevice.git
+</pre></div>
+</div>
+</li>
+<li><p>clone FlagCX</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/flagos-ai/FlagCX.git
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="compile-paddle-with-flagcx">
+<h2>Compile paddle with FlagCX<a class="headerlink" href="#compile-paddle-with-flagcx" title="Link to this heading">#</a></h2>
+<ol class="arabic">
+<li><p>cd into iluvatar_gpu directory</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>PaddleCustomDevice/backends/iluvatar_gpu
+</pre></div>
+</div>
+</li>
+<li><p>modify default build script to enable compiling with FlagCX</p>
+<ul class="simple">
+<li><p>In <code class="docutils literal notranslate"><span class="pre">build_paddle.sh</span></code>
+<a href="../_images/iluvatar_build_paddle.png" data-lightbox="image-set">
+<img alt="alt text" src="../_images/iluvatar_build_paddle.png" /></a>
+
+set <code class="docutils literal notranslate"><span class="pre">BUILD_WITH_FLAGCX=1</span></code> and the correct location for <code class="docutils literal notranslate"><span class="pre">FLAGCX_ROOT</span></code></p></li>
+<li><p>In <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>
+<a href="../_images/iluvatar_cmakelists.png" data-lightbox="image-set">
+<img alt="alt text" src="../_images/iluvatar_cmakelists.png" /></a>
+
+change <code class="docutils literal notranslate"><span class="pre">nccl</span></code> to <code class="docutils literal notranslate"><span class="pre">${FLAGCX_LIB}</span></code></p></li>
+</ul>
+</li>
+<li><p>run build script</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>build_paddle.sh
+</pre></div>
+</div>
+</li>
+<li><p>run install script</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>install_paddle.sh
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Note</strong>: To build Paddle with FlagCX on Iluvatar machines, we need to ensure that FlagCX is built before building Paddle</p>
+</section>
+<section id="train-model-using-paddle-flagcx">
+<h2>Train model using paddle + FlagCX<a class="headerlink" href="#train-model-using-paddle-flagcx" title="Link to this heading">#</a></h2>
+<p>We now support training ERNIE4.5 on Iluvatar machines using Paddle + FlagCX. Please refer to the following steps to get started</p>
+<ol class="arabic">
+<li><p>Get ERNIE-4.5-Lite model from huggingface</p>
+<p>ERNIE-4.5-Lite corresponds to ERNIE-4.5-21B-A3B-Paddle</p>
+</li>
+<li><p>clone ERNIE repo</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/PaddlePaddle/ERNIE.git
+</pre></div>
+</div>
+</li>
+<li><p>install dependencies</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>ERNIE
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements/gpu/requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p>create a training script; please refer to the training script below</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># Copyright (c) 2025 PaddlePaddle Authors. All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the "License");</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an "AS IS" BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="nb">unset</span><span class="w"> </span>PADDLE_TRAINERS_NUM
+<span class="nb">unset</span><span class="w"> </span>PADDLE_ELASTIC_JOB_ID
+<span class="nb">unset</span><span class="w"> </span>PADDLE_TRAINER_ENDPOINTS
+<span class="nb">unset</span><span class="w"> </span>DISTRIBUTED_TRAINER_ENDPOINTS
+<span class="nb">unset</span><span class="w"> </span>FLAGS_START_PORT
+<span class="nb">unset</span><span class="w"> </span>PADDLE_ELASTIC_TIMEOUT
+<span class="nb">export</span><span class="w"> </span><span class="nv">PADDLE_DISTRI_BACKEND</span><span class="o">=</span>xccl
+<span class="nb">export</span><span class="w"> </span><span class="nv">PADDLE_XCCL_BACKEND</span><span class="o">=</span>iluvatar_gpu
+<span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="k">)</span>/../../../..:<span class="nv">$PYTHONPATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGS_set_to_1d</span><span class="o">=</span>False
+<span class="nb">export</span><span class="w"> </span><span class="nv">NVIDIA_TF32_OVERRIDE</span><span class="o">=</span><span class="m">0</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGS_dataloader_use_file_descriptor</span><span class="o">=</span>False
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_SOCKET_IFNAME</span><span class="o">=</span>ens22f0,ens11f0np0
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_IB_HCA</span><span class="o">=</span>mlx5_101
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG</span><span class="o">=</span>TRACE
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_DEBUG_SUBSYS</span><span class="o">=</span>INIT
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGCX_ENABLE_TOPO_DETECT</span><span class="o">=</span>TRUE
+<span class="c1">#export GLOG_v=4</span>
+<span class="c1">#export FLAGS_call_stack_level=3</span>
+<span class="c1">#export LD_PRELOAD=/usr/local/corex-4.3.0/lib64/libcuda.so.1</span>
+
+<span class="nv">model_path</span><span class="o">=</span><span class="s2">"/workspace/ernie/ERNIE-4.5-Lite"</span>
+<span class="c1">#model_path="/workspace/ernie/ERNIE-4.5-21B-A3B-Paddle"</span>
+<span class="nv">task</span><span class="o">=</span><span class="s2">"sft_8k"</span>
+<span class="nv">paddle_log_dir</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">model_path</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">task</span><span class="si">}</span><span class="s2">_log"</span>
+<span class="nv">vdl_log_dir</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">model_path</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">task</span><span class="si">}</span><span class="s2">_vdl"</span>
+<span class="nv">output_dir</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">model_path</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">task</span><span class="si">}</span><span class="s2">_checkpoint"</span>
+
+rm<span class="w"> </span>-rf<span class="w"> </span><span class="si">${</span><span class="nv">paddle_log_dir</span><span class="si">}</span>
+
+python3<span class="w"> </span>-m<span class="w"> </span>paddle.distributed.launch<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--log_dir<span class="w"> </span><span class="si">${</span><span class="nv">paddle_log_dir</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--gpus<span class="w"> </span><span class="m">0</span>,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>../../../../examples/post-training/sft/train.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--logging_dir<span class="w"> </span><span class="si">${</span><span class="nv">vdl_log_dir</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_name_or_path<span class="w"> </span><span class="si">${</span><span class="nv">model_path</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--output_dir<span class="w"> </span><span class="si">${</span><span class="nv">output_dir</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--per_device_train_batch_size<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--per_device_eval_batch_size<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--train_dataset_path<span class="w"> </span><span class="s2">"/workspace/ernie/ERNIEKit-tianshu-new/examples/data/sft-train.jsonl"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--train_dataset_prob<span class="w"> </span><span class="s2">"0.8"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--train_dataset_type<span class="w"> </span><span class="s2">"erniekit"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--eval_dataset_path<span class="w"> </span><span class="s2">"/workspace/ernie/ERNIEKit-tianshu-new/examples/data/sft-eval.jsonl"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--train_dataset_prob<span class="w"> </span><span class="s2">"0.2"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--train_dataset_type<span class="w"> </span><span class="s2">"erniekit"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max_steps<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max_evaluate_steps<span class="w"> </span><span class="m">10000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--num_train_epochs<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--save_steps<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--logging_steps<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--eval_steps<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--weight_decay<span class="w"> </span><span class="m">0</span>.01<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--do_train<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--evaluation_strategy<span class="w"> </span>steps<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tensor_parallel_degree<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--pipeline_parallel_degree<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--sharding_parallel_degree<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--sharding<span class="w"> </span>stage1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max_seq_len<span class="w"> </span><span class="m">8192</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--seed<span class="w"> </span><span class="m">23</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--gradient_accumulation_steps<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--warmup_steps<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lr_scheduler_type<span class="w"> </span><span class="s2">"linear"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--learning_rate<span class="w"> </span>3e-4<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--num_samples_each_epoch<span class="w"> </span><span class="m">6000000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bf16<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--fp16_opt_level<span class="w"> </span>O2<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--amp_custom_white_list<span class="w"> </span><span class="s2">"lookup_table"</span><span class="w"> </span><span class="s2">"lookup_table_v2"</span><span class="w"> </span><span class="s2">"flash_attn"</span><span class="w"> </span><span class="s2">"matmul"</span><span class="w"> </span><span class="s2">"matmul_v2"</span><span class="w"> </span><span class="s2">"fused_gemm_epilogue"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--amp_custom_black_list<span class="w"> </span><span class="s2">"reduce_sum"</span><span class="w"> </span><span class="s2">"softmax_with_cross_entropy"</span><span class="w"> </span><span class="s2">"c_softmax_with_cross_entropy"</span><span class="w"> </span><span class="s2">"elementwise_div"</span><span class="w"> </span><span class="s2">"sin"</span><span class="w"> </span><span class="s2">"cos"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--disable_tqdm<span class="w"> </span>True<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--recompute<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--offload_optim<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--recompute_granularity<span class="w"> </span><span class="s2">"full"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dataloader_num_workers<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--distributed_dataloader<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--use_flash_attention<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--use_sparse_head_and_loss_fn<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--use_attn_mask_start_row_indices<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--use_sparse_flash_attn<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tensor_parallel_output<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--pipeline_parallel_config<span class="w"> </span><span class="s2">"disable_partial_send_recv enable_clear_every_step_cache disable_batch_p2p_comm"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--greedy_intokens<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lr_scheduler<span class="w"> </span>linear<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--sequence_parallel<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--release_grads<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--recompute_use_reentrant<span class="w"> </span>True<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--fuse_rope<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--device<span class="w"> </span>iluvatar_gpu<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--continue_training<span class="w"> </span>False<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--moe_group<span class="w"> </span><span class="s2">"mp"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lora<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--lora_rank<span class="w"> </span><span class="m">32</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--moe_multimodal_dispatch_use_allgather<span class="w"> </span><span class="s2">""</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--unified_checkpoint_config<span class="w"> </span><span class="s2">"async_save"</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="nvidia.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Guide for using paddle with FlagCX on nvidia GPU environment</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="kunlun.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Guide for using paddle with FlagCX on XPU machines</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-setup">Environment setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compile-paddle-with-flagcx">Compile paddle with FlagCX</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#train-model-using-paddle-flagcx">Train model using paddle + FlagCX</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagcx_zh/paddle/iluvatar.html">中文</a></body>
+</html>
