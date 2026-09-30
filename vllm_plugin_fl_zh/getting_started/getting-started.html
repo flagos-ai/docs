@@ -11,10 +11,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="getting_started/getting-started.html" />
 <meta property="og:site_name" content="KernelGen Documentation" />
-<meta property="og:description" content="本节介绍安装 vllm-plugin-FL 的要求，并指导您在不同硬件平台上安装 vllm、vllm-plugin-FL 以及运行推理任务。 要求- 软件要求, 支持的硬件平台, 支持的模型., 安装运行推理任务所需的软件- 从 Docker 镜像安装., 运行推理任务- 运行离线批量推理, 运行服务推理任务., 适配门禁测试- 测试矩阵, 运行门禁测试, 结果与质量检查.." />
+<meta property="og:description" content="本节介绍安装 vllm-plugin-FL 的要求，并指导您在不同硬件平台上安装 vllm、vllm-plugin-FL 以及运行推理任务。 要求- 软件要求, 支持的硬件平台, 支持的模型., 安装运行推理任务所需的软件- 从 Docker 镜像安装., 运行推理任务- 运行离线批量推理, 运行服务推理任务., 适配门禁测试- 测试矩阵, 运行门禁测试, 结果与质量检查., ARM CPU + empty vllm0.24.0+vllm-plugin-FL- 环境配置, 硬件环境, 软件环境, 安装流程, 模型准备, 测试执行流程, 测试命令, ARM 主机同时安装 GPU 或 NPU..." />
 <meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
 <meta property="og:image:alt" content="KernelGen Documentation" />
-<meta name="description" content="本节介绍安装 vllm-plugin-FL 的要求，并指导您在不同硬件平台上安装 vllm、vllm-plugin-FL 以及运行推理任务。 要求- 软件要求, 支持的硬件平台, 支持的模型., 安装运行推理任务所需的软件- 从 Docker 镜像安装., 运行推理任务- 运行离线批量推理, 运行服务推理任务., 适配门禁测试- 测试矩阵, 运行门禁测试, 结果与质量检查.." />
+<meta name="description" content="本节介绍安装 vllm-plugin-FL 的要求，并指导您在不同硬件平台上安装 vllm、vllm-plugin-FL 以及运行推理任务。 要求- 软件要求, 支持的硬件平台, 支持的模型., 安装运行推理任务所需的软件- 从 Docker 镜像安装., 运行推理任务- 运行离线批量推理, 运行服务推理任务., 适配门禁测试- 测试矩阵, 运行门禁测试, 结果与质量检查., ARM CPU + empty vllm0.24.0+vllm-plugin-FL- 环境配置, 硬件环境, 软件环境, 安装流程, 模型准备, 测试执行流程, 测试命令, ARM 主机同时安装 GPU 或 NPU..." />
 <meta name="twitter:card" content="summary_large_image" />
 
     <title>快速入门 &#8212; VLLM-Plugin-FL 文档中心</title>
@@ -70,7 +70,7 @@
     <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
     <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
     <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-    <script defer="defer" src="../_static/tippy/getting_started/getting-started.bc755eda-9692-427d-adbc-33bc77b8b5cd.js"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/getting-started.3450c755-ae38-48d7-9c9f-fbb967266c9d.js"></script>
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/getting-started';</script>
@@ -386,6 +386,7 @@
 <li class="toctree-l2"><a class="reference internal" href="install.html">安装运行推理任务所需的软件</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run-inference-task.html">运行推理任务</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adaptation-gate.html">适配门禁测试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html">ARM CPU + empty vllm0.24.0+vllm-plugin-FL</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../dispatch_user_guide/dispatch-user-guide.html">算子调度用户指南</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -576,6 +577,18 @@
 <li class="toctree-l2"><a class="reference internal" href="adaptation-gate.html#id2">测试矩阵</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adaptation-gate.html#id3">运行门禁测试</a></li>
 <li class="toctree-l2"><a class="reference internal" href="adaptation-gate.html#id4">结果与质量检查</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="arm-cpu-inference.html">ARM CPU + empty vllm0.24.0+vllm-plugin-FL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id1">环境配置</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id3">硬件环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id4">软件环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id5">安装流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id8">模型准备</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id9">测试执行流程</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id13">测试命令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#arm-gpu-npu">ARM 主机同时安装 GPU 或 NPU 时的行为</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arm-cpu-inference.html#id14">常见问题</a></li>
 </ul>
 </li>
 </ul>

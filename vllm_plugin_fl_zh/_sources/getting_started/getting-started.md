@@ -9,5 +9,6 @@ requirements.md
 install.md
 run-inference-task.md
 adaptation-gate.md
+arm-cpu-inference.md
 
 ```

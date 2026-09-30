@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"overview/overview.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">vllm-plugin-FL \u6982\u89c8<a class=\"headerlink\" href=\"#vllm-plugin-fl\" title=\"Link to this heading\">#</a></h1><p>vllm-plugin-FL \u662f <a class=\"reference external\" href=\"https://github.com/vllm-project/vllm\">vLLM</a> \u63a8\u7406/\u670d\u52a1\u6846\u67b6\u7684\u63d2\u4ef6\uff0c\u6784\u5efa\u5728 <a class=\"reference external\" href=\"https://flagos.io\">FlagOS</a> \u8fd9\u4e00\u7edf\u4e00\u7684\u5f00\u6e90 AI \u7cfb\u7edf\u8f6f\u4ef6\u6808\u4e4b\u4e0a\u3002vllm-plugin-FL \u6269\u5c55\u4e86 vLLM \u5728\u591a\u79cd\u786c\u4ef6\u73af\u5883\u4e0b\u7684\u80fd\u529b\u4e0e\u6027\u80fd\u3002\u5728\u4e0d\u6539\u53d8 vLLM \u539f\u6709\u63a5\u53e3\u548c\u4f7f\u7528\u65b9\u5f0f\u7684\u524d\u63d0\u4e0b\uff0c\u540c\u4e00\u6761\u547d\u4ee4\u5373\u53ef\u5728\u4e0d\u540c\u82af\u7247\u4e0a\u8fd0\u884c\u6a21\u578b\u63a8\u7406/\u670d\u52a1\u3002vllm-plugin-FL \u53ef\u4e0e FlagOS \u7684\u5176\u4ed6\u7ec4\u4ef6\u914d\u5408\u4f7f\u7528\uff0c\u5305\u62ec\u7edf\u4e00\u7b97\u5b50\u5e93 <a class=\"reference external\" href=\"https://github.com/flagos-ai/FlagGems\">FlagGems</a>\u3001\u7edf\u4e00\u901a\u4fe1\u5e93 <a class=\"reference external\" href=\"https://github.com/flagos-ai/FlagCX\">FlagCX</a> \u548c\u7edf\u4e00\u7f16\u8bd1\u5668 <a class=\"reference external\" href=\"https://github.com/flagos-ai/FlagTree\">FlagTree</a>\u3002</p><p>vllm-plugin-FL \u901a\u8fc7 Docker \u955c\u50cf\u5b89\u88c5\uff0c\u968f\u540e\u5728\u76ee\u6807\u82af\u7247\u4e0a\u628a vLLM \u4e0e FlagOS \u7684\u7b97\u5b50\u5e93\u3001\u901a\u4fe1\u5e93\u548c\u7f16\u8bd1\u5668\u6808\u96c6\u6210\u8d77\u6765\u3002\u5b89\u88c5\u6d41\u7a0b\u53c2\u89c1<a class=\"reference internal\" href=\"getting_started/getting-started.html\"><span class=\"std std-doc\">\u5feb\u901f\u5165\u95e8</span></a>\uff0c\u63d2\u4ef6\u63d0\u4f9b\u7684\u80fd\u529b\u53c2\u89c1<a class=\"reference internal\" href=\"overview/features.html\"><span class=\"std std-doc\">\u7279\u6027</span></a>\u3002</p>", "a[href=\"getting_started/getting-started.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u5feb\u901f\u5165\u95e8<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><p>\u672c\u8282\u4ecb\u7ecd\u5b89\u88c5 vllm-plugin-FL \u7684\u8981\u6c42\uff0c\u5e76\u6307\u5bfc\u60a8\u5728\u4e0d\u540c\u786c\u4ef6\u5e73\u53f0\u4e0a\u5b89\u88c5 vllm\u3001vllm-plugin-FL \u4ee5\u53ca\u8fd0\u884c\u63a8\u7406\u4efb\u52a1\u3002</p>", "a[href=\"#vllm-plugin-fl\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">vllm-plugin-FL \u6587\u6863<a class=\"headerlink\" href=\"#vllm-plugin-fl\" title=\"Link to this heading\">#</a></h1><p><a class=\"sd-sphinx-override sd-btn sd-text-wrap sd-btn-primary sd-btn-lg sd-px-4 sd-py-2 sd-fw-bold reference internal\" href=\"getting_started/getting-started.html\"><span class=\"doc std std-doc\">\u5feb\u901f\u5165\u95e8</span></a></p>", "a[href=\"dispatch_user_guide/dispatch-user-guide.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u7b97\u5b50\u8c03\u5ea6\u7528\u6237\u6307\u5357<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><p>\u672c\u6307\u5357\u4ecb\u7ecd\u5982\u4f55\u4f7f\u7528\u7b97\u5b50\u8c03\u5ea6\u7cfb\u7edf\uff0c\u8be5\u7cfb\u7edf\u5728 FlagGems\u3001\u5382\u5546\u7279\u5b9a\u5b9e\u73b0\u548c PyTorch \u53c2\u8003\u5b9e\u73b0\u4e4b\u95f4\u8fdb\u884c\u9009\u62e9\u3002\u9009\u62e9\u9075\u5faa\u4f18\u5148\u7ea7\u5c42\u7ea7\uff0c\u4ece\u9ad8\u5230\u4f4e\uff1a</p>", "a[href=\"reference/dispatch-api-reference.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u8c03\u5ea6 API \u53c2\u8003<a class=\"headerlink\" href=\"#api\" title=\"Link to this heading\">#</a></h1><h2>\u4fbf\u6377\u51fd\u6570<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h2>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

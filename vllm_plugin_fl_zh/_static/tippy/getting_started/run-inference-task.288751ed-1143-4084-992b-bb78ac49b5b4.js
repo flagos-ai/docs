@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"adaptation-gate.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u9002\u914d\u95e8\u7981\u6d4b\u8bd5<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><p>\u9002\u914d\u95e8\u7981\uff08adaptation gate\uff09\u662f vllm-plugin-FL \u4ed3\u5e93\u4e2d <code class=\"docutils literal notranslate\"><span class=\"pre\">tools/adaptation-gate-cases</span></code> \u4e0b\u7684\u4e00\u5957\u5c0f\u578b\u624b\u5de5\u6d4b\u8bd5\uff0c\u7528\u4e8e\u52a0\u901f\u5668\u9002\u914d\u548c vLLM \u63d2\u4ef6\u5347\u7ea7\u9a8c\u8bc1\uff0c\u8986\u76d6\u5fc5\u9700\u6a21\u578b\u5728 eager \u4e0e graph \u4e24\u79cd\u6a21\u5f0f\u4e0b\u7684\u6587\u672c\u3001\u56fe\u50cf\u4ee5\u53ca\u6587\u672c\u56fe\u50cf\u6df7\u5408\u8bf7\u6c42\u3002</p><p>\u6d4b\u8bd5\u7528\u4f8b\u672c\u8eab\u7ef4\u62a4\u5728\u4ed3\u5e93\u4e2d\uff1a<a class=\"reference external\" href=\"https://github.com/flagos-ai/vllm-plugin-FL/tree/main/tools/adaptation-gate-cases\">tools/adaptation-gate-cases</a>\u3002</p>", "a[href=\"#id1\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u8fd0\u884c\u63a8\u7406\u4efb\u52a1<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><p><a class=\"reference internal\" href=\"install.html\"><span class=\"std std-doc\">\u5b89\u88c5</span></a>\u597d vLLM \u548c vllm-plugin-FL \u540e\uff0c\u60a8\u53ef\u4ee5\u901a\u8fc7\u4e24\u79cd\u65b9\u5f0f\u8fd0\u884c\u63a8\u7406\uff1a\u79bb\u7ebf\u6279\u91cf\u63a8\u7406\uff08\u5728 Python \u811a\u672c\u4e2d\u76f4\u63a5\u52a0\u8f7d\u6a21\u578b\uff09\u6216\u670d\u52a1\u63a8\u7406\uff08\u542f\u52a8 API \u670d\u52a1\u5668\u5e76\u53d1\u9001\u8bf7\u6c42\uff09\u3002\u8bf7\u9009\u62e9\u9002\u5408\u60a8\u7528\u4f8b\u7684\u65b9\u5f0f\u3002</p>", "a[href=\"#run-a-serving-inference-task\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u8fd0\u884c\u670d\u52a1\u63a8\u7406\u4efb\u52a1<a class=\"headerlink\" href=\"#run-a-serving-inference-task\" title=\"Link to this heading\">#</a></h2><p>\u670d\u52a1\u63a8\u7406\u542f\u52a8\u4e00\u4e2a\u957f\u671f\u8fd0\u884c\u7684 vLLM API \u670d\u52a1\u5668\uff0c\u5c06\u6a21\u578b\u4fdd\u6301\u5728\u5185\u5b58\u4e2d\uff0c\u901a\u8fc7\u517c\u5bb9 OpenAI \u7684 HTTP \u7aef\u70b9\u63a5\u53d7\u8bf7\u6c42\u2014\u2014\u975e\u5e38\u9002\u5408\u5728\u7ebf\u670d\u52a1\u548c\u5e76\u53d1\u5ba2\u6237\u7aef\u3002</p><p>\u7531\u4e8e\u8fd9\u662f\u672c\u5730\u90e8\u7f72\uff0c\u4e0d\u9700\u8981 API \u5bc6\u94a5\u3002\u5c06 <code class=\"docutils literal notranslate\"><span class=\"pre\">api_key</span></code> \u8bbe\u7f6e\u4e3a\u4efb\u610f\u503c\uff08\u4f8b\u5982 <code class=\"docutils literal notranslate\"><span class=\"pre\">\"EMPTY\"</span></code>\uff09\u2014\u2014\u4e0d\u4f1a\u6d88\u8017\u4efb\u4f55 token\u3002</p>", "a[href=\"#id2\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u8fd0\u884c\u79bb\u7ebf\u6279\u91cf\u63a8\u7406<a class=\"headerlink\" href=\"#id2\" title=\"Link to this heading\">#</a></h2><p>\u79bb\u7ebf\u6279\u91cf\u63a8\u7406\u5728 Python \u811a\u672c\u4e2d\u76f4\u63a5\u52a0\u8f7d\u6a21\u578b\uff0c\u5e76\u5728\u5355\u6b21\u8fd0\u884c\u4e2d\u4e3a\u4e00\u6279\u63d0\u793a\u8bcd\u751f\u6210\u8f93\u51fa\u2014\u2014\u65e0\u9700\u8bbe\u7f6e\u670d\u52a1\u5668\u3002</p>", "a[href=\"install.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u5b89\u88c5\u8fd0\u884c\u63a8\u7406\u4efb\u52a1\u6240\u9700\u7684\u8f6f\u4ef6<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><h2>\u4ece Docker \u955c\u50cf\u5b89\u88c5<a class=\"headerlink\" href=\"#docker\" title=\"Link to this heading\">#</a></h2><p>vllm-plugin-FL \u901a\u8fc7\u9884\u6784\u5efa\u7684 Docker \u955c\u50cf\u5b89\u88c5\u3002\u53d7\u652f\u6301\u7684\u7248\u672c\u4e0e\u786c\u4ef6\u5e73\u53f0\u89c1<a class=\"reference internal\" href=\"requirements.html\"><span class=\"std std-doc\">\u8981\u6c42</span></a>\u3002</p>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};

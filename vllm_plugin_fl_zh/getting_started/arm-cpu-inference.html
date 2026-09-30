@@ -1,0 +1,1277 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="ARM CPU + empty vllm0.24.0+vllm-plugin-FL" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="getting_started/arm-cpu-inference.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="本文说明如何在 ARM64 CPU 上从源码安装 vLLM 0.24.0、vllm-plugin-FL、FlagGems 和 flagtree-cpu，并使用 MiniCPM-2B 完成一次轻量文本推理验证。 vllm-plugin-FL 负责 vLLM 插件注册、ARM CPU platform 选择、packed checkpoint 接入以及 Qwen GDN 的 CPU 兼容处理；FlagGems 提供 W4A8-G128 权重打包和 Triton kernel；flagtree-cpu 将 Triton 程序编译到 ARM CPU。 MiniCPM-2B 使用 BF16 权重，..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="本文说明如何在 ARM64 CPU 上从源码安装 vLLM 0.24.0、vllm-plugin-FL、FlagGems 和 flagtree-cpu，并使用 MiniCPM-2B 完成一次轻量文本推理验证。 vllm-plugin-FL 负责 vLLM 插件注册、ARM CPU platform 选择、packed checkpoint 接入以及 Qwen GDN 的 CPU 兼容处理；FlagGems 提供 W4A8-G128 权重打包和 Triton kernel；flagtree-cpu 将 Triton 程序编译到 ARM CPU。 MiniCPM-2B 使用 BF16 权重，..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>ARM CPU + empty vllm0.24.0+vllm-plugin-FL &#8212; VLLM-Plugin-FL 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/arm-cpu-inference.831e540d-7fec-4ca1-b487-20b67cf3c6b2.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/arm-cpu-inference';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/getting_started/arm-cpu-inference.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="算子调度用户指南" href="../dispatch_user_guide/dispatch-user-guide.html" />
+    <link rel="prev" title="适配门禁测试" href="adaptation-gate.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 30, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="VLLM-Plugin-FL 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="VLLM-Plugin-FL 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    vllm-plugin-FL 文档
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../overview/overview.html">vllm-plugin-FL 概览</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../overview/features.html">特性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../overview/operator-dispatch-mechanism.html">算子调度机制</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="getting-started.html">快速入门</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="requirements.html">要求</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html">安装运行推理任务所需的软件</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run-inference-task.html">运行推理任务</a></li>
+<li class="toctree-l2"><a class="reference internal" href="adaptation-gate.html">适配门禁测试</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">ARM CPU + empty vllm0.24.0+vllm-plugin-FL</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../dispatch_user_guide/dispatch-user-guide.html">算子调度用户指南</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/quick-start.html">快速开始</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-backend-selection.html">配置后端选择</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/configure-policy.html">策略上下文管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dispatch_user_guide/add-ops-and-vendors.html">添加新算子和厂商后端</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📖 参考文档</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/dispatch-api-reference.html">调度 API 参考</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/getting_started/arm-cpu-inference.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>ARM CPU + empty vllm0.24.0+vllm-plugin-FL</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">环境配置</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">运行前检查</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos">macOS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-arm64">Linux ARM64</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">硬件环境</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">软件环境</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">安装流程</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">1. 创建 Python 环境</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2. 下载并固定源码版本</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">3. 安装 Python 依赖</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree-cpu-triton-3-7-2">4. 构建 flagtree-cpu / Triton 3.7.2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-0-24-0-cpu">5. 构建 vLLM 0.24.0 CPU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems-vllm-plugin-fl">6. 安装 FlagGems 和 vllm-plugin-FL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpu-platform">7. 验证插件和 CPU platform</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">模型准备</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">测试执行流程</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems-w4a8">1. 执行 FlagGems W4A8 数值测试</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-plugin-fl-arm">2. 执行 vllm-plugin-FL ARM 接口测试</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">3. 启动文本服务</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">4. 执行文本请求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">5. 停止服务</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">测试命令</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eager">eager 模式（已验证）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arm-gpu-npu">ARM 主机同时安装 GPU 或 NPU 时的行为</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">常见问题</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">插件没有加载</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems">FlagGems 导入失败</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpuplatform">平台不是 CpuPlatform</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos-openmp">macOS 找不到 OpenMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">首次请求长时间没有返回</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">内存不足</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="arm-cpu-empty-vllm0-24-0-vllm-plugin-fl">
+<h1>ARM CPU + empty vllm0.24.0+vllm-plugin-FL<a class="headerlink" href="#arm-cpu-empty-vllm0-24-0-vllm-plugin-fl" title="Link to this heading">#</a></h1>
+<p>本文说明如何在 ARM64 CPU 上从源码安装 vLLM 0.24.0、vllm-plugin-FL、FlagGems 和 flagtree-cpu，并使用 MiniCPM-2B 完成一次轻量文本推理验证。</p>
+<p>vllm-plugin-FL 负责 vLLM 插件注册、ARM CPU platform 选择、packed checkpoint 接入以及 Qwen GDN 的 CPU 兼容处理；FlagGems 提供 W4A8-G128 权重打包和 Triton kernel；flagtree-cpu 将 Triton 程序编译到 ARM CPU。</p>
+<p>MiniCPM-2B 使用 BF16 权重，不经过本 PR 新增的 packed W4A8 或 Qwen GDN 路径。因此，小模型用于验证安装、插件注册、CPU platform 和基础生成；W4A8 接口及 kernel 正确性由后文的专项测试验证。</p>
+<section id="id1">
+<h2>环境配置<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<section id="id2">
+<h3>运行前检查<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>先确认主机架构为 <code class="docutils literal notranslate"><span class="pre">arm64</span></code> 或 <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uname<span class="w"> </span>-m
+</pre></div>
+</div>
+<p>MiniCPM-2B 模型包含两个 safetensors 权重分片，下载量约 4 GB。运行时还需要额外内存加载权重并创建 KV cache；如果资源不足，应缩短本文的最大上下文长度，不要把模型加载失败解释为插件注册失败。</p>
+</section>
+<section id="macos">
+<h3>macOS<a class="headerlink" href="#macos" title="Link to this heading">#</a></h3>
+<p>macOS 需要 Apple Silicon、Xcode Command Line Tools、Homebrew 和 Python 3.11：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>xcode-select<span class="w"> </span>--install
+brew<span class="w"> </span>install<span class="w"> </span>python@3.11<span class="w"> </span>cmake<span class="w"> </span>ninja<span class="w"> </span>libomp<span class="w"> </span>uv<span class="w"> </span>git
+
+xcode-select<span class="w"> </span>-p
+clang<span class="w"> </span>--version
+brew<span class="w"> </span>--prefix<span class="w"> </span>libomp
+</pre></div>
+</div>
+<p>如果 Command Line Tools 已安装，<code class="docutils literal notranslate"><span class="pre">xcode-select</span> <span class="pre">--install</span></code> 会提示无需重复安装。</p>
+</section>
+<section id="linux-arm64">
+<h3>Linux ARM64<a class="headerlink" href="#linux-arm64" title="Link to this heading">#</a></h3>
+<p>以下依赖命令适用于 Debian/Ubuntu。vLLM 0.24.0 的 ARM CPU 源码构建要求 NEON，并建议使用 GCC/G++ 12.3 或更高版本。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>--no-install-recommends<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>build-essential<span class="w"> </span>ccache<span class="w"> </span>cmake<span class="w"> </span>ninja-build<span class="w"> </span>git<span class="w"> </span>curl<span class="w"> </span>wget<span class="w"> </span>ca-certificates<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>gcc-12<span class="w"> </span>g++-12<span class="w"> </span>libtcmalloc-minimal4<span class="w"> </span>libnuma-dev<span class="w"> </span>python3.11-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>python3.11-venv<span class="w"> </span>ffmpeg<span class="w"> </span>libsm6<span class="w"> </span>libxext6<span class="w"> </span>libgl1<span class="w"> </span>jq<span class="w"> </span>lsof
+
+sudo<span class="w"> </span>update-alternatives<span class="w"> </span>--install<span class="w"> </span>/usr/bin/gcc<span class="w"> </span>gcc<span class="w"> </span>/usr/bin/gcc-12<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--slave<span class="w"> </span>/usr/bin/g++<span class="w"> </span>g++<span class="w"> </span>/usr/bin/g++-12
+
+uname<span class="w"> </span>-m
+gcc<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Linux 使用 vLLM CPU wheel 时通常还需要预加载 TCMalloc。本文后续采用源码构建；如果部署环境启用了 TCMalloc，应使用系统实际路径，不要把其他机器的绝对路径复制过来。与参考 GPU 接入文档不同，本文不提供 Docker 路径：vLLM 0.24.0 没有可直接用于本文的 macOS ARM64 CPU 镜像，现有 Linux ARM64 镜像也不包含这两个待合入 PR。当前可复现入口是下文的固定 commit 源码构建。</p>
+</section>
+</section>
+<section id="id3">
+<h2>硬件环境<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>项目</p></th>
+<th class="head"><p>Mac</p></th>
+<th class="head"><p>CIX P1</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>芯片平台</p></td>
+<td><p>Apple Silicon</p></td>
+<td><p>CIX P1</p></td>
+</tr>
+<tr class="row-odd"><td><p>CPU</p></td>
+<td><p>Apple M5 Pro</p></td>
+<td><p>CIX P1 ARM CPU</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU 核数</p></td>
+<td><p>18</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-odd"><td><p>内存</p></td>
+<td><p>64 GiB</p></td>
+<td><p>32G</p></td>
+</tr>
+<tr class="row-even"><td><p>操作系统</p></td>
+<td><p>macOS 26.5.1</p></td>
+<td><p>Debian 13</p></td>
+</tr>
+<tr class="row-odd"><td><p>架构</p></td>
+<td><p>arm64</p></td>
+<td><p>aarch64</p></td>
+</tr>
+<tr class="row-even"><td><p>验证范围</p></td>
+<td><p>W4A8 单测、插件单测、MiniCPM-2B 权重加载与 HTTP 短生成</p></td>
+<td><p>W4A8 实际执行、构建与动态链接、插件注册和 CPU platform</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id4">
+<h2>软件环境<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>组件</p></th>
+<th class="head"><p>版本或 commit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p>3.11.16</p></td>
+</tr>
+<tr class="row-odd"><td><p>PyTorch</p></td>
+<td><p>2.11.0</p></td>
+</tr>
+<tr class="row-even"><td><p>vLLM</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">v0.24.0</span></code> / <code class="docutils literal notranslate"><span class="pre">ee0da84ab9e04ac7610e28580af62c365e898389</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>transformers</p></td>
+<td><p>5.15.1</p></td>
+</tr>
+<tr class="row-even"><td><p>compressed-tensors</p></td>
+<td><p>0.17.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>flagtree-cpu</p></td>
+<td><p><a class="github reference external" href="https://github.com/flagos-ai/flagtree-cpu/tree/triton_v3.7.x">flagos-ai/flagtree-cpu</a></p></td>
+</tr>
+<tr class="row-even"><td><p>FlagGems</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">1fda4b11ae528c02ae5187cda551af4a61a514c5</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>vllm-plugin-FL</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">58a690b2ac03af5fb26c1dc37533212ed8ef6976</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>相关评审链接：</p>
+<ul class="simple">
+<li><p>FlagGems：<a class="github reference external" href="https://github.com/flagos-ai/FlagGems/pull/5904">flagos-ai/FlagGems#5904</a> 已经合入</p></li>
+<li><p>vllm-plugin-FL：<a class="github reference external" href="https://github.com/flagos-ai/vllm-plugin-FL/pull/433">flagos-ai/vllm-plugin-FL#433</a></p></li>
+</ul>
+<p>当前插件加载依赖 FlagGems；其中 Qwen packed W4A8 adapter 会直接调用 FlagGems 的 <code class="docutils literal notranslate"><span class="pre">pack_rhs_qsi4c128p()</span></code> 和 <code class="docutils literal notranslate"><span class="pre">w4a8_g128_linear()</span></code>。因此，本文路径必须先安装包含 <code class="docutils literal notranslate"><span class="pre">724a6276</span></code> 的 FlagGems 版本，再安装 vllm-plugin-FL。</p>
+</section>
+<section id="id5">
+<h2>安装流程<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>以下命令使用一个全新的工作目录，避免加载系统中已有的 vLLM、Triton、FlagGems 或插件。</p>
+<section id="python">
+<h3>1. 创建 Python 环境<a class="headerlink" href="#python" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">WORK_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">/arm64-vllm024"</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">"</span>
+<span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">"</span>
+
+<span class="c1"># macOS</span>
+uv<span class="w"> </span>venv<span class="w"> </span>--python<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>python@3.11<span class="k">)</span><span class="s2">/bin/python3.11"</span><span class="w"> </span>.venv
+
+<span class="c1"># Linux ARM64 使用下面一行替代上一行</span>
+<span class="c1"># uv venv --python python3.11 .venv</span>
+
+<span class="nb">source</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/.venv/bin/activate"</span>
+python<span class="w"> </span>-VV
+python<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import platform; print(platform.machine())'</span>
+</pre></div>
+</div>
+<p>预期 Python 为 3.11，架构为 <code class="docutils literal notranslate"><span class="pre">arm64</span></code> 或 <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>。</p>
+</section>
+<section id="id6">
+<h3>2. 下载并固定源码版本<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">"</span>
+
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>v0.24.0<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://github.com/vllm-project/vllm.git
+git<span class="w"> </span>-C<span class="w"> </span>vllm<span class="w"> </span>checkout<span class="w"> </span>ee0da84ab9e04ac7610e28580af62c365e898389
+
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>triton_v3.7.x<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://github.com/flagos-ai/flagtree-cpu.git
+git<span class="w"> </span>-C<span class="w"> </span>flagtree-cpu<span class="w"> </span>checkout<span class="w"> </span>77433cf0534d0cddf8717da654628f3f9e48cea9
+
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>arm64-cpu-upstream<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://github.com/kevinzs2048/FlagGems.git
+git<span class="w"> </span>-C<span class="w"> </span>FlagGems<span class="w"> </span>checkout<span class="w"> </span>1fda4b11ae528c02ae5187cda551af4a61a514c5
+
+git<span class="w"> </span>clone<span class="w"> </span>--branch<span class="w"> </span>arm64-cpu-upstream<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>https://github.com/kevinzs2048/vllm-plugin-FL.git
+git<span class="w"> </span>-C<span class="w"> </span>vllm-plugin-FL<span class="w"> </span>checkout<span class="w"> </span>58a690b2ac03af5fb26c1dc37533212ed8ef6976
+</pre></div>
+</div>
+<p>逐项确认实际 checkout：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>-C<span class="w"> </span>vllm<span class="w"> </span>rev-parse<span class="w"> </span>HEAD
+git<span class="w"> </span>-C<span class="w"> </span>flagtree-cpu<span class="w"> </span>rev-parse<span class="w"> </span>HEAD
+git<span class="w"> </span>-C<span class="w"> </span>FlagGems<span class="w"> </span>rev-parse<span class="w"> </span>HEAD
+git<span class="w"> </span>-C<span class="w"> </span>vllm-plugin-FL<span class="w"> </span>rev-parse<span class="w"> </span>HEAD
+</pre></div>
+</div>
+<p>四行输出应分别等于上面固定的四个完整 commit ID。PR 合入后，社区可以改用官方仓库的合入 commit；在此之前，不应把浮动的 <code class="docutils literal notranslate"><span class="pre">master</span></code> 或 <code class="docutils literal notranslate"><span class="pre">main</span></code> 当作本文验证版本。</p>
+</section>
+<section id="id7">
+<h3>3. 安装 Python 依赖<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>建立约束文件：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/constraints.txt"</span><span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<span class="s">torch==2.11.0</span>
+<span class="s">torchaudio==2.11.0</span>
+<span class="s">torchvision==0.26.0</span>
+<span class="s">transformers==5.15.1</span>
+<span class="s">tokenizers==0.22.2</span>
+<span class="s">compressed-tensors==0.17.0</span>
+<span class="s">numpy==2.3.5</span>
+<span class="s">numba==0.65.0</span>
+<span class="s">llvmlite==0.47.0</span>
+<span class="s">safetensors==0.8.0</span>
+<span class="s">sqlalchemy==2.0.48</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>安装 vLLM CPU 依赖和构建工具：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">"</span>
+
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-r<span class="w"> </span>vllm/requirements/cpu.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--constraint<span class="w"> </span>constraints.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--index-strategy<span class="w"> </span>unsafe-best-match
+
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'cmake==4.4.2'</span><span class="w"> </span><span class="s1">'ninja==1.13.0'</span><span class="w"> </span><span class="s1">'pybind11==3.0.3'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'setuptools==77.0.3'</span><span class="w"> </span><span class="s1">'setuptools-scm==9.2.0'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'setuptools-rust==1.13.0'</span><span class="w"> </span><span class="s1">'scikit-build-core==0.12.2'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'sqlalchemy==2.0.48'</span><span class="w"> </span>pytest<span class="w"> </span>openai<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--constraint<span class="w"> </span>constraints.txt
+</pre></div>
+</div>
+</section>
+<section id="flagtree-cpu-triton-3-7-2">
+<h3>4. 构建 flagtree-cpu / Triton 3.7.2<a class="headerlink" href="#flagtree-cpu-triton-3-7-2" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">"</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>uname<span class="w"> </span>-s<span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Darwin"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">BUILD_JOBS</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>sysctl<span class="w"> </span>-n<span class="w"> </span>hw.ncpu<span class="k">)</span><span class="s2">"</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">TRITON_LOCAL_LIBOMP_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>libomp<span class="k">)</span><span class="s2">"</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">BUILD_JOBS</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2">"</span>
+<span class="k">fi</span>
+
+<span class="nv">TRITON_HOME</span><span class="o">=</span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/.triton-build"</span><span class="w"> </span><span class="se">\</span>
+<span class="nv">TRITON_BUILD_PROTON</span><span class="o">=</span>OFF<span class="w"> </span><span class="se">\</span>
+<span class="nv">MAX_JOBS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$BUILD_JOBS</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--constraint<span class="w"> </span>constraints.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--editable<span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/flagtree-cpu"</span>
+</pre></div>
+</div>
+<p>验证当前 Python 加载的是刚安装的 flagtree-cpu：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">from pathlib import Path</span>
+<span class="s">import triton</span>
+
+<span class="s">print("Triton version:", triton.__version__)</span>
+<span class="s">print("Triton path:", Path(triton.__file__).resolve())</span>
+<span class="s">assert triton.__version__ == "3.7.2"</span>
+<span class="s">assert "flagtree-cpu" in str(Path(triton.__file__).resolve())</span>
+<span class="s">PY</span>
+</pre></div>
+</div>
+</section>
+<section id="vllm-0-24-0-cpu">
+<h3>5. 构建 vLLM 0.24.0 CPU<a class="headerlink" href="#vllm-0-24-0-cpu" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">"</span>
+
+<span class="nv">VLLM_TARGET_DEVICE</span><span class="o">=</span>cpu<span class="w"> </span><span class="se">\</span>
+<span class="nv">VLLM_VERSION_OVERRIDE</span><span class="o">=</span><span class="m">0</span>.24.0+cpu<span class="w"> </span><span class="se">\</span>
+<span class="nv">MAX_JOBS</span><span class="o">=</span><span class="s2">"</span><span class="nv">$BUILD_JOBS</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--constraint<span class="w"> </span>constraints.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--editable<span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/vllm"</span>
+</pre></div>
+</div>
+<p>验证版本与构建类型：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">import vllm</span>
+
+<span class="s">print(vllm.__version__)</span>
+<span class="s">print(vllm.__file__)</span>
+<span class="s">assert vllm.__version__ == "0.24.0+cpu"</span>
+<span class="s">PY</span>
+</pre></div>
+</div>
+</section>
+<section id="flaggems-vllm-plugin-fl">
+<h3>6. 安装 FlagGems 和 vllm-plugin-FL<a class="headerlink" href="#flaggems-vllm-plugin-fl" title="Link to this heading">#</a></h3>
+<p>ARM CPU 接入是 Python 路径，不需要设置 <code class="docutils literal notranslate"><span class="pre">VLLM_VENDOR=arm</span></code>。如果当前 shell 继承过其他硬件后端的配置，应先清除它。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">"</span>
+<span class="nb">unset</span><span class="w"> </span>VLLM_VENDOR
+
+<span class="nv">FLAGGEMS_VENDOR</span><span class="o">=</span>arm<span class="w"> </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--constraint<span class="w"> </span>constraints.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--editable<span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/FlagGems"</span>
+
+uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-build-isolation<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--constraint<span class="w"> </span>constraints.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--editable<span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/vllm-plugin-FL"</span>
+</pre></div>
+</div>
+</section>
+<section id="cpu-platform">
+<h3>7. 验证插件和 CPU platform<a class="headerlink" href="#cpu-platform" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">VLLM_PLUGINS</span></code> 是 vLLM 官方提供的插件过滤变量。<code class="docutils literal notranslate"><span class="pre">VLLM_PLUGINS=fl</span></code> 表示只加载名为 <code class="docutils literal notranslate"><span class="pre">fl</span></code> 的已安装插件；它不负责识别 ARM，也不能替代 <code class="docutils literal notranslate"><span class="pre">FLAGGEMS_VENDOR=arm</span></code>。</p>
+<p><code class="docutils literal notranslate"><span class="pre">FLAGGEMS_VENDOR=arm</span></code> 必须在当前进程第一次导入 <code class="docutils literal notranslate"><span class="pre">flag_gems</span></code>、<code class="docutils literal notranslate"><span class="pre">vllm_fl</span></code> 或 <code class="docutils literal notranslate"><span class="pre">vllm</span></code> 之前设置：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">FLAGGEMS_VENDOR</span><span class="o">=</span>arm
+<span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_PLUGINS</span><span class="o">=</span>fl
+
+python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">from pathlib import Path</span>
+<span class="s">import platform</span>
+<span class="s">import flag_gems</span>
+<span class="s">import vllm</span>
+<span class="s">import vllm_fl</span>
+<span class="s">from vllm.platforms import current_platform</span>
+
+<span class="s">print("machine:", platform.machine())</span>
+<span class="s">print("platform:", type(current_platform).__module__ + "." +</span>
+<span class="s">      type(current_platform).__name__)</span>
+<span class="s">print("device_type:", current_platform.device_type)</span>
+<span class="s">print("FlagGems vendor:", flag_gems.vendor_name)</span>
+<span class="s">print("vLLM:", Path(vllm.__file__).resolve())</span>
+<span class="s">print("vllm-plugin-FL:", Path(vllm_fl.__file__).resolve())</span>
+<span class="s">print("FlagGems:", Path(flag_gems.__file__).resolve())</span>
+
+<span class="s">assert platform.machine().lower() in {"arm64", "aarch64"}</span>
+<span class="s">assert current_platform.device_type == "cpu"</span>
+<span class="s">assert flag_gems.vendor_name == "arm"</span>
+<span class="s">PY</span>
+</pre></div>
+</div>
+<p>预期关键结果为：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>machine: arm64 或 aarch64
+platform: vllm.platforms.cpu.CpuPlatform
+device_type: cpu
+FlagGems vendor: arm
+</pre></div>
+</div>
+<p>三个模块路径都应指向当前 <code class="docutils literal notranslate"><span class="pre">WORK_DIR</span></code> 下的源码目录。如果路径指向另一个虚拟环境或旧 checkout，应先解决环境污染，再继续测试。</p>
+</section>
+</section>
+<section id="id8">
+<h2>模型准备<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<p>本文使用 ModelScope 上的 MiniCPM-2B。下载命令使用 ModelScope 1.39.1 CLI：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">MODEL_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/models/Qwen3-1.7B"</span>
+mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$MODEL_DIR</span><span class="s2">"</span>
+
+uv<span class="w"> </span>tool<span class="w"> </span>run<span class="w"> </span>--from<span class="w"> </span><span class="s1">'modelscope==1.39.1'</span><span class="w"> </span>modelscope<span class="w"> </span>download<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>Qwen/Qwen3-1.7B<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--revision<span class="w"> </span>master<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--local-dir<span class="w"> </span><span class="s2">"</span><span class="nv">$MODEL_DIR</span><span class="s2">"</span>
+</pre></div>
+</div>
+<p>下载完成后确认模型配置及 index 引用的权重分片完整：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$MODEL_DIR</span><span class="s2">"</span>
+python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">import json</span>
+<span class="s">from pathlib import Path</span>
+
+<span class="s">root = Path.cwd()</span>
+<span class="s">config = json.loads((root / "config.json").read_text())</span>
+<span class="s">index = json.loads((root / "model.safetensors.index.json").read_text())</span>
+<span class="s">files = sorted(set(index["weight_map"].values()))</span>
+<span class="s">missing = [</span>
+<span class="s">    name for name in files</span>
+<span class="s">    if not (root / name).is_file() or (root / name).stat().st_size == 0</span>
+<span class="s">]</span>
+
+<span class="s">print("architecture:", config["architectures"])</span>
+<span class="s">print("dtype:", config["torch_dtype"])</span>
+<span class="s">print("weight files:", len(files))</span>
+<span class="s">print("missing files:", missing)</span>
+
+<span class="s">assert config["model_type"] == "qwen3"</span>
+<span class="s">assert config["architectures"] == ["Qwen3ForCausalLM"]</span>
+<span class="s">assert config["torch_dtype"] == "bfloat16"</span>
+<span class="s">assert "quantization_config" not in config</span>
+<span class="s">assert not missing</span>
+<span class="s">PY</span>
+</pre></div>
+</div>
+</section>
+<section id="id9">
+<h2>测试执行流程<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<p>建议按以下顺序测试。前两步用于确认 kernel 和插件接口，不能只用一次模型生成替代。</p>
+<section id="flaggems-w4a8">
+<h3>1. 执行 FlagGems W4A8 数值测试<a class="headerlink" href="#flaggems-w4a8" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/FlagGems"</span>
+<span class="nv">FLAGGEMS_VENDOR</span><span class="o">=</span>arm<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-ra<span class="w"> </span>tests/test_arm_w4a8_g128.py
+</pre></div>
+</div>
+<p>本文对应 commit 在 Mac M5 Pro 上的结果为 <code class="docutils literal notranslate"><span class="pre">7</span> <span class="pre">passed</span></code>、<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">skipped</span></code>。测试会执行 Triton W4A8-G128 kernel，并与 PyTorch 参考实现比较；如果全部 skip，不能算通过。</p>
+</section>
+<section id="vllm-plugin-fl-arm">
+<h3>2. 执行 vllm-plugin-FL ARM 接口测试<a class="headerlink" href="#vllm-plugin-fl-arm" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/vllm-plugin-FL"</span>
+<span class="nv">FLAGGEMS_VENDOR</span><span class="o">=</span>arm<span class="w"> </span><span class="nv">VLLM_PLUGINS</span><span class="o">=</span>fl<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>-ra<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>tests/unit_tests/test_arm_cpu_registration.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>tests/unit_tests/patches/test_arm_cpu_gdn.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>tests/unit_tests/quantization/test_arm_cpu_w4a8.py
+</pre></div>
+</div>
+<p>本文对应 commit 在 Mac M5 Pro 上的结果为 <code class="docutils literal notranslate"><span class="pre">16</span> <span class="pre">passed</span></code>、<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">skipped</span></code>。其中包括 ARM CPU platform 注册、ARM 主机上 GPU backend 隔离、GDN patch 幂等性以及 packed W4A8 参数契约。</p>
+</section>
+<section id="id10">
+<h3>3. 启动文本服务<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<p>在终端 A 执行：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 将下面路径替换为第 1 步创建的实际目录。</span>
+<span class="nb">cd</span><span class="w"> </span>/path/to/arm64-vllm024
+<span class="nb">export</span><span class="w"> </span><span class="nv">WORK_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MODEL_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/models/Qwen3-1.7B"</span>
+<span class="nb">source</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/.venv/bin/activate"</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">FLAGGEMS_VENDOR</span><span class="o">=</span>arm
+<span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_PLUGINS</span><span class="o">=</span>fl
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">10</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MKL_NUM_THREADS</span><span class="o">=</span><span class="m">10</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">VLLM_CPU_KVCACHE_SPACE</span><span class="o">=</span><span class="m">1</span>
+
+<span class="c1"># 仅 macOS 需要这一行</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TRITON_LOCAL_LIBOMP_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>libomp<span class="k">)</span><span class="s2">"</span>
+
+vllm<span class="w"> </span>serve<span class="w"> </span><span class="s2">"</span><span class="nv">$MODEL_DIR</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--port<span class="w"> </span><span class="m">8000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--served-model-name<span class="w"> </span>qwen3-1.7b<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--dtype<span class="w"> </span>bfloat16<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--enforce-eager<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-model-len<span class="w"> </span><span class="m">512</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-num-seqs<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max-num-batched-tokens<span class="w"> </span><span class="m">512</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--generation-config<span class="w"> </span>vllm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--distributed-executor-backend<span class="w"> </span>uni<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--disable-log-stats
+</pre></div>
+</div>
+<p>上述参数用于最小功能验证，不是通用性能配置。<code class="docutils literal notranslate"><span class="pre">VLLM_CPU_KVCACHE_SPACE=1</span></code> 将 CPU KV cache 固定为 1 GiB，避免按整机内存比例为一次短请求预留过大空间。</p>
+<p>服务日志至少应出现：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Platform plugin fl is activated
+device_config=cpu
+Resolved architecture: Qwen3ForCausalLM
+Application startup complete
+</pre></div>
+</div>
+<p>这些日志用于确认插件已经加载且 vLLM 选择了 CPU platform。Qwen3-1.7B 不会触发 packed W4A8 adapter；必须结合前两步的专项测试判断 W4A8 kernel 和插件接口是否正常。</p>
+</section>
+<section id="id11">
+<h3>4. 执行文本请求<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<p>在终端 B 先检查健康状态和模型名：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>-fsS<span class="w"> </span>http://127.0.0.1:8000/health
+curl<span class="w"> </span>-fsS<span class="w"> </span>http://127.0.0.1:8000/v1/models
+</pre></div>
+</div>
+<p>然后运行客户端脚本（文本请求的客户端示例见<a class="reference internal" href="run-inference-task.html"><span class="std std-doc">运行推理任务</span></a>）：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 在新的终端中重新进入实际工作目录。</span>
+<span class="nb">cd</span><span class="w"> </span>/path/to/arm64-vllm024
+<span class="nb">export</span><span class="w"> </span><span class="nv">WORK_DIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>
+<span class="nb">source</span><span class="w"> </span><span class="s2">"</span><span class="nv">$WORK_DIR</span><span class="s2">/.venv/bin/activate"</span>
+python<span class="w"> </span>client_text.py
+</pre></div>
+</div>
+<p>成功标准：HTTP 请求返回 200，客户端得到非空文本，服务端没有模型加载、ABI、undefined symbol 或动态库错误。</p>
+</section>
+<section id="id12">
+<h3>5. 停止服务<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<p>返回终端 A，按 <code class="docutils literal notranslate"><span class="pre">Ctrl-C</span></code>，等待 API server、EngineCore 和 worker 退出。</p>
+</section>
+</section>
+<section id="id13">
+<h2>测试命令<a class="headerlink" href="#id13" title="Link to this heading">#</a></h2>
+<section id="eager">
+<h3>eager 模式（已验证）<a class="headerlink" href="#eager" title="Link to this heading">#</a></h3>
+<p>本文“测试执行流程”中的 <code class="docutils literal notranslate"><span class="pre">vllm</span> <span class="pre">serve</span></code> 命令即为当前验证命令。2026-09-04 的 Mac 复验使用 vLLM 源码 commit <code class="docutils literal notranslate"><span class="pre">ee0da84a</span></code>、FlagGems <code class="docutils literal notranslate"><span class="pre">1fda4b11</span></code>、vllm-plugin-FL <code class="docutils literal notranslate"><span class="pre">58a690b</span></code>、Qwen3-1.7B BF16、Batch=1 和 <code class="docutils literal notranslate"><span class="pre">--enforce-eager</span></code>。服务加载 2 个 safetensors 分片，日志确认 CPU KV cache 固定为 1 GiB；<code class="docutils literal notranslate"><span class="pre">/health</span></code>、<code class="docutils literal notranslate"><span class="pre">/v1/models</span></code> 和流式 <code class="docutils literal notranslate"><span class="pre">/v1/chat/completions</span></code> 请求均返回 HTTP 200，客户端收到 16 个非空文本 token。</p>
+</section>
+</section>
+<section id="arm-gpu-npu">
+<h2>ARM 主机同时安装 GPU 或 NPU 时的行为<a class="headerlink" href="#arm-gpu-npu" title="Link to this heading">#</a></h2>
+<p>CPU 架构是 ARM64，不代表 vLLM 一定选择 CPU backend。插件只在下列两个条件同时成立时注册 vLLM CPU platform，并安装 GDN 兼容处理：</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">platform.machine()</span></code> 为 <code class="docutils literal notranslate"><span class="pre">arm64</span></code> 或 <code class="docutils literal notranslate"><span class="pre">aarch64</span></code>；</p></li>
+<li><p>vLLM 选择的 platform 是 CPU。</p></li>
+</ol>
+<p>packed W4A8 adapter 还会额外检查 FlagGems 的 <code class="docutils literal notranslate"><span class="pre">vendor_name</span></code> 是否为 <code class="docutils literal notranslate"><span class="pre">arm</span></code>；不满足时不会改写 vLLM 的 W4A8 kernel 路径。插件测试覆盖了“ARM64 主机使用 GPU build”场景：此时保留已有 GPU platform 注册，不导入 ARM CPU hook。因此，在 ARM+GPU/NPU 服务中不要全局设置 <code class="docutils literal notranslate"><span class="pre">FLAGGEMS_VENDOR=arm</span></code>；应为 CPU 服务单独设置环境变量，并通过前面的 platform 检查确认 <code class="docutils literal notranslate"><span class="pre">device_type</span></code>。</p>
+</section>
+<section id="id14">
+<h2>常见问题<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<section id="id15">
+<h3>插件没有加载<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<p>检查 entry point：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">from importlib.metadata import entry_points</span>
+
+<span class="s">for group in ("vllm.platform_plugins", "vllm.general_plugins"):</span>
+<span class="s">    print(group, [(ep.name, ep.value) for ep in entry_points(group=group)])</span>
+<span class="s">PY</span>
+</pre></div>
+</div>
+<p>两个 group 中都应出现名为 <code class="docutils literal notranslate"><span class="pre">fl</span></code> 的 entry point。若环境中安装了多个 vLLM 插件，设置 <code class="docutils literal notranslate"><span class="pre">VLLM_PLUGINS=fl</span></code> 后启动一个新进程。</p>
+</section>
+<section id="flaggems">
+<h3>FlagGems 导入失败<a class="headerlink" href="#flaggems" title="Link to this heading">#</a></h3>
+<p>当前插件的公共工具模块会导入 FlagGems。缺少 FlagGems 时，<code class="docutils literal notranslate"><span class="pre">fl</span></code> entry point 无法完整加载，本文的 W4A8 checkpoint 也无法运行。检查实际路径：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">FLAGGEMS_VENDOR</span><span class="o">=</span>arm<span class="w"> </span>python<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">import flag_gems</span>
+<span class="s">print(flag_gems.__file__)</span>
+<span class="s">print(flag_gems.vendor_name)</span>
+<span class="s">PY</span>
+</pre></div>
+</div>
+</section>
+<section id="cpuplatform">
+<h3>平台不是 CpuPlatform<a class="headerlink" href="#cpuplatform" title="Link to this heading">#</a></h3>
+<p>Linux 上确认安装的是 vLLM CPU build；ARM+GPU/NPU 主机还应确认没有选择其他 device plugin。不要伪造 <code class="docutils literal notranslate"><span class="pre">platform.machine()</span></code> 或强制 monkey-patch <code class="docutils literal notranslate"><span class="pre">current_platform</span></code> 绕过检查。</p>
+</section>
+<section id="macos-openmp">
+<h3>macOS 找不到 OpenMP<a class="headerlink" href="#macos-openmp" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">TRITON_LOCAL_LIBOMP_PATH</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>brew<span class="w"> </span>--prefix<span class="w"> </span>libomp<span class="k">)</span><span class="s2">"</span>
+<span class="nb">test</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$TRITON_LOCAL_LIBOMP_PATH</span><span class="s2">/include/omp.h"</span>
+<span class="nb">test</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$TRITON_LOCAL_LIBOMP_PATH</span><span class="s2">/lib/libomp.dylib"</span>
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h3>首次请求长时间没有返回<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<p>先检查 worker 是否仍在运行和占用 CPU；首次 Triton/LLVM JIT 可能耗时数分钟。如果服务端已经输出异常，应以异常为准，不能将 ABI 不匹配、缺少动态库、undefined symbol 或架构错误解释为“仍在编译”。</p>
+</section>
+<section id="id17">
+<h3>内存不足<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<p>本文用 <code class="docutils literal notranslate"><span class="pre">VLLM_CPU_KVCACHE_SPACE=1</span></code> 为 512-token、Batch=1 smoke test 分配固定的 1 GiB KV cache。如果修改上下文长度或并发数，应根据启动日志重新调整；如果模型权重本身无法完整加载，增加 KV cache 不会解决问题。</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="adaptation-gate.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">适配门禁测试</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../dispatch_user_guide/dispatch-user-guide.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">算子调度用户指南</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">环境配置</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">运行前检查</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos">macOS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#linux-arm64">Linux ARM64</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">硬件环境</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">软件环境</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">安装流程</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">1. 创建 Python 环境</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2. 下载并固定源码版本</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">3. 安装 Python 依赖</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flagtree-cpu-triton-3-7-2">4. 构建 flagtree-cpu / Triton 3.7.2</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-0-24-0-cpu">5. 构建 vLLM 0.24.0 CPU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems-vllm-plugin-fl">6. 安装 FlagGems 和 vllm-plugin-FL</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpu-platform">7. 验证插件和 CPU platform</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">模型准备</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">测试执行流程</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems-w4a8">1. 执行 FlagGems W4A8 数值测试</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vllm-plugin-fl-arm">2. 执行 vllm-plugin-FL ARM 接口测试</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">3. 启动文本服务</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">4. 执行文本请求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">5. 停止服务</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">测试命令</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eager">eager 模式（已验证）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#arm-gpu-npu">ARM 主机同时安装 GPU 或 NPU 时的行为</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">常见问题</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">插件没有加载</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flaggems">FlagGems 导入失败</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cpuplatform">平台不是 CpuPlatform</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos-openmp">macOS 找不到 OpenMP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">首次请求长时间没有返回</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">内存不足</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Sep 30, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../vllm_plugin_fl_en/getting_started/arm-cpu-inference.html">English</a></body>
+</html>

@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"install.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">Install software for running an inference task<a class=\"headerlink\" href=\"#install-software-for-running-an-inference-task\" title=\"Link to this heading\">#</a></h1><h2>Install from docker image<a class=\"headerlink\" href=\"#install-from-docker-image\" title=\"Link to this heading\">#</a></h2><p>vllm-plugin-FL is installed from a pre-built Docker image. The supported versions and hardware platforms are listed in <a class=\"reference internal\" href=\"requirements.html\"><span class=\"std std-doc\">Requirements</span></a>.</p>", "a[href=\"#test-matrix\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Test matrix<a class=\"headerlink\" href=\"#test-matrix\" title=\"Link to this heading\">#</a></h2><p>The matrix counts pytest scenarios; each concurrent scenario sends eight requests.</p><p>Each mode runs the following scenarios:</p>", "a[href=\"#results-and-quality-checks\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Results and quality checks<a class=\"headerlink\" href=\"#results-and-quality-checks\" title=\"Link to this heading\">#</a></h2><p>Each pytest case writes one JSON file under <code class=\"docutils literal notranslate\"><span class=\"pre\">results/MODEL/port-PORT/SCENARIO.json</span></code>. Use different\nports for the eager and graph services when both result sets must be retained; reusing a port\noverwrites that model and port\u2019s previous result. A two-model, two-port matrix contains 20 JSON\nfiles. Every file contains the exact inputs, API outputs, timing, per-response checks, and a\npass/fail summary. On failure, a concise request-level error summary is also printed to the\nterminal.</p><p>Responses must contain the expected semantic answer and must not contain empty output, <code class=\"docutils literal notranslate\"><span class=\"pre\">!!!</span></code>,\nmojibake, control characters, suspicious character runs, or repeated words or phrases. The detailed\nLLM introduction must also contain at least 256 characters. Number words and digits are treated as\nequivalent.</p>", "a[href=\"run-inference-task.html\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">Run an inference task<a class=\"headerlink\" href=\"#run-an-inference-task\" title=\"Link to this heading\">#</a></h1><p>With vLLM and vllm-plugin-FL <a class=\"reference internal\" href=\"install.html\"><span class=\"std std-doc\">installed</span></a>, you can run inference in two ways: offline batched inference (load the model directly in a Python script) or serving inference (start an API server and send requests). Choose the approach that fits your use case.</p>", "a[href=\"#run-the-gate\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">Run the gate<a class=\"headerlink\" href=\"#run-the-gate\" title=\"Link to this heading\">#</a></h2><p>The scripts live in <code class=\"docutils literal notranslate\"><span class=\"pre\">tools/adaptation-gate-cases</span></code> of the plugin repository. Start an eager service\nin terminal 1:</p>", "a[href=\"#adaptation-gate\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">Adaptation gate<a class=\"headerlink\" href=\"#adaptation-gate\" title=\"Link to this heading\">#</a></h1><p>The adaptation gate is a small manual test suite in the vllm-plugin-FL repository\n(<code class=\"docutils literal notranslate\"><span class=\"pre\">tools/adaptation-gate-cases</span></code>) for accelerator adaptation and vLLM plugin upgrades. It validates\ntext, image, and mixed text-image requests for the required models in both eager and graph modes.</p><p>The test cases themselves are maintained in the repository:\n<a class=\"reference external\" href=\"https://github.com/flagos-ai/vllm-plugin-FL/tree/main/tools/adaptation-gate-cases\">tools/adaptation-gate-cases</a>.</p>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};
