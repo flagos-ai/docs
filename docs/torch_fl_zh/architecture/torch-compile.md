@@ -40,7 +40,7 @@ model = torch.compile(model, backend="flagos", options={"max_autotune": True})
 
 后端编译器在 FlagTree 构建期通过 `FLAGTREE_BACKEND` 选择（NVIDIA 与 AMD 不设置），而不是运行期：同一份 Triton 内核代码为不同厂商后端编译。`is_flagtree_active()` 用于检测 FlagTree 构建，`FLAGOS_USE_FLAGTREE=1` 断言当前 Triton 必须是 FlagTree —— 不满足时直接报错，而不是静默使用官方 Triton 编译。
 
-由于安装 FlagTree 会移除既有 `triton`，在 `triton` 已被 FlagGems 使用的机器上应将其构建到独立的虚拟环境中。FlagTree 0.6.2 及之后的 wheel 还会安装真实的 `flagtree` 包（FlagPrism 调试器/profiler 的宿主）；访问 FlagTree 仍然通过 `triton`。
+由于安装 FlagTree 会移除既有 `triton`，在 `triton` 已被 FlagGems 使用的机器上应将其构建到独立的虚拟环境中。较新的 FlagTree wheel 还会安装真实的 `flagtree` 包（FlagPrism 调试器/profiler 的宿主）；访问 FlagTree 仍然通过 `triton`。
 
 ## 后端内部组成
 
@@ -56,12 +56,12 @@ model = torch.compile(model, backend="flagos", options={"max_autotune": True})
 
 ## 平台差异
 
-- **Ascend** — 通过 FlagTree 的 Ascend 后端编译；插件自有的 `flagos` 策略从自身运行时回答 FlagTree 的策略名称，并强制 `TRITON_ENABLE_TASKQUEUE=false`（任务队列仅 `torch_npu` 支持）。未纳入 CI。
+- **Ascend** — 通过 FlagTree 的 Ascend 后端编译；插件自有的 `flagos` 策略从自身运行时回答 FlagTree 的策略名称，并强制 `TRITON_ENABLE_TASKQUEUE=false`（任务队列仅 `torch_npu` 支持）。仅由集成测试覆盖。
 - **PPU** — FlagTree 在异步 Inductor worker 中选取编译提示时会初始化 CUDA，可能在父进程已初始化 PPU context 后失败，因此 PPU 的 FlagTree 默认串行编译。仅在验证上游修复或刻意选择其他 worker 配置时才显式设置 `TORCHINDUCTOR_COMPILE_THREADS`。
 - **MetaX** — `torch.compile` 已在 CUDA boxing 模式下使用厂商 Triton 与 FlagTree main 验证。
 - **燧原 GCU** — 64 位代码生成守卫把「不支持 64 位」的失败转换为指名算子的可操作错误，见故障排查。
 - **地平线 BPU** — 编译是唯一的加速路径：`torch.compile(backend="bpu")` 追踪计算图，经 hbdk4 编译为 `.hbm` 产物并在 BPU 上执行，默认插入 int8 量化。
-- **CUDA** — `flagos` 已注册为一等 Inductor GPU 设备。CUDA 的 CI 任务中没有 `torch.compile` 步骤，该路径由集成测试而非 CI 覆盖。
+- **CUDA** — `flagos` 已注册为一等 Inductor GPU 设备。该路径由集成测试覆盖，而非专门的构建任务。
 
 ## 性能
 

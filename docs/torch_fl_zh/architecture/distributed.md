@@ -56,15 +56,15 @@ flagos_dist.move_buffers_to_device(model, "flagos:0")
 
 | 厂商 | FlagCX 路径 | 原生回退 | 视图转换 | 说明 |
 |---|---|---|---|---|
-| NVIDIA | 可用 | NCCL | flagos → cuda 视图 | 集合通信与 DDP 梯度同步已在 2×/8× A100 上实测验证 |
-| MetaX | 可复用 | 经 MACA libtorch 的 NCCL 形态 MCCL | flagos → cuda 视图 | 未纳入 CI |
-| Ascend | 推荐的优先路径 | HCCL（自定义后端类型） | flagos → npu 视图 | Ascend 上没有 CUDA 兼容层。仅为架构层面路由，无集合级 CI 覆盖 |
-| 海光 DCU | 可复用 | 经 DTK 的 RCCL | flagos → cuda 视图 | `all_reduce`/DDP 已在 2 卡上实测，未纳入 CI |
-| 摩尔线程 MUSA | 可复用 | MCCL | flagos → cuda 视图 | host-staged gloo 已在 MTT S5000 上实测 |
+| NVIDIA | 可用 | NCCL | flagos → cuda 视图 | 集合通信与 DDP 梯度同步已在 NVIDIA 多机多卡环境实测验证 |
+| MetaX | 可复用 | 经 MACA libtorch 的 NCCL 形态 MCCL | flagos → cuda 视图 | 未持续验证 |
+| Ascend | 推荐的优先路径 | HCCL（自定义后端类型） | flagos → npu 视图 | Ascend 上没有 CUDA 兼容层。仅为架构层面路由，无集合级验证 |
+| 海光 DCU | 可复用 | 经 DTK 的 RCCL | flagos → cuda 视图 | `all_reduce`/DDP 已在 2 卡上实测，未持续验证 |
+| 摩尔线程 MUSA | 可复用 | MCCL | flagos → cuda 视图 | FlagCX 优先路由与 MCCL 回退已实现；该主机上的端到端多进程集合通信尚未验证 |
 | 燧原 GCU | 优先路径 | 无（仅 FlagCX） | 无需转换 | 已在两块 S60 上实测：集合通信、barrier、DDP 前反向与梯度同步、FSDP2 `fully_shard` 训练与分片 state-dict 存取 |
 
 ## 限制
 
 - 集合通信覆盖范围按厂商验证，缺口如实记录而非默认成立。在燧原 GCU 上，点对点通信、`gather`/`scatter` 的 root 参数、all-to-all、多机建联、进程故障恢复以及超过两台设备的部署尚未验证。
-- Ascend 的分布式支持属于架构层面：路由与视图逻辑已经存在，但没有集合级 CI 覆盖。
+- Ascend 的分布式支持属于架构层面：路由与视图逻辑已经存在，但没有集合级验证。
 - host-staged gloo 级别以正确性优先，每次集合通信都要付出一次设备 → 主机 → 设备的拷贝。

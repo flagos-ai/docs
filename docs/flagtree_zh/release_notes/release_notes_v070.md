@@ -15,7 +15,7 @@
       - 新增 `tle.gpu.buffered_tensor.slot` 和 `tle.gpu.buffered_tensor.reshape` 操作。在 NVIDIA 上支持。
       - 为 `tle.gpu.alloc` 新增 `init_value` 和 `alias_offset_bytes` 参数。在 NVIDIA 上支持。
     - TLE-Raw：
-      - 新增 `library` 与 `compiler` 参数，支持通过 `@dialect(..., library="nvshmem", compiler="clang")` 将 NVSHMEM 设备端接口内联进 TLE-Raw kernel。在 NVIDIA 上支持。
+      - 新增 `library` 与 `compiler` 参数，支持通过 `@dialect(..., library="nvshmem")` 将 NVSHMEM 设备端接口内联进 TLE-Raw kernel。在 NVIDIA 上支持。
 
   - 后端：
     - 新增以下后端集成（基于 Triton 3.6）：[tileir](/getting_started/multi-backend-prebuilt-docker-image-install/install-tileir.md)（NVIDIA TileIR）、[ppu](/getting_started/multi-backend-prebuilt-docker-image-install/install-ppu.md)（平头哥）和 [spacemit](/getting_started/multi-backend-prebuilt-docker-image-install/install-spacemit.md)（进迭时空）。

@@ -20,7 +20,7 @@
 
 所有平台都需要：
 
-- **Python**：3.8 或更高版本（平台 SDK 与可用 wheel 可能要求更窄的范围）
+- **Python**：每个平台只有一个解释器版本，不是区间 — CUDA/GCU/MetaX/PPU 为 3.12，DCU/MUSA 为 3.10，Ascend 为 3.11。FlagTree 只对单个 cp tag 发布，wheel 直接链接该版本，因此 `Requires-Python` 是单一版本
 - **PyTorch**：2.10.x（`>=2.10,<2.11`）— 生成的 ATen 绑定与该次版本线绑定
 - **CMake**：3.18 或更高版本
 - **C++ 工具链**：可用的 C++17 编译器（GCC 7+、Clang 5+ 或 MSVC 2017+）
@@ -50,7 +50,7 @@ pip install torch==2.10.0+cpu --index-url https://download.pytorch.org/whl/cpu
 FLAGOS_ACCELERATOR=cuda pip install --no-build-isolation -vvv -e .
 ```
 
-该构建根据 PyTorch 的 ATen schema 生成 CUDA boxing 内核，把 `libtorch_cuda.so` 及相关 CUDA 调度库打包到 `torch_fl/lib/`，并固定与之匹配的 `nvidia-*-cu12` 运行期依赖。要求：计算能力 7.0 及以上的 NVIDIA GPU、470 及以上的驱动、用于构建的 CUDA 12.x 工具包，以及 `cmake`、`ninja`、`patchelf`。
+该构建根据 PyTorch 的 ATen schema 生成 CUDA boxing 内核，把 `libtorch_cuda.so` 及相关 CUDA 调度库打包到 `torch_fl/lib/`，并固定与之匹配的 `nvidia-*-cu12` 运行期依赖。要求：计算能力 7.0 及以上的 NVIDIA GPU；驱动需足够新以支持 wheel 打包的运行时（cu12.8 的 `libtorch_cuda.so` 及匹配的 `nvidia-*-cu12` wheels）；构建需要提供 `nvcc` 与头文件的 CUDA 工具包；以及 `cmake`、`ninja`、`patchelf`。
 
 可选的 FlagGems C++ 调度路径（开销最低的 FlagGems 路由）：
 
@@ -74,7 +74,7 @@ pip install torch==2.10.0+cpu --index-url https://download.pytorch.org/whl/cpu
 pip install torch_fl-<version>+<sdk>.whl
 ```
 
-`FLAGOS_WHEEL_LOCAL` 会把目标 SDK 写入 wheel 的本地版本号（例如 `0.1.0+metax3.8.1`），避免两个 SDK 不兼容的 wheel 仅凭文件名无法区分。
+`FLAGOS_WHEEL_LOCAL` 会把目标 SDK 写入 wheel 的本地版本号（例如 `2.10.0+maca3.8.1.3`），避免两个 SDK 不兼容的 wheel 仅凭文件名无法区分。
 
 **MetaX 上导入顺序很重要**：必须先导入 `torch_fl` 再 `import torch`。PyTorch 自带的 CUDA 12.x 运行时与 MACA 的 `cu-bridge` ABI 不兼容，`torch_fl` 会预加载一个提供所需符号版本的 shim。
 
@@ -87,7 +87,7 @@ source /usr/local/Ascend/ascend-toolkit/set_env.sh
 FLAGOS_ACCELERATOR=ascend pip install --no-build-isolation -v -e .
 ```
 
-要求：Ascend 910 与 CANN 9.0.0 或兼容版本、可访问的 `/dev/davinci*` 设备节点；若使用 FlagTree Ascend 3.5 wheel（仅提供 cp311），需要 Python 3.11，纯 ACLNN 构建则 Python 3.8+ 即可。
+要求：Ascend 910 与 CANN 9.0.0 或兼容版本、可访问的 `/dev/davinci*` 设备节点；且需要 Python 3.11 —— FlagTree Ascend wheel 仅提供 cp311，wheel 的 `Requires-Python` 即该单一版本。
 
 默认配置为已验证算子启用 FlagGems Python 路由，并以原生 ACLNN 内核作为回退。`scripts/codegen/codegen_ascend.py` 生成 ACLNN 内核；没有 ACLNN 映射的算子回退到 CPU。
 
@@ -149,6 +149,34 @@ FLAGOS_ACCELERATOR=bpu pip install --no-build-isolation -e .
 
 BPU 平台只提供运行时加速：不存在逐算子 BPU 内核，eager 算子通过回退在 CPU 上执行，加速来自整图编译（`torch.compile(backend="bpu")`）或预构建 HBM 的 LLM 运行时。图编译需要 `hbdk4`，其 wheel 仅提供 x86_64 版本。
 
+## 运行期依赖与包索引
+
+wheel 会声明三个本仓库之外构建、且缺一不可的包 — **FlagTree**（携带厂商后端的 Triton 构建）、**FlagGems**（算子来源）与 **FlagCX**（分布式后端）— 并按构建时所用版本精确固定，来源为 `.github/version-pins.env`。这三者都不是版本区间：`flagtree` 与 `flagcx` 根本不在 PyPI 上，FlagTree 构建是分平台的（包名携带厂商的 Triton 后端），而 PyPI 上的 `flag_gems` 版本比 `torch_fl/configs/backends_*.conf` 中逐算子路由表所依据的那批版本更旧。
+
+因此索引必须包含多个位置：
+
+| 依赖 | 发布位置 |
+|---|---|
+| `torch_fl` | `flagos-pypi-<vendor>` —— 由 wheel 本地版本号指定（`2.10.0+hygon` → `flagos-pypi-hygon`） |
+| `flag_gems`、`flagcx` | 同一个厂商 lane |
+| `flagtree` | `flagos-pypi-hosted`，所有平台通用 |
+| `torch==2.10.0+cpu` | `https://download.pytorch.org/whl/cpu` |
+| 其余（`packaging`、`PyYAML`、`numpy` 等） | PyPI（或镜像） |
+
+因此单个 `--index-url` 必须指向一个**包含上述全部内容的 group 仓库**。若没有配置这样的仓库，就逐条列出 —— DCU 就是这种情况：
+
+```bash
+BASE=https://resource.flagos.net/repository
+pip install \
+  --index-url       "$BASE/flagos-pypi-hygon/simple/" \
+  --extra-index-url "$BASE/flagos-pypi-hosted/simple/" \
+  --extra-index-url "$BASE/pypi-proxy/simple/" \
+  --extra-index-url "https://download.pytorch.org/whl/cpu" \
+  torch_fl==2.10.0+hygon
+```
+
+这里有两个容易出错的点：即使厂商 lane 已经包含全部三个 FlagOS 包，只用该 lane 也不够（`flag_gems` 自身声明了 `packaging>=26.0` 与 `PyYAML==6.0.1`，lane 不提供）；而且 `flagtree` 不在大多数 lane 中 —— 所有平台都从 `flagos-pypi-hosted` 获取。
+
 ## 构建期开关
 
 `setup.py` 会为内核集合开关强制指定各平台取值，并拒绝与之矛盾的环境变量显式取值：
@@ -203,7 +231,7 @@ pytest tests/integration/test_factory_ops.py -v --tb=short
 
 | 标记 | 含义 |
 |---|---|
-| `main_ops` | CI 冒烟子集中的代表性算子 |
+| `main_ops` | 冒烟子集中的代表性算子 |
 | `anyplatform` | 可在任意加速器后端运行 |
 | `cuda`、`metax`、`ascend`、`musa` | 需要对应后端的内核或硬件 |
 | `flaggems` | 校验 `backends_<platform>.conf` 中的 FlagGems 路由 |
@@ -216,7 +244,11 @@ pytest tests/integration/test_factory_ops.py -v --tb=short
 
 ## 下一步
 
+- {doc}`快速开始 <quickstart>` — 与平台无关的用法
 - {doc}`兼容性矩阵 <../reference/compatibility>` — 分平台能力验证
+- {doc}`平台能力矩阵 <../reference/platform-capability>` — 各加速器构建与路由了什么
+- {doc}`数据类型支持 <../reference/dtype-support>` — 存储、AMP 目标与回退边界
+- {doc}`常见故障排查 <../reference/troubleshooting>` — 设备数为 0、库缺失、编译器报错
 - {doc}`环境变量 <../reference/environment-variables>` — 构建与运行期配置
 - {doc}`分布式集合通信 <../architecture/distributed>` — `ProcessGroupFlagOS` 与 FlagCX
 - {doc}`Profiler <../architecture/profiler>` — `torch.profiler` 集成

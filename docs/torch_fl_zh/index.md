@@ -69,12 +69,6 @@ Torch-FL 是什么、设计理念、能力范围与组件架构。
 
 ::::
 
-- **代码仓库**：[flagos-ai/Torch-FL](https://github.com/flagos-ai/Torch-FL)
-- **FlagGems**：[flagos-ai/FlagGems](https://github.com/flagos-ai/FlagGems)
-- **FlagTree**：[flagos-ai/FlagTree](https://github.com/flagos-ai/FlagTree)
-- **FlagCX**：[flagos-ai/FlagCX](https://github.com/flagos-ai/FlagCX)
-- **许可证**：Apache License 2.0
-
 ---
 
 ```{toctree}
@@ -94,9 +88,13 @@ overview/overview.md
 overview/features.md
 overview/architecture.md
 getting_started/installation.md
+getting_started/quickstart.md
 architecture/distributed.md
 architecture/profiler.md
 architecture/torch-compile.md
 reference/compatibility.md
 reference/environment-variables.md
+reference/platform-capability.md
+reference/dtype-support.md
+reference/troubleshooting.md
 ```

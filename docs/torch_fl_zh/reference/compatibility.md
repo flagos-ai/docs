@@ -13,10 +13,11 @@
 
 | 组件 | 支持范围 | 说明 |
 |---|---|---|
-| Python | 3.8 或更高版本 | 平台 SDK 与可用 wheel 可能要求更窄的范围 |
+| Python | 每个平台唯一版本 | 在 `setup.py` 中固定：FlagTree 只对单个 cp tag 发布且 wheel 链接它，因此解释器版本唯一 — CUDA/GCU/MetaX/PPU 为 3.12，DCU/MUSA 为 3.10，Ascend 为 3.11 |
 | PyTorch | 2.10.x（`>=2.10,<2.11`） | 生成的 ATen 绑定与该次版本线绑定 |
-| FlagGems | 取决于平台 | 仅在平台路由使用 FlagGems 时，从 PyPI 或厂商兼容构建安装 |
-| Triton/编译器 | 取决于平台 | 使用所选加速器要求的编译器发行版；平台基于 FlagTree 时使用 FlagTree |
+| FlagGems | 精确固定版本（5.4.0） | 声明为精确要求而非区间：逐算子路由表是针对同一批版本生成的 |
+| FlagTree | 精确固定版本，分平台 | 声明为精确要求，且它**就是** Triton —— 包名携带厂商后端（如 `0.7.0+hcu3.6`，尾部数字即 Triton 版本线）。没有 FlagTree 构建的平台改为声明 `triton>=3.5.1` |
+| FlagCX | 精确固定版本，分平台 | 仅在厂商运行时存在构建时声明；PPU 目前没有，其余平台分布式路径回退到 NCCL 形态的路由 |
 
 ### ATen 次版本线固定
 
@@ -37,12 +38,12 @@ python scripts/tools/torch-fl-preflight --wheel dist/torch_fl-*.whl --platform c
 
 | 平台 | 构建选择器 | 执行路径 | Eager 与 autograd | torch.compile | 分布式 | Profiler | FlagGems | 状态 |
 |---|---|---|---|---|---|---|---|---|
-| NVIDIA CUDA | `FLAGOS_ACCELERATOR=cuda`（默认） | 基于外部 `libtorch_cuda.so` 的 CUDA boxing | 稳定 | 实验性（已注册 Inductor GPU 设备，CI 无该步骤） | Beta（FlagCX + NCCL 回退，DDP 已实测） | 稳定（CUPTI 对等性） | Beta（Python + C++ 调度路径） | 稳定 |
-| MetaX | `FLAGOS_ACCELERATOR=metax` | 通过 `cu-bridge` 对厂商 libtorch 进行 CUDA boxing | 稳定（boxing 模式下实测 FP16/BF16 autocast 与 GradScaler） | 实验性（厂商 Triton 与 FlagTree 已在 C550 上实测） | 实验性（NCCL 形态的 `mccl` 回退，未纳入 CI） | 实验性（MCPTI 对等性已在 C550 上实测，未纳入 CI） | 实验性（Python 调度，MetaX 上未做 CI 测试） | 稳定 |
-| Ascend | `FLAGOS_ACCELERATOR=ascend` | 原生 ACLNN 后端，通过 FlagTree（Triton 3.5）使用 FlagGems | 稳定（CI 覆盖的算子与 RNG 套件） | 实验性（仅在 910 + triton-ascend 上测过 Inductor，未在 FlagTree 上复验；CI 无该步骤） | 实验性（HCCL 回退；仅架构层面路由） | Beta（MSPTI 事件与设备时间关联由共享契约覆盖 CI，对等性套件未纳入） | Beta（Python 调度；float64 与 bool 的 `neg` 路由回退 ACLNN） | Beta |
-| PPU | `FLAGOS_ACCELERATOR=ppu` | 针对 PPU CUDA 13 兼容 SDK 的 CUDA boxing，自带 libtorch | 实验性（FP16/BF16 autocast 与 GradScaler 已在 PPU 硬件上实测，未纳入 CI） | 未验证 | 实验性（经厂商适配的 `libnccl.so.2` 实现 NCCL 回退，未纳入 CI） | 未在该厂商追踪器上验证 | 实验性（需要厂商源 Triton） | 实验性 |
-| 海光 DCU | `FLAGOS_ACCELERATOR=dcu` | 基于 hipify 的 DTK torch 构建的 CUDA boxing | Beta（含 FP16/BF16 autocast 与 GradScaler） | 实验性（FlagTree HCU 已在 `gfx936` 上验证，未纳入 CI） | 实验性（经 DTK 的 RCCL；`all_reduce`/DDP 已在 2 卡上实测） | Beta（对等性套件在 CI 中运行） | Beta（仅 Python 调度） | Beta |
-| 燧原 GCU | `FLAGOS_ACCELERATOR=gcu` | 原生 `libtopsaten.so` 后端，未路由及 int64/float64 算子使用 CPU 回退 | Beta（算子、RNG、工厂与 AMP 套件在 S60 上由 CI 守卫） | 未验证 | 未验证 | 仅运行时（TOPSPTI 采集活动，但仅有 CPU 的 Kineto 构建不产生设备事件） | 实验性（Python 调度，需要厂商 Triton） | Beta |
+| NVIDIA CUDA | `FLAGOS_ACCELERATOR=cuda`（默认） | 基于外部 `libtorch_cuda.so` 的 CUDA boxing | 稳定 | 实验性（已注册 Inductor GPU 设备，仅由集成测试覆盖） | Beta（FlagCX + NCCL 回退，DDP 已实测） | 稳定（CUPTI 对等性） | Beta（Python + C++ 调度路径） | 稳定 |
+| MetaX | `FLAGOS_ACCELERATOR=metax` | 通过 `cu-bridge` 对厂商 libtorch 进行 CUDA boxing | 稳定（boxing 模式下实测 FP16/BF16 autocast 与 GradScaler） | 实验性（厂商 Triton 与 FlagTree 已在 C550 上实测） | 实验性（NCCL 形态的 `mccl` 回退，未持续验证） | 实验性（MCPTI 对等性已在 C550 上实测，未持续验证） | 实验性（Python 调度，MetaX 上未验证） | 稳定 |
+| Ascend | `FLAGOS_ACCELERATOR=ascend` | 原生 ACLNN 后端，通过 FlagTree（Triton 3.5）使用 FlagGems | 稳定（算子与 RNG 套件已实测） | 实验性（仅在 910 + triton-ascend 上测过 Inductor，未在 FlagTree 上复验） | 实验性（HCCL 回退；仅架构层面路由） | Beta（MSPTI 事件与设备时间关联由共享契约覆盖，对等性套件未纳入） | Beta（Python 调度；float64 与 bool 的 `neg` 路由回退 ACLNN） | Beta |
+| PPU | `FLAGOS_ACCELERATOR=ppu` | 针对 PPU CUDA 13 兼容 SDK 的 CUDA boxing，自带 libtorch | 实验性（FP16/BF16 autocast 与 GradScaler 已在 PPU 硬件上实测） | 未验证 | 实验性（经厂商适配的 `libnccl.so.2` 实现 NCCL 回退，未持续验证） | 未在该厂商追踪器上验证 | 实验性（需要厂商源 Triton） | 实验性 |
+| 海光 DCU | `FLAGOS_ACCELERATOR=dcu` | 基于 hipify 的 DTK torch 构建的 CUDA boxing | Beta（含 FP16/BF16 autocast 与 GradScaler） | 实验性（FlagTree HCU 已在 `gfx936` 上验证） | 实验性（经 DTK 的 RCCL；`all_reduce`/DDP 已在 2 卡上实测） | Beta（对等性套件已纳入） | Beta（仅 Python 调度） | Beta |
+| 燧原 GCU | `FLAGOS_ACCELERATOR=gcu` | 原生 `libtopsaten.so` 后端，未路由及 int64/float64 算子使用 CPU 回退 | Beta（算子、RNG、工厂与 AMP 套件已在设备上实测） | 未验证 | 未验证 | 仅运行时（TOPSPTI 采集活动，但仅有 CPU 的 Kineto 构建不产生设备事件） | 实验性（Python 调度，需要厂商 Triton） | Beta |
 | 摩尔线程 MUSA | `FLAGOS_ACCELERATOR=musa` | 原生 `mudnn` 后端，未路由算子使用 CPU 回退 | 实验性（FP16/BF16 autocast 与 GradScaler 已在 MTT S5000 上实测） | 实验性（FlagTree 前反向已在 MTT S5000 上实测，需要厂商运行时） | 未验证 | 实验性（MUPTI 设备时间线已在 MTT S5000 上实测） | 实验性（Python 调度，需要厂商 Triton） | 实验性 |
 | 地平线 BPU | `FLAGOS_ACCELERATOR=bpu` | 不构建 eager 内核集合，eager 算子在 CPU 上执行 | 仅运行时（eager 走 CPU 回退） | 实验性（经 hbdk4 的 `torch.compile(backend="bpu")` 图路径） | 不适用 | 未验证 | 不适用（无逐算子内核构建） | 仅运行时 |
 | 清微智能 | `FLAGOS_ACCELERATOR=tsingmicro` | 已提供运行时/构建选择器，无逐算子内核集合 | 仅运行时 | 未验证 | 未验证 | 未验证 | 不适用 | 仅运行时 |
@@ -50,9 +51,9 @@ python scripts/tools/torch-fl-preflight --wheel dist/torch_fl-*.whl --platform c
 ## 如何阅读本矩阵
 
 - **Eager 与 autograd** 是主要算子路径；“稳定”表示该平台的关键路径持续接受测试。
-- **torch.compile** 在多数平台上仍属实验性：仅在特定硬件上验证，多个平台尚无对应 CI 步骤。详见 {doc}`torch.compile 集成 <../architecture/torch-compile>`。
+- **torch.compile** 在多数平台上仍属实验性：仅在特定硬件上验证，多个平台仅由集成测试覆盖。详见 {doc}`torch.compile 集成 <../architecture/torch-compile>`。
 - **分布式**评级反映的是已实测的集合通信与 DDP 覆盖范围，而不是代码是否存在。详见 {doc}`分布式集合通信 <../architecture/distributed>`。
 - **Profiler** 评级描述平台满足 `torch.profiler` 契约的哪些部分。详见 {doc}`Profiler 集成 <../architecture/profiler>`。
 - **FlagGems** 表示该平台可用可移植的 Triton 内核路由；其可用性与正确性分别测量。
 
-这里的评级描述的是平台，而不是某次构建。仅编译了部分内核集合（`FLAGOS_BUILD_*`）的 wheel 只支持该平台能力的一个子集 —— 对该 wheel 而言，其自身的构建记录才是权威依据。
+{doc}`平台能力矩阵 <platform-capability>` 记录各加速器默认构建与路由了什么，{doc}`数据类型支持 <dtype-support>` 覆盖各平台的 dtype 与 AMP 边界。这里的评级描述的是平台，而不是某次构建。仅编译了部分内核集合（`FLAGOS_BUILD_*`）的 wheel 只支持该平台能力的一个子集 —— 对该 wheel 而言，其自身的构建记录才是权威依据。

@@ -40,7 +40,7 @@ model = torch.compile(model, backend="flagos", options={"max_autotune": True})
 
 The backend compiler is selected at FlagTree build time through `FLAGTREE_BACKEND` (unset for NVIDIA and AMD), not at runtime: the same Triton kernel code compiles for a different vendor backend. `is_flagtree_active()` detects a FlagTree build, and `FLAGOS_USE_FLAGTREE=1` asserts that the active Triton is FlagTree — it errors rather than silently compiling with stock Triton.
 
-Because the FlagTree install removes the existing `triton`, build it in a separate virtualenv on a machine whose `triton` is in use by FlagGems. Wheels from FlagTree 0.6.2 on also install a real `flagtree` package (the FlagPrism debugger/profiler host); reaching FlagTree is still done through `triton`.
+Because the FlagTree install removes the existing `triton`, build it in a separate virtualenv on a machine whose `triton` is in use by FlagGems. Recent FlagTree wheels also install a real `flagtree` package (the FlagPrism debugger/profiler host); reaching FlagTree is still done through `triton`.
 
 ## Backend internals
 
@@ -56,12 +56,12 @@ Because the FlagTree install removes the existing `triton`, build it in a separa
 
 ## Platform notes
 
-- **Ascend** — compilation through FlagTree's Ascend backend; the plugin's `flagos` policy answers FlagTree's strategy names from its own runtime and forces `TRITON_ENABLE_TASKQUEUE=false` (the task queue is `torch_npu`-only). Not covered in CI.
+- **Ascend** — compilation through FlagTree's Ascend backend; the plugin's `flagos` policy answers FlagTree's strategy names from its own runtime and forces `TRITON_ENABLE_TASKQUEUE=false` (the task queue is `torch_npu`-only). Exercised by the integration test only.
 - **PPU** — FlagTree initializes CUDA while selecting compiler hints in an asynchronous Inductor worker, which can fail after the parent process initialized the PPU context, so PPU FlagTree defaults to serial compilation. Set `TORCHINDUCTOR_COMPILE_THREADS` explicitly only when testing an upstream fix or deliberately choosing another worker configuration.
 - **MetaX** — `torch.compile` is validated with the vendor Triton and with FlagTree main in CUDA-boxing mode.
 - **Enflame GCU** — the 64-bit codegen guard is what turns "no 64-bit support" failures into an actionable error naming the operator; see Troubleshooting.
 - **D-Robotics BPU** — compilation is the *only* acceleration path: `torch.compile(backend="bpu")` traces a graph, compiles it to an `.hbm` artifact through hbdk4 and runs it on the BPU, with int8 quantization inserted by default.
-- **CUDA** — `flagos` is registered as a first-class Inductor GPU device. There is no `torch.compile` step in the CUDA CI job, so the path is exercised by the integration test rather than by CI.
+- **CUDA** — `flagos` is registered as a first-class Inductor GPU device. The path is exercised by the integration test rather than by a dedicated job.
 
 ## Performance
 

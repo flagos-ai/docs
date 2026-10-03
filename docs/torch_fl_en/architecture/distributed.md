@@ -56,15 +56,15 @@ At import, Torch-FL patches `torch.nn.parallel.DistributedDataParallel.__init__`
 
 | Vendor | FlagCX path | Native fallback | View conversion | Notes |
 |---|---|---|---|---|
-| NVIDIA | Yes | NCCL | flagos → cuda view | Collectives and DDP gradient sync live-verified on 2x/8x A100 |
-| MetaX | Reused | NCCL-shaped MCCL via MACA's libtorch | flagos → cuda view | Not covered by CI |
-| Ascend | Recommended primary path | HCCL (custom backend type) | flagos → npu view | No CUDA compatibility layer exists on Ascend. Architectural routing only; no collective-level CI coverage |
-| Hygon DCU | Reused | RCCL via DTK | flagos → cuda view | `all_reduce`/DDP measured on 2 cards; not in CI |
-| Moore Threads MUSA | Reused | MCCL | flagos → cuda view | Host-staged gloo measured on MTT S5000 |
+| NVIDIA | Yes | NCCL | flagos → cuda view | Collectives and DDP gradient sync verified on multi-node NVIDIA hardware |
+| MetaX | Reused | NCCL-shaped MCCL via MACA's libtorch | flagos → cuda view | Not continuously validated |
+| Ascend | Recommended primary path | HCCL (custom backend type) | flagos → npu view | No CUDA compatibility layer exists on Ascend. Architectural routing only; no collective-level validation |
+| Hygon DCU | Reused | RCCL via DTK | flagos → cuda view | `all_reduce`/DDP measured on 2 cards; not continuously validated |
+| Moore Threads MUSA | Reused | MCCL | flagos → cuda view | FlagCX-first routing and MCCL fallback are implemented; end-to-end multi-process collectives are not yet validated on this host |
 | Enflame GCU | Primary path | None (FlagCX only) | None needed | Measured on two S60 devices: collectives, barrier, DDP forward/backward and gradient sync, FSDP2 `fully_shard` training and sharded state-dict save/load |
 
 ## Limitations
 
 - Collective coverage is validated per vendor; gaps are recorded rather than implied. On Enflame GCU, point-to-point operations, `gather`/`scatter` roots, all-to-all, multi-node rendezvous, process-failure recovery and deployments larger than two devices remain unvalidated.
-- Ascend distributed support is architectural: the routing and view logic exist, but there is no collective-level CI coverage.
+- Ascend distributed support is architectural: the routing and view logic exist, but there is no collective-level validation.
 - The host-staged gloo tier is correctness-first and pays a device-to-host-to-device copy per collective.

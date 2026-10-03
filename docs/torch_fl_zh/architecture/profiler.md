@@ -20,10 +20,10 @@
 
 | 加速器 | 活动 API | 状态 |
 |---|---|---|
-| NVIDIA CUDA | CUPTI | 稳定，对等性套件纳入 CI |
-| MetaX | MCPTI（MACA 中 CUDA 兼容的活动 API） | 实验性：C550 + MACA 3.8.0 上七项对等性断言全部通过（本地硬件验证，CI 无厂商 runner） |
-| Ascend | MSPTI | Beta：内核/运行期/flow/memcpy 事件及设备时间关联由共享契约覆盖 CI；对等性套件本身不在 CI 中 |
-| 海光 DCU | ROCtracer | Beta：对等性套件在 CI 中运行 |
+| NVIDIA CUDA | CUPTI | 稳定，对等性套件已纳入 |
+| MetaX | MCPTI（MACA 中 CUDA 兼容的活动 API） | 实验性：已在 C550 + MACA 3.8.0 上完成对等性验证（本地硬件验证，无厂商 runner） |
+| Ascend | MSPTI | Beta：内核/运行期/flow/memcpy 事件及设备时间关联由共享契约覆盖；对等性套件本身未纳入 |
+| 海光 DCU | ROCtracer | Beta：对等性套件已纳入 |
 | 摩尔线程 MUSA | MUPTI | 实验性：设备时间线已在 MTT S5000 上实测；CPU-Kineto 关联依赖具体环境 |
 | 燧原 GCU | TOPSPTI | 仅运行时：TOPSPTI 能采集活动，但仅有 CPU 的 Kineto 构建不提供 PrivateUse1 resolver，活动无法呈现为设备事件 |
 | 其他 | `unavailable_device_tracer.cc` | 显式的「无设备活动」回退 |
@@ -52,7 +52,7 @@
 
 ## 对等性测试与基线
 
-`tests/integration/test_profiler_parity.py` 将 `flagos` trace 与在原生 `torch+cuda` 上采集的基线对比。七项断言全部只检查结构，不检查计数或耗时：
+对等性测试将 `flagos` trace 与在原生 `torch+cuda` 上采集的基线对比。全部断言只检查结构，不检查计数或耗时：
 
 | # | 断言 | 检查内容 |
 |---|---|---|
@@ -64,7 +64,7 @@
 | 6 | `test_runtime_names_come_from_cbid` | 运行期事件名由 callback id 解码得到 |
 | 7 | `test_capture_window_containment` | 没有设备或运行期事件逸出采集时间窗 |
 
-基线位于 `tests/data/profiler_cuda_baseline.json`。第 2 项断言刻意比上游 `torch.cuda` 更严格：它是 Torch-FL 自身的约束，保留它是因为流向箭头出现悬空半边正是它要防的回归。
+基线为在原生 `torch+cuda` 上采集的 trace。第 2 项断言刻意比上游 `torch.cuda` 更严格：它是 Torch-FL 自身的约束，保留它是因为流向箭头出现悬空半边正是它要防的回归。
 
 ## 已知缺口
 

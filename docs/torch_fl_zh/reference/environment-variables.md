@@ -9,7 +9,7 @@ Torch-FL 有自己的一套命名空间 `FLAGOS_*`，另外还会读取属于其
 - **布尔值**：`1`/`true`/`on`/`yes`（不区分大小写）为开；`0`/`false`/`off`/`no` 为关。其他取值不是布尔值 —— 会输出一次告警并使用该变量的默认值，而不会把该值当作真值。
 - **空值等于未设置**：`FLAGOS_LOG=${EXTRA_LOG}` 在 `EXTRA_LOG` 未设置时等同于从未导出 `FLAGOS_LOG`，因此默认开启的开关会保持开启。
 - **枚举**：命名模式的开关（而非布尔开关）在收到范围外的取值时会列出可选值并使用默认值。
-- **未知名称**：`import torch_fl` 会扫描一次环境，对既未声明、也不属于动态 `FLAGOS_OP_<op>` 族的任何 `FLAGOS_*` 名称给出告警 —— 否则拼写错误的开关会无人读取、静默失效。
+- **未知名称**：`import torch_fl` 会扫描一次环境，对既未声明、也不属于动态 `FLAGOS_OP_<op>` 族的任何 `FLAGOS_*` 名称给出告警 —— 否则拼写错误的开关会无人读取、静默失效。早期版本已废弃的名称被有意排除在该告警之外：旧导出是惰性的（不做别名、无弃用过渡期），不会被静默采纳。
 
 ## 构建选择
 
@@ -23,8 +23,8 @@ Torch-FL 有自己的一套命名空间 `FLAGOS_*`，另外还会读取属于其
 | `FLAGOS_BUILD_FLAGGEMS_CPP` | `cuda`、`tsingmicro` 上为 `ON` | 编译 FlagGems C++ 包装（`liboperators.so`） |
 | `FLAGOS_BUILD_BOXING` | `ON`，`ascend`、`gcu`、`musa` 上为 `OFF` | 编译生成的 CUDA boxing 内核 |
 | `FLAGOS_BUILD_TILEOPS` | `cuda` 上为 `ON` | 编译 TileOps 内核包装（TileLang，NVIDIA SM90） |
-| `FLAGOS_BUILD_JOBS` | CPU 核数 | CMake 构建并行任务数 |
-| `FLAGOS_WHEEL_LOCAL` | 由 SDK 推导 | 本地版本标记，例如 `metax3.8.1` |
+| `FLAGOS_BUILD_JOBS` | CPU 核数 | CMake 构建并行任务数；`MAX_JOBS` 与 `CMAKE_BUILD_PARALLEL_LEVEL` 作为低优先级回退 |
+| `FLAGOS_WHEEL_LOCAL` | 由 SDK 推导 | 本地版本标记，例如 `maca3.8.1.3` |
 | `FLAGOS_SKIP_CUDA_ASSETS` | `0` | 不打包外部 `libtorch_cuda.so` |
 | `FLAGOS_CUDA_ASSETS_DIR` | `.libtorch_cuda_assets` | 外部 `libtorch_cuda.so` 的拷贝来源目录 |
 | `FLAGOS_DCU_VENDOR_CORE` | `0` | 使用 DTK 分支版核心库替代官方 PyTorch 核心库（构建与导入期必须一致） |
@@ -41,6 +41,7 @@ Torch-FL 有自己的一套命名空间 `FLAGOS_*`，另外还会读取属于其
 | `FLAGOS_OP_<name>` | 无 | 逐算子覆盖，例如 `FLAGOS_OP_add__Tensor=cuda`（算子名中的 `.` 替换为 `__`） |
 | `FLAGOS_FORCE_BACKEND` | 无 | 把所有算子重新固定到某个后端族（`flaggems`、`vendor`、`tileops`），用于 A/B 测量 |
 | `FLAGOS_DISABLE_FLAGGEMS_PY` | `0` | 不注册 FlagGems Python 层（仅 C++ 桩模式） |
+| `FLAGOS_STARTUP_PROFILE` | `full` | `full` 在导入期执行框架兼容钩子；`minimal` 将这些钩子留给显式激活。两种模式下 FlagTree、FlagGems、FlagCX 仍为必需依赖 |
 
 `torch_fl.backend_config_path()` 返回实际使用的路由表；`FLAGOS_BACKEND_CONFIG` 中只保留用户导出的值，因此读取它即可回答「我是否覆盖了路由表」。
 
@@ -58,7 +59,7 @@ Torch-FL 有自己的一套命名空间 `FLAGOS_*`，另外还会读取属于其
 |---|---|---|
 | `FLAGOS_DIST_REDIRECT_GLOO` | `1` | 当进程加速器是 flagos 设备时，用 flagos 后端响应普通的 `init_process_group(backend="gloo")` 或 `new_group` 请求 |
 | `FLAGOS_DIST_STAGED_GLOO` | `1` | 允许 host-staged gloo 内部后端，即无厂商通信库时的最后一级回退。设为 `0` 时直接失败而不做 staged 拷贝 |
-| `FLAGOS_DIST_FORCE_NCCL` | `0` | 在 MetaX 手动分布式测试中跳过 FlagCX 而使用 NCCL |
+| `FLAGOS_DIST_FORCE_NCCL` | `0` | 仅测试用：在 MetaX 手动分布式测试中跳过 FlagCX 而使用 NCCL |
 
 ## 厂商与框架兼容
 
@@ -89,6 +90,15 @@ Torch-FL 有自己的一套命名空间 `FLAGOS_*`，另外还会读取属于其
 | `FLAGOS_TILEOPS_USE_L2` | `0` | 使用 TileOps 的 L2 缓存层级 |
 | `FLAGOS_TILEOPS_CACHE_MAX` | `512` | TileOps 实例缓存容量 |
 | `FLAGOS_TILEOPS_DISABLE_ALL_CACHE` | `0` | 关闭所有 TileLang 缓存（正确但慢；须在导入 `tileops` 之前设置） |
+
+## 代码生成
+
+算子绑定生成器的输入；它们在重新生成某平台路由时起作用，运行期无关。
+
+| 变量 | 默认值 | 用途 |
+|---|---|---|
+| `FLAGOS_EXEC_CACHE` | `1` | 缓存 Ascend 算子 codegen 的执行结果；设为 `0` 强制重新生成 |
+| `FLAGOS_CODEGEN_ALL` | `0` | 为完整的 leaf-CUDA 算子集合生成路由，而非仅受支持子集 |
 
 ## BPU 编译器
 

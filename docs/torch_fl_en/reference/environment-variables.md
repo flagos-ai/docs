@@ -9,7 +9,7 @@ Nothing here is required to run a wheel: a wheel routes, compiles and runs with 
 - **Booleans**: `1`/`true`/`on`/`yes` (any case) are on; `0`/`false`/`off`/`no` are off. Anything else is not a boolean — a warning is printed once and the variable's default is used instead of treating the value as truthy.
 - **Empty means unset**: `FLAGOS_LOG=${EXTRA_LOG}` with `EXTRA_LOG` unset behaves as if `FLAGOS_LOG` were never exported, so a switch that defaults on stays on.
 - **Enums**: a switch naming a mode rather than a boolean reports the alternatives and uses the default when given a value outside them.
-- **Unknown names**: `import torch_fl` scans the environment once and warns about any `FLAGOS_*` name that is neither declared nor part of the dynamic `FLAGOS_OP_<op>` family — a misspelled switch would otherwise be read by nobody and silently do nothing.
+- **Unknown names**: `import torch_fl` scans the environment once and warns about any `FLAGOS_*` name that is neither declared nor part of the dynamic `FLAGOS_OP_<op>` family — a misspelled switch would otherwise be read by nobody and silently do nothing. Names retired by an earlier release are deliberately excluded from that warning: an old export is inert (no alias and no deprecation window) rather than silently honoured.
 
 ## Build selection
 
@@ -23,8 +23,8 @@ Inputs to `setup.py` and the CMake build; nothing at runtime reads them. The whe
 | `FLAGOS_BUILD_FLAGGEMS_CPP` | `ON` on `cuda`, `tsingmicro` | Compile the FlagGems C++ wrapper (`liboperators.so`) |
 | `FLAGOS_BUILD_BOXING` | `ON`, `OFF` on `ascend`, `gcu`, `musa` | Compile the generated CUDA-boxing kernels |
 | `FLAGOS_BUILD_TILEOPS` | `ON` on `cuda` | Compile the TileOps kernel wrappers (TileLang, SM90 NVIDIA) |
-| `FLAGOS_BUILD_JOBS` | CPU count | Parallel jobs for the CMake build |
-| `FLAGOS_WHEEL_LOCAL` | SDK-derived | Local version label, e.g. `metax3.8.1` |
+| `FLAGOS_BUILD_JOBS` | CPU count | Parallel jobs for the CMake build; `MAX_JOBS` and `CMAKE_BUILD_PARALLEL_LEVEL` are honoured as lower-priority fallbacks |
+| `FLAGOS_WHEEL_LOCAL` | SDK-derived | Local version label, e.g. `maca3.8.1.3` |
 | `FLAGOS_SKIP_CUDA_ASSETS` | `0` | Do not bundle an external `libtorch_cuda.so` |
 | `FLAGOS_CUDA_ASSETS_DIR` | `.libtorch_cuda_assets` | Directory the external `libtorch_cuda.so` is copied from |
 | `FLAGOS_DCU_VENDOR_CORE` | `0` | Use DTK's forked core libraries instead of the official PyTorch core (must match at build and import time) |
@@ -41,6 +41,7 @@ Which backend implementation each operator dispatches to. Routing is stated per 
 | `FLAGOS_OP_<name>` | none | Per-operator override, e.g. `FLAGOS_OP_add__Tensor=cuda` (replace `.` with `__`) |
 | `FLAGOS_FORCE_BACKEND` | none | Repin every operator onto one backend family (`flaggems`, `vendor`, `tileops`) for A/B measurement |
 | `FLAGOS_DISABLE_FLAGGEMS_PY` | `0` | Leave the FlagGems Python layer unregistered (C++ stub-only mode) |
+| `FLAGOS_STARTUP_PROFILE` | `full` | `full` runs framework compatibility hooks during import; `minimal` leaves them for explicit activation. FlagTree, FlagGems and FlagCX stay required in both |
 
 `torch_fl.backend_config_path()` reports the table in use; `FLAGOS_BACKEND_CONFIG` holds only what the user exported, so reading it answers "did I override the table?".
 
@@ -58,7 +59,7 @@ Which backend implementation each operator dispatches to. Routing is stated per 
 |---|---|---|
 | `FLAGOS_DIST_REDIRECT_GLOO` | `1` | Answer a plain `init_process_group(backend="gloo")` or `new_group` request with the flagos backend when the process accelerator is the flagos device |
 | `FLAGOS_DIST_STAGED_GLOO` | `1` | Allow the host-staged gloo inner backend, the last fallback tier when no vendor communicator is available. Set `0` to fail loudly instead of staging |
-| `FLAGOS_DIST_FORCE_NCCL` | `0` | In the manual MetaX distributed tests, skip FlagCX and use NCCL |
+| `FLAGOS_DIST_FORCE_NCCL` | `0` | Test-only: in the manual MetaX distributed tests, skip FlagCX and use NCCL |
 
 ## Vendor and framework compatibility
 
@@ -89,6 +90,15 @@ Import-time shims that adapt a vendor runtime or another framework to the `flago
 | `FLAGOS_TILEOPS_USE_L2` | `0` | Use the TileOps L2-cache tier |
 | `FLAGOS_TILEOPS_CACHE_MAX` | `512` | TileOps instance-cache capacity |
 | `FLAGOS_TILEOPS_DISABLE_ALL_CACHE` | `0` | Neutralize every TileLang cache (correct but slow; set before `tileops` is imported) |
+
+## Code generation
+
+Inputs to the operator-binding generators; they matter when rebuilding a platform's generated routes, not at runtime.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `FLAGOS_EXEC_CACHE` | `1` | Cache Ascend operator-codegen execution results; `0` forces regeneration |
+| `FLAGOS_CODEGEN_ALL` | `0` | Generate routes for the full leaf-CUDA operator set rather than the supported subset |
 
 ## BPU compiler
 

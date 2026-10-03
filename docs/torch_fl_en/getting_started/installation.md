@@ -20,7 +20,7 @@ Each platform is selected by a single build variable, `FLAGOS_ACCELERATOR`, and 
 
 All platforms require:
 
-- **Python**: 3.8 or later (platform SDKs and available wheels may impose a narrower range)
+- **Python**: one version per platform, not a range — 3.12 on CUDA/GCU/MetaX/PPU, 3.10 on DCU/MUSA, 3.11 on Ascend. A FlagTree build exists for exactly one cp tag and the wheel links it, so `Requires-Python` names a single interpreter
 - **PyTorch**: 2.10.x (`>=2.10,<2.11`) — the generated ATen bindings are tied to this minor line
 - **CMake**: 3.18 or later
 - **C++ toolchain**: a working C++17 compiler (GCC 7+, Clang 5+, or MSVC 2017+)
@@ -50,7 +50,7 @@ pip install torch==2.10.0+cpu --index-url https://download.pytorch.org/whl/cpu
 FLAGOS_ACCELERATOR=cuda pip install --no-build-isolation -vvv -e .
 ```
 
-This generates the CUDA-boxing kernels from PyTorch's ATen schema, bundles `libtorch_cuda.so` and the related CUDA dispatcher libraries into `torch_fl/lib/`, and pins matching `nvidia-*-cu12` runtime dependencies. Requirements: an NVIDIA GPU with compute capability 7.0 or later, driver 470 or later, a CUDA 12.x toolkit for the build, plus `cmake`, `ninja` and `patchelf`.
+This generates the CUDA-boxing kernels from PyTorch's ATen schema, bundles `libtorch_cuda.so` and the related CUDA dispatcher libraries into `torch_fl/lib/`, and pins matching `nvidia-*-cu12` runtime dependencies. Requirements: an NVIDIA GPU with compute capability 7.0 or later, a driver new enough for the runtime the wheel bundles (a cu12.8 `libtorch_cuda.so` plus matching `nvidia-*-cu12` wheels), a CUDA toolkit providing `nvcc` and headers for the build, plus `cmake`, `ninja` and `patchelf`.
 
 Optional FlagGems C++ dispatch (lowest-overhead FlagGems route):
 
@@ -74,7 +74,7 @@ pip install torch==2.10.0+cpu --index-url https://download.pytorch.org/whl/cpu
 pip install torch_fl-<version>+<sdk>.whl
 ```
 
-`FLAGOS_WHEEL_LOCAL` records the target SDK in the wheel's local version label (for example `0.1.0+metax3.8.1`), which keeps two SDK-incompatible wheels from being indistinguishable by filename.
+`FLAGOS_WHEEL_LOCAL` records the target SDK in the wheel's local version label (for example `2.10.0+maca3.8.1.3`), which keeps two SDK-incompatible wheels from being indistinguishable by filename.
 
 **Import order matters on MetaX**: import `torch_fl` before `import torch`, because PyTorch's bundled CUDA 12.x runtime is ABI-incompatible with MACA's `cu-bridge` and `torch_fl` preloads a shim that supplies the required symbol versions.
 
@@ -87,7 +87,7 @@ source /usr/local/Ascend/ascend-toolkit/set_env.sh
 FLAGOS_ACCELERATOR=ascend pip install --no-build-isolation -v -e .
 ```
 
-Requirements: an Ascend 910 with CANN 9.0.0 or compatible, accessible `/dev/davinci*` device nodes, and Python 3.11 if you use the FlagTree Ascend 3.5 wheel (it is cp311-only; Python 3.8+ works for an ACLNN-only build).
+Requirements: an Ascend 910 with CANN 9.0.0 or compatible, accessible `/dev/davinci*` device nodes, and Python 3.11 — the FlagTree Ascend wheel is cp311-only and the wheel's `Requires-Python` names that single interpreter.
 
 The default configuration enables the FlagGems Python route for measured operators, with native ACLNN kernels as the fallback. `scripts/codegen/codegen_ascend.py` generates the ACLNN kernels; operators without an ACLNN mapping fall back to CPU.
 
@@ -149,6 +149,34 @@ FLAGOS_ACCELERATOR=bpu pip install --no-build-isolation -e .
 
 The BPU platform provides runtime acceleration only: no per-operator BPU kernels exist, eager operators run on the CPU via fallback, and acceleration comes from whole-graph compilation (`torch.compile(backend="bpu")`) or from the prebuilt-HBM LLM runtime. Graph compilation needs `hbdk4`, which ships x86_64-only wheels.
 
+## Runtime dependencies and the package index
+
+A wheel declares the three packages built outside this repository that it cannot work without — **FlagTree** (the Triton build carrying the vendor's backend), **FlagGems** (the operator source) and **FlagCX** (the distributed backend) — pinned to the exact versions it was built against, taken from `.github/version-pins.env`. Nothing about them is a range: `flagtree` and `flagcx` are not on PyPI at all, a FlagTree build is per-platform (its package name carries the vendor's Triton backend), and the `flag_gems` on PyPI is an older cohort than the one the per-op routing tables in `torch_fl/configs/backends_*.conf` were generated against.
+
+That means the index has to carry more than one location:
+
+| Requirement | Where it is published |
+|---|---|
+| `torch_fl` | `flagos-pypi-<vendor>` — the lane named by the wheel's local version (`2.10.0+hygon` → `flagos-pypi-hygon`) |
+| `flag_gems`, `flagcx` | the same vendor lane |
+| `flagtree` | `flagos-pypi-hosted`, for every platform |
+| `torch==2.10.0+cpu` | `https://download.pytorch.org/whl/cpu` |
+| everything else (`packaging`, `PyYAML`, `numpy`, …) | PyPI (or a mirror) |
+
+A single `--index-url` therefore has to name a **group repository** that contains all of those. Where one is not configured, list them instead — this is the DCU case:
+
+```bash
+BASE=https://resource.flagos.net/repository
+pip install \
+  --index-url       "$BASE/flagos-pypi-hygon/simple/" \
+  --extra-index-url "$BASE/flagos-pypi-hosted/simple/" \
+  --extra-index-url "$BASE/pypi-proxy/simple/" \
+  --extra-index-url "https://download.pytorch.org/whl/cpu" \
+  torch_fl==2.10.0+hygon
+```
+
+Two things are easy to get wrong here: the vendor lane alone is not enough even where it already carries all three FlagOS packages (`flag_gems` itself declares `packaging>=26.0` and `PyYAML==6.0.1`, which the lanes do not serve), and `flagtree` is not in most lanes — it comes from `flagos-pypi-hosted` for every platform.
+
 ## Build-time switches
 
 `setup.py` forces a per-accelerator value for the kernel-set switches and rejects an explicit environment value that contradicts it:
@@ -203,7 +231,7 @@ Operator tests are selected by markers registered in `tests/integration/ops/conf
 
 | Marker | Meaning |
 |---|---|
-| `main_ops` | Representative operator in the CI smoke subset |
+| `main_ops` | Representative operator in the smoke subset |
 | `anyplatform` | Runs on any accelerator backend |
 | `cuda`, `metax`, `ascend`, `musa` | Requires that backend's kernels or hardware |
 | `flaggems` | Asserts the FlagGems route from `backends_<platform>.conf` |
@@ -216,7 +244,11 @@ Test filtering is automatic: the conftest detects the platform from the wheel's 
 
 ## Next steps
 
+- {doc}`Quick start <quickstart>` — platform-independent usage patterns
 - {doc}`Compatibility matrix <../reference/compatibility>` — per-platform capability validation
+- {doc}`Platform capability matrix <../reference/platform-capability>` — what each accelerator builds and routes
+- {doc}`Dtype support <../reference/dtype-support>` — storage, AMP targets and fallback boundaries
+- {doc}`Troubleshooting <../reference/troubleshooting>` — device count 0, missing libraries, compiler errors
 - {doc}`Environment variables <../reference/environment-variables>` — build and runtime configuration
 - {doc}`Distributed collectives <../architecture/distributed>` — `ProcessGroupFlagOS` and FlagCX
 - {doc}`Profiler <../architecture/profiler>` — `torch.profiler` integration

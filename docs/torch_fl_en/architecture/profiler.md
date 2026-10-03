@@ -20,10 +20,10 @@ Adding a vendor means writing one file: a tracer that satisfies the vendor-agnos
 
 | Accelerator | Activity API | Status |
 |---|---|---|
-| NVIDIA CUDA | CUPTI | Stable, parity suite in CI |
-| MetaX | MCPTI (CUDA-compatible activity API in MACA) | Experimental: all seven parity assertions passed on C550 + MACA 3.8.0 (local validation, no vendor runner in CI) |
-| Ascend | MSPTI | Beta: kernel/runtime/flow/memcpy events plus device-time linkage, CI-covered by the shared contract; the parity suite itself is not in CI |
-| Hygon DCU | ROCtracer | Beta: parity suite runs in CI |
+| NVIDIA CUDA | CUPTI | Stable, parity suite included |
+| MetaX | MCPTI (CUDA-compatible activity API in MACA) | Experimental: parity validated on C550 + MACA 3.8.0 (local validation, no vendor runner) |
+| Ascend | MSPTI | Beta: kernel/runtime/flow/memcpy events plus device-time linkage, covered by the shared contract; the parity suite itself is not included |
+| Hygon DCU | ROCtracer | Beta: parity suite included |
 | Moore Threads MUSA | MUPTI | Experimental: device timeline measured on MTT S5000; CPU-Kineto linkage is environment-dependent |
 | Enflame GCU | TOPSPTI | Runtime only: TOPSPTI collects activities, but a CPU-only Kineto build supplies no PrivateUse1 resolver, so activities do not surface as device events |
 | Other | `unavailable_device_tracer.cc` | Explicit no-device-activity fallback |
@@ -52,7 +52,7 @@ Two warnings are deliberately not gated by `FLAGOS_TRACE` — an empty linked-ac
 
 ## Parity test and baseline
 
-`tests/integration/test_profiler_parity.py` compares a `flagos` trace against a baseline captured on native `torch+cuda`. All seven assertions check structure, never counts or durations:
+The parity test compares a `flagos` trace against a baseline captured on native `torch+cuda`. Every assertion checks structure, never counts or durations:
 
 | # | Assertion | What it checks |
 |---|---|---|
@@ -64,7 +64,7 @@ Two warnings are deliberately not gated by `FLAGOS_TRACE` — an empty linked-ac
 | 6 | `test_runtime_names_come_from_cbid` | Runtime event names are decoded from the callback id |
 | 7 | `test_capture_window_containment` | No device or runtime event escapes the capture window |
 
-The baseline lives in `tests/data/profiler_cuda_baseline.json`. Assertion 2 is deliberately stricter than upstream `torch.cuda`: it is a Torch-FL invariant, kept because a regression into dangling flow halves is exactly the bug it guards against.
+The baseline is a trace captured on native `torch+cuda`. Assertion 2 is deliberately stricter than upstream `torch.cuda`: it is a Torch-FL invariant, kept because a regression into dangling flow halves is exactly the bug it guards against.
 
 ## Known gaps
 
