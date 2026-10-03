@@ -1,0 +1,59 @@
+# Compatibility and Platform Support
+
+## Status definitions
+
+| Status | Meaning |
+|---|---|
+| Stable | Critical paths are continuously tested and the supported version combination is documented. |
+| Beta | The primary path is validated, but coverage, packaging, or release procedures are not yet stable. |
+| Experimental | Validation exists for a specific setup, model, or hardware environment; interfaces or build procedures may change. |
+| Runtime only | Device runtime support exists, but the platform is not a general eager operator backend. |
+
+## Project compatibility
+
+| Component | Supported range | Notes |
+|---|---|---|
+| Python | One version per platform | Fixed in `setup.py`: a FlagTree build exists for exactly one cp tag and the wheel links it, so the interpreter is single-valued — 3.12 on CUDA/GCU/MetaX/PPU, 3.10 on DCU/MUSA, 3.11 on Ascend |
+| PyTorch | 2.10.x (`>=2.10,<2.11`) | Generated ATen bindings are tied to this minor line |
+| FlagGems | Exact pin (5.4.0) | Declared as an exact requirement, not a range: the per-op routing tables were generated against one cohort |
+| FlagTree | Exact pin, per platform | Declared as an exact requirement and it *is* Triton — the package name carries the vendor's backend (e.g. `0.7.0+hcu3.6`, the trailing number being the Triton line) |
+| FlagCX | Exact pin, per platform | Declared only where the vendor runtime has a build; PPU has none yet, and elsewhere the distributed path falls back to the NCCL-shaped route |
+
+### ATen minor-line pinning
+
+Torch-FL generates native bindings to PyTorch's internal ATen operator registry. Those bindings are sensitive to C++ ABI and operator schema changes, so the project pins to a PyTorch minor line — currently **2.10.x**. A different minor version (for example 2.11.x) produces build or runtime failures; patch releases inside the same line (2.10.0 → 2.10.1) are compatible.
+
+### Wheel compatibility record
+
+Every built wheel carries `torch_fl/compatibility.json`, recording the selected platform and kernel sets, the bundled libtorch location, the build-time PyTorch version and C++ ABI flag, the FlagTree/FlagGems/FlagCX versions observed at build time, the declared vendor PyTorch version where one supplies device libraries, and the wheel's Python requirements. An SDK version is recorded only when the builder sets `FLAGOS_SDK_VERSION` to a verified value; an absent value means *unknown*, not "compatible with all".
+
+```bash
+python scripts/tools/torch-fl-preflight --wheel dist/torch_fl-*.whl --platform cuda \
+  --sdk-version 13.3 --check-installed
+```
+
+`torch-fl-preflight` runs without importing `torch_fl`, so its checks do not trigger backend import side effects. `--check-installed` compares declared dependency ranges with the installed environment, `--check-build-env` requires exact build versions, and `--require-sdk` rejects wheels without a declared SDK. A release table can be generated from final wheel files with `--release --markdown-table`.
+
+## Platform matrix
+
+| Platform | Build selector | Execution path | Eager and autograd | torch.compile | Distributed | Profiler | FlagGems | Status |
+|---|---|---|---|---|---|---|---|---|
+| NVIDIA CUDA | `FLAGOS_ACCELERATOR=cuda` (default) | CUDA boxing over an external `libtorch_cuda.so` | Stable | Experimental (Inductor GPU device registered; validated by the integration test only) | Beta (FlagCX + NCCL fallback, DDP live-verified) | Stable (CUPTI parity) | Beta (Python + C++ dispatch paths) | Stable |
+| MetaX | `FLAGOS_ACCELERATOR=metax` | CUDA boxing via `cu-bridge` against the vendor libtorch | Stable (FP16/BF16 autocast and GradScaler measured in boxing mode) | Experimental (vendor Triton and FlagTree measured on C550) | Experimental (NCCL-shaped `mccl` fallback; not continuously validated) | Experimental (MCPTI parity measured on C550; not continuously validated) | Experimental (Python dispatch; not validated on MetaX) | Stable |
+| Ascend | `FLAGOS_ACCELERATOR=ascend` | Native ACLNN backend, FlagGems via FlagTree (Triton 3.5) | Stable (operator and RNG suites validated) | Experimental (Inductor measured on 910 with triton-ascend only, not revalidated on FlagTree) | Experimental (HCCL fallback; architectural routing only) | Beta (MSPTI events plus device-time linkage, covered by the shared contract; parity suite not included) | Beta (Python dispatch; float64 and bool `neg` routes fall back to ACLNN) | Beta |
+| PPU | `FLAGOS_ACCELERATOR=ppu` | CUDA boxing against the PPU CUDA-13-compatible SDK, bundling its own libtorch | Experimental (FP16/BF16 autocast and GradScaler measured on PPU hardware) | Not validated | Experimental (NCCL fallback via a vendor-adapted `libnccl.so.2`; not continuously validated) | Not validated on this vendor's tracer | Experimental (vendor-index Triton required) | Experimental |
+| Hygon DCU | `FLAGOS_ACCELERATOR=dcu` | CUDA boxing over the hipified DTK torch build | Beta (including FP16/BF16 autocast and GradScaler) | Experimental (FlagTree HCU validated on `gfx936`) | Experimental (RCCL via DTK; architectural routing, not continuously validated) | Beta (parity suite included) | Beta (Python dispatch only) | Beta |
+| Enflame GCU | `FLAGOS_ACCELERATOR=gcu` | Native `libtopsaten.so` backend, CPU fallback for unrouted/int64/float64 ops | Beta (operator, RNG, factory and AMP suites exercised) | Not validated | Not validated | Runtime only (TOPSPTI activities, no device events on a CPU-only Kineto build) | Experimental (Python dispatch, requires vendor Triton) | Beta |
+| Moore Threads MUSA | `FLAGOS_ACCELERATOR=musa` | Native `mudnn` backend, CPU fallback for unrouted ops | Experimental (FP16/BF16 autocast and GradScaler measured on MTT S5000) | Experimental (FlagTree forward/backward measured on MTT S5000; vendor runtime required) | Not validated | Experimental (MUPTI device timeline measured on MTT S5000) | Experimental (Python dispatch, requires vendor Triton) | Experimental |
+| D-Robotics BPU | `FLAGOS_ACCELERATOR=bpu` | No eager kernel sets; eager ops run on CPU | Runtime only (CPU fallback for eager) | Experimental (`torch.compile(backend="bpu")` graph path via hbdk4) | Not applicable | Not validated | Not applicable (no per-operator kernel build) | Runtime only |
+| TsingMicro | `FLAGOS_ACCELERATOR=tsingmicro` | Runtime/build selector present; no per-operator kernel set documented | Runtime only | Not validated | Not validated | Not validated | Not applicable | Runtime only |
+
+## Reading the matrix
+
+- **Eager and autograd** is the primary operator path; a Stable rating means the platform's critical paths are continuously exercised.
+- **torch.compile** is experimental on most platforms: it is validated on specific hardware, and on several platforms it is exercised only by the integration test. See {doc}`torch.compile integration <../architecture/torch-compile>`.
+- **Distributed** ratings reflect measured collective and DDP coverage rather than the presence of code; see {doc}`Distributed collectives <../architecture/distributed>`.
+- **Profiler** ratings describe which parts of the `torch.profiler` contract a platform satisfies; see {doc}`Profiler integration <../architecture/profiler>`.
+- **FlagGems** on a platform means the portable Triton kernel route is available there; it is measured separately for availability and correctness.
+
+The {doc}`platform capability matrix <platform-capability>` records what each accelerator builds and routes by default, and the {doc}`dtype support <dtype-support>` page covers per-platform dtype and AMP boundaries. Capability ratings here describe the platform, not one build. A wheel built with a subset of kernel sets (`FLAGOS_BUILD_*`) supports a subset of what the platform can do — the wheel's own record is authoritative for that wheel.

@@ -1,0 +1,22 @@
+selector_to_html = {"a[href=\"#id2\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u5de5\u4f5c\u539f\u7406<a class=\"headerlink\" href=\"#id2\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">flagos</span></code> \u5f20\u91cf\u4e0e\u5382\u5546\u5f20\u91cf\u5171\u4eab\u540c\u4e00\u5757\u7269\u7406\u8bbe\u5907\u5185\u5b58\uff0c\u56e0\u6b64\u96c6\u5408\u901a\u4fe1\u53ea\u9700\u8981\u5143\u6570\u636e\u8f6c\u6362\uff0c\u800c\u4e0d\u9700\u8981\u6570\u636e\u62f7\u8d1d\uff1a</p>", "a[href=\"#id1\"]": "<h1 class=\"tippy-header\" style=\"margin-top: 0;\">\u5206\u5e03\u5f0f\u96c6\u5408\u901a\u4fe1<a class=\"headerlink\" href=\"#id1\" title=\"Link to this heading\">#</a></h1><p>Torch-FL \u901a\u8fc7 <code class=\"docutils literal notranslate\"><span class=\"pre\">ProcessGroupFlagOS</span></code> \u4e3a <code class=\"docutils literal notranslate\"><span class=\"pre\">flagos</span></code> \u8bbe\u5907\u63d0\u4f9b\u5206\u5e03\u5f0f\u652f\u6301\u3002\u5b83\u662f\u539f\u751f\u7684 <code class=\"docutils literal notranslate\"><span class=\"pre\">torch.distributed.ProcessGroup</span></code> \u5b50\u7c7b\uff0c\u5728\u5bfc\u5165\u65f6\u5b8c\u6210\u6ce8\u518c\uff0c\u56e0\u6b64 <code class=\"docutils literal notranslate\"><span class=\"pre\">torch.distributed.init_process_group(\"flagos\")</span></code> \u53ef\u76f4\u63a5\u4f7f\u7528\uff0c\u65e0\u9700\u5bf9 <code class=\"docutils literal notranslate\"><span class=\"pre\">torch.distributed.*</span></code> \u505a\u4efb\u4f55 monkeypatch\u3002</p>", "a[href=\"#ddp\"]": "<h3 class=\"tippy-header\" style=\"margin-top: 0;\">DDP<a class=\"headerlink\" href=\"#ddp\" title=\"Link to this heading\">#</a></h3><p>\u5bfc\u5165\u65f6\uff0cTorch-FL \u4f1a\u8865\u4e01 <code class=\"docutils literal notranslate\"><span class=\"pre\">torch.nn.parallel.DistributedDataParallel.__init__</span></code>\u3002\u5f53\u6a21\u578b\u4f4d\u4e8e <code class=\"docutils literal notranslate\"><span class=\"pre\">flagos</span></code> \u8bbe\u5907\u4e0a\u65f6\uff0c\u8be5\u8865\u4e01\u4f1a\uff1a</p>", "a[href=\"#id3\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u540e\u7aef\u9009\u62e9<a class=\"headerlink\" href=\"#id3\" title=\"Link to this heading\">#</a></h2><p>\u5185\u90e8\u901a\u4fe1\u540e\u7aef\u5728\u521b\u5efa\u901a\u4fe1\u7ec4\u65f6\u6309\u4ee5\u4e0b\u4f18\u5148\u7ea7\u89e3\u6790\uff1a</p>", "a[href=\"#id4\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u4f7f\u7528\u65b9\u5f0f<a class=\"headerlink\" href=\"#id4\" title=\"Link to this heading\">#</a></h2><p><code class=\"docutils literal notranslate\"><span class=\"pre\">torch_fl.distributed</span></code> \u5bf9\u5916\u63d0\u4f9b <code class=\"docutils literal notranslate\"><span class=\"pre\">init_process_group</span></code>\u3001<code class=\"docutils literal notranslate\"><span class=\"pre\">DistributedDataParallel</span></code> \u4e0e <code class=\"docutils literal notranslate\"><span class=\"pre\">move_buffers_to_device</span></code>\u3002\u5728\u540e\u7aef\u5df2\u6ce8\u518c\u7684\u524d\u63d0\u4e0b\uff0c\u4e5f\u53ef\u4ee5\u76f4\u63a5\u8c03\u7528 <code class=\"docutils literal notranslate\"><span class=\"pre\">torch.distributed.init_process_group(\"flagos\")</span></code>\uff0c\u6216\u7531 <code class=\"docutils literal notranslate\"><span class=\"pre\">device_id=torch.device(\"privateuseone:0\")</span></code> \u81ea\u52a8\u9009\u62e9\u3002</p>", "a[href=\"#id5\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u5404\u5382\u5546\u72b6\u6001<a class=\"headerlink\" href=\"#id5\" title=\"Link to this heading\">#</a></h2>", "a[href=\"#id6\"]": "<h2 class=\"tippy-header\" style=\"margin-top: 0;\">\u9650\u5236<a class=\"headerlink\" href=\"#id6\" title=\"Link to this heading\">#</a></h2>"}
+skip_classes = ["headerlink", "sd-stretched-link"]
+
+window.onload = function () {
+    for (const [select, tip_html] of Object.entries(selector_to_html)) {
+        const links = document.querySelectorAll(` ${select}`);
+        for (const link of links) {
+            if (skip_classes.some(c => link.classList.contains(c))) {
+                continue;
+            }
+
+            tippy(link, {
+                content: tip_html,
+                allowHTML: true,
+                arrow: true,
+                placement: 'auto-start', maxWidth: 500, interactive: false,
+
+            });
+        };
+    };
+    console.log("tippy tips loaded!");
+};
