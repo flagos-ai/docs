@@ -114,6 +114,7 @@
 | Hy3-iluvatar-FlagOS | <https://modelscope.cn/models/FlagRelease/Hy3-iluvatar-FlagOS> |
 | Hy3-metax-FlagOS | <https://modelscope.cn/models/FlagRelease/Hy3-metax-FlagOS> |
 | Hy3-mthreads-FlagOS | <https://modelscope.cn/models/FlagRelease/Hy3-mthreads-FlagOS> |
+| Hy3-nvidia-FlagOS | <https://modelscope.cn/models/FlagRelease/Hy3-nvidia-FlagOS> |
 | Hy3-nvidia-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/Hy3-nvidia-FlagOS-Express> |
 | Hy3-tsingmicro-FlagOS | <https://modelscope.cn/models/FlagRelease/Hy3-tsingmicro-FlagOS> |
 | Hy3-zhenwu-FlagOS | <https://modelscope.cn/models/FlagRelease/Hy3-zhenwu-FlagOS> |
@@ -165,6 +166,7 @@
 | MiniCPM5-1B-mthreads-FlagOS | <https://modelscope.cn/models/FlagRelease/MiniCPM5-1B-mthreads-FlagOS> |
 | MiniCPM5-1B-nvidia-FlagOS | <https://modelscope.cn/models/FlagRelease/MiniCPM5-1B-nvidia-FlagOS> |
 | MiniCPM5-1B-zhenwu-FlagOS | <https://modelscope.cn/models/FlagRelease/MiniCPM5-1B-zhenwu-FlagOS> |
+| MiniCPM5-1B-zhenwu-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/MiniCPM5-1B-zhenwu-FlagOS-Express> |
 | MiniCPM5-2B-BF16-ascend-FlagOS | <https://modelscope.cn/models/FlagRelease/MiniCPM5-2B-BF16-ascend-FlagOS> |
 | MiniCPM5-2B-BF16-hygon-FlagOS | <https://modelscope.cn/models/FlagRelease/MiniCPM5-2B-BF16-hygon-FlagOS> |
 | MiniCPM5-2B-BF16-iluvatar-FlagOS | <https://modelscope.cn/models/FlagRelease/MiniCPM5-2B-BF16-iluvatar-FlagOS> |
@@ -257,12 +259,13 @@
 | Qwen3.5-397B-A17B-metax-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.5-397B-A17B-metax-FlagOS> |
 | Qwen3.5-397B-A17B-nvidia-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.5-397B-A17B-nvidia-FlagOS> |
 | Qwen3.5-397B-A17B-zhenwu-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.5-397B-A17B-zhenwu-FlagOS> |
-| Qwen3.6-27B-hygon-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-27B-hygon-FlagOS> |
+| Qwen3.6-27B-hygon-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/Qwen3.6-27B-hygon-FlagOS-Express> |
 | Qwen3.6-27B-metax-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/Qwen3.6-27B-metax-FlagOS-Express> |
 | Qwen3.6-35B-A3B-nomtp-ascend-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-ascend-FlagOS> |
 | Qwen3.6-35B-A3B-nomtp-hygon-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-hygon-FlagOS> |
 | Qwen3.6-35B-A3B-nomtp-iluvatar-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-iluvatar-FlagOS> |
 | Qwen3.6-35B-A3B-nomtp-kunlunxin-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-kunlunxin-FlagOS> |
+| Qwen3.6-35B-A3B-nomtp-metax-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS> |
 | Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express> |
 | Qwen3.6-35B-A3B-nomtp-nvidia-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-nvidia-FlagOS> |
 | Qwen3.6-35B-A3B-nomtp-zhenwu-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.6-35B-A3B-nomtp-zhenwu-FlagOS> |
@@ -278,6 +281,7 @@
 | Qwen3.8-2.4T-A95B-INT8-zhenwu-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-2.4T-A95B-INT8-zhenwu-FlagOS> |
 | Qwen3.8-27B-BF16-ascend-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-ascend-FlagOS> |
 | Qwen3.8-27B-BF16-enflame-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-enflame-FlagOS> |
+| Qwen3.8-27B-BF16-hygon-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-hygon-FlagOS> |
 | Qwen3.8-27B-BF16-hygon-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-hygon-FlagOS-Express> |
 | Qwen3.8-27B-BF16-iluvatar-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-iluvatar-FlagOS> |
 | Qwen3.8-27B-BF16-kunlunxin-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-kunlunxin-FlagOS> |
@@ -285,8 +289,10 @@
 | Qwen3.8-27B-BF16-nvidia-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-nvidia-FlagOS> |
 | Qwen3.8-27B-BF16-sunrise-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-sunrise-FlagOS> |
 | Qwen3.8-27B-BF16-tsingmicro-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-tsingmicro-FlagOS> |
+| Qwen3.8-27B-BF16-zhenwu-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-zhenwu-FlagOS> |
 | Qwen3.8-27B-BF16-zhenwu-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-BF16-zhenwu-FlagOS-Express> |
 | Qwen3.8-27B-FP8-mthreads-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-FP8-mthreads-FlagOS> |
+| Qwen3.8-27B-W4A8-arm-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-W4A8-arm-FlagOS> |
 | Qwen3.8-27B-W4A8-arm-FlagOS-Express | <https://modelscope.cn/models/FlagRelease/Qwen3.8-27B-W4A8-arm-FlagOS-Express> |
 | Qwen3.8-Flash-Next-BF16-ascend-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-Flash-Next-BF16-ascend-FlagOS> |
 | Qwen3.8-Flash-Next-BF16-hygon-FlagOS | <https://modelscope.cn/models/FlagRelease/Qwen3.8-Flash-Next-BF16-hygon-FlagOS> |
