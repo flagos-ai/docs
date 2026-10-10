@@ -6,161 +6,102 @@ language:
 ---
 
 # Introduction
-
-**Qwen3.6-35B-A3B** is a fully open-source sparse MoE model (35B total parameters / 3B active parameters) that excels at agentic coding, significantly outperforming its predecessor Qwen3.5-35B-A3B and holding its own against dense models such as Qwen3.5-27B and Gemma4-31B. Key features include:
-
-- Outstanding agentic coding capabilities, comparable to much larger models
-- Strong multimodal perception and reasoning abilities
+Alibaba open‑sources the vision‑language model Qwen3.8‑27B, and the Zhongzhi (众智) FlagOS community simultaneously completes Day 0 multi‑chip adaptation; based on the FlagOS unified open‑source technology stack, Qwen3.8‑27B has finished multi‑chip adaptation, precision alignment and deployment verification across 11 AI chips including T-Head（平头哥）、NVIDIA（英伟达）、Moore Threads（摩尔线程）、MetaX（沐曦）、Kunlunxin（昆仑芯）、Ascend（华为昇腾）、Hygon（海光）、Iluvatar CoreX（天数智芯）、Tsingmicro（清微智能）、Enflame（燧原科技）and Sunrise（曦望）, among which NVIDIA and Moore Threads support FP8 precision deployment while the rest run on BF16, and FlagOS has for the first time extended the adaptation of the latest Qwen model to ARM edge‑side platforms with a W4A8 low‑bit version, enabling developers to directly obtain corresponding out‑of‑the‑box solutions.
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Metax** container image supporting deployment within minutes
+- Released **FlagOS-Hygon** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
+
 # Evaluation Results
 ## Benchmark Result
-|Metrics|Qwen3.6-35B-A3B-nomtp-Nvidia-Origin|Qwen3.6-35B-A3B-nomtp-Metax-FlagOS|
-|-------|---------------|---------------|
-|GPQA_Diamond |0.8283 |0.803|
-|ERQA  | 0.5875  | 0.6|
+| Metrics      | Qwen3.8-2.7B-Nvidia-Origin | Qwen3.8-27B-Hygon-FlagOS |
+|--------------|----------------------------|--------------------------|
+| musr_murder_mysteries| 76.8                      | 78.31                    |
+| GPQA_Diamond | 90.4                      | 90.91                    |
 
-## Performance Benchmark Result
-|Metric|	1k&1k 64 Concurrency|	4k&1k 64 Concurrency|	16k&1k 64 Concurrency|64k&1k 64 Concurrency|
-|--------------|---------------------------|--------------------------|---|---|
-|Equal Computing Power Ratio (FlagOS/H100)|	136.94%	|125.03%|	113.468%|87.97%|
+## Performance Benchmark
+| Test Scenario                            | 4k & 1k 64 Concurrent | 
+|------------------------------------------|-----------------------|
+| Speedup Ratio (Hygon-flagos / NV-native) | 82.98%                | 
 
 # User Guide
 Environment Setup
 
 | Item             | Version              |
 |------------------|----------------------|
-| Docker Version   | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2 |
-| Operating System |  Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
+| Docker Version   | Docker version 20.10.5, build 55c4c88 |
+| Operating System | Ubuntu 22.04.4 LTS (Jammy Jellyfish) |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/qwen36-35b-a3b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607280210
+docker pull harbor.baai.ac.cn/flagrelease-public/qwen3.8-27b-hygon001-gems5.0.2-tree0.6.1-cxnone-plugin0.1.1-vllm0.20.0-cp310-pt210-dtk2604-x64-6.3.30-v1.4.1a:202608131925
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express --local_dir /data/Qwen3.6-35B-A3B-nomtp
+modelscope download --model FlagRelease/Qwen3.8-27B-BF16-hygon-FlagOS --local_dir /data/Qwen3.8-27B
 ```
 
 ### Start the Container
 ```bash
-docker run -itd \
+docker run \
     --name flagos \
-    --privileged \
-    --ipc=host \
     --network=host \
-    --shm-size 64g \
+    --ipc=host \
+    --device=/dev/kfd \
+    --device=/dev/mkfd \
+    --device=/dev/dri \
+    -v /opt/hyhal:/opt/hyhal \
+    -v /public-flash:/baai \
     -v /data:/data \
-    -w /workspace \
-    harbor.baai.ac.cn/flagrelease-public/qwen36-35b-a3b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607280210 \
-    /bin/bash
-docker exec -it flagos /bin/bash
+    --group-add video \
+    --cap-add=SYS_PTRACE \
+    --security-opt seccomp=unconfined \
+    -itd \
+    harbor.baai.ac.cn/flagrelease-public/qwen3.8-27b-hygon001-gems5.0.2-tree0.6.1-cxnone-plugin0.1.1-vllm0.20.0-cp310-pt210-dtk2604-x64-6.3.30-v1.4.1a:202608131925 \
+    bash
+docker exec -it flagos bash
 ```
 ### Start the Server
-#### Start Service and Test 1k, 4k Scenarios
 ```bash
-# Test 1k, 4K Input Scenario
-export USE_FLAGGEMS=1
-export VLLM_USE_FLAGGEMS=1
-export FLAGGEMS_ATEN_SHAPE_AWARE=0
-export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
-export VLLM020_CONTIGUOUS_SINGLE_PREFILL=0
-export VLLM020_GDN_PACKED_MIN_BATCH=32
-export VLLM020_MOE_EVEN_K_FASTPATH=1
-export VLLM020_GDN_T1_FUSED_H_SPLIT=1
-
-vllm serve /data/Qwen3.6-35B-A3B-nomtp \
-    --host 0.0.0.0 \
-    --port 8020 \
-    --served-model-name qwen36-moe \
-    --tensor-parallel-size 2 \
+export VLLM_FL_FLAGOS_WHITELIST="cos,cumsum,fill,full,gather,gt,le,lt,max,mul,sin,softmax,to,where,zeros,zeros_like"
+export HIP_VISIBLE_DEVICES="0,1"
+export VLLM_SPARSE_THRESHOLD=0.01
+export VLLM_FL_USE_FLASH_PREFILL_ONE_SEQ=1
+export VLLM_FL_HYGON_CUSTOM_AR=2
+export GEMS_VENDOR="hygon" 
+export VLLM_PLUGINS="fl"
+vllm serve /data/Qwen3.8-27B \
+    --served-model-name qwen38 \
+    --port 8000 \
     --trust-remote-code \
     --dtype bfloat16 \
-    --max-model-len 67584 \
+    --tensor-parallel-size 2 \
+    --gpu-memory-utilization 0.925 \
+    --max-model-len 262144 \
+    --reasoning-parser qwen3 \
+    --no-enable-log-requests \
     --max-num-batched-tokens 8192 \
-    --max-num-seqs 64 \
-    --gpu_memory_utilization 0.9 \
-    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
-    --generation-config vllm \
-    --no-enable-prefix-caching \
-    > /workspace/qwen36-moe-server.log 2>&1 &
-```
-#### Start Service and Test 16k Scenarios
-```bash
-# Test 16k Input Scenario
-export USE_FLAGGEMS=1
-export VLLM_USE_FLAGGEMS=1
-export FLAGGEMS_ATEN_SHAPE_AWARE=0
-export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
-export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
-export VLLM020_GDN_PACKED_MIN_BATCH=64
-export VLLM020_MOE_EVEN_K_FASTPATH=0
-export VLLM020_GDN_T1_FUSED_H_SPLIT=0
-
-vllm serve /data/Qwen3.6-35B-A3B-nomtp \
-    --host 0.0.0.0 \
-    --port 8020 \
-    --served-model-name qwen36-moe \
-    --tensor-parallel-size 2 \
-    --trust-remote-code \
-    --dtype bfloat16 \
-    --max-model-len 67584 \
-    --max-num-batched-tokens 32768 \
-    --max-num-seqs 64 \
-    --gpu_memory_utilization 0.9 \
-    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
-    --generation-config vllm \
-    --no-enable-prefix-caching \
-    > /workspace/qwen36-moe-server.log 2>&1 &
-
-```
-#### Start Service and Test 64k Scenarios
-```bash
-# Test 64k Input Scenario
-export USE_FLAGGEMS=1
-export VLLM_USE_FLAGGEMS=1
-export FLAGGEMS_ATEN_SHAPE_AWARE=0
-export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
-export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
-export VLLM020_GDN_PACKED_MIN_BATCH=64
-export VLLM020_MOE_EVEN_K_FASTPATH=0
-export VLLM020_GDN_T1_FUSED_H_SPLIT=0
-
-vllm serve /data/Qwen3.6-35B-A3B-nomtp \
-    --host 0.0.0.0 \
-    --port 8020 \
-    --served-model-name qwen36-moe \
-    --tensor-parallel-size 2 \
-    --trust-remote-code \
-    --dtype bfloat16 \
-    --max-model-len 67584 \
-    --max-num-batched-tokens 16384 \
-    --max-num-seqs 64 \
-    --gpu_memory_utilization 0.9 \
-    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
-    --generation-config vllm \
-    --no-enable-prefix-caching \
-    > /workspace/qwen36-moe-server.log 2>&1 &
+    --no-enable-prefix-caching
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8020/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "qwen36-moe",
-    "messages": [{"role": "user", "content": "hi"}]
-  }'
+curl http://127.0.0.1:8000/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+    "model": "qwen38",
+    "messages": [{"role": "user", "content": "HI"}],
+    "temperature": 0.6,
+    "max_tokens": 512
+    }'
 ```
 
 
@@ -201,6 +142,7 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  FlagEval is a comprehensive evaluation system and open platform for large models launched in 2023. It aims to establish scientific, fair, and open benchmarks, methodologies, and tools to help researchers assess model and training algorithm performance. It features:
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
+
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -210,4 +152,4 @@ We warmly welcome global developers to join us:
 3. Improve technical documentation
 4. Expand hardware adaptation support
 # License
-The model weights are derived from Qwen/Qwen3.6-35B-A3B-nomtp and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Qwen/Qwen3.8-27B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
