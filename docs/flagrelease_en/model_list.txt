@@ -102,6 +102,7 @@ FlagRelease/Hy3-hygon-FlagOS
 FlagRelease/Hy3-iluvatar-FlagOS
 FlagRelease/Hy3-metax-FlagOS
 FlagRelease/Hy3-mthreads-FlagOS
+FlagRelease/Hy3-nvidia-FlagOS
 FlagRelease/Hy3-nvidia-FlagOS-Express
 FlagRelease/Hy3-tsingmicro-FlagOS
 FlagRelease/Hy3-zhenwu-FlagOS
@@ -151,6 +152,7 @@ FlagRelease/MiniCPM5-1B-metax-FlagOS
 FlagRelease/MiniCPM5-1B-mthreads-FlagOS
 FlagRelease/MiniCPM5-1B-nvidia-FlagOS
 FlagRelease/MiniCPM5-1B-zhenwu-FlagOS
+FlagRelease/MiniCPM5-1B-zhenwu-FlagOS-Express
 FlagRelease/MiniCPM5-2B-BF16-ascend-FlagOS
 FlagRelease/MiniCPM5-2B-BF16-hygon-FlagOS
 FlagRelease/MiniCPM5-2B-BF16-iluvatar-FlagOS
@@ -245,12 +247,13 @@ FlagRelease/Qwen3.5-397B-A17B-FP8-enflame-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-metax-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-nvidia-FlagOS
 FlagRelease/Qwen3.5-397B-A17B-zhenwu-FlagOS
-FlagRelease/Qwen3.6-27B-hygon-FlagOS
+FlagRelease/Qwen3.6-27B-hygon-FlagOS-Express
 FlagRelease/Qwen3.6-27B-metax-FlagOS-Express
 FlagRelease/Qwen3.6-35B-A3B-nomtp-ascend-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-hygon-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-iluvatar-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-kunlunxin-FlagOS
+FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express
 FlagRelease/Qwen3.6-35B-A3B-nomtp-nvidia-FlagOS
 FlagRelease/Qwen3.6-35B-A3B-nomtp-zhenwu-FlagOS
@@ -266,6 +269,7 @@ FlagRelease/Qwen3.8-2.4T-A95B-INT8-tsingmicro-FlagOS
 FlagRelease/Qwen3.8-2.4T-A95B-INT8-zhenwu-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-ascend-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-enflame-FlagOS
+FlagRelease/Qwen3.8-27B-BF16-hygon-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-hygon-FlagOS-Express
 FlagRelease/Qwen3.8-27B-BF16-iluvatar-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-kunlunxin-FlagOS
@@ -273,8 +277,10 @@ FlagRelease/Qwen3.8-27B-BF16-metax-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-nvidia-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-sunrise-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-tsingmicro-FlagOS
+FlagRelease/Qwen3.8-27B-BF16-zhenwu-FlagOS
 FlagRelease/Qwen3.8-27B-BF16-zhenwu-FlagOS-Express
 FlagRelease/Qwen3.8-27B-FP8-mthreads-FlagOS
+FlagRelease/Qwen3.8-27B-W4A8-arm-FlagOS
 FlagRelease/Qwen3.8-27B-W4A8-arm-FlagOS-Express
 FlagRelease/Qwen3.8-Flash-Next-BF16-ascend-FlagOS
 FlagRelease/Qwen3.8-Flash-Next-BF16-hygon-FlagOS
