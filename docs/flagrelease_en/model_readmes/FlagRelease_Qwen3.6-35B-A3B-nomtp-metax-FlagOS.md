@@ -22,8 +22,13 @@ language:
 ## Benchmark Result
 |Metrics|Qwen3.6-35B-A3B-nomtp-Nvidia-Origin|Qwen3.6-35B-A3B-nomtp-Metax-FlagOS|
 |-------|---------------|---------------|
-|GPQA_Diamond |0.8283 |0.8081|
-|ERQA  | 0.5875  | 0.555|
+|GPQA_Diamond |0.8283 |0.803|
+|ERQA  | 0.5875  | 0.6|
+
+## Performance Benchmark Result
+|Metric|	1k&1k 64 Concurrency|	4k&1k 64 Concurrency|	16k&1k 64 Concurrency|64k&1k 64 Concurrency|
+|--------------|---------------------------|--------------------------|---|---|
+|Equal Computing Power Ratio (FlagOS/H100)|	136.94%	|125.03%|	113.468%|87.97%|
 
 # User Guide
 Environment Setup
@@ -37,65 +42,124 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-qwen3.6-35b-a3b-nomtp-metax-tree_none-gems_4.2.0-vllm_0.13.0_empty-plugin_0.0.0-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_2.15.9:202606100608
+docker pull harbor.baai.ac.cn/flagrelease-public/qwen36-35b-a3b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607280210
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS --local_dir /data/Qwen3.6-35B-A3B-nomtp
+modelscope download --model FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express --local_dir /data/Qwen3.6-35B-A3B-nomtp
 ```
 
 ### Start the Container
 ```bash
-#Container Startup
-docker run -itd
-    --name flagos
-    --privileged
-    --network=host
-    --security-opt seccomp=unconfined
-    --security-opt apparmor=unconfined
-    --shm-size '100gb'
-    --ulimit memlock=-1
-    --group-add video
-    --device=/dev/dri
-    --device=/dev/mxcd
-    --p 8000:8000
-    --env CUDA_VISIBLE_DEVICES=0,1
-    --device=/dev/mem
-    --device=/dev/infiniband
-    -v /usr/local/:/usr/local/
-    -v /data/:/data/
-    harbor.baai.ac.cn/flagrelease-public/flagrelease-qwen3.6-35b-a3b-nomtp-metax-tree_none-gems_4.2.0-vllm_0.13.0_empty-plugin_0.0.0-cx_0.8.0-python_3.12.11-torch_2.8.0_metax3.3.0.2-pcp_maca3.3.0.15-gpu_metax001-arc_amd64-driver_2.15.9:202606100608 bin/bash
-
+docker run -itd \
+    --name flagos \
+    --privileged \
+    --ipc=host \
+    --network=host \
+    --shm-size 64g \
+    -v /data:/data \
+    -w /workspace \
+    harbor.baai.ac.cn/flagrelease-public/qwen36-35b-a3b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607280210 \
+    /bin/bash
 docker exec -it flagos /bin/bash
-  
 ```
 ### Start the Server
+#### Start Service and Test 1k, 4k Scenarios
 ```bash
+# Test 1k, 4K Input Scenario
 export USE_FLAGGEMS=1
-export VLLM_PLUGINS=fl
-export VLLM_FL_PLATFORM=maca
-export CUDA_VISIBLE_DEVICES=0,1
-export VLLM_FL_PREFER=flagos
-export VLLM_FL_SKIP_ATEN_OVERRIDE=1
-export VLLM_FL_NO_MCOP_MOESUM=1
-export VLLM_FL_MCOP_MOEALIGN=1
-export VLLM_FL_MOE_TUNED_CFG=1
-export MACA_PATH=/opt/maca
-export LD_LIBRARY_PATH=/opt/maca/lib:/opt/maca/mxgpu_llvm/lib:/opt/maca/ompi/lib
-export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
-vllm serve /data/Qwen3.6-35B-A3B-nomtp --served-model-name qwen36 --host 0.0.0.0 --port 8000 --trust-remote-code --max-model-len 73728 --gpu-memory-utilization 0.90 --tensor-parallel-size 2 --no-enable-prefix-caching --compilation-config '{"cudagraph_mode":"FULL"}' --max-num-batched-tokens 16384 --block-size 32 
+export VLLM_USE_FLAGGEMS=1
+export FLAGGEMS_ATEN_SHAPE_AWARE=0
+export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
+export VLLM020_CONTIGUOUS_SINGLE_PREFILL=0
+export VLLM020_GDN_PACKED_MIN_BATCH=32
+export VLLM020_MOE_EVEN_K_FASTPATH=1
+export VLLM020_GDN_T1_FUSED_H_SPLIT=1
+
+vllm serve /data/Qwen3.6-35B-A3B-nomtp \
+    --host 0.0.0.0 \
+    --port 8020 \
+    --served-model-name qwen36-moe \
+    --tensor-parallel-size 2 \
+    --trust-remote-code \
+    --dtype bfloat16 \
+    --max-model-len 67584 \
+    --max-num-batched-tokens 8192 \
+    --max-num-seqs 64 \
+    --gpu_memory_utilization 0.9 \
+    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
+    --generation-config vllm \
+    --no-enable-prefix-caching \
+    > /workspace/qwen36-moe-server.log 2>&1 &
+```
+#### Start Service and Test 16k Scenarios
+```bash
+# Test 16k Input Scenario
+export USE_FLAGGEMS=1
+export VLLM_USE_FLAGGEMS=1
+export FLAGGEMS_ATEN_SHAPE_AWARE=0
+export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
+export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
+export VLLM020_GDN_PACKED_MIN_BATCH=64
+export VLLM020_MOE_EVEN_K_FASTPATH=0
+export VLLM020_GDN_T1_FUSED_H_SPLIT=0
+
+vllm serve /data/Qwen3.6-35B-A3B-nomtp \
+    --host 0.0.0.0 \
+    --port 8020 \
+    --served-model-name qwen36-moe \
+    --tensor-parallel-size 2 \
+    --trust-remote-code \
+    --dtype bfloat16 \
+    --max-model-len 67584 \
+    --max-num-batched-tokens 32768 \
+    --max-num-seqs 64 \
+    --gpu_memory_utilization 0.9 \
+    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
+    --generation-config vllm \
+    --no-enable-prefix-caching \
+    > /workspace/qwen36-moe-server.log 2>&1 &
+
+```
+#### Start Service and Test 64k Scenarios
+```bash
+# Test 64k Input Scenario
+export USE_FLAGGEMS=1
+export VLLM_USE_FLAGGEMS=1
+export FLAGGEMS_ATEN_SHAPE_AWARE=0
+export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
+export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
+export VLLM020_GDN_PACKED_MIN_BATCH=64
+export VLLM020_MOE_EVEN_K_FASTPATH=0
+export VLLM020_GDN_T1_FUSED_H_SPLIT=0
+
+vllm serve /data/Qwen3.6-35B-A3B-nomtp \
+    --host 0.0.0.0 \
+    --port 8020 \
+    --served-model-name qwen36-moe \
+    --tensor-parallel-size 2 \
+    --trust-remote-code \
+    --dtype bfloat16 \
+    --max-model-len 67584 \
+    --max-num-batched-tokens 16384 \
+    --max-num-seqs 64 \
+    --gpu_memory_utilization 0.9 \
+    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
+    --generation-config vllm \
+    --no-enable-prefix-caching \
+    > /workspace/qwen36-moe-server.log 2>&1 &
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8000/v1/chat/completions \
+curl http://localhost:8020/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen36",
-    "messages": [{"role": "user", "content": "你好"}]
+    "model": "qwen36-moe",
+    "messages": [{"role": "user", "content": "hi"}]
   }'
 ```
 
