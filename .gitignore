@@ -1,27 +1,4 @@
-.claude/
-CLAUDE.md
-Makefile
-docs/.claude/
-docs/flagos_homepage/.claude/
-docs/_build/
-docs/dockerfile
-make.bat
-*lectures*.py
-background/
-*-backup/
-to-do/
-.playwright-mcp/
-dockerfile
-dockerfile.bak
-docs/flagos-homepage/AGENTS.md
-docs/flagos-homepage/TODO.md
+# Build artifacts and local dependencies
+node_modules/
 __pycache__/
 *.py[cod]
-
-# Playwright related files
-docs/flagcicd_zh/.playwright-mcp/
-docs/flagcicd_zh/static/node_modules/
-docs/flagcicd_zh/static/package.json
-docs/flagcicd_zh/static/package-lock.json
-docs/flagcicd_zh/static/*.js
-
