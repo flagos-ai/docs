@@ -36,7 +36,8 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-mthreads001-gems5.3.0-tree0.6.1-cx0.13.0-pluginnone-vllm0.10.1-sglang0.0.0-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202609170304
+docker pull harbor.baai.ac.cn/flagrelease-public/xingchen4-29b-a4b-mthreads001-gems5.3.0-tree0.6.1-cx0.13.0-pluginnone-vllm0.10.1-sglang0.0.0-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202610081052
+
 
 ```
 
@@ -58,62 +59,109 @@ docker run -d \
   -e LD_LIBRARY_PATH=/usr/local/musa/lib:/usr/local/openmpi/lib:/usr/local/musa/mudnn/lib \
   -v /data:/data \
   -v /bjzyrgznyjy_ssd/models:/models:ro \
-  harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-mthreads001-gems5.3.0-tree0.6.1-cx0.13.0-pluginnone-vllm0.10.1-sglang0.0.0-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202609170304 \
+  harbor.baai.ac.cn/flagrelease-public/xingchen4-29b-a4b-mthreads001-gems5.3.0-tree0.6.1-cx0.13.0-pluginnone-vllm0.10.1-sglang0.0.0-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202610081052 \
   bash -lc 'sleep infinity'
 ```
 ### Start the Server
 ```bash
-export PYTHONPATH=/opt/xing4_adaptation/sglang:/opt/xing4_adaptation
+cd /workspace
+
+export PYTHON_BIN=/usr/bin/python
+export PORT=31082
+export MODEL_PATH=/data/models/Xing4.0-29B-A4B
+export SERVED_MODEL_NAME=Xing4.0-29B-A4B
+export RUNTIME_ROOT=/opt/xing4-runtime
+export RUN_DIR=/workspace/release-validation
+
+export PYTHONPATH=/opt/xing4-runtime/sglang/python:/opt/xing4-runtime/overlay
+export FLAGCX_PATH=/opt/xing4-runtime/flagcx
+export LD_LIBRARY_PATH=/opt/xing4-runtime/flagcx/lib:/usr/local/musa/lib:/usr/local/openmpi/lib:/usr/local/musa/mudnn/lib
+export TRITON_CACHE_DIR=/root/.cache/triton/xing4-svc1
+
 export SGLANG_EXTERNAL_MODEL_PACKAGE=xingchen4_sglang
 export SGLANG_FL_DIST_BACKEND=flagcx
-export FLAGCX_PATH=/data/adaptation/XingChen4-29B-A4B/sglang/mthreads_s5000/xingchen4-0907-tp4-20260907-1737/sources/FlagCX-8737bab40cf529c333039d3b66d367c3f78f632d
-export LD_LIBRARY_PATH=$FLAGCX_PATH/build/lib:$LD_LIBRARY_PATH
+export SGLANG_FL_FLAGOS_BLACKLIST='arange,arange_start,to_copy,count_nonzero,cumsum,mm,unique,_unique2,unique_dim,unique_consecutive,index_put,index_put_,_index_put_impl_,multinomial,copy,copy_,softmax,_softmax,uniform_,sort,gather,masked_fill,masked_fill_,topk,exponential_,true_divide_out,argmax,scatter_'
+
+export USE_FLAGGEMS=1
+export USE_FLAGTUNE=0
+export FLAGGEMS_DB_URL='sqlite:////opt/xing4-runtime/config/TunedConfig_mthreads_triton_3_6.db?timeout=300'
+
+export SGLANG_FLAGGEMS_RECORD=1
+export SGLANG_FLAGGEMS_LOG_ONCE=1
+export SGLANG_FLAGGEMS_LOG_PATH="${RUN_DIR}/logs/flaggems-31082.log"
+export SGLANG_FL_DISPATCH_DEBUG=1
+export SGLANG_FL_DISPATCH_LOG="${RUN_DIR}/logs/dispatch-31082.log"
+
 export MCCL_SOCKET_IFNAME=bond0
 export GLOO_SOCKET_IFNAME=bond0
 export MCCL_TIMEOUT=14400
 export MUSA_LAUNCH_BLOCKING=0
-export PYTORCH_MUSA_ALLOC_CONF=expandable_segments:True
 export TORCH_COMPILE_DISABLE=1
-export USE_FLAGTUNE=0
-export USE_FLAGGEMS=1
+
+export SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1
+export SGLANG_SET_CPU_AFFINITY=1
+export SGLANG_MOE_PADDING=1
+export SGLANG_MOE_CONFIG_DIR=/opt/xing4-runtime/config/moe_candidate216
+export SGLANG_USE_MUSA_FUSED_KERNEL=1
+export SGLANG_USE_DEEPGEMM_BMM=0
 export SGLANG_OPT_DEEPGEMM_HC_PRENORM=0
 export SGLANG_OPT_USE_TILELANG_MHC_PRE=0
 export SGLANG_OPT_USE_TILELANG_MHC_POST=0
-export XING4_L1_OPERATORS_DISABLED=1
-export SGLANG_FL_FLAGOS_BLACKLIST=arange,arange_start,to_copy,count_nonzero,cumsum,mm,unique,_unique2,unique_dim,unique_consecutive,index_put,index_put_,_index_put_impl_,multinomial,copy,copy_,softmax,_softmax,uniform_
-export SGLANG_FLAGGEMS_RECORD=1
-export SGLANG_FLAGGEMS_LOG_PATH=/tmp/flaggems_op-1.txt
-export SGLANG_FL_DISPATCH_DEBUG=1
-export SGLANG_FL_DISPATCH_LOG=/tmp/dispatch-1.log
-export SGLANG_SANITIZE_NAN_LOGITS=1
-export SGLANG_SAFE_MAX_COMPLETION_TOKENS=16384
+export SGLANG_XINGCHEN4_TRITON_MULTINOMIAL=1
+
 export XINGCHEN4_MHC_HIN_IMPL=torch
-export XINGCHEN4_MHC_HOUT_IMPL=triton
-export TRITON_CACHE_DIR=/data/adaptation/XingChen4-29B-A4B/sglang/mthreads_s5000/xingchen4-0907-tp4-20260907-1737/cache/triton-xing4-l1off-service1
-python -m sglang.launch_server \
-  --model-path /data/Xing4.0-29B-A4B \
-  --served-model-name Xing4.0-29B-A4B \
+export XINGCHEN4_MHC_HOUT_IMPL=vendor
+export XINGCHEN4_MHC_SANITIZE=1
+export SGLANG_SANITIZE_NAN_LOGITS=1
+export SGLANG_SAFE_MAX_COMPLETION_TOKENS=99000
+export SGLANG_INVALID_BYTES_LOG_DIR="${RUN_DIR}/invalid-bytes-31082-svc1"
+
+mkdir -p \
+  "${RUN_DIR}/logs" \
+  "${TRITON_CACHE_DIR}" \
+  "${SGLANG_INVALID_BYTES_LOG_DIR}"
+
+"${PYTHON_BIN}" -c \
+'import sys, transformers, tokenizers, xgrammar
+print("python:", sys.executable)
+print("transformers:", transformers.__version__)
+print("tokenizers:", tokenizers.__version__)
+print("xgrammar:", xgrammar.__file__)'
+
+nohup "${PYTHON_BIN}" -m sglang.launch_server \
+  --model-path "${MODEL_PATH}" \
+  --served-model-name "${SERVED_MODEL_NAME}" \
   --tp-size 4 \
   --host 0.0.0.0 \
-  --port 31082 \
+  --port "${PORT}" \
   --trust-remote-code \
   --context-length 100000 \
   --default-chat-template-kwargs '{"enable_thinking":true}' \
   --reasoning-parser xingchen4 \
   --cuda-graph-backend-decode full \
-  --cuda-graph-max-bs-decode 8 \
-  --disable-cuda-graph-padding \
-  --max-running-requests 32 \
+  --cuda-graph-bs-decode 1 2 4 8 16 32 64 \
+  --max-running-requests 64 \
+  --enable-dynamic-batch-tokenizer \
+  --dynamic-batch-tokenizer-batch-size 64 \
+  --dynamic-batch-tokenizer-batch-timeout 3.0 \
+  --max-total-tokens 800000 \
   --disable-radix-cache \
-  --disable-overlap-schedule \
   --cuda-graph-backend-prefill disabled \
-  --chunked-prefill-size 8192 \
+  --chunked-prefill-size 49152 \
+  --max-prefill-tokens 100000 \
   --moe-runner-backend triton \
   --disable-custom-all-reduce \
   --disable-shared-experts-fusion \
   --skip-server-warmup \
   --watchdog-timeout 18000 \
-  --mem-fraction-static 0.68
+  --disable-overlap-schedule \
+  --mem-fraction-static 0.80 \
+  >"${RUN_DIR}/logs/service-31082.log" 2>&1 </dev/null &
+
+echo "service pid=$!"
+echo "service log=${RUN_DIR}/logs/service-31082.log"
+echo "FlagGems log=${SGLANG_FLAGGEMS_LOG_PATH}"
+echo "dispatch log=${SGLANG_FL_DISPATCH_LOG}"
 ```
 
 ## Service Invocation
