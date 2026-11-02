@@ -1,6 +1,4 @@
 ---
-base_model:
-- ""
 language:
 - zh
 - en
@@ -21,7 +19,7 @@ MiniMax M3, released on June 1st, is the first Chinese model to simultaneously d
 ## Benchmark Result
 | Metrics      | MiniMax-M3-Nvidia-Origin | MiniMax-M3-Zhenwu-FlagOS |
 |--------------|--------------------------|--------------------------|
-| GPQA_Diamond | 86.36                    | 73.08                  |
+| GPQA_Diamond | 86.36                    | 92.42                |
 
 # User Guide
 Environment Setup
@@ -32,11 +30,10 @@ Environment Setup
 | Operating System | Ubuntu 24.04.2 LTS |
 
 ## Operation Steps
-The image for this task is exported from Alibaba Cloud PAI and can be used on Alibaba Cloud EAS and DSW, both of which are container‑based resource services. For detailed instructions on how to use this image, please contact the PAI platform support team. The task released by BAAI is developed based on the container environment launched via the PAI platform.
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-minimax-m3-zhenwu-tree_none-gems_5.0.1rc0-vllm_0.13.1.dev0_g72506c983.d20260218-plugin_0.0.0-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.3.2-d7f5a2:202606052018
+docker pull harbor.baai.ac.cn/flagrelease-public/minimaxm3-pp001-gems5.4.0-tree0.6.2-cxnone-plugin0.3.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202610151646
 ```
 
 ### Download Open-source Model Weights
@@ -45,12 +42,61 @@ pip install modelscope
 modelscope download --model FlagRelease/MiniMax-M3-zhenwu-FlagOS --local_dir /data/MiniMax-M3
 ```
 
+### Start the Container
+```bash
+sudo docker run --privileged -dit \
+  -e HOST_HOSTNAME=$(hostname) \
+  --network=host \
+  --device=/dev/infiniband \
+  --ipc=host \
+  --device=/dev/alixpu_ctl \
+  --device=/dev/alixpu \
+  --ulimit memlock=-1 \
+  --ulimit stack=67108864 \
+  --init \
+  -v /mnt:/mnt \
+  -v /data:/data \
+  -w /mnt/nfs/users/jinghao \
+  --name minimaxM3 \
+  harbor.baai.ac.cn/flagrelease-public/minimaxm3-pp001-gems5.4.0-tree0.6.2-cxnone-plugin0.3.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202610151646
+```
+
+### Start the Server
+
+```bash
+source /usr/local/PPU_SDK/envsetup.sh
+export PATH="/usr/lib64/openmpi/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/lib64/libibverbs:/usr/lib64/openmpi/lib:${LD_LIBRARY_PATH:-}"
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+export VLLM_WORKER_MULTIPROC_METHOD=spawn FLAGTREE_AABS=0
+export GLOO_SOCKET_IFNAME=eth0 NCCL_IB_HCA=fic2_soe_bond
+export NCCL_IB_GID_INDEX=1 NCCL_IB_ADDR_FAMILY=6
+export NCCL_SOCKET_IFNAME=bond NCCL_SOCKET_FAMILY=AF_INET6
+
+vllm serve /data/MiniMax-M3 \
+  --host 0.0.0.0 \
+  --host 127.0.0.1 \
+  --port 8024 \
+  --served-model-name MiniMax-M3 \
+  --tensor-parallel-size 16 \
+  --dtype bfloat16 \
+  --block-size 128 \
+  --max-model-len 100000 \
+  --max-num-seqs 64 \
+  --max-num-batched-tokens 8192 \
+  --compilation-config '{"cudagraph_mode":"FULL_AND_PIECEWISE","cudagraph_capture_sizes":[1,2,4,8,16,32,64]}'
+
+```
+
 ## Service Invocation
 ### Invocation Script
 ```bash
-cd /root
-USE_FLAGGEMS=1 python inference_bf16.py --num_gpus 16 --prompt "你好"
-
+curl http://127.0.0.1:8024/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+      "messages": [{"role": "user", "content": "请给我介绍一下GPQA"}],
+      "max_tokens": 128
+    }'
 ```
 
 
