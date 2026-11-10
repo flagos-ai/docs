@@ -1,0 +1,1229 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FlagPrism Profiler and Debugger Chip Vendor Adaptation Requirements" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/vendor-adaptation.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="1. Goal: The environment preparation uses the FlagTree development container corresponding to the chip; the detailed steps are given in the user manual of that backend. The LLVM and SDK environment follows the configuration of the corresponding FlagTree container. After the chip adaptation is com..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="1. Goal: The environment preparation uses the FlagTree development container corresponding to the chip; the detailed steps are given in the user manual of that backend. The LLVM and SDK environment follows the configuration of the corresponding FlagTree container. After the chip adaptation is com..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>FlagPrism Profiler and Debugger Chip Vendor Adaptation Requirements &#8212; FlagPrism Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/vendor-adaptation.c4ffa0b9-2739-4756-98b8-3b090139ac8b.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/vendor-adaptation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/vendor-adaptation.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference" href="../references/reference.html" />
+    <link rel="prev" title="Profiler" href="profiler.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Nov 10, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/en/latest/" 
+   class="return-to-main-link"
+   aria-label="Back to FlagOS Documentation"
+   title="Back to FlagOS Documentation">
+  ← Back to FlagOS Documentation
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagPrism Documentation - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagPrism Documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagPrism
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Release Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">Release Notes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profiler.html">Profiler</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">FlagPrism Profiler and Debugger Chip Vendor Adaptation Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/reference.html">Reference</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/vendor-adaptation.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FlagPrism Profiler and Debugger Chip Vendor Adaptation Requirements</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">1. Goal</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-sources">1.1 Information sources</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profiler-adaptation-interfaces">2. Profiler adaptation interfaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#declare-capabilities-and-generate-the-collection-configuration">2.1 Declare capabilities and generate the collection configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#collection-plan-vendorprofileplan">Collection plan (VendorProfilePlan)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-collection-and-mark-operators">2.2 Start collection and mark operators</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-vendor-performance-data">2.3 Parse vendor performance data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend-implementation-approach">2.4 Ascend implementation approach</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugger-adaptation-interfaces">3. Debugger adaptation interfaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-runtime-interfaces">3.1 Device runtime interfaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-compilation-and-launch-requirements">3.2 Kernel compilation and launch requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">3.3 Ascend implementation approach</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-requirements">4. Error handling requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correspondence-between-interfaces-and-code-files">5. Correspondence between interfaces and code files</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#profiler">5.1 Profiler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debugger">5.2 Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">6. Validation</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flagprism-profiler-and-debugger-chip-vendor-adaptation-requirements">
+<h1>FlagPrism Profiler and Debugger Chip Vendor Adaptation Requirements<a class="headerlink" href="#flagprism-profiler-and-debugger-chip-vendor-adaptation-requirements" title="Link to this heading">#</a></h1>
+<section id="goal">
+<h2>1. Goal<a class="headerlink" href="#goal" title="Link to this heading">#</a></h2>
+<p>The environment preparation uses the FlagTree development container corresponding to the chip; the detailed steps are given in the user manual of that backend. The LLVM and SDK environment follows the configuration of the corresponding FlagTree container.</p>
+<p>After the chip adaptation is complete, the following must be supported:</p>
+<ul class="simple">
+<li><p>Profiler starts and stops chip performance collection, and obtains kernel execution information and hardware metrics;</p></li>
+<li><p>Debugger allocates device debug memory, passes the debug pointer to the kernel, and retrieves the debug data after the kernel executes;</p></li>
+<li><p>when Profiler or Debugger is not enabled, the compilation and execution behavior of the kernel is not changed.</p></li>
+</ul>
+<p>Among them, the chip hardware performance information depends on the Profiler capability provided by the vendor. The vendor must provide a performance collection API or command-line tool, and provide parseable results. FlagPrism is responsible for invoking the vendor Profiler, correlating Triton operators, and converting the results into a unified format.</p>
+<section id="information-sources">
+<h3>1.1 Information sources<a class="headerlink" href="#information-sources" title="Link to this heading">#</a></h3>
+<p>The information in the current design is divided into three categories:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Information that can be obtained</p></th>
+<th class="head"><p>Depends on vendor Profiler</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Basic instrumentation information</p></td>
+<td><p>kernel and operator name, source location, operator ID, data type, shape, layout, access type</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Numerical summary</p></td>
+<td><p>element count, NaN count, Inf count, zero count, mean of finite values, minimum, maximum, L2 Norm</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Chip performance information</p></td>
+<td><p>kernel device execution time, compute unit utilization, bandwidth, cache, instruction statistics, hardware counters</p></td>
+<td><p>Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>After the instrumentation, compilation, and runtime integration of Debugger are completed, FlagPrism can collect basic instrumentation information and numerical summaries; see Section 3 for specific requirements.</p>
+<p>The scope of chip performance metrics is determined by the vendor. Metrics not provided by the vendor are marked as unsupported or unavailable, and do not affect the collection of basic instrumentation information and numerical summaries.</p>
+</section>
+</section>
+<section id="profiler-adaptation-interfaces">
+<h2>2. Profiler adaptation interfaces<a class="headerlink" href="#profiler-adaptation-interfaces" title="Link to this heading">#</a></h2>
+<p>Profiler adaptation is divided into three steps:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. Declare which metrics the vendor supports, and generate the collection configuration for this run
+                         ↓
+2. Start the vendor Profiler, and collect data while the program is running
+                         ↓
+3. Parse the vendor output, and generate unified kernel performance results
+</pre></div>
+</div>
+<p>The three steps correspond to 2.1, 2.2, and 2.3 respectively. The main flow of runtime collection is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>makePlan → configure the collector → doStart → startOp/stopOp → doFlush → doStop → import
+</pre></div>
+</div>
+<section id="declare-capabilities-and-generate-the-collection-configuration">
+<h3>2.1 Declare capabilities and generate the collection configuration<a class="headerlink" href="#declare-capabilities-and-generate-the-collection-configuration" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">VendorAdapter</span></code> is responsible for stating which metrics the vendor supports, and converting the user request into the collection configuration actually used in this run.</p>
+<p>Implement the following 6 interfaces:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VendorAdapter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// Return the backend name, for example "cann".</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Return the device type.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">DeviceType</span><span class="w"> </span><span class="nf">getDeviceType</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Return the names of the supported hardware metrics.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="n">getSupportedVendorMetrics</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Generate the actual collection plan according to the user request.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">VendorProfilePlan</span>
+<span class="w">  </span><span class="nf">makePlan</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">VendorProfileOptions</span><span class="w"> </span><span class="o">&amp;</span><span class="n">options</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Return the chip Profiler instance.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">Profiler</span><span class="w"> </span><span class="o">*</span><span class="nf">getRuntimeProfiler</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Create the performance data importer.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">VendorMetricsImporter</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="n">createImporter</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Among them, <code class="docutils literal notranslate"><span class="pre">getRuntimeProfiler()</span></code> returns the collection object in 2.2, and <code class="docutils literal notranslate"><span class="pre">createImporter()</span></code> returns the parsing object in 2.3.</p>
+<p>When the collection plan needs to be passed to the runtime collector, <code class="docutils literal notranslate"><span class="pre">configureRuntimeProfiler(profilerPath,</span> <span class="pre">plan)</span></code> can be overridden; this interface already has a default implementation.</p>
+<section id="collection-plan-vendorprofileplan">
+<h4>Collection plan (VendorProfilePlan)<a class="headerlink" href="#collection-plan-vendorprofileplan" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">makePlan()</span></code> generates the collection configuration <code class="docutils literal notranslate"><span class="pre">VendorProfilePlan</span></code> for this run according to the user request and the scope supported by the vendor.</p>
+<p>The user request <code class="docutils literal notranslate"><span class="pre">VendorProfileOptions</span></code> contains:</p>
+<ul class="simple">
+<li><p>whether to collect basic kernel runtime information;</p></li>
+<li><p>the hardware metrics to be collected;</p></li>
+<li><p>vendor parameters such as device ID and output location.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">VendorProfilePlan</span></code> returned by <code class="docutils literal notranslate"><span class="pre">makePlan()</span></code> contains:</p>
+<ul class="simple">
+<li><p>the metrics actually enabled in this run;</p></li>
+<li><p>the metrics that cannot be enabled in this run;</p></li>
+<li><p>the configuration passed to the vendor Profiler;</p></li>
+<li><p>the reasons why the metrics cannot be enabled.</p></li>
+</ul>
+<p>For example, if the user requests <code class="docutils literal notranslate"><span class="pre">aicore</span></code>, <code class="docutils literal notranslate"><span class="pre">bandwidth</span></code>, and <code class="docutils literal notranslate"><span class="pre">cache</span></code>, while Ascend currently supports only the first two, the generated plan is:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>enabled  = [aicore, bandwidth]
+disabled = [cache]
+reason   = [the current Profiler does not support the cache metric]
+</pre></div>
+</div>
+<p>Subsequent collection and result parsing both use the same plan.</p>
+</section>
+</section>
+<section id="start-collection-and-mark-operators">
+<h3>2.2 Start collection and mark operators<a class="headerlink" href="#start-collection-and-mark-operators" title="Link to this heading">#</a></h3>
+<p>This stage is responsible for invoking the vendor Profiler, and adding markers at the start and end of Triton operators.</p>
+<p>Implement the following interfaces:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Profiler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// Start chip performance collection.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">doStart</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Flush the currently collected data.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doFlush</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Stop collection and release resources.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doStop</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Set collection parameters such as device, metrics, and output directory.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doSetMode</span><span class="p">(</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">options</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>In order to correlate Triton operators with chip-side performance events, the following must also be implemented:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpInterface</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// The operator starts executing.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">startOp</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Scope</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scope</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// The operator finishes executing.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">stopOp</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Scope</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scope</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Data should be flushed before collection is stopped, so that the collected events can be imported later.</p>
+</section>
+<section id="parse-vendor-performance-data">
+<h3>2.3 Parse vendor performance data<a class="headerlink" href="#parse-vendor-performance-data" title="Link to this heading">#</a></h3>
+<p>The purpose of this interface is to convert the raw results of the vendor Profiler into unified results that FlagPrism can read.</p>
+<p>The raw results may come from memory data collected at runtime, or from files exported by vendor tools. When an external tool is used, the tool invocation and the result import must both be completed, and errors must be reported when execution fails.</p>
+<p>Implement the following interface:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VendorMetricsImporter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">VendorProfileArtifact</span><span class="w"> </span><span class="nf">import</span><span class="p">(</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="n">SessionProfileMetadata</span><span class="w"> </span><span class="o">&amp;</span><span class="n">metadata</span><span class="p">,</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="n">VendorProfilePlan</span><span class="w"> </span><span class="o">&amp;</span><span class="n">plan</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The three structures used by the import interface are defined by FlagPrism. With default values omitted, the structures are as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Basic information of this collection, passed by FlagPrism to the vendor Importer.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">SessionProfileMetadata</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">schemaVersion</span><span class="p">;</span><span class="w">                    </span><span class="c1">// data format version</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">runId</span><span class="p">;</span><span class="w">                         </span><span class="c1">// run ID of this run</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">sessionName</span><span class="p">;</span><span class="w">                   </span><span class="c1">// session name</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">backend</span><span class="p">;</span><span class="w">                       </span><span class="c1">// chip backend name</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">profilerName</span><span class="p">;</span><span class="w">                  </span><span class="c1">// Profiler name</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w">                       </span><span class="c1">// context mode</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w">                          </span><span class="c1">// output data type</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">hook</span><span class="p">;</span><span class="w">                          </span><span class="c1">// hook type</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span><span class="w">                          </span><span class="c1">// raw collection mode passed in by the user</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">runtimeBaseEnabled</span><span class="p">;</span><span class="w">                   </span><span class="c1">// whether to collect basic kernel runtime information</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vendorMetricsRequested</span><span class="p">;</span><span class="w"> </span><span class="c1">// vendor metrics requested by the user</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vendorMetricsEnabled</span><span class="p">;</span><span class="w">   </span><span class="c1">// vendor metrics actually enabled in this run</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">degradeReasons</span><span class="p">;</span><span class="w">   </span><span class="c1">// known degradation reasons</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">config</span><span class="p">;</span><span class="w"> </span><span class="c1">// vendor configuration and raw result location</span>
+<span class="w">  </span><span class="n">RuntimeVersionInfo</span><span class="w"> </span><span class="n">versions</span><span class="p">;</span><span class="w">               </span><span class="c1">// driver and Runtime versions</span>
+<span class="w">  </span><span class="n">DeviceSnapshot</span><span class="w"> </span><span class="n">device</span><span class="p">;</span><span class="w">                     </span><span class="c1">// device ID, name, architecture, and other information</span>
+<span class="p">};</span>
+
+<span class="c1">// The collection configuration actually executed in this run, generated by makePlan().</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">VendorProfilePlan</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">VendorProfileOptions</span><span class="w"> </span><span class="n">requested</span><span class="p">;</span><span class="w">            </span><span class="c1">// original user request and vendor parameters</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">runtimeBaseEnabled</span><span class="p">;</span><span class="w">                   </span><span class="c1">// whether to collect basic kernel runtime information</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">enabledVendorMetrics</span><span class="p">;</span><span class="w">  </span><span class="c1">// metrics actually enabled</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">disabledVendorMetrics</span><span class="p">;</span><span class="w"> </span><span class="c1">// metrics that cannot be enabled</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">degradeReasons</span><span class="p">;</span><span class="w">   </span><span class="c1">// reasons why the metrics cannot be enabled</span>
+<span class="p">};</span>
+
+<span class="c1">// The unified result returned by the vendor Importer.</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">VendorProfileArtifact</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">schemaVersion</span><span class="p">;</span><span class="w">                    </span><span class="c1">// data format version</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">backend</span><span class="p">;</span><span class="w">                       </span><span class="c1">// chip backend name</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">importer</span><span class="p">;</span><span class="w">                      </span><span class="c1">// Importer name</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VendorMetricRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">requestedMetrics</span><span class="p">;</span><span class="w"> </span><span class="c1">// metrics requested by the user</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">enabledMetrics</span><span class="p">;</span><span class="w">   </span><span class="c1">// metrics actually collected</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rawInputs</span><span class="p">;</span><span class="w">        </span><span class="c1">// vendor raw files that were read</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">degradeReasons</span><span class="p">;</span><span class="w">   </span><span class="c1">// parsing and correlation failure reasons</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VendorMetricAssociation</span><span class="o">&gt;</span><span class="w"> </span><span class="n">associations</span><span class="p">;</span><span class="w"> </span><span class="c1">// kernel events and their metrics</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Among them:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">VendorProfileOptions</span></code> contains the raw user mode, the metric list, and vendor parameters;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VendorMetricAssociation</span></code> contains a kernel event, the collection status, the metric list, and an error description;</p></li>
+<li><p>a kernel event contains the kernel name, device ID, stream ID, task/correlation ID, and the start and end times.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">metrics</span></code> stores the performance data provided by the vendor, for example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ai_core_utilization = 85.2
+memory_bandwidth_gbps = 720.5
+cache_hit_rate = 0.91
+</pre></div>
+</div>
+<p>The following must be completed inside <code class="docutils literal notranslate"><span class="pre">import()</span></code>:</p>
+<ul class="simple">
+<li><p>read the data collected at runtime or the files exported by the vendor tool;</p></li>
+<li><p>convert the times uniformly to nanoseconds;</p></li>
+<li><p>correlate the metrics with the kernel or operator;</p></li>
+<li><p>mark whether each metric was collected successfully;</p></li>
+<li><p>give reasons for data that is unsupported, not collected, or unable to be correlated.</p></li>
+</ul>
+<p>Each metric should state its source, unit, and statistical scope, and should distinguish host time from device time, theoretical occupancy from measured utilization, and the statistics of a single kernel from those of the entire collection scope.</p>
+</section>
+<section id="ascend-implementation-approach">
+<h3>2.4 Ascend implementation approach<a class="headerlink" href="#ascend-implementation-approach" title="Link to this heading">#</a></h3>
+<p>The implementation approach on Ascend is as follows:</p>
+<ol class="arabic simple">
+<li><p>the backend name is <code class="docutils literal notranslate"><span class="pre">cann</span></code>, and the device type is <code class="docutils literal notranslate"><span class="pre">ASCEND</span></code>;</p></li>
+<li><p>start performance collection through <code class="docutils literal notranslate"><span class="pre">aclprofInit</span></code>, <code class="docutils literal notranslate"><span class="pre">aclprofCreateConfig</span></code>, and <code class="docutils literal notranslate"><span class="pre">aclprofStart</span></code>;</p></li>
+<li><p>mark the start and end of operators through MSTX Range, and save the relationship between operator IDs and Range IDs;</p></li>
+<li><p>stop collection through <code class="docutils literal notranslate"><span class="pre">aclprofStop</span></code>, <code class="docutils literal notranslate"><span class="pre">aclprofDestroyConfig</span></code>, and <code class="docutils literal notranslate"><span class="pre">aclprofFinalize</span></code>;</p></li>
+<li><p>export the performance data through <code class="docutils literal notranslate"><span class="pre">msprof</span></code>;</p></li>
+<li><p>parse the exported data, and correlate metrics such as AI Core, bandwidth, and execution time with the corresponding operators;</p></li>
+<li><p>when the CANN or MSTX interfaces are unavailable, state in the results that the corresponding metrics were not collected successfully.</p></li>
+</ol>
+</section>
+</section>
+<section id="debugger-adaptation-interfaces">
+<h2>3. Debugger adaptation interfaces<a class="headerlink" href="#debugger-adaptation-interfaces" title="Link to this heading">#</a></h2>
+<section id="device-runtime-interfaces">
+<h3>3.1 Device runtime interfaces<a class="headerlink" href="#device-runtime-interfaces" title="Link to this heading">#</a></h3>
+<p>Implement the following 11 interfaces:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RuntimeBackendAdapter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// Return the driver kind, the backend name, and the current availability.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">TransferDriverKind</span><span class="w"> </span><span class="n">driverKind</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="nf">name</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">isAvailable</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Allocate and free device memory.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">allocateDevice</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">freeDevice</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Allocate and free host memory.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">allocateHost</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">freeHost</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Initialize device memory.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">memsetDevice</span><span class="p">(</span>
+<span class="w">      </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Host-to-device data transfer.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">copyHostToDevice</span><span class="p">(</span>
+<span class="w">      </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">deviceDst</span><span class="p">,</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">hostSrc</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Device-to-host data transfer.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">copyDeviceToHost</span><span class="p">(</span>
+<span class="w">      </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">hostDst</span><span class="p">,</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">deviceSrc</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Wait for the specified stream to complete.</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">synchronize</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>In multi-device scenarios, if the runtime needs to switch devices explicitly, <code class="docutils literal notranslate"><span class="pre">setDevice(uint32_t</span> <span class="pre">deviceId)</span></code> should also be overridden, to ensure that memory allocation and transfers use the device on which the kernel resides.</p>
+<p>The interfaces must satisfy:</p>
+<ul class="simple">
+<li><p>device memory can be read and written directly by the kernel;</p></li>
+<li><p>host memory supports data transfer between the device and the host;</p></li>
+<li><p>when a valid stream is passed in, data transfers and the kernel keep the correct order on the same stream;</p></li>
+<li><p>the host starts reading the debug data only after synchronization is complete;</p></li>
+<li><p>all memory and runtime resources are released after debugging ends.</p></li>
+</ul>
+</section>
+<section id="kernel-compilation-and-launch-requirements">
+<h3>3.2 Kernel compilation and launch requirements<a class="headerlink" href="#kernel-compilation-and-launch-requirements" title="Link to this heading">#</a></h3>
+<p>In addition to the C++ interfaces above, the chip compiler and launcher must also support:</p>
+<ol class="arabic simple">
+<li><p>adding one device pointer parameter <code class="docutils literal notranslate"><span class="pre">__debug_ctrl_ptr</span></code> for kernels with Debugger enabled;</p></li>
+<li><p>the launcher allocating and initializing the debug buffer before the kernel is launched;</p></li>
+<li><p>the launcher passing the device address of the debug buffer to the kernel as the last parameter;</p></li>
+<li><p>the kernel writing debug records into that buffer;</p></li>
+<li><p>copying the buffer back to the host after the kernel finishes executing;</p></li>
+<li><p>not adding this parameter when Debugger is not enabled;</p></li>
+<li><p>recording the overflow status when the debug buffer is full, without writing out of bounds.</p></li>
+</ol>
+<p>In the initial stage of integration, the L1 numerical summary can be implemented first, including statistics such as NaN, Inf, maximum, minimum, and mean; L2 additionally needs to support the collection and transfer back of complete tensors.</p>
+<p>If memory access address collection needs to be supported, the pointers in the kernel also need to be converted to actual device addresses, and an address summary of the valid threads or a complete address list must be output.</p>
+</section>
+<section id="id1">
+<h3>3.3 Ascend implementation approach<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>The Debugger Runtime on Ascend uses the following CANN interfaces:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Function</p></th>
+<th class="head"><p>Ascend implementation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Allocate device memory</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMalloc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Free device memory</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtFree</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Allocate host memory</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMallocHost</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Free host memory</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtFreeHost</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Initialize device memory</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMemset</span></code> or <code class="docutils literal notranslate"><span class="pre">aclrtMemsetAsync</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Copy from host to device</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMemcpy</span></code> or <code class="docutils literal notranslate"><span class="pre">aclrtMemcpyAsync</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Copy from device to host</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMemcpy</span></code> or <code class="docutils literal notranslate"><span class="pre">aclrtMemcpyAsync</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Wait for stream completion</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtSynchronizeStream</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The overall flow is as follows:</p>
+<ol class="arabic simple">
+<li><p>allocate the debug buffer with <code class="docutils literal notranslate"><span class="pre">aclrtMalloc</span></code>;</p></li>
+<li><p>initialize the buffer header and record area;</p></li>
+<li><p>pass the device address of the buffer to the kernel as <code class="docutils literal notranslate"><span class="pre">__debug_ctrl_ptr</span></code>;</p></li>
+<li><p>the kernel writes debug records such as numerical summaries and address information into the buffer;</p></li>
+<li><p>after the kernel ends, copy the buffer to the host on the same CANN stream;</p></li>
+<li><p>call <code class="docutils literal notranslate"><span class="pre">aclrtSynchronizeStream</span></code> to wait for the copy to complete;</p></li>
+<li><p>the host parses the debug records and frees the device and host memory.</p></li>
+</ol>
+</section>
+</section>
+<section id="error-handling-requirements">
+<h2>4. Error handling requirements<a class="headerlink" href="#error-handling-requirements" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>the return value of every chip Runtime or Profiler API call must be checked;</p></li>
+<li><p>error messages must include the name of the failing interface and the error code;</p></li>
+<li><p>unsupported performance metrics must be clearly marked as unsupported;</p></li>
+<li><p>metrics that cannot be correlated with a kernel must be clearly marked as uncorrelated;</p></li>
+<li><p>placeholder zero values must not be used to disguise a successful collection;</p></li>
+<li><p>when memory allocation, data transfer, or kernel parameters are inconsistent, this debug session must be stopped and an error returned.</p></li>
+</ul>
+</section>
+<section id="correspondence-between-interfaces-and-code-files">
+<h2>5. Correspondence between interfaces and code files<a class="headerlink" href="#correspondence-between-interfaces-and-code-files" title="Link to this heading">#</a></h2>
+<p>The following code can be used as a reference. The Profiler files show the collection implementations of each vendor; the four Debugger Runtime Adapters are all located in <a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Debugger/lib/Runtime/TransferEngine.cpp">TransferEngine.cpp</a>, and can be found by the class names in the table.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Chip</p></th>
+<th class="head"><p>Profiler reference code</p></th>
+<th class="head"><p>Debugger Runtime class name</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Enflame</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Vendor/EnflameProfiler.cpp">EnflameProfiler.cpp</a>: TOPSPTI collection</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EnflameRuntimeBackendAdapter</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Moore Threads</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Vendor/MthreadsProfiler.cpp">MthreadsProfiler.cpp</a>: runtime collection</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MusaRuntimeBackendAdapter</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Ascend</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Vendor/CannProfiler.cpp">CannProfiler.cpp</a>: CANN/MSTX collection and msprof export</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CannRuntimeBackendAdapter</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>NVIDIA</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Cupti/CuptiProfiler.cpp">CuptiProfiler.cpp</a>: CUPTI collection; <a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Cupti/NvidiaHardwareCounters.cpp">NvidiaHardwareCounters.cpp</a>: hardware counters</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CudaRuntimeBackendAdapter</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="profiler">
+<h3>5.1 Profiler<a class="headerlink" href="#profiler" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Interface definition or common structure</p></th>
+<th class="head"><p>Vendor implementation and wiring location</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Vendor capabilities and collection plan</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Adapter.h</span></code>, <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Mode.h</span></code></p></td>
+<td><p>add <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Adapter.h/.cpp</span></code>; for Ascend, <code class="docutils literal notranslate"><span class="pre">CannAdapter.h/.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Start, flush, and stop collection</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Profiler.h</span></code></p></td>
+<td><p>add <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Profiler.h/.cpp</span></code>; for Ascend, <code class="docutils literal notranslate"><span class="pre">CannProfiler.h/.cpp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Operator start and end markers</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">OpInterface</span></code> in <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Context/Context.h</span></code></p></td>
+<td><p>implement <code class="docutils literal notranslate"><span class="pre">startOp()</span></code> and <code class="docutils literal notranslate"><span class="pre">stopOp()</span></code> in <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Profiler.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Vendor data import</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VendorMetricsImporter</span></code> in <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Adapter.h</span></code></p></td>
+<td><p>implement in <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Adapter.cpp</span></code> or in a separate Importer file; the Ascend implementation is in <code class="docutils literal notranslate"><span class="pre">CannAdapter.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">CannProfiler.cpp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Unified result structure</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Data/Artifacts.h</span></code></p></td>
+<td><p>the Importer fills in <code class="docutils literal notranslate"><span class="pre">VendorProfileArtifact</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Device type</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/common/include/Device.h</span></code></p></td>
+<td><p>add the vendor device type, and wire it into the device query implementation</p></td>
+</tr>
+<tr class="row-even"><td><p>Adapter registration</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">VendorAdapterRegistry</span></code> in <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Adapter.h</span></code></p></td>
+<td><p>modify <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/lib/Profiler/Vendor/Adapter.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Automatic Profiler backend selection</p></td>
+<td><p>Python <code class="docutils literal notranslate"><span class="pre">backend</span></code> selection logic</p></td>
+<td><p>modify <code class="docutils literal notranslate"><span class="pre">Profiler/python/flagtree_profiler/profile.py</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Compilation integration</p></td>
+<td><p>backend registration and CMake source file lists in <code class="docutils literal notranslate"><span class="pre">cmake/FlagPrism.cmake</span></code></p></td>
+<td><p>register the new backend, and modify <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/CMakeLists.txt</span></code> or <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/lib/Profiler/CMakeLists.txt</span></code> according to where the source files belong</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="debugger">
+<h3>5.2 Debugger<a class="headerlink" href="#debugger" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Interface definition or common structure</p></th>
+<th class="head"><p>Vendor implementation and wiring location</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Backend kind and debug record format</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Debugger/include/Debugger/Common/Protocol.h</span></code></p></td>
+<td><p>add the vendor <code class="docutils literal notranslate"><span class="pre">BackendKind</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Transfer driver kind</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Debugger/include/Debugger/Runtime/TransferEngine.h</span></code></p></td>
+<td><p>add the vendor <code class="docutils literal notranslate"><span class="pre">TransferDriverKind</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Device memory and data transfer interfaces</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/BackendAdapter.h</span></code></p></td>
+<td><p>implement <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;RuntimeBackendAdapter</span></code>; the Ascend implementation is located in <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/TransferEngine.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Runtime Adapter creation</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">createRuntimeBackendAdapter()</span></code></p></td>
+<td><p>add the vendor branch in <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/TransferEngine.cpp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Hidden parameter and debug record lowering</p></td>
+<td><p>Debugger instrumentation passes</p></td>
+<td><p>modify <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Instrumentation/Passes.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Compilation stage integration</p></td>
+<td><p>Debugger compiler callback</p></td>
+<td><p>modify <code class="docutils literal notranslate"><span class="pre">Debugger/python/flagtree_debugger/compiler.py</span></code>; modify <code class="docutils literal notranslate"><span class="pre">Debugger/python/CompilerBindings.cpp</span></code> when new C++ bindings need to be added</p></td>
+</tr>
+<tr class="row-even"><td><p>Debug buffer preparation and export</p></td>
+<td><p>Debugger Python Runtime</p></td>
+<td><p>modify <code class="docutils literal notranslate"><span class="pre">Debugger/python/flagtree_debugger/api.py</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>FlagTree common launch interface</p></td>
+<td><p>FlagTree Host gateway</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FlagTree/python/triton/_flagprism.py</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Chip launcher wiring</p></td>
+<td><p>each chip backend driver</p></td>
+<td><p>call the Debugger launch context in the chip backend <code class="docutils literal notranslate"><span class="pre">driver.py</span></code>; for Ascend, <code class="docutils literal notranslate"><span class="pre">FlagTree/third_party/ascend/backend/driver.py</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Vendor SDK detection and linking</p></td>
+<td><p>Debugger Runtime CMake</p></td>
+<td><p>add a vendor CMake file, and modify <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/CMakeLists.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">Debugger/lib/CMakeLists.txt</span></code>; for Ascend, <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/CANN.cmake</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Existing FlagTree compiler callbacks and launch interfaces should be reused with priority; when a new backend has not yet been integrated, the corresponding compilation and launch integration should be completed on the FlagTree side, and the collection and parsing logic should be placed in FlagPrism.</p>
+</section>
+</section>
+<section id="validation">
+<h2>6. Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h2>
+<p>After adaptation, on the target chip, enter the FlagPrism repository root and run the unified operator acceptance test:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>test.py
+</pre></div>
+</div>
+<p>The test runs Debugger L1, Debugger L2, and Profiler in sequence; each stage compares the operator output with the CPU reference result, and checks the corresponding collection results. Profiler acceptance requires a real kernel device execution time.</p>
+<p>Multi-card testing can use <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">test.py</span> <span class="pre">--devices</span> <span class="pre">0,1</span> <span class="pre">--jobs</span> <span class="pre">2</span></code>.</p>
+<p>At least 100 operator families are covered by default. When collection fails, the test re-runs the same operator with the tool not enabled: if plain execution also fails, it is recorded as WARNING; if plain execution succeeds, it is recorded as ERROR; errors such as environment initialization or device exceptions are recorded directly as ERROR. The unified acceptance passes when the coverage requirement is met and there is no ERROR, but a WARNING does not mean the collection succeeded.</p>
+<p>Results are saved by default under <code class="docutils literal notranslate"><span class="pre">test-results/&lt;run</span> <span class="pre">time&gt;/</span></code>; check the PASS, WARNING, and ERROR counts in <code class="docutils literal notranslate"><span class="pre">summary.json</span></code>, as well as the corresponding test logs. Add dedicated tests for new capabilities, checking the values actually collected and the correlation results; when submitting the adaptation, state the scope that actually passes and the known limitations.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="profiler.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Profiler</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../references/reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goal">1. Goal</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#information-sources">1.1 Information sources</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profiler-adaptation-interfaces">2. Profiler adaptation interfaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#declare-capabilities-and-generate-the-collection-configuration">2.1 Declare capabilities and generate the collection configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#collection-plan-vendorprofileplan">Collection plan (VendorProfilePlan)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#start-collection-and-mark-operators">2.2 Start collection and mark operators</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-vendor-performance-data">2.3 Parse vendor performance data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ascend-implementation-approach">2.4 Ascend implementation approach</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugger-adaptation-interfaces">3. Debugger adaptation interfaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#device-runtime-interfaces">3.1 Device runtime interfaces</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel-compilation-and-launch-requirements">3.2 Kernel compilation and launch requirements</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">3.3 Ascend implementation approach</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#error-handling-requirements">4. Error handling requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correspondence-between-interfaces-and-code-files">5. Correspondence between interfaces and code files</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#profiler">5.1 Profiler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#debugger">5.2 Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">6. Validation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Nov 10, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagprism_zh/user_guide/vendor-adaptation.html">中文</a></body>
+</html>

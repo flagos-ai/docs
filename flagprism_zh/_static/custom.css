@@ -1,0 +1,83 @@
+/* ============================================
+   FLAGOS DOCUMENTATION - SHARED CUSTOM CSS
+   For sphinx_book_theme sub-projects
+   ============================================ */
+
+/* ---------- Right Sidebar Width Adjustments ---------- */
+/* Reduce right TOC sidebar width to give more space to main content */
+
+@media (min-width: 992px) {
+  /* Book theme: main container adjustments */
+  .container-fluid {
+    max-width: 1600px;
+  }
+
+  /* Reduce right sidebar width */
+  .col-md-2,
+  .bd-sidebar-secondary,
+  .toc-chapters {
+    flex: 0 0 17rem !important;
+    max-width: 17rem !important;
+    width: 17rem !important;
+  }
+
+  /* Increase main content column
+  .col-md-8,
+  .col-md-9,
+  .bd-content {
+    flex: 0 0 calc(100% - 17rem) !important;
+    max-width: calc(100% - 17rem) !important;
+  } */
+
+  /* When both sidebars present
+  .col-md-7 {
+    flex: 0 0 calc(100% - 26rem) !important;
+    max-width: calc(100% - 26rem) !important;
+  } */
+}
+
+/* Ensure content uses full available width */
+.bd-article,
+.bd-article-container,
+article[role="main"] {
+  max-width: 100% !important;
+}
+
+/* Adjust TOC font size for narrower sidebar */
+.toc-h2, .toc-h3, .toc-h4,
+.toc-entry a,
+.bd-toc-nav li a {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Back to main link styling */
+.back-to-main {
+  font-weight: 500;
+}
+
+/* ---------- General improvements ---------- */
+/* Make sure images don't overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Better table handling */
+table {
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
+}
+
+/* Code block improvements */
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Adjust sphinx-book-theme navbar logo size */ 
+.sidebar-primary-item .logo__image {
+    max-height: 45px !important;
+    width: auto !important;
+}

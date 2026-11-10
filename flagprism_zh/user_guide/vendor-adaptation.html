@@ -1,0 +1,1229 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="FlagPrism Profiler 与 Debugger 芯片适配需求" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="user_guide/vendor-adaptation.html" />
+<meta property="og:site_name" content="KernelGen Documentation" />
+<meta property="og:description" content="1. 目标: 环境准备使用 FlagTree 对应芯片的开发容器，具体步骤见该后端的使用手册。LLVM 和 SDK 环境沿用对应 FlagTree 容器的配置。 芯片适配完成后，需要支持： Profiler 启动和停止芯片性能采集，获取 kernel 执行信息和硬件指标；, Debugger 分配设备调试内存，将调试指针传给 kernel，并在 kernel 执行后取回调试数据；, 未开启 Profiler 或 Debugger 时，不改变 kernel 的编译和执行行为。. 其中，芯片硬件性能信息依赖厂商提供的 Profiler 能力。厂商需要提供性能采集 API 或命令行工具，并提供..." />
+<meta property="og:image" content="https://docs.readthedocs.io/en/latest/_static/img/logo-opengraph.png" />
+<meta property="og:image:alt" content="KernelGen Documentation" />
+<meta name="description" content="1. 目标: 环境准备使用 FlagTree 对应芯片的开发容器，具体步骤见该后端的使用手册。LLVM 和 SDK 环境沿用对应 FlagTree 容器的配置。 芯片适配完成后，需要支持： Profiler 启动和停止芯片性能采集，获取 kernel 执行信息和硬件指标；, Debugger 分配设备调试内存，将调试指针传给 kernel，并在 kernel 执行后取回调试数据；, 未开启 Profiler 或 Debugger 时，不改变 kernel 的编译和执行行为。. 其中，芯片硬件性能信息依赖厂商提供的 Profiler 能力。厂商需要提供性能采集 API 或命令行工具，并提供..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>FlagPrism Profiler 与 Debugger 芯片适配需求 &#8212; FlagPrism 文档中心</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
+    <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=b8b12719"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+    <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
+    <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
+    <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
+    <script defer="defer" src="../_static/tippy/user_guide/vendor-adaptation.7f4927b6-c20e-4757-b59e-5a7a7d570972.js"></script>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/vendor-adaptation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="canonical" href="/user_guide/vendor-adaptation.html" />
+    <link rel="icon" href="../_static/favicon.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="参考" href="../references/reference.html" />
+    <link rel="prev" title="Profiler" href="profiler.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Nov 10, 2026"/>
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  <!--preview-badge-css--><style>html{scroll-padding-top:36px}body{padding-top:36px !important}</style></head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item"><!-- docs/_templates/return_to_main.html -->
+<!-- Minimal text link version -->
+<style>
+  .return-to-main-link {
+    display: inline-block;
+    margin-left: 16px;
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
+    font-style: italic; /* Add italic style */
+  }
+  
+  .return-to-main-link:hover {
+    color: #2b6cb0;
+    text-decoration: none;
+  }
+  
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
+  }
+  
+  /* Dark mode support */
+  html[data-theme="dark"] .return-to-main-link {
+    color: #cbd5e0;
+  }
+
+  html[data-theme="dark"] .return-to-main-link:hover {
+    color: #90cdf4;
+  }
+
+  html[data-theme="dark"] .return-to-main-link::after {
+    background-color: #90cdf4;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<a href="https://docs.flagos.io/zh-cn/latest/" 
+   class="return-to-main-link"
+   aria-label="返回 FlagOS 文档"
+   title="返回 FlagOS 文档">
+  ← 返回 FlagOS 文档
+</a></div>
+          
+        
+      </div>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/logo-en-light.svg" class="logo__image only-light" alt="FlagPrism 文档中心 - Home"/>
+    <img src="../_static/logo-en-dark.svg" class="logo__image only-dark pst-js-only" alt="FlagPrism 文档中心 - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    FlagPrism
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 发布说明</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../release_notes/release-notes.html">发布说明</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">📚 使用指南</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../overview/overview.html">概览</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/install.html">安装</a></li>
+<li class="toctree-l1"><a class="reference internal" href="debugger.html">Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profiler.html">Profiler</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">FlagPrism Profiler 与 Debugger 芯片适配需求</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references/reference.html">参考</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/flagos-ai/docs/edit/main/user_guide/vendor-adaptation.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>FlagPrism Profiler 与 Debugger 芯片适配需求</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 目标</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1.1 信息来源</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profiler">2. Profiler 适配接口</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2.1 声明能力并生成采集配置</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vendorprofileplan">采集计划（VendorProfilePlan）</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">2.2 启动采集并标记算子</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.3 解析厂商性能数据</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.4 昇腾实现思路</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugger">3. Debugger 适配接口</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">3.1 设备运行时接口</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">3.2 Kernel 编译和启动要求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">3.3 昇腾实现思路</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">4. 错误处理要求</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">5. 接口与代码文件对应关系</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">5.1 Profiler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">5.2 Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">6. 验证</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="flagprism-profiler-debugger">
+<h1>FlagPrism Profiler 与 Debugger 芯片适配需求<a class="headerlink" href="#flagprism-profiler-debugger" title="Link to this heading">#</a></h1>
+<section id="id1">
+<h2>1. 目标<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>环境准备使用 FlagTree 对应芯片的开发容器，具体步骤见该后端的使用手册。LLVM 和 SDK 环境沿用对应 FlagTree 容器的配置。</p>
+<p>芯片适配完成后，需要支持：</p>
+<ul class="simple">
+<li><p>Profiler 启动和停止芯片性能采集，获取 kernel 执行信息和硬件指标；</p></li>
+<li><p>Debugger 分配设备调试内存，将调试指针传给 kernel，并在 kernel 执行后取回调试数据；</p></li>
+<li><p>未开启 Profiler 或 Debugger 时，不改变 kernel 的编译和执行行为。</p></li>
+</ul>
+<p>其中，芯片硬件性能信息依赖厂商提供的 Profiler 能力。厂商需要提供性能采集 API 或命令行工具，并提供可解析的结果。FlagPrism 负责调用厂商 Profiler、关联 Triton 算子，以及将结果转换为统一格式。</p>
+<section id="id2">
+<h3>1.1 信息来源<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>当前设计中的信息分为三类：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>类型</p></th>
+<th class="head"><p>可以获得的信息</p></th>
+<th class="head"><p>是否依赖厂商 Profiler</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>基础插桩信息</p></td>
+<td><p>kernel 和算子名称、源码位置、算子 ID、数据类型、shape、layout、访存类型</p></td>
+<td><p>否</p></td>
+</tr>
+<tr class="row-odd"><td><p>数值摘要</p></td>
+<td><p>元素数量、NaN 数量、Inf 数量、零值数量、有限值均值、最小值、最大值、L2 Norm</p></td>
+<td><p>否</p></td>
+</tr>
+<tr class="row-even"><td><p>芯片性能信息</p></td>
+<td><p>kernel 设备执行时间、计算单元利用率、带宽、Cache、指令统计、硬件计数器</p></td>
+<td><p>是</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>完成 Debugger 的插桩、编译和运行时接入后，FlagPrism 可以采集基础插桩信息和数值摘要，具体要求见第 3 节。</p>
+<p>芯片性能指标由厂商决定支持范围。厂商未提供的指标会标记为不支持或不可用，不影响基础插桩信息和数值摘要的采集。</p>
+</section>
+</section>
+<section id="profiler">
+<h2>2. Profiler 适配接口<a class="headerlink" href="#profiler" title="Link to this heading">#</a></h2>
+<p>Profiler 适配分为三个步骤：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. 声明厂商支持哪些指标，并生成本次采集配置
+                         ↓
+2. 启动厂商 Profiler，在程序运行期间采集数据
+                         ↓
+3. 解析厂商输出，生成统一的 kernel 性能结果
+</pre></div>
+</div>
+<p>三个步骤分别对应 2.1、2.2 和 2.3。运行时采集的主要流程为：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>makePlan → 配置采集器 → doStart → startOp/stopOp → doFlush → doStop → import
+</pre></div>
+</div>
+<section id="id3">
+<h3>2.1 声明能力并生成采集配置<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">VendorAdapter</span></code> 负责说明厂商支持哪些指标，并把用户请求转换成本次实际使用的采集配置。</p>
+<p>实现以下 6 个接口：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VendorAdapter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// 返回后端名称，例如 "cann"。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 返回设备类型。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">DeviceType</span><span class="w"> </span><span class="nf">getDeviceType</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 返回支持的硬件指标名称。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="n">getSupportedVendorMetrics</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 根据用户请求生成实际采集方案。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">VendorProfilePlan</span>
+<span class="w">  </span><span class="nf">makePlan</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">VendorProfileOptions</span><span class="w"> </span><span class="o">&amp;</span><span class="n">options</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 返回芯片 Profiler 实例。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">Profiler</span><span class="w"> </span><span class="o">*</span><span class="nf">getRuntimeProfiler</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 创建性能数据导入器。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">VendorMetricsImporter</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="n">createImporter</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>其中，<code class="docutils literal notranslate"><span class="pre">getRuntimeProfiler()</span></code> 返回 2.2 中的采集对象，<code class="docutils literal notranslate"><span class="pre">createImporter()</span></code> 返回 2.3 中的解析对象。</p>
+<p>需要把采集计划传给运行时采集器时，可重写 <code class="docutils literal notranslate"><span class="pre">configureRuntimeProfiler(profilerPath,</span> <span class="pre">plan)</span></code>；该接口默认已有实现。</p>
+<section id="vendorprofileplan">
+<h4>采集计划（VendorProfilePlan）<a class="headerlink" href="#vendorprofileplan" title="Link to this heading">#</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">makePlan()</span></code> 根据用户请求和厂商支持范围，生成本次采集配置 <code class="docutils literal notranslate"><span class="pre">VendorProfilePlan</span></code>。</p>
+<p>用户请求 <code class="docutils literal notranslate"><span class="pre">VendorProfileOptions</span></code> 包含：</p>
+<ul class="simple">
+<li><p>是否采集 kernel 基础运行信息；</p></li>
+<li><p>希望采集的硬件指标；</p></li>
+<li><p>device ID、输出位置等厂商参数。</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">makePlan()</span></code> 返回的 <code class="docutils literal notranslate"><span class="pre">VendorProfilePlan</span></code> 包含：</p>
+<ul class="simple">
+<li><p>本次实际启用的指标；</p></li>
+<li><p>本次无法启用的指标；</p></li>
+<li><p>传给厂商 Profiler 的配置；</p></li>
+<li><p>指标无法启用的原因。</p></li>
+</ul>
+<p>例如，用户请求 <code class="docutils literal notranslate"><span class="pre">aicore</span></code>、<code class="docutils literal notranslate"><span class="pre">bandwidth</span></code> 和 <code class="docutils literal notranslate"><span class="pre">cache</span></code>，而昇腾当前只支持前两项，则生成的 plan 为：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>enabled  = [aicore, bandwidth]
+disabled = [cache]
+reason   = [当前 Profiler 不支持 cache 指标]
+</pre></div>
+</div>
+<p>后续采集和结果解析都使用同一个 plan。</p>
+</section>
+</section>
+<section id="id4">
+<h3>2.2 启动采集并标记算子<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>这一阶段负责调用厂商 Profiler，并在 Triton 算子开始和结束时添加标记。</p>
+<p>实现以下接口：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Profiler</span><span class="w"> </span><span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// 启动芯片性能采集。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">doStart</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 刷新当前采集数据。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doFlush</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 停止采集并释放资源。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doStop</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 设置设备、指标、输出目录等采集参数。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">doSetMode</span><span class="p">(</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">options</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>为了将 Triton 算子与芯片侧性能事件对应，还需要实现：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">OpInterface</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// 算子开始执行。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">startOp</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Scope</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scope</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 算子执行结束。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">stopOp</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Scope</span><span class="w"> </span><span class="o">&amp;</span><span class="n">scope</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>停止采集前应刷新数据，确保已采集的事件可供后续导入。</p>
+</section>
+<section id="id5">
+<h3>2.3 解析厂商性能数据<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>该接口的作用是把厂商 Profiler 的原始结果转换成 FlagPrism 可以读取的统一结果。</p>
+<p>原始结果可以来自运行时采集的内存数据，也可以来自厂商工具导出的文件。使用外部工具时，需完成工具调用和结果导入，并在执行失败时报告错误。</p>
+<p>实现以下接口：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VendorMetricsImporter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">VendorProfileArtifact</span><span class="w"> </span><span class="nf">import</span><span class="p">(</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="n">SessionProfileMetadata</span><span class="w"> </span><span class="o">&amp;</span><span class="n">metadata</span><span class="p">,</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="n">VendorProfilePlan</span><span class="w"> </span><span class="o">&amp;</span><span class="n">plan</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>导入接口使用的三个结构体由 FlagPrism 定义。省略默认值后，结构如下：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// 本次采集的基本信息，由 FlagPrism 传给厂商 Importer。</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">SessionProfileMetadata</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">schemaVersion</span><span class="p">;</span><span class="w">                    </span><span class="c1">// 数据格式版本</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">runId</span><span class="p">;</span><span class="w">                         </span><span class="c1">// 本次运行 ID</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">sessionName</span><span class="p">;</span><span class="w">                   </span><span class="c1">// session 名称</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">backend</span><span class="p">;</span><span class="w">                       </span><span class="c1">// 芯片后端名称</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">profilerName</span><span class="p">;</span><span class="w">                  </span><span class="c1">// Profiler 名称</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">context</span><span class="p">;</span><span class="w">                       </span><span class="c1">// 上下文模式</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w">                          </span><span class="c1">// 输出数据类型</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">hook</span><span class="p">;</span><span class="w">                          </span><span class="c1">// hook 类型</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span><span class="w">                          </span><span class="c1">// 用户传入的原始采集模式</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">runtimeBaseEnabled</span><span class="p">;</span><span class="w">                   </span><span class="c1">// 是否采集 kernel 基础运行信息</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vendorMetricsRequested</span><span class="p">;</span><span class="w"> </span><span class="c1">// 用户请求的厂商指标</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vendorMetricsEnabled</span><span class="p">;</span><span class="w">   </span><span class="c1">// 本次实际启用的厂商指标</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">degradeReasons</span><span class="p">;</span><span class="w">   </span><span class="c1">// 已知的降级原因</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">config</span><span class="p">;</span><span class="w"> </span><span class="c1">// 厂商配置和原始结果位置</span>
+<span class="w">  </span><span class="n">RuntimeVersionInfo</span><span class="w"> </span><span class="n">versions</span><span class="p">;</span><span class="w">               </span><span class="c1">// 驱动和 Runtime 版本</span>
+<span class="w">  </span><span class="n">DeviceSnapshot</span><span class="w"> </span><span class="n">device</span><span class="p">;</span><span class="w">                     </span><span class="c1">// 设备 ID、名称和架构等信息</span>
+<span class="p">};</span>
+
+<span class="c1">// 本次实际执行的采集配置，由 makePlan() 生成。</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">VendorProfilePlan</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">VendorProfileOptions</span><span class="w"> </span><span class="n">requested</span><span class="p">;</span><span class="w">            </span><span class="c1">// 用户原始请求和厂商参数</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">runtimeBaseEnabled</span><span class="p">;</span><span class="w">                   </span><span class="c1">// 是否采集 kernel 基础运行信息</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">enabledVendorMetrics</span><span class="p">;</span><span class="w">  </span><span class="c1">// 实际启用的指标</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">disabledVendorMetrics</span><span class="p">;</span><span class="w"> </span><span class="c1">// 无法启用的指标</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">degradeReasons</span><span class="p">;</span><span class="w">   </span><span class="c1">// 无法启用的原因</span>
+<span class="p">};</span>
+
+<span class="c1">// 厂商 Importer 返回的统一结果。</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">VendorProfileArtifact</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">schemaVersion</span><span class="p">;</span><span class="w">                    </span><span class="c1">// 数据格式版本</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">backend</span><span class="p">;</span><span class="w">                       </span><span class="c1">// 芯片后端名称</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">importer</span><span class="p">;</span><span class="w">                      </span><span class="c1">// Importer 名称</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VendorMetricRequest</span><span class="o">&gt;</span><span class="w"> </span><span class="n">requestedMetrics</span><span class="p">;</span><span class="w"> </span><span class="c1">// 用户请求的指标</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">enabledMetrics</span><span class="p">;</span><span class="w">   </span><span class="c1">// 实际采集的指标</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rawInputs</span><span class="p">;</span><span class="w">        </span><span class="c1">// 读取的厂商原始文件</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">degradeReasons</span><span class="p">;</span><span class="w">   </span><span class="c1">// 解析和关联失败原因</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VendorMetricAssociation</span><span class="o">&gt;</span><span class="w"> </span><span class="n">associations</span><span class="p">;</span><span class="w"> </span><span class="c1">// kernel 事件及其指标</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>其中：</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">VendorProfileOptions</span></code> 包含用户原始模式、指标列表和厂商参数；</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">VendorMetricAssociation</span></code> 包含一个 kernel 事件、采集状态、指标列表和错误说明；</p></li>
+<li><p>kernel 事件包含 kernel 名称、device ID、stream ID、task/correlation ID，以及开始和结束时间。</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">metrics</span></code> 保存厂商提供的性能数据，例如：</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ai_core_utilization = 85.2
+memory_bandwidth_gbps = 720.5
+cache_hit_rate = 0.91
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">import()</span></code> 内需要完成：</p>
+<ul class="simple">
+<li><p>读取运行时采集数据或厂商工具导出的文件；</p></li>
+<li><p>将时间统一转换为纳秒；</p></li>
+<li><p>将指标与 kernel 或算子关联；</p></li>
+<li><p>标记指标是否采集成功；</p></li>
+<li><p>对不支持、未采集到或无法关联的数据给出原因。</p></li>
+</ul>
+<p>每项指标应说明来源、单位和统计范围，区分 Host 耗时与设备耗时、理论 occupancy 与实测利用率，以及单个 kernel 与整个采集范围的统计值。</p>
+</section>
+<section id="id6">
+<h3>2.4 昇腾实现思路<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>昇腾上的实现方式如下：</p>
+<ol class="arabic simple">
+<li><p>后端名称为 <code class="docutils literal notranslate"><span class="pre">cann</span></code>，设备类型为 <code class="docutils literal notranslate"><span class="pre">ASCEND</span></code>；</p></li>
+<li><p>通过 <code class="docutils literal notranslate"><span class="pre">aclprofInit</span></code>、<code class="docutils literal notranslate"><span class="pre">aclprofCreateConfig</span></code> 和 <code class="docutils literal notranslate"><span class="pre">aclprofStart</span></code> 启动性能采集；</p></li>
+<li><p>通过 MSTX Range 标记算子的开始和结束，并保存算子 ID 与 Range ID 的关系；</p></li>
+<li><p>通过 <code class="docutils literal notranslate"><span class="pre">aclprofStop</span></code>、<code class="docutils literal notranslate"><span class="pre">aclprofDestroyConfig</span></code> 和 <code class="docutils literal notranslate"><span class="pre">aclprofFinalize</span></code> 停止采集；</p></li>
+<li><p>通过 <code class="docutils literal notranslate"><span class="pre">msprof</span></code> 导出性能数据；</p></li>
+<li><p>解析导出的数据，将 AI Core、带宽、执行时间等指标关联到对应算子；</p></li>
+<li><p>CANN 或 MSTX 接口不可用时，在结果中说明相应指标未采集成功。</p></li>
+</ol>
+</section>
+</section>
+<section id="debugger">
+<h2>3. Debugger 适配接口<a class="headerlink" href="#debugger" title="Link to this heading">#</a></h2>
+<section id="id7">
+<h3>3.1 设备运行时接口<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>实现以下 11 个接口：</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RuntimeBackendAdapter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// 返回驱动类型、后端名称和当前可用状态。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">TransferDriverKind</span><span class="w"> </span><span class="n">driverKind</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="nf">name</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">isAvailable</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 分配和释放设备内存。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">allocateDevice</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">freeDevice</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 分配和释放 Host 内存。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">allocateHost</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">freeHost</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 初始化设备内存。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">memsetDevice</span><span class="p">(</span>
+<span class="w">      </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">ptr</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Host 到设备的数据传输。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">copyHostToDevice</span><span class="p">(</span>
+<span class="w">      </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">deviceDst</span><span class="p">,</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">hostSrc</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 设备到 Host 的数据传输。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">copyDeviceToHost</span><span class="p">(</span>
+<span class="w">      </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">hostDst</span><span class="p">,</span>
+<span class="w">      </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">deviceSrc</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">size_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">,</span>
+<span class="w">      </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 等待指定 stream 完成。</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">synchronize</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">streamHandle</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>多设备场景下，如运行时需要显式切换设备，还应重写 <code class="docutils literal notranslate"><span class="pre">setDevice(uint32_t</span> <span class="pre">deviceId)</span></code>，确保内存分配和传输使用 kernel 所在的设备。</p>
+<p>接口需要满足：</p>
+<ul class="simple">
+<li><p>设备内存可以被 kernel 直接读写；</p></li>
+<li><p>Host 内存支持设备与 Host 之间的数据传输；</p></li>
+<li><p>传入有效 stream 时，数据传输和 kernel 在同一 stream 上保持正确顺序；</p></li>
+<li><p>同步完成后，Host 才开始读取调试数据；</p></li>
+<li><p>所有内存和运行时资源在调试结束后释放。</p></li>
+</ul>
+</section>
+<section id="kernel">
+<h3>3.2 Kernel 编译和启动要求<a class="headerlink" href="#kernel" title="Link to this heading">#</a></h3>
+<p>除上述 C++ 接口外，芯片编译器和 launcher 还需要支持：</p>
+<ol class="arabic simple">
+<li><p>为开启 Debugger 的 kernel 增加一个设备指针参数 <code class="docutils literal notranslate"><span class="pre">__debug_ctrl_ptr</span></code>；</p></li>
+<li><p>launcher 在 kernel 启动前分配并初始化调试缓冲区；</p></li>
+<li><p>launcher 将调试缓冲区的设备地址作为最后一个参数传给 kernel；</p></li>
+<li><p>kernel 将调试记录写入该缓冲区；</p></li>
+<li><p>kernel 执行完成后，将缓冲区复制回 Host；</p></li>
+<li><p>未开启 Debugger 时，不增加该参数；</p></li>
+<li><p>调试缓冲区满时记录溢出状态，不能越界写入。</p></li>
+</ol>
+<p>接入初期可先实现 L1 数值摘要，包括 NaN、Inf、最大值、最小值、均值等统计信息；L2 还需支持完整张量的采集和回传。</p>
+<p>如果需要支持访存地址采集，还需要将 kernel 中的指针转换为实际设备地址，并输出有效线程的地址摘要或完整地址列表。</p>
+</section>
+<section id="id8">
+<h3>3.3 昇腾实现思路<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>昇腾上的 Debugger Runtime 使用以下 CANN 接口：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>功能</p></th>
+<th class="head"><p>昇腾实现</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>分配设备内存</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMalloc</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>释放设备内存</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtFree</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>分配 Host 内存</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMallocHost</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>释放 Host 内存</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtFreeHost</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>初始化设备内存</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMemset</span></code> 或 <code class="docutils literal notranslate"><span class="pre">aclrtMemsetAsync</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Host 复制到设备</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMemcpy</span></code> 或 <code class="docutils literal notranslate"><span class="pre">aclrtMemcpyAsync</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>设备复制到 Host</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtMemcpy</span></code> 或 <code class="docutils literal notranslate"><span class="pre">aclrtMemcpyAsync</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>等待 stream 完成</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">aclrtSynchronizeStream</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>整体流程如下：</p>
+<ol class="arabic simple">
+<li><p>使用 <code class="docutils literal notranslate"><span class="pre">aclrtMalloc</span></code> 分配调试缓冲区；</p></li>
+<li><p>初始化缓冲区头部和记录区域；</p></li>
+<li><p>将缓冲区设备地址作为 <code class="docutils literal notranslate"><span class="pre">__debug_ctrl_ptr</span></code> 传给 kernel；</p></li>
+<li><p>kernel 将数值摘要、地址信息等调试记录写入缓冲区；</p></li>
+<li><p>kernel 结束后，在同一 CANN stream 上将缓冲区复制到 Host；</p></li>
+<li><p>调用 <code class="docutils literal notranslate"><span class="pre">aclrtSynchronizeStream</span></code> 等待复制完成；</p></li>
+<li><p>Host 解析调试记录并释放设备和 Host 内存。</p></li>
+</ol>
+</section>
+</section>
+<section id="id9">
+<h2>4. 错误处理要求<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>每个芯片 Runtime 或 Profiler API 调用都要检查返回值；</p></li>
+<li><p>错误信息需要包含失败的接口名称和错误码；</p></li>
+<li><p>不支持的性能指标需要明确标记为不支持；</p></li>
+<li><p>无法关联到 kernel 的指标需要明确标记为未关联；</p></li>
+<li><p>不得用占位零值伪装采集成功；</p></li>
+<li><p>内存分配、数据传输或 kernel 参数不一致时，应停止本次调试并返回错误。</p></li>
+</ul>
+</section>
+<section id="id10">
+<h2>5. 接口与代码文件对应关系<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>以下代码可作为参考。Profiler 文件展示各厂商的采集实现；四个 Debugger Runtime Adapter 均位于 <a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Debugger/lib/Runtime/TransferEngine.cpp">TransferEngine.cpp</a>，可按表中的类名查找。</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>芯片</p></th>
+<th class="head"><p>Profiler 参考代码</p></th>
+<th class="head"><p>Debugger Runtime 类名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>燧原</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Vendor/EnflameProfiler.cpp">EnflameProfiler.cpp</a>：TOPSPTI 采集</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EnflameRuntimeBackendAdapter</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>摩尔线程</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Vendor/MthreadsProfiler.cpp">MthreadsProfiler.cpp</a>：运行时采集</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">MusaRuntimeBackendAdapter</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>昇腾</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Vendor/CannProfiler.cpp">CannProfiler.cpp</a>：CANN/MSTX 采集与 msprof 导出</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CannRuntimeBackendAdapter</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>英伟达</p></td>
+<td><p><a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Cupti/CuptiProfiler.cpp">CuptiProfiler.cpp</a>：CUPTI 采集；<a class="reference external" href="https://github.com/flagos-ai/FlagPrism/blob/main/Profiler/csrc/lib/Profiler/Cupti/NvidiaHardwareCounters.cpp">NvidiaHardwareCounters.cpp</a>：硬件计数器</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">CudaRuntimeBackendAdapter</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="id11">
+<h3>5.1 Profiler<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>内容</p></th>
+<th class="head"><p>接口定义或公共结构</p></th>
+<th class="head"><p>厂商实现及接线位置</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>厂商能力与采集计划</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Adapter.h</span></code>、<code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Mode.h</span></code></p></td>
+<td><p>新增 <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Adapter.h/.cpp</span></code>；昇腾对应 <code class="docutils literal notranslate"><span class="pre">CannAdapter.h/.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>启动、刷新和停止采集</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Profiler.h</span></code></p></td>
+<td><p>新增 <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Profiler.h/.cpp</span></code>；昇腾对应 <code class="docutils literal notranslate"><span class="pre">CannProfiler.h/.cpp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>算子开始和结束标记</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Context/Context.h</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">OpInterface</span></code></p></td>
+<td><p>在 <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Profiler.cpp</span></code> 中实现 <code class="docutils literal notranslate"><span class="pre">startOp()</span></code> 和 <code class="docutils literal notranslate"><span class="pre">stopOp()</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>厂商数据导入</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Adapter.h</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">VendorMetricsImporter</span></code></p></td>
+<td><p>在 <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;Adapter.cpp</span></code> 或独立 Importer 文件中实现；昇腾实现在 <code class="docutils literal notranslate"><span class="pre">CannAdapter.cpp</span></code> 和 <code class="docutils literal notranslate"><span class="pre">CannProfiler.cpp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>统一结果结构</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Data/Artifacts.h</span></code></p></td>
+<td><p>Importer 填充 <code class="docutils literal notranslate"><span class="pre">VendorProfileArtifact</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>设备类型</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/common/include/Device.h</span></code></p></td>
+<td><p>增加厂商设备类型，并在设备查询实现中接入</p></td>
+</tr>
+<tr class="row-even"><td><p>Adapter 注册</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Profiler/csrc/include/Profiler/Vendor/Adapter.h</span></code> 中的 <code class="docutils literal notranslate"><span class="pre">VendorAdapterRegistry</span></code></p></td>
+<td><p>修改 <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/lib/Profiler/Vendor/Adapter.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>自动选择 Profiler 后端</p></td>
+<td><p>Python <code class="docutils literal notranslate"><span class="pre">backend</span></code> 选择逻辑</p></td>
+<td><p>修改 <code class="docutils literal notranslate"><span class="pre">Profiler/python/flagtree_profiler/profile.py</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>编译接入</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">cmake/FlagPrism.cmake</span></code> 中的后端注册、CMake 源文件列表</p></td>
+<td><p>注册新后端，并按源文件归属修改 <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/CMakeLists.txt</span></code> 或 <code class="docutils literal notranslate"><span class="pre">Profiler/csrc/lib/Profiler/CMakeLists.txt</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id12">
+<h3>5.2 Debugger<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>内容</p></th>
+<th class="head"><p>接口定义或公共结构</p></th>
+<th class="head"><p>厂商实现及接线位置</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>后端类型和调试记录格式</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Debugger/include/Debugger/Common/Protocol.h</span></code></p></td>
+<td><p>增加厂商 <code class="docutils literal notranslate"><span class="pre">BackendKind</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>传输驱动类型</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Debugger/include/Debugger/Runtime/TransferEngine.h</span></code></p></td>
+<td><p>增加厂商 <code class="docutils literal notranslate"><span class="pre">TransferDriverKind</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>设备内存与数据传输接口</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/BackendAdapter.h</span></code></p></td>
+<td><p>实现 <code class="docutils literal notranslate"><span class="pre">&lt;Vendor&gt;RuntimeBackendAdapter</span></code>；昇腾实现位于 <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/TransferEngine.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Runtime Adapter 创建</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">createRuntimeBackendAdapter()</span></code></p></td>
+<td><p>在 <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/TransferEngine.cpp</span></code> 中增加厂商分支</p></td>
+</tr>
+<tr class="row-even"><td><p>隐藏参数和调试记录 lowering</p></td>
+<td><p>Debugger instrumentation passes</p></td>
+<td><p>修改 <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Instrumentation/Passes.cpp</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>编译阶段接入</p></td>
+<td><p>Debugger compiler callback</p></td>
+<td><p>修改 <code class="docutils literal notranslate"><span class="pre">Debugger/python/flagtree_debugger/compiler.py</span></code>；需要新增 C++ binding 时修改 <code class="docutils literal notranslate"><span class="pre">Debugger/python/CompilerBindings.cpp</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>调试缓冲区准备和导出</p></td>
+<td><p>Debugger Python Runtime</p></td>
+<td><p>修改 <code class="docutils literal notranslate"><span class="pre">Debugger/python/flagtree_debugger/api.py</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>FlagTree 通用 launch 接口</p></td>
+<td><p>FlagTree Host gateway</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">FlagTree/python/triton/_flagprism.py</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>芯片 launcher 接线</p></td>
+<td><p>各芯片 backend driver</p></td>
+<td><p>在芯片 backend 的 <code class="docutils literal notranslate"><span class="pre">driver.py</span></code> 中调用 Debugger launch context；昇腾对应 <code class="docutils literal notranslate"><span class="pre">FlagTree/third_party/ascend/backend/driver.py</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>厂商 SDK 探测和链接</p></td>
+<td><p>Debugger Runtime CMake</p></td>
+<td><p>新增厂商 CMake 文件，并修改 <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/CMakeLists.txt</span></code> 和 <code class="docutils literal notranslate"><span class="pre">Debugger/lib/CMakeLists.txt</span></code>；昇腾对应 <code class="docutils literal notranslate"><span class="pre">Debugger/lib/Runtime/CANN.cmake</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>已有的 FlagTree 编译回调和 launch 接口应优先复用；新后端尚未接入时，在 FlagTree 侧补齐相应的编译和启动接入，采集和解析逻辑放在 FlagPrism。</p>
+</section>
+</section>
+<section id="id13">
+<h2>6. 验证<a class="headerlink" href="#id13" title="Link to this heading">#</a></h2>
+<p>适配后，在目标芯片上进入 FlagPrism 仓库根目录，运行统一算子验收：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>test.py
+</pre></div>
+</div>
+<p>测试依次运行 Debugger L1、Debugger L2 和 Profiler，每个阶段都将算子输出与 CPU 参考结果比较，并检查对应的采集结果。Profiler 验收要求真实的 kernel 设备耗时。</p>
+<p>多卡测试可使用 <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">test.py</span> <span class="pre">--devices</span> <span class="pre">0,1</span> <span class="pre">--jobs</span> <span class="pre">2</span></code>。</p>
+<p>默认至少覆盖 100 个算子族。采集失败时，测试会补跑未开启工具的同一算子：普通执行也失败记为 WARNING，普通执行成功则记为 ERROR；环境初始化或设备异常等错误直接记为 ERROR。达到覆盖要求且没有 ERROR 时，统一验收通过，但 WARNING 不代表采集成功。</p>
+<p>结果默认保存在 <code class="docutils literal notranslate"><span class="pre">test-results/&lt;运行时间&gt;/</span></code>，查看 <code class="docutils literal notranslate"><span class="pre">summary.json</span></code> 中的 PASS、WARNING 和 ERROR 数量，以及对应测试日志。为新增能力补充专项测试，检查实际采集的数值和关联结果；提交适配时说明实际通过的范围和已知限制。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="profiler.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Profiler</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../references/reference.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">参考</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">1. 目标</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">1.1 信息来源</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#profiler">2. Profiler 适配接口</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">2.1 声明能力并生成采集配置</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vendorprofileplan">采集计划（VendorProfilePlan）</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">2.2 启动采集并标记算子</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">2.3 解析厂商性能数据</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">2.4 昇腾实现思路</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugger">3. Debugger 适配接口</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">3.1 设备运行时接口</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kernel">3.2 Kernel 编译和启动要求</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">3.3 昇腾实现思路</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">4. 错误处理要求</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">5. 接口与代码文件对应关系</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">5.1 Profiler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">5.2 Debugger</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">6. 验证</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By FlagOS Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, FlagOS Community.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Nov 10, 2026.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  <!--preview-badge--><div style="position:fixed;top:0;left:0;right:0;height:36px;line-height:36px;z-index:2147483647;background:#f59e0b;color:#000;text-align:center;font:700 15px sans-serif;letter-spacing:.08em;box-shadow:0 2px 6px rgba(0,0,0,.25)">PREVIEW</div><!--langswitch-css--><style>a.langswitch{position:fixed;bottom:18px;right:16px;z-index:2147483646;display:inline-block;padding:8px 16px;border-radius:999px;background:#111827;color:#fff !important;font:600 14px/1.2 sans-serif;text-decoration:none !important;box-shadow:0 2px 10px rgba(0,0,0,.3)}a.langswitch:hover{background:#374151}</style><a class="langswitch" href="../../flagprism_en/user_guide/vendor-adaptation.html">English</a></body>
+</html>
