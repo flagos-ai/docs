@@ -22,8 +22,8 @@ language:
 ## Benchmark Result
 |Metrics|Qwen3.6-35B-A3B-nomtp-Nvidia-Origin|Qwen3.6-35B-A3B-nomtp-Metax-FlagOS|
 |-------|---------------|---------------|
-|GPQA_Diamond |0.8283 |0.803|
-|ERQA  | 0.5875  | 0.6|
+|GPQA_Diamond |77.53% |76.26% |
+|ERQA  | 59.63%  | 59%|
 
 ## Performance Benchmark Result
 |Metric|	1k&1k 64 Concurrency|	4k&1k 64 Concurrency|	16k&1k 64 Concurrency|64k&1k 64 Concurrency|
@@ -31,138 +31,105 @@ language:
 |Equal Computing Power Ratio (FlagOS/H100)|	136.94%	|125.03%|	113.468%|87.97%|
 
 # User Guide
-Environment Setup
 
-| Item             | Version              |
-|------------------|----------------------|
-| Docker Version   | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2 |
-| Operating System |  Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
+## Environment Setup
+
+### Host Environment
+
+| Item | Version / Spec |
+|---|---|
+| Hardware (GPU) | MetaX C550 x2卡 |
+| Docker Version | 29.1.3 |
+| Operating System | Ubuntu 22.04.5 LTS |
+| Driver | MetaX 3.8.1 |
+| SDK | MACA 3.7.0.38 |
 
 ## Operation Steps
 
-### Download FlagOS Image
+### Step 0. Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/qwen36-35b-a3b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607280210
+docker pull harbor.baai.ac.cn/flagrelease-public/qwen3.6-35b-metax001-gems5.5.0-tree0.7.0-cxnone-plugin0.2.0-vllm0.20.2-sglangnone-sglangflnone-cp312-pt28-maca37-x64-3.8.1:202611091810
 ```
 
-### Download Open-source Model Weights
+### Step 1. Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express --local_dir /data/Qwen3.6-35B-A3B-nomtp
+modelscope download --model FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express
 ```
 
-### Start the Container
+### Step 2. Start the Container
 ```bash
 docker run -itd \
-    --name flagos \
+    --name qwen36-35b \
+    --hostname "$(hostname)" \
     --privileged \
     --ipc=host \
     --network=host \
-    --shm-size 64g \
-    -v /data:/data \
-    -w /workspace \
-    harbor.baai.ac.cn/flagrelease-public/qwen36-35b-a3b-metax001-gems5.0.2-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607280210 \
+    -v /public-flash:/public-flash:rw,rprivate \
+    -v /data:/data:rw,rslave \
+    -w /public-flash \
+    harbor.baai.ac.cn/flagrelease-public/qwen3.6-35b-metax001-gems5.5.0-tree0.7.0-cxnone-plugin0.2.0-vllm0.20.2-sglangnone-sglangflnone-cp312-pt28-maca37-x64-3.8.1:202611091810 \
     /bin/bash
-docker exec -it flagos /bin/bash
 ```
-### Start the Server
-#### Start Service and Test 1k, 4k Scenarios
+
+### Step 3. Start the Inference Server
 ```bash
-# Test 1k, 4K Input Scenario
-export USE_FLAGGEMS=1
-export VLLM_USE_FLAGGEMS=1
-export FLAGGEMS_ATEN_SHAPE_AWARE=0
-export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
-export VLLM020_CONTIGUOUS_SINGLE_PREFILL=0
-export VLLM020_GDN_PACKED_MIN_BATCH=32
-export VLLM020_MOE_EVEN_K_FASTPATH=1
-export VLLM020_GDN_T1_FUSED_H_SPLIT=1
-
-vllm serve /data/Qwen3.6-35B-A3B-nomtp \
-    --host 0.0.0.0 \
-    --port 8020 \
-    --served-model-name qwen36-moe \
-    --tensor-parallel-size 2 \
-    --trust-remote-code \
-    --dtype bfloat16 \
-    --max-model-len 67584 \
-    --max-num-batched-tokens 8192 \
-    --max-num-seqs 64 \
-    --gpu_memory_utilization 0.9 \
+export CUDA_VISIBLE_DEVICES=4,5 MACA_VISIBLE_DEVICES=4,5
+export USE_FLAGGEMS=1 VLLM_USE_FLAGGEMS=1 FLAGGEMS_VENDOR=metax
+export VLLM_FL_FLAGOS_BLACKLIST=topk_softmax,exponential_,index_select,mm,mm_out,clone
+export MACA_PATH=/opt/maca
+export PATH=/opt/maca/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export LD_LIBRARY_PATH=/opt/maca/ompi/lib:/opt/maca/lib
+nohup /opt/conda/bin/vllm serve FlagRelease/Qwen3.6-35B-A3B-nomtp-metax-FlagOS-Express \
+    --host 0.0.0.0 --port 8000 \
+    --served-model-name qwen36-35b \
+    --tensor-parallel-size 2 --dtype bfloat16 \
+    --max-num-batched-tokens 8192 --max-num-seqs 64 \
+    --gpu-memory-utilization 0.9 --enable-prefix-caching \
     --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
-    --generation-config vllm \
-    --no-enable-prefix-caching \
-    > /workspace/qwen36-moe-server.log 2>&1 &
-```
-#### Start Service and Test 16k Scenarios
-```bash
-# Test 16k Input Scenario
-export USE_FLAGGEMS=1
-export VLLM_USE_FLAGGEMS=1
-export FLAGGEMS_ATEN_SHAPE_AWARE=0
-export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
-export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
-export VLLM020_GDN_PACKED_MIN_BATCH=64
-export VLLM020_MOE_EVEN_K_FASTPATH=0
-export VLLM020_GDN_T1_FUSED_H_SPLIT=0
-
-vllm serve /data/Qwen3.6-35B-A3B-nomtp \
-    --host 0.0.0.0 \
-    --port 8020 \
-    --served-model-name qwen36-moe \
-    --tensor-parallel-size 2 \
-    --trust-remote-code \
-    --dtype bfloat16 \
-    --max-model-len 67584 \
-    --max-num-batched-tokens 32768 \
-    --max-num-seqs 64 \
-    --gpu_memory_utilization 0.9 \
-    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
-    --generation-config vllm \
-    --no-enable-prefix-caching \
-    > /workspace/qwen36-moe-server.log 2>&1 &
-
-```
-#### Start Service and Test 64k Scenarios
-```bash
-# Test 64k Input Scenario
-export USE_FLAGGEMS=1
-export VLLM_USE_FLAGGEMS=1
-export FLAGGEMS_ATEN_SHAPE_AWARE=0
-export VLLM_FL_FLAGOS_WHITELIST=add,cat,cos,cumsum,embedding,full,gather,le,lt,mul,pow_scalar,resolve_conj,sin,softmax,sub,zeros,zeros_like
-export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
-export VLLM020_GDN_PACKED_MIN_BATCH=64
-export VLLM020_MOE_EVEN_K_FASTPATH=0
-export VLLM020_GDN_T1_FUSED_H_SPLIT=0
-
-vllm serve /data/Qwen3.6-35B-A3B-nomtp \
-    --host 0.0.0.0 \
-    --port 8020 \
-    --served-model-name qwen36-moe \
-    --tensor-parallel-size 2 \
-    --trust-remote-code \
-    --dtype bfloat16 \
-    --max-model-len 67584 \
-    --max-num-batched-tokens 16384 \
-    --max-num-seqs 64 \
-    --gpu_memory_utilization 0.9 \
-    --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
-    --generation-config vllm \
-    --no-enable-prefix-caching \
-    > /workspace/qwen36-moe-server.log 2>&1 &
+    > ./service.log 2>&1 &
 ```
 
 ## Service Invocation
-### Invocation Script
+### Invocation Script (Text)
 ```bash
-curl http://localhost:8020/v1/chat/completions \
+curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen36-moe",
-    "messages": [{"role": "user", "content": "hi"}]
+    "model": "qwen36-35b",
+    "messages": [{"role": "user", "content": "你好"}]
   }'
 ```
 
+### Invocation Script (Image)
+```bash
+IMAGE_BASE64=$(base64 -w 0 "/public-flash/example.jpg")
+
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<EOF
+{
+  "model": "qwen36-35b",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "请描述这张图片中的内容。"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/jpeg;base64,${IMAGE_BASE64}"
+          }
+        }
+      ]
+    }
+  ]
+}
+EOF
+```
 
 ### AnythingLLM Integration Guide
 
@@ -183,10 +150,11 @@ curl http://localhost:8020/v1/chat/completions \
 
 - After model loading is complete:
 - Click **"New Conversation"**
-- Enter your question (e.g., “Explain the basics of quantum computing”)
+- Enter your question (e.g., "Explain the basics of quantum computing")
 - Click the send button to get a response
+
 # Technical Overview
-**FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
+**FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a "develop once, run anywhere" workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of <chip + open-source model>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
 FlagGems is a high-performance, generic operator libraryimplemented in [Triton](https://github.com/openai/triton) language. It is built on a collection of backend-neutralkernels that aims to accelerate LLM (Large-Language Models) training and inference across diverse hardware platforms.
 ## FlagTree
@@ -201,6 +169,7 @@ FlagCX is a scalable and adaptive cross-chip communication library. It serves as
  FlagEval is a comprehensive evaluation system and open platform for large models launched in 2023. It aims to establish scientific, fair, and open benchmarks, methodologies, and tools to help researchers assess model and training algorithm performance. It features:
  - **Multi-dimensional Evaluation**: Supports 800+ modelevaluations across NLP, CV, Audio, and Multimodal fields,covering 20+ downstream tasks including language understanding and image-text generation.
  - **Industry-Grade Use Cases**: Has completed horizonta1 evaluations of mainstream large models, providing authoritative benchmarks for chip-model performance validation.
+
 # Contributing
 
 We warmly welcome global developers to join us:
@@ -209,5 +178,9 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
+
 # License
-The model weights are derived from Qwen/Qwen3.6-35B-A3B-nomtp and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Qwen/Qwen3.6-35B and are open-sourced under the Apache License 2.0.
+
+
+
