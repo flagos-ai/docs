@@ -56,7 +56,7 @@ docker run --privileged -dit \
   --ulimit memlock=-1 \
   --ulimit stack=67108864 \
   --init \
-  -v /data:/data\
+  -v /data:/data \
   -w /data/ \
   --name flagos \
   harbor.baai.ac.cn/flagrelease-public/glm5.3-flash-pp001-gems5.4-tree0.6.1-cxnone-plugin0.3.0-vllm0.24.0-cp312-ptnone-hggcnone-x64-2.1.1-rbd225:202608271447
