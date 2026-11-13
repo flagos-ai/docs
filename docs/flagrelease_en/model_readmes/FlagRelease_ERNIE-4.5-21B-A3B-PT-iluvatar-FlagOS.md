@@ -1,4 +1,6 @@
 ---
+base_model:
+- ""
 frameworks:
 - ""
 language:
@@ -143,4 +145,6 @@ We warmly welcome global developers to join us:
 4. Expand hardware adaptation support
 # License
 The model weights are derived from PaddlePaddle/ERNIE-4.5-21B-A3B-PT and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+
+
 
