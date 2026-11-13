@@ -11,7 +11,7 @@ The general workflow is as follows:
 1. Download Open-Source Model Weights
 
    {style=lower-alpha}
-    1. Visit the FlagRelease pages on [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model), [Hugging Face](https://huggingface.co/FlagRelease), or [AI Huanxin](https://aihuanxin.cn/#/specialzone/detail/17).
+    1. Visit the FlagRelease pages on [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model), [Hugging Face](https://huggingface.co/FlagRelease), [AI Huanxin](https://aihuanxin.cn/#/specialzone/detail/17), or [SCNet](https://www.scnet.cn/ui/aihub/models?authenticated=FlagOS); cloud-GPU options (Tencent Cloud HAI, Aliyun PAI) are on the [Cloud GPU](../model_list/model-list-cloud.md) page.
     2. Select the required large model and the corresponding hardware-specific version, and download the model weight files directly.
 
 2. Download the FlagOS Image
@@ -24,6 +24,6 @@ The general workflow is as follows:
 
 ## Operation Steps
 
-1. Visit the FlagRelease pages on [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model), [Hugging Face](https://huggingface.co/FlagRelease), or [AI Huanxin](https://aihuanxin.cn/#/specialzone/detail/17).
+1. Visit the FlagRelease pages on [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model), [Hugging Face](https://huggingface.co/FlagRelease), [AI Huanxin](https://aihuanxin.cn/#/specialzone/detail/17), or [SCNet](https://www.scnet.cn/ui/aihub/models?authenticated=FlagOS); cloud-GPU options (Tencent Cloud HAI, Aliyun PAI) are on the [Cloud GPU](../model_list/model-list-cloud.md) page.
 2. Select the required large model and the corresponding hardware-specific version.
 3. Follow the steps descrbied in the model introduction pages.
