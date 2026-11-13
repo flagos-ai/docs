@@ -65,7 +65,7 @@ export MACA_VISIBLE_DEVICES=0
 /opt/conda/bin/vllm serve /data/MiniCPM5-2B \
     --port 8000 \
     --served-model-name metaxcpm526 \
-    --chat-template /data/MiniCPM5-2.6B/chat_template.jinja \
+    --chat-template /data/MiniCPM5-2B/chat_template.jinja \
     --tensor-parallel-size 1 \
     --gpu-memory-utilization 0.9 \
     --enforce-eager \

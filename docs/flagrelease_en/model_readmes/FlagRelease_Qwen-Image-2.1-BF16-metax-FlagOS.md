@@ -46,7 +46,7 @@ modelscope download --model FlagRelease/Qwen-Image-2.1-BF16-metax-FlagOS --local
 
 ### Start the Container
 ```bash
-sudo docker run -dit --privileged --gpus all --ipc=host \
+sudo docker run -dit --privileged --ipc=host \
   --entrypoint sleep \
   -e CUDA_VISIBLE_DEVICES=0 \
   -v /data/Qwen-Image-2.1:/models/Qwen-Image-2.1:ro \
