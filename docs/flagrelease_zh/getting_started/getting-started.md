@@ -11,7 +11,7 @@ FlagRelease 的输出包括经过验证的大模型文件和集成的 FlagOS Doc
 1. 下载开源模型权重
 
    {style=lower-alpha}
-    1. 访问 FlagRelease 在 [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model)、[Hugging Face](https://huggingface.co/FlagRelease) 或 [AI 焕新](https://aihuanxin.cn/#/model?path=/model) 的页面。
+    1. 访问 FlagRelease 在 [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model)、[Hugging Face](https://huggingface.co/FlagRelease) 或 [AI 焕新](https://aihuanxin.cn/#/specialzone/detail/17) 的页面。
     2. 选择所需的大模型及对应的硬件特定版本，直接下载模型权重文件。
 
 2. 下载 FlagOS 镜像
@@ -24,6 +24,6 @@ FlagRelease 的输出包括经过验证的大模型文件和集成的 FlagOS Doc
 
 ## 操作步骤
 
-1. 访问 FlagRelease 在 [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model)、[Hugging Face](https://huggingface.co/FlagRelease) 或 [AI 焕新](https://aihuanxin.cn/#/model?path=/model) 的页面。
+1. 访问 FlagRelease 在 [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model)、[Hugging Face](https://huggingface.co/FlagRelease) 或 [AI 焕新](https://aihuanxin.cn/#/specialzone/detail/17) 的页面。
 2. 选择所需的大模型及对应的硬件特定版本。
 3. 按照模型介绍页面中描述的步骤进行操作。

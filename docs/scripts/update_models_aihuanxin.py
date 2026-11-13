@@ -108,11 +108,11 @@ def get_flagos_models() -> List[Dict]:
     print(f"  Total unique 众智FlagOS models found: {len(unique_models)}")
     return unique_models
 
-def generate_model_url(model_id: str) -> str:
+def generate_model_url(model_name: str) -> str:
     """
-    Generate the model detail page URL based on model ID
+    Generate the model detail page URL based on model name
     """
-    return f"https://aihuanxin.cn/#/model?path=/model/detail/{model_id}"
+    return f"https://aihuanxin.cn/model/detail/baai/{model_name}/type=org?form=specialZone"
 
 def extract_model_names_from_markdown(filename: str) -> Set[str]:
     """
@@ -177,7 +177,7 @@ def create_markdown_table(models: List[Dict]) -> Tuple[str, Set[str]]:
         else:
             short_name = full_name
         
-        model_url = generate_model_url(model_id)
+        model_url = generate_model_url(short_name)
         model_data.append((short_name, model_url, model_id))
     
     # Sort by model name alphabetically (case-insensitive)

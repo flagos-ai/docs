@@ -13,7 +13,7 @@ FlagRelease 基于统一开源的 AI 系统软件栈 FlagOS 构建，提供跨�
 
 - [ModelScope](https://modelscope.cn/organization/FlagRelease?tab=model)
 - [Hugging Face](https://huggingface.co/FlagRelease)
-- [AI 焕新](https://aihuanxin.cn/#/model?path=/model)
+- [AI 焕新](https://aihuanxin.cn/#/specialzone/detail/17)
 
 用户可以获取不同硬件特定版本的开源大模型。这些模型可以直接在相应的硬件环境中下载和使用，无需用户自行进行模型迁移。
 
