@@ -6,6 +6,7 @@ This section includes the hardware-adapted models released through FlagRelease.
 :maxdepth: 5
 
 model-list-aihuanxin.md
+model-list-scnet.md
 model-list-huggingface.md
 model-list-modelscope.md
 model-list-cloud.md

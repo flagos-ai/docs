@@ -30,17 +30,6 @@
 +++
 [了解更多 »](model_list/model-list.md)
 :::
-
-:::{grid-item-card} {octicon}`rocket;1.5em;sd-mr-1` 发布指南
-:link: release_guide/release-guide
-:link-type: doc
-
-使用 FlagRelease 评测和发布大模型的完整流程。
-
-+++
-[了解更多 »](release_guide/release-guide.md)
-:::
-
 ::::
 
 ---
@@ -52,7 +41,6 @@
 
 FlagRelease_overview/FlagRelease-overview.md
 getting_started/getting-started.md
-release_guide/release-guide.md
 ```
 
 ```{toctree}

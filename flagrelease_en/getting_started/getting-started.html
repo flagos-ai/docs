@@ -43,7 +43,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=4418a689" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../_static/css/lightbox.min.css?v=6e7d0de0" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=538fca1d" />
     <link rel="stylesheet" type="text/css" href="../_static/homepage.css" />
@@ -64,13 +64,13 @@
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../_static/togglebutton.js?v=b8b12719"></script>
     <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/js/lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
     <script src="../_static/js/lightbox2-options.js?v=b4db3a7c"></script>
     <script defer="defer" src="https://unpkg.com/@popperjs/core@2"></script>
     <script defer="defer" src="https://unpkg.com/tippy.js@6"></script>
-    <script defer="defer" src="../_static/tippy/getting_started/getting-started.d8d12cbf-0c24-4fc5-86ca-677fa5480db2.js"></script>
+    <script defer="defer" src="../_static/tippy/getting_started/getting-started.6f7e2a3e-d376-4809-ad9b-d827d0fe1c53.js"></script>
     <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/getting-started';</script>
@@ -79,12 +79,12 @@
     <link rel="icon" href="../_static/favicon.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="FlagRelease Release Guide" href="../release_guide/release-guide.html" />
+    <link rel="next" title="Model List" href="../model_list/model-list.html" />
     <link rel="prev" title="FlagRelease Overview" href="../FlagRelease_overview/FlagRelease-overview.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
-    <meta name="docbuild:last-update" content="Nov 10, 2026"/>
+    <meta name="docbuild:last-update" content="Nov 13, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -378,19 +378,12 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../FlagRelease_overview/FlagRelease-overview.html">FlagRelease Overview</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_guide/release-guide.html">FlagRelease Release Guide</a></li>
-
-
-
-
-
-
-
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">📑 Model List</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../model_list/model-list.html">Model List</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../model_list/model-list-aihuanxin.html">Models on AI Huanxin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../model_list/model-list-scnet.html">Models on SCNet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../model_list/model-list-huggingface.html">Models on Hugging Face</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../model_list/model-list-modelscope.html">Models on ModelScope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../model_list/model-list-cloud.html">Model List on Cloud GPU</a></li>
@@ -570,7 +563,7 @@
 <ol class="arabic">
 <li><p>Download Open-Source Model Weights</p>
 <ol class="loweralpha simple">
-<li><p>Visit the FlagRelease pages on <a class="reference external" href="https://modelscope.cn/organization/FlagRelease?tab=model">ModelScope</a>, <a class="reference external" href="https://huggingface.co/FlagRelease">Hugging Face</a>, or <a class="reference external" href="https://aihuanxin.cn/#/model?path=/model">AI Huanxin</a>.</p></li>
+<li><p>Visit the FlagRelease pages on <a class="reference external" href="https://modelscope.cn/organization/FlagRelease?tab=model">ModelScope</a>, <a class="reference external" href="https://huggingface.co/FlagRelease">Hugging Face</a>, or <a class="reference external" href="https://aihuanxin.cn/#/specialzone/detail/17">AI Huanxin</a>.</p></li>
 <li><p>Select the required large model and the corresponding hardware-specific version, and download the model weight files directly.</p></li>
 </ol>
 </li>
@@ -585,7 +578,7 @@
 <section id="operation-steps">
 <h2>Operation Steps<a class="headerlink" href="#operation-steps" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p>Visit the FlagRelease pages on <a class="reference external" href="https://modelscope.cn/organization/FlagRelease?tab=model">ModelScope</a>, <a class="reference external" href="https://huggingface.co/FlagRelease">Hugging Face</a>, or <a class="reference external" href="https://aihuanxin.cn/#/model?path=/model">AI Huanxin</a>.</p></li>
+<li><p>Visit the FlagRelease pages on <a class="reference external" href="https://modelscope.cn/organization/FlagRelease?tab=model">ModelScope</a>, <a class="reference external" href="https://huggingface.co/FlagRelease">Hugging Face</a>, or <a class="reference external" href="https://aihuanxin.cn/#/specialzone/detail/17">AI Huanxin</a>.</p></li>
 <li><p>Select the required large model and the corresponding hardware-specific version.</p></li>
 <li><p>Follow the steps descrbied in the model introduction pages.</p></li>
 </ol>
@@ -613,11 +606,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="../release_guide/release-guide.html"
+       href="../model_list/model-list.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">FlagRelease Release Guide</p>
+        <p class="prev-next-title">Model List</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -674,7 +667,7 @@ By FlagOS Community
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Nov 10, 2026.
+  Last updated on Nov 13, 2026.
   <br/>
 </p>
   </div>
