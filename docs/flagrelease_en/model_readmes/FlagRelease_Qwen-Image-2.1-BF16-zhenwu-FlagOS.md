@@ -61,6 +61,8 @@ docker run --privileged -dit \
   --name qwen-image \
   harbor.baai.ac.cn/flagrelease-public/qwen-image2.1-pp001-gems0.0.0-tree0.6.2-cxnone-pluginnone-vllm0.23.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202609201422
 
+docker exec -it qwen-image /bin/bash
+
 ```
 ### Start the Server
 ```bash
