@@ -49,7 +49,7 @@ modelscope download --model FlagRelease/MiniCPM5-2B-BF16-zhenwu-FlagOS --local_d
 ### Start the Container
 ```bash
 sudo docker run --privileged -dit \
-  -e HOST_HOSTNAME=bm-aliyun-wlcb-zonea3-c-810e-96g-10-1 \
+  -e HOST_HOSTNAME=$(hostname) \
   --network=host \
   --device=/dev/infiniband \
   --ipc=host \
@@ -61,12 +61,14 @@ sudo docker run --privileged -dit \
   -v /data:/data \
   --name minicpm5 \
   harbor.baai.ac.cn/flagrelease-public/minicpm5-2b-pp001-gems5.3.5-tree0.6.2-cxnone-plugin0.2.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202609031748
+
+docker exec -it minicpm5 /bin/bash
 ```
 
 ### Start the Server
 ```bash
 VLLM_FL_USE_FLAGGEMS_ATTN=1 VLLM_FL_FLAGOS_WHITELIST=attention_backend,reciprocal,rand_like,where_self_out,sort,exponential_ vllm serve /data/MiniCPM5-2B \
-    --port 8060 \
+    --port 8000 \
     --dtype bfloat16 \
     --gpu-memory-utilization 0.85 \
     --served-model-name minicpm

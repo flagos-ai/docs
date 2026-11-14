@@ -60,6 +60,8 @@ docker run --privileged -dit \
   -v /data:/data \
   --name xing4.0-flagos \
   harbor.baai.ac.cn/flagrelease-public/xing4_0-pp001-gems5.3.5-tree0.6.2-cxnone-plugin0.0.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202609211738
+
+docker exec -it xing4.0-flagos /bin/bash
 ```
 ### Start the Server
 ```bash
