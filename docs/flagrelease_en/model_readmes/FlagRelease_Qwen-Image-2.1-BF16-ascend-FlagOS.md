@@ -40,7 +40,7 @@ docker pull harbor.baai.ac.cn/flagrelease-public/qwen-image-2.1-ascend001-gems5.
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen-Image-2.1-BF16-ascend-FlagOS --local_dir /data/Qwen-Image-2.1
+modelscope download --model FlagRelease/Qwen-Image-2.1-BF16-ascend-FlagOS --local_dir /public-flash/models/Qwen-Image-2.1
 ```
 
 ### Start the Container
@@ -59,7 +59,7 @@ docker run -d \
 ```
 ### Start the Server
 ```bash
-export QWEN_IMAGE_21_MODEL=/data/Qwen-Image-2.1
+export QWEN_IMAGE_21_MODEL=/models/Qwen-Image-2.1
 export QWEN_IMAGE_21_DIFFUSERS=/opt/qwen21/ref/src
 export QWEN21_ZERO_FALLBACK_INTEGRATION=1
 export QWEN21_FLAGGEMS_INDEX_OVERRIDE_EXISTING=1
