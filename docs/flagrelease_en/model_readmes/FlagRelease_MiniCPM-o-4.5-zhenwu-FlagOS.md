@@ -81,16 +81,6 @@ pip install modelscope
 modelscope download --model FlagRelease/MiniCPM-o-4.5-zhenwu-FlagOS --local_dir /data/MiniCPMO45
 ```
 
-### Start the Container
-```bash
-docker run --init --detach --net=host --user 0 --ipc=host \
-    -v /data:/data --security-opt=seccomp=unconfined \
-    --privileged --ulimit=stack=67108864 --ulimit=memlock=-1 \
-    --shm-size=512G --gpus all \
-    --name flagos harbor.baai.ac.cn/flagrelease-public/minicpm-0-4.5-zhenwu:202608071022
-docker exec -it flagos /bin/bash
-```
-
 ### Start the Server
 ```bash
 USE_FLAGGEMS=1 vllm serve /data/MiniCPMO45 --trust-remote-code --served-model-name MiniCPMO45
