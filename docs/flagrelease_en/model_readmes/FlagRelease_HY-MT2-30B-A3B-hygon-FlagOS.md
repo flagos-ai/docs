@@ -13,7 +13,7 @@ The 1.8B offers a 1.25-bit quantized version based on the Sherry framework, requ
 
 ### Integrated Deployment
 - Out-of-the-box inference scripts with pre-configured hardware and software parameters	
-- Released **FlagOS-Nvidia** container image supporting deployment within minutes
+- Released **FlagOS-Hygon** container image supporting deployment within minutes
 ### Consistency Validation
 - Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
 
@@ -37,38 +37,55 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-30b-a3b-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.20.2-plugin_0.0.0-cx_none-python_3.12.3-torch_2.11.0-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:202605191822
+docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hy_mt-hygon-tree_none-gems_4.2.1rc0-vllm_0.13.0_das.opt1.dtk2604.20260306.g0c698cda-plugin_0.0.0-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-p:202605281442
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/HY-MT2-30B-A3B-nvidia-FlagOS --local_dir /data/HY-MT2-30B-A3B-FlagOS
+modelscope download --model FlagRelease/HY-MT2-30B-A3B-hygon-FlagOS
 ```
 
 ### Start the Container
 ```bash
-docker run --init --detach --net=host --uts=host --ipc=host --security-opt=seccomp=unconfined --privileged=true --ulimit stack=67108864 --ulimit memlock=-1 --ulimit nofile=1048576:1048576 --shm-size=32G -v /data:/data --gpus all --name flagos harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-30b-a3b-nvidia-tree_0.5.0_3.5-gems_5.0.1rc0-vllm_0.20.2-plugin_0.0.0-cx_none-python_3.12.3-torch_2.11.0-pcp_cuda13.2-gpu_nvidia003-arc_amd64-driver_570.158.01:202605191822 sleep infinity
-docker exec -it flagos /bin/bash
+docker run \
+    --name hy_mt \
+    --network=host \
+    --ipc=host \
+    --device=/dev/kfd \
+    --device=/dev/mkfd \
+    --device=/dev/dri \
+    -v /opt/hyhal:/opt/hyhal \
+    -v /data:/data \
+    --group-add video \
+    --cap-add=SYS_PTRACE \
+    --security-opt seccomp=unconfined \
+    -itd \
+    harbor.baai.ac.cn/flagrelease-public/flagrelease-hy_mt-hygon-tree_none-gems_4.2.1rc0-vllm_0.13.0_das.opt1.dtk2604.20260306.g0c698cda-plugin_0.0.0-cx_none-python_3.10.12-torch_2.9.0_das.opt1.dtk2604.20260206.g275d08c2-p:202605281442
+docker exec -it hy_mt /bin/bash
 ```
 ### Start the Server
 ```bash
-vllm serve /data/HY-MT2-30B-A3B-FlagOS \
---host 0.0.0.0 --port 8000 \
---tensor-parallel-size 1 \
---served-model-name flagOS \
---enforce-eager
+pip install modelscope
+VLLM_FL_FLAGOS_BLACKLIST="pow_scalar,pow_tensor_scalar,pow_tensor_tensor,pow_tensor_scalar_,pow_tensor_tensor_,mm,mm_out" \
+vllm serve /data/models/Hy-MT2-30B-A3B \
+  --trust-remote-code --port 8080 \
+  --gpu-memory-utilization 0.95 --tensor-parallel-size 2 \
+  --served-model-name hy_mt2_30B
 
 ```
 
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:8000/v1/chat/completions \
+curl http://127.0.0.1:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "flagOS",
-    "messages": [{"role": "user", "content": "你好"}]
+    "model": "hy_mt2_30B",
+    "messages": [
+      {"role": "user", "content": "你好"}
+    ],
+    "max_tokens": 100
   }'
 ```
 
