@@ -24,116 +24,142 @@ Built upon the TeleChat1-3 series, Xing4.0-29B-A4B is a comprehensively upgraded
 | GPQA_Diamond | 62.63 | Evaluating   |
 | Math-500        | 84.80 | 84.20  |
 
-# User Guide
-Environment Setup
 
-| Item             | Version              |
-|------------------|----------------------|
-| Docker Version   | Docker version 29.3.1 |
-| Operating System | 22.04.5 LTS |
+# User Guide
+
+## Environment Setup
+
+### Host Environment
+
+| Item | Version / Spec |
+|---|---|
+| Hardware (GPU) | MTT S5000 x8卡 |
+| Docker Version | 24.0.9 |
+| Operating System | Ubuntu 22.04.4 LTS |
+| Driver | MThreads 3.3.5-server; |
+| SDK | /usr/local/musa-4.3.5 |
 
 ## Operation Steps
 
-### Download FlagOS Image
+### Step 0. Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-mthreads001-gems5.3.0-tree0.6.1-cx0.13.0-pluginnone-vllm0.10.1-sglang0.0.0-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202609170304
-
+docker pull harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-mthreads001-gems0.0-tree0.6.0-cx0.13.0-pluginnone-vllm0.10.1-sglang0.5.18-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202611031916
 ```
 
-### Download Open-source Model Weights
+### Step 1. Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Xing4.0-29B-A4B-BF16-mthreads-FlagOS --local_dir /data/Xing4.0-29B-A4B
+modelscope download --model FlagRelease/Xing4.0-29B-A4B-BF16-mthreads-FlagOS
 ```
 
-### Start the Container
+### Step 2. Start the Container
 ```bash
 docker run -d \
-  --name flagos \
-  --network host \
-  --shm-size 16g \
-  -e MTHREADS_VISIBLE_DEVICES=4,5,6,7 \
-  -e MTHREADS_DRIVER_CAPABILITIES=all \
-  -e MUSA_HOME=/usr/local/musa \
-  -e LD_LIBRARY_PATH=/usr/local/musa/lib:/usr/local/openmpi/lib:/usr/local/musa/mudnn/lib \
-  -v /data:/data \
-  -v /bjzyrgznyjy_ssd/models:/models:ro \
-  harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-mthreads001-gems5.3.0-tree0.6.1-cx0.13.0-pluginnone-vllm0.10.1-sglang0.0.0-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202609170304 \
-  bash -lc 'sleep infinity'
+  --name xing4-release-formal-20261103 \
+  --runtime=mthreads \
+  --privileged \
+  --network=host \
+  --ipc=host \
+  --shm-size=1g \
+  -e MUSA_VISIBLE_DEVICES=0,1,2,3 \
+  -v /data/models/Xing4.0-29B-A4B:/data/models/Xing4.0-29B-A4B:ro \
+  -v /data/xing4-release/202611031916/logs:/workspace/release-validation/logs \
+  -v /data/xing4-release/202611031916/cache:/workspace/cache \
+  -v /data/xing4-release/202611031916/mate-cache:/root/.cache/mate \
+  -v /data/xing4-release/202611031916/invalid-bytes:/workspace/release-validation/invalid-bytes-31082-svc1 \
+  -w /workspace \
+  harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-mthreads001-gems0.0-tree0.6.0-cx0.13.0-pluginnone-vllm0.10.1-sglang0.5.18-sglangfl0.1.0-cp310-pt29-musa43-x64-3.3.5-server:202611031916 \
+  -lc 'exec sleep infinity'
 ```
-### Start the Server
+
+### Step 3. Start the Inference Server
 ```bash
-export PYTHONPATH=/opt/xing4_adaptation/sglang:/opt/xing4_adaptation
-export SGLANG_EXTERNAL_MODEL_PACKAGE=xingchen4_sglang
+cd /workspace
+
+export PORT=31082
+export MODEL_PATH=/data/models/Xing4.0-29B-A4B
+export SERVED_MODEL_NAME=Xing4.0-29B-A4B
+export RUN_DIR=/workspace/release-validation
+export FLAGCX_PATH=/opt/xing4-runtime/flagcx
+export LD_LIBRARY_PATH=/opt/xing4-runtime/flagcx/lib:/usr/local/musa/lib:/usr/local/openmpi/lib:/usr/local/musa/mudnn/lib
+export TRITON_CACHE_DIR=/workspace/cache/triton
+export FLAGGEMS_CACHE_DIR=/workspace/cache/flaggems
+export TORCH_EXTENSIONS_DIR=/workspace/cache/torch_extensions
+export TVM_FFI_CACHE_DIR=/workspace/cache/tvm-ffi
+export XDG_CACHE_HOME=/workspace/cache/xdg
+
 export SGLANG_FL_DIST_BACKEND=flagcx
-export FLAGCX_PATH=/data/adaptation/XingChen4-29B-A4B/sglang/mthreads_s5000/xingchen4-0907-tp4-20260907-1737/sources/FlagCX-8737bab40cf529c333039d3b66d367c3f78f632d
-export LD_LIBRARY_PATH=$FLAGCX_PATH/build/lib:$LD_LIBRARY_PATH
+export SGLANG_FL_FLAGOS_BLACKLIST='arange,arange_start,to_copy,count_nonzero,cumsum,mm,unique,_unique2,unique_dim,unique_consecutive,index_put,index_put_,_index_put_impl_,multinomial,copy,copy_,softmax,_softmax,uniform_,sort,argsort,gather,masked_fill,masked_fill_,topk,exponential_,true_divide_out,argmax,scatter_'
+export SGLANG_FL_PER_OP=topk=vendor
+
+export USE_FLAGGEMS=1
+export USE_FLAGTUNE=0
+export FLAGGEMS_DB_URL='sqlite:////opt/xing4-runtime/config/TunedConfig_mthreads_triton_3_6.db?timeout=300'
+export SGLANG_FLAGGEMS_RECORD=1
+export SGLANG_FLAGGEMS_LOG_ONCE=1
+export SGLANG_FLAGGEMS_LOG_PATH="${RUN_DIR}/logs/flaggems-31082.log"
+export SGLANG_FL_DISPATCH_DEBUG=1
+export SGLANG_FL_DISPATCH_LOG="${RUN_DIR}/logs/dispatch-31082.log"
+
 export MCCL_SOCKET_IFNAME=bond0
 export GLOO_SOCKET_IFNAME=bond0
 export MCCL_TIMEOUT=14400
 export MUSA_LAUNCH_BLOCKING=0
-export PYTORCH_MUSA_ALLOC_CONF=expandable_segments:True
 export TORCH_COMPILE_DISABLE=1
-export USE_FLAGTUNE=0
-export USE_FLAGGEMS=1
+
+export SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1
+export SGLANG_SET_CPU_AFFINITY=1
+export SGLANG_MOE_PADDING=1
+export SGLANG_MOE_CONFIG_DIR=/opt/xing4-runtime/config/moe_candidate216
+export SGLANG_USE_MUSA_FUSED_KERNEL=1
+export SGLANG_USE_DEEPGEMM_BMM=0
 export SGLANG_OPT_DEEPGEMM_HC_PRENORM=0
 export SGLANG_OPT_USE_TILELANG_MHC_PRE=0
 export SGLANG_OPT_USE_TILELANG_MHC_POST=0
-export XING4_L1_OPERATORS_DISABLED=1
-export SGLANG_FL_FLAGOS_BLACKLIST=arange,arange_start,to_copy,count_nonzero,cumsum,mm,unique,_unique2,unique_dim,unique_consecutive,index_put,index_put_,_index_put_impl_,multinomial,copy,copy_,softmax,_softmax,uniform_
-export SGLANG_FLAGGEMS_RECORD=1
-export SGLANG_FLAGGEMS_LOG_PATH=/tmp/flaggems_op-1.txt
-export SGLANG_FL_DISPATCH_DEBUG=1
-export SGLANG_FL_DISPATCH_LOG=/tmp/dispatch-1.log
-export SGLANG_SANITIZE_NAN_LOGITS=1
-export SGLANG_SAFE_MAX_COMPLETION_TOKENS=16384
+
 export XINGCHEN4_MHC_HIN_IMPL=torch
-export XINGCHEN4_MHC_HOUT_IMPL=triton
-export TRITON_CACHE_DIR=/data/adaptation/XingChen4-29B-A4B/sglang/mthreads_s5000/xingchen4-0907-tp4-20260907-1737/cache/triton-xing4-l1off-service1
-python -m sglang.launch_server \
-  --model-path /data/Xing4.0-29B-A4B \
-  --served-model-name Xing4.0-29B-A4B \
+export XINGCHEN4_MHC_HOUT_IMPL=vendor
+export XINGCHEN4_MHC_SANITIZE=1
+export SGLANG_SANITIZE_NAN_LOGITS=1
+export SGLANG_SAFE_MAX_COMPLETION_TOKENS=99000
+export SGLANG_INVALID_BYTES_LOG_DIR="${RUN_DIR}/invalid-bytes-31082-svc1"
+
+nohup /root/.virtualenvs/sglang-0.5.6/bin/python -m sglang.launch_server \
+  --model-path "${MODEL_PATH}" \
+  --served-model-name "${SERVED_MODEL_NAME}" \
   --tp-size 4 \
   --host 0.0.0.0 \
-  --port 31082 \
+  --port "${PORT}" \
   --trust-remote-code \
   --context-length 100000 \
   --default-chat-template-kwargs '{"enable_thinking":true}' \
-  --reasoning-parser xingchen4 \
   --cuda-graph-backend-decode full \
-  --cuda-graph-max-bs-decode 8 \
-  --disable-cuda-graph-padding \
-  --max-running-requests 32 \
+  --cuda-graph-bs-decode 1 2 4 8 16 32 64 \
+  --max-running-requests 64 \
+  --enable-dynamic-batch-tokenizer \
+  --dynamic-batch-tokenizer-batch-size 64 \
+  --dynamic-batch-tokenizer-batch-timeout 3.0 \
+  --max-total-tokens 800000 \
   --disable-radix-cache \
-  --disable-overlap-schedule \
   --cuda-graph-backend-prefill disabled \
-  --chunked-prefill-size 8192 \
+  --chunked-prefill-size 49152 \
+  --max-prefill-tokens 100000 \
   --moe-runner-backend triton \
   --disable-custom-all-reduce \
   --disable-shared-experts-fusion \
-  --skip-server-warmup \
   --watchdog-timeout 18000 \
-  --mem-fraction-static 0.68
+  --disable-overlap-schedule \
+  --mem-fraction-static 0.80 \
+  >"${RUN_DIR}/logs/service-31082.log" 2>&1 </dev/null &
 ```
 
 ## Service Invocation
-### Invocation Script
+### Invocation Script (Text)
 ```bash
-curl -sS http://127.0.0.1:31082/v1/chat/completions \
+curl --max-time 600 http://127.0.0.1:31082/v1/chat/completions \
   -H 'Content-Type: application/json' \
-  -d '{
-    "model": "Xing4.0-29B-A4B",
-    "messages": [
-      {"role":"user","content":"你好，请用一句话介绍你自己。"}
-    ],
-    "temperature": 0.7,
-    "top_p": 0.9,
-    "max_tokens": 256,
-    "stream": false,
-    "chat_template_kwargs": {"enable_thinking": true}
-  }' | python3 -m json.tool
+  -d '{"model":"Xing4.0-29B-A4B","messages":[{"role":"user","content":"请只回答最终答案：2+3等于多少？"}],"max_tokens":512,"temperature":0}'
 ```
-
 
 ### AnythingLLM Integration Guide
 
@@ -156,6 +182,7 @@ curl -sS http://127.0.0.1:31082/v1/chat/completions \
 - Click **"New Conversation"**
 - Enter your question (e.g., "Explain the basics of quantum computing")
 - Click the send button to get a response
+
 # Technical Overview
 **FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a "develop once, run anywhere" workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of <chip + open-source model>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
@@ -181,5 +208,7 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
+
 # License
-The model weights are derived from XingChen-AGI/Xing4.0-29B-A4B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Xing4.0-29B-A4B and are open-sourced under the Apache License 2.0.
+
