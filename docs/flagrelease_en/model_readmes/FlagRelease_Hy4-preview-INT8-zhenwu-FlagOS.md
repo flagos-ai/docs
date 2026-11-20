@@ -33,7 +33,7 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/hy4-preview-pp001-gems0.0-tree0.6.1-cxnone-plugin0.2.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202608281106
+docker pull harbor.baai.ac.cn/flagrelease-public/hy4-preview-pp001-gems0.0-tree0.6.2-cxnone-plugin0.0.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202610171156
 
 ```
 
@@ -57,33 +57,34 @@ sudo docker run --privileged -dit \
   -v /mnt:/mnt \
   -v /data:/data \
   --name hyv4 \
-  harbor.baai.ac.cn/flagrelease-public/hy4-preview-pp001-gems0.0-tree0.6.1-cxnone-plugin0.2.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202608281106
+  harbor.baai.ac.cn/flagrelease-public/hy4-preview-pp001-gems0.0-tree0.6.2-cxnone-plugin0.0.0-vllm0.24.0-cp312-pt210-hggc130-x64-2.1.1-rbd225:202610171156
 
 
 ```
 ### Start the Server
 ```bash
-VLLM_WORKER_MULTIPROC_METHOD=spawn \
-VLLM_FL_HYV4_INDEXER_TOPK_MODE=scoped_native \
-VLLM_FL_HYV4_UNCOMPILED_GROUPED_TOPK=1 \
-VLLM_FL_HYV4_SAFE_DETOKENIZER=1 \
-FLAGGEMS_DB_URL='sqlite:////root/.flaggems/hy4-tp16.db?timeout=600' \
-VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=1800 \
-vllm serve /data/Hy4-preview \
+source /usr/local/PPU_SDK/envsetup.sh
+export PATH="/usr/lib64/openmpi/bin:${PATH}"
+export LD_LIBRARY_PATH="/usr/lib64/libibverbs:/usr/lib64/openmpi/lib:${LD_LIBRARY_PATH:-}"
+export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+export VLLM_WORKER_MULTIPROC_METHOD=spawn
+export VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=1800
+export GLOO_SOCKET_IFNAME=eth0
+export NCCL_IB_HCA=fic2_soe_bond
+export NCCL_IB_GID_INDEX=1
+export NCCL_IB_ADDR_FAMILY=6
+export NCCL_SOCKET_IFNAME=bond
+export NCCL_SOCKET_FAMILY=AF_INET6
+vllm serve /data/Hy4-preview/ \
   --served-model-name hy4 \
   --host 0.0.0.0 \
   --port 8010 \
   --trust-remote-code \
-  --reasoning-parser-plugin /workspace/vllm-plugin-FL/vllm_fl/hy_v4_reasoning_parser.py \
   --reasoning-parser hy_v4 \
-  --load-format safetensors \
   --tensor-parallel-size 16 \
-  --max-model-len 50000 \
-  --max-num-seqs 32 \
-  --max-num-batched-tokens 1024 \
-  --gpu-memory-utilization 0.8 \
-  --compilation-config \
-    '{"mode":"none","cudagraph_mode":"FULL_DECODE_ONLY","cudagraph_capture_sizes":[1,32]}'
+  --max-model-len 100000 \
+  --max-num-batched-tokens 2048 \
+  --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY"}'
 
 ```
 
