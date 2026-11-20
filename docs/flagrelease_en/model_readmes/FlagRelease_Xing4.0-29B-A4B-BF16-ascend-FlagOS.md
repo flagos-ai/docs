@@ -25,81 +25,87 @@ Built upon the TeleChat1-3 series, Xing4.0-29B-A4B is a comprehensively upgraded
 | Math-500        | 84.80 | 85.20 |
 
 # User Guide
-Environment Setup
 
-| Item             | Version              |
-|------------------|----------------------|
-| Docker Version   | Docker version 20.10.8 |
+## Environment Setup
+
+### Host Environment
+
+| Item | Version / Spec |
+|---|---|
+| Hardware (GPU) | 910C x4卡 |
+| Docker Version | Server 20.10.8 |
 | Operating System | openEuler 22.03 (LTS-SP4) |
+| Driver | CANN 8.5.0 |
+| SDK | CANN 8.5.0 |
 
 ## Operation Steps
 
-### Download FlagOS Image
+### Step 0. Download FlagOS Image
 ```bash
 docker pull harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-ascend001-gems5.3.0-tree0.6.0-cx0.13.0-pluginnone-vllmnone-sglang0.5.11-sglangfl0.1.0-cp311-ptnpu28-cann85-a64-none:202609181434
-
-
 ```
 
-### Download Open-source Model Weights
+### Step 1. Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Xing4.0-29B-A4B-BF16-ascend-FlagOS --local_dir /data/Xing4.0-29B-A4B
+modelscope download --model FlagRelease/Xing4.0-29B-A4B-BF16-ascend-FlagOS
 ```
 
-### Start the Container
+### Step 2. Start the Container
 ```bash
-docker run -d \
-  --name flagos \
+docker run -dit \
+  --name xing4-0-tp4-release-20261104-121 \
+  --hostname "$(hostname)" \
+  --add-host "$(hostname):127.0.0.1" \
   --runtime ascend \
   --network host \
   --ipc host \
   --privileged \
-  --shm-size 32g \
+  --shm-size 128g \
   --security-opt label=disable \
-  -v /public-flash:/public-flash:ro \
+  --device /dev/davinci0 \
+  --device /dev/davinci1 \
+  --device /dev/davinci2 \
+  --device /dev/davinci3 \
+  --device /dev/davinci_manager \
+  --device /dev/devmm_svm \
+  --device /dev/hisi_hdc \
+  --mount type=bind,src=/public-flash/models/Xing4.0-29B-A4B,dst=/public-flash/models/Xing4.0-29B-A4B,readonly \
+  -v /data/xing4-release-121/logs:/logs \
+  -v /data/xing4-release-121/cache:/cache \
   -w /workspace \
   --entrypoint /usr/bin/tail \
   harbor.baai.ac.cn/flagrelease-public/xing4.0-29b-a4b-ascend001-gems5.3.0-tree0.6.0-cx0.13.0-pluginnone-vllmnone-sglang0.5.11-sglangfl0.1.0-cp311-ptnpu28-cann85-a64-none:202609181434 \
   -f /dev/null
 ```
-### Start the Server
+
+### Step 3. Start the Inference Server
 ```bash
-set -euo pipefail
-
-export CMAKE_PREFIX_PATH=""
-
-source /usr/local/Ascend/ascend-toolkit/set_env.sh
-
-export ASCEND_RT_VISIBLE_DEVICES=8,9,10,11
-
-export SGLANG_PLUGINS=sglang_fl
-export SGLANG_FL_PLATFORM=ascend
-export SGLANG_FL_DIST_BACKEND=hccl
-export SGLANG_FL_STRICT=0
-
-export SGLANG_FL_FLAGOS_BLACKLIST=full_like,index_copy_,gather,count_nonzero,index_put_,_index_put_impl_,cumsum,fill_scalar_,argmax,index,add_,conv1d,floor_divide,true_divide_,addmm,pow_scalar,pow_tensor_scalar,pow_tensor_tensor,pow_tensor_scalar_,pow_tensor_tensor_,float_power_scalar_tensor,float_power_scalar_tensor_out,float_power_tensor_scalar,float_power_tensor_scalar_out,float_power_tensor_tensor,float_power_tensor_tensor_out,float_power_tensor_scalar_,float_power_tensor_tensor_,ones,zeros,zero_,lift_fresh,add,mul,linear,mean_dim,bmm,masked_fill,masked_fill_,max,index_select,sum_dim,bitwise_and,bitwise_not,bitwise_or,clamp,cos,true_divide,eq,eq_scalar,ge,ge_scalar,lt,lt_scalar,mul_,neg,ne,ne_scalar,pad,reciprocal,remainder,rsqrt,rsub,rsub_scalar,scalar_tensor,sigmoid,silu,sin,square,sub,sum,multinomial,softmax,uniform_
-
-export SGLANG_FL_PER_OP='mhc_pre=flagos|reference;mhc_post=flagos|reference'
-export SGLANG_FL_MHC_CACHE_FN_BF16=1
-export SGLANG_FL_MHC_NPU_RMSNORM=1
-
-export SGLANG_FLAGGEMS_RECORD=0
-export SGLANG_FLAGGEMS_LOG_PATH=/tmp/flaggems-op-xing4-best.txt
-
-export SGLANG_FL_DISPATCH_DEBUG=0
-export SGLANG_FL_DISPATCH_LOG=/tmp/dispatch-xing4-best.log
-
-export SGLANG_MAX_THINK_TOKENS=70000
-
-export FLAGCX_PATH=/opt/xingchen4-adaptation/build/FlagCX
-
-export LD_LIBRARY_PATH=/opt/xingchen4-adaptation/build/FlagCX/build/lib:/opt/xingchen4-adaptation/candidate-venv/lib/python3.11/site-packages/torch/lib:/usr/local/Ascend/cann-8.5.0/lib64:/usr/local/Ascend/cann-8.5.0/lib64/plugin/opskernel:/usr/local/Ascend/cann-8.5.0/lib64/plugin/nnengine:/usr/local/Ascend/cann-8.5.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/usr/local/Ascend/cann-8.5.0/tools/aml/lib64:/usr/local/Ascend/cann-8.5.0/tools/aml/lib64/plugin:/usr/local/Ascend/driver/lib64:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/nnal/atb/latest/atb/cxx_abi_1/lib:/usr/local/Ascend/nnal/atb/latest/atb/cxx_abi_1/examples:/usr/local/Ascend/nnal/atb/latest/atb/cxx_abi_1/tests/atbopstest:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64/plugin:/usr/local/Ascend/ascend-toolkit/latest/lib64:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/opskernel:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/nnengine:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling:/usr/local/python3.11.14/lib:
-
-export PYTHONPATH=/opt/xingchen4-adaptation/build/sglang-pr37228-srt-empty/python:/usr/local/Ascend/cann-8.5.0/python/site-packages:/usr/local/Ascend/cann-8.5.0/opp/built-in/op_impl/ai_core/tbe:/usr/local/Ascend/ascend-toolkit/latest/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe:
-
-nohup /opt/xingchen4-adaptation/candidate-venv/bin/python \
-  -m sglang.launch_server \
+export PATH=/usr/local/Ascend/nnal/atb/latest/atb/cxx_abi_1/bin:/usr/local/Ascend/ascend-toolkit/latest/bin:/usr/local/Ascend/ascend-toolkit/latest/compiler/ccec_compiler/bin:/usr/local/Ascend/ascend-toolkit/latest/tools/ccec_compiler/bin:/usr/local/Ascend/cann-8.5.0/tools/show_kernel_debug_data:/usr/local/Ascend/cann-8.5.0/tools/msobjdump:/usr/local/Ascend/cann-8.5.0/bin:/usr/local/Ascend/cann-8.5.0/tools/ccec_compiler/bin:/usr/local/Ascend/cann-8.5.0/tools/profiler/bin:/usr/local/Ascend/cann-8.5.0/tools/ascend_system_advisor/asys:/usr/local/python3.11.14/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin && \
+export CMAKE_PREFIX_PATH= && \
+export SGLANG_PLUGINS=sglang_fl && \
+export SGLANG_FL_PLATFORM=ascend && \
+export SGLANG_FL_DIST_BACKEND=hccl && \
+export SGLANG_FL_STRICT=0 && \
+export SGLANG_FL_FLAGOS_BLACKLIST=full_like,index_copy_,gather,count_nonzero,index_put_,_index_put_impl_,cumsum,fill_scalar_,argmax,index,add_,conv1d,floor_divide,true_divide_,addmm,pow_scalar,pow_tensor_scalar,pow_tensor_tensor,pow_tensor_scalar_,pow_tensor_tensor_,float_power_scalar_tensor,float_power_scalar_tensor_out,float_power_tensor_scalar,float_power_tensor_scalar_out,float_power_tensor_tensor,float_power_tensor_tensor_out,float_power_tensor_scalar_,float_power_tensor_tensor_,ones,zeros,zero_,lift_fresh,add,mul,linear,mean_dim,bmm,masked_fill,masked_fill_,max,index_select,sum_dim,bitwise_and,bitwise_not,bitwise_or,clamp,cos,true_divide,eq,eq_scalar,ge,ge_scalar,lt,lt_scalar,mul_,neg,ne,ne_scalar,pad,reciprocal,remainder,rsqrt,rsub,rsub_scalar,scalar_tensor,sigmoid,silu,sin,square,sub,sum,multinomial,softmax,uniform_ && \
+export SGLANG_FL_PER_OP='mhc_pre=flagos|reference;mhc_post=flagos|reference' && \
+export SGLANG_FLAGGEMS_RECORD=1 && \
+export SGLANG_FLAGGEMS_LOG_ONCE=1 && \
+export SGLANG_FLAGGEMS_LOG_PATH=/logs/flaggems-op-31107.txt && \
+export SGLANG_FL_DISPATCH_DEBUG=1 && \
+export SGLANG_FL_DISPATCH_LOG=/logs/dispatch-31107.log && \
+export SGLANG_MAX_THINK_TOKENS=70000 && \
+export SGLANG_FL_MHC_CACHE_FN_BF16=1 && \
+export SGLANG_FL_MHC_NPU_RMSNORM=1 && \
+export FLAGCX_PATH=/opt/xingchen4-adaptation/build/FlagCX && \
+export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3 && \
+export HF_HOME=/cache/huggingface && \
+export SGLANG_CACHE_DIR=/cache/sglang && \
+export TRITON_CACHE_DIR=/cache/triton && \
+export TORCHINDUCTOR_CACHE_DIR=/cache/torchinductor && \
+export LD_LIBRARY_PATH=/opt/xingchen4-adaptation/build/FlagCX/build/lib:/opt/xingchen4-adaptation/candidate-venv/lib/python3.11/site-packages/torch/lib:/usr/local/Ascend/cann-8.5.0/lib64:/usr/local/Ascend/cann-8.5.0/lib64/plugin/opskernel:/usr/local/Ascend/cann-8.5.0/lib64/plugin/nnengine:/usr/local/Ascend/cann-8.5.0/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64:/usr/local/Ascend/cann-8.5.0/tools/aml/lib64:/usr/local/Ascend/cann-8.5.0/tools/aml/lib64/plugin:/usr/local/Ascend/driver/lib64:/usr/local/Ascend/driver/lib64/common:/usr/local/Ascend/driver/lib64/driver:/usr/local/Ascend/nnal/atb/latest/atb/cxx_abi_1/lib:/usr/local/Ascend/nnal/atb/latest/atb/cxx_abi_1/examples:/usr/local/Ascend/nnal/atb/latest/atb/cxx_abi_1/tests/atbopstest:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64:/usr/local/Ascend/ascend-toolkit/latest/tools/aml/lib64/plugin:/usr/local/Ascend/ascend-toolkit/latest/lib64:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/opskernel:/usr/local/Ascend/ascend-toolkit/latest/lib64/plugin/nnengine:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling:/usr/local/python3.11.14/lib && \
+export PYTHONPATH=/opt/xingchen4-adaptation/overlay:/opt/xingchen4-adaptation/build/sglang-pr37228-srt-empty/python:/opt/xingchen4-adaptation/build/sglang-plugin-FL:/opt/xingchen4-adaptation/build/FlagGems/src:/usr/local/Ascend/cann-8.5.0/python/site-packages:/usr/local/Ascend/cann-8.5.0/opp/built-in/op_impl/ai_core/tbe:/usr/local/Ascend/ascend-toolkit/latest/python/site-packages:/usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe && \
+nohup /opt/xingchen4-adaptation/candidate-venv/bin/python -m sglang.launch_server \
   --model-path /public-flash/models/Xing4.0-29B-A4B \
   --served-model-name Xing4.0-29B-A4B \
   --trust-remote-code \
@@ -123,28 +129,17 @@ nohup /opt/xingchen4-adaptation/candidate-venv/bin/python \
   --enable-fused-moe-sum-all-reduce \
   --grammar-backend xgrammar \
   --enable-quant-communications \
-  > /tmp/xing4-0-tp4-31107.log 2>&1 &
-
-echo $! > /tmp/xing4-0-tp4-31107.pid
+  >/logs/server-31107.log 2>&1 </dev/null &
 ```
 
 ## Service Invocation
-### Invocation Script
+### Invocation Script (Text)
 ```bash
-curl -sS http://127.0.0.1:31107/v1/chat/completions \
+curl -sS --max-time 600 \
   -H 'Content-Type: application/json' \
-  -d '{
-    "model": "Xing4.0-29B-A4B",
-    "messages": [
-      {"role": "user", "content": "你好，请用一句话介绍你自己。"}
-    ],
-    "temperature": 0.7,
-    "top_p": 0.9,
-    "max_tokens": 256,
-    "stream": false
-  }' | python3 -m json.tool
+  -d '{"model":"Xing4.0-29B-A4B","messages":[{"role":"user","content":"请只回答数字：17+25等于多少？"}],"temperature":0,"max_tokens":64,"chat_template_kwargs":{"enable_thinking":false}}' \
+  http://127.0.0.1:31107/v1/chat/completions
 ```
-
 
 ### AnythingLLM Integration Guide
 
@@ -167,6 +162,7 @@ curl -sS http://127.0.0.1:31107/v1/chat/completions \
 - Click **"New Conversation"**
 - Enter your question (e.g., "Explain the basics of quantum computing")
 - Click the send button to get a response
+
 # Technical Overview
 **FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a "develop once, run anywhere" workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of <chip + open-source model>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
@@ -192,5 +188,7 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
+
 # License
-The model weights are derived from XingChen-AGI/Xing4.0-29B-A4B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Xing4.0-29B-A4B and are open-sourced under the Apache License 2.0.
+
