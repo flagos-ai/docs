@@ -55,6 +55,7 @@ docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
+pip install modelscope
 VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=3600 GEMS_VENDOR="hygon" vllm serve /data/Qwen3.5-35B-A3B -tp 4 --enforce-eager --served-model-name Qwen3.5-35B-A3B-Flagos
 ```
 
