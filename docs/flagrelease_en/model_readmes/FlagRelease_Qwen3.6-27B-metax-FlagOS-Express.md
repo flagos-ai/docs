@@ -20,7 +20,7 @@ The first open-weight release of Qwen3.6 is now available. Building on the Qwen3
 ## Benchmark Result
 | Metrics      | Qwen3.6-27B-Nvidia-Origin | Qwen3.6-27B-Metax-FlagOS |
 |--------------|---------------------------|--------------------------|
-| GPQA_Diamond | 85.86                     | 84.34                   |
+| GPQA_Diamond | 85.86                     | 87.37                   |
 | ERQA         | 59.25                        | 58.25                     |
 
 ## Performance Benchmark Result
@@ -29,70 +29,111 @@ The first open-weight release of Qwen3.6 is now available. Building on the Qwen3
 |Equal Computing Power Ratio (flagos/H100)|	96.35%	|97.36%|	83.33%|90.31%|
 
 # User Guide
-Environment Setup
 
-| Item             | Version              |
-|------------------|----------------------|
-| Docker Version   | Docker version 27.5.1, build 27.5.1-0ubuntu3~22.04.2 |
-| Operating System | Ubuntu 22.04.5 LTS (Jammy Jellyfish) |
+## Environment Setup
+
+### Host Environment
+
+| Item | Version / Spec |
+|---|---|
+| Hardware (GPU) | MetaX C550 x2卡 |
+| Docker Version | 29.1.3 |
+| Operating System | Ubuntu 22.04.5 LTS |
+| Driver | MetaX 3.8.1 |
+| SDK | MACA 3.7.0.38 |
 
 ## Operation Steps
 
-### Download FlagOS Image
+### Step 0. Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/qwen3.6-27b-metax001-gems5.4.0-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607220155
+docker pull harbor.baai.ac.cn/flagrelease-public/qwen3.6-27b-metax001-gems5.5.0-tree0.6.1-cxnone-plugin0.2.2-vllm0.20.2-sglangnone-sglangflnone-cp312-pt28-maca37-x64-3.8.1:202611100923
 ```
 
-### Download Open-source Model Weights
+### Step 1. Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.6-27B-metax-FlagOS-Express --local_dir /data/Qwen3.6-27B
+modelscope download --model FlagRelease/Qwen3.6-27B-metax-FlagOS-Express
 ```
 
-### Start the Container
+### Step 2. Start the Container
 ```bash
 docker run -itd \
-    --name flagos \
+    --name qwen36-27b \
+    --hostname "$(hostname)" \
     --privileged \
+    --ipc=host \
     --network=host \
-    --security-opt seccomp=unconfined \
-    --security-opt apparmor=unconfined \
-    --shm-size '100gb' \
-     --ulimit memlock=-1 \
-     --group-add video \
-     --device=/dev/dri \
-     --device=/dev/mxcd \
-     --device=/dev/mem \
-     --device=/dev/infiniband \
-     -v /usr/local/:/usr/local/ \
-     -v /data/:/data/ \
-    harbor.baai.ac.cn/flagrelease-public/qwen3.6-27b-metax001-gems5.4.0-tree0.5.1-cxnone-plugin0.2.0-vllm0.20.2-cp312-pt28-maca37-x64-3.8.1:202607220155 \
+    -v /public-flash:/public-flash:rw,rprivate \
+    -v /data:/data:rw,rslave \
+    -w /public-flash \
+    harbor.baai.ac.cn/flagrelease-public/qwen3.6-27b-metax001-gems5.5.0-tree0.6.1-cxnone-plugin0.2.2-vllm0.20.2-sglangnone-sglangflnone-cp312-pt28-maca37-x64-3.8.1:202611100923 \
     /bin/bash
-docker exec -it flagos /bin/bash
 ```
-### Start the Server
+
+### Step 3. Start the Inference Server
 ```bash
+export PATH=/opt/conda/bin:$PATH
+export CUDA_VISIBLE_DEVICES=0,1
+export MACA_VISIBLE_DEVICES=0,1
+export USE_FLAGGEMS=1
 export FLAGGEMS_VENDOR=metax
-export CUDA_VISIBLE_DEVICES=6,7
-export VLLM_FL_FLAGOS_WHITELIST=cat,cos,cumsum,fill,full,gather,gt,le,lt,max,mul,sin,softmax,to,where,zeros,zeros_like
-export VLLM020_CONTIGUOUS_SINGLE_PREFILL=1
-vllm serve  /data/Qwen3.6-27B \
-    --tensor-parallel-size 2 --port 8000 --trust-remote-code --dtype bfloat16 \
-    --served-model-name qwen36-27b \
-    --max-num-batched-tokens 16384
+export VLLM_FL_STRICT=0
+export VLLM_FL_FLAGOS_BLACKLIST=exponential_,index_select,mm,max,mm_out,max_dim,linear,sort,sort_stable
+nohup /opt/conda/bin/vllm serve FlagRelease/Qwen3.6-27B-metax-FlagOS-Express \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --served-model-name qwen36-27b \
+  --tensor-parallel-size 2 \
+  --trust-remote-code \
+  --dtype bfloat16 \
+  --max-num-batched-tokens 8192 \
+  --max-num-seqs 64 \
+  --gpu-memory-utilization 0.9 \
+  --enable-prefix-caching \
+  --compilation-config '{"cudagraph_mode":"FULL_DECODE_ONLY","max_cudagraph_capture_size":64}' \
+  > ./service-jingdu.log 2>&1 &
 ```
 
 ## Service Invocation
-### Invocation Script
+### Invocation Script (Text)
 ```bash
 curl http://localhost:8000/v1/chat/completions \
-    -H "Content-Type: application/json" \
-    -d '{
-        "model": "qwen36-27b",
-        "messages": [{"role": "user", "content": "你好"}]
-    }'
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen36-27b",
+    "messages": [{"role": "user", "content": "你好"}]
+  }'
 ```
 
+### Invocation Script (Image)
+```bash
+IMAGE_BASE64=$(base64 -w 0 "/public-flash/example.jpg")
+
+curl http://localhost:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  --data-binary @- <<EOF
+{
+  "model": "qwen36-27b",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "请描述这张图片中的内容。"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/jpeg;base64,${IMAGE_BASE64}"
+          }
+        }
+      ]
+    }
+  ]
+}
+EOF
+```
 
 ### AnythingLLM Integration Guide
 
@@ -113,10 +154,11 @@ curl http://localhost:8000/v1/chat/completions \
 
 - After model loading is complete:
 - Click **"New Conversation"**
-- Enter your question (e.g., “Explain the basics of quantum computing”)
+- Enter your question (e.g., "Explain the basics of quantum computing")
 - Click the send button to get a response
+
 # Technical Overview
-**FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
+**FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a "develop once, run anywhere" workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of <chip + open-source model>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
 FlagGems is a high-performance, generic operator libraryimplemented in [Triton](https://github.com/openai/triton) language. It is built on a collection of backend-neutralkernels that aims to accelerate LLM (Large-Language Models) training and inference across diverse hardware platforms.
 ## FlagTree
@@ -140,6 +182,7 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
+
 # License
-The model weights are derived from Qwen/Qwen3.6-27B and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Qwen/Qwen3.6-27B and are open-sourced under the Apache License 2.0.
 

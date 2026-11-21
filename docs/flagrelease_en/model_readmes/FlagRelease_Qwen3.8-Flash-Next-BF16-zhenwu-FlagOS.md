@@ -62,6 +62,7 @@ docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
+pip install modelscope
 export VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=6000
 vllm serve /data/Qwen3.8-Flash-Next/ \
   --port 8000 \
