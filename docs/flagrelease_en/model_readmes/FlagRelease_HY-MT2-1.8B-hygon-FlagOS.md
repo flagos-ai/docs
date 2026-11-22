@@ -70,6 +70,7 @@ docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
+pip install modelscope
 vllm serve /data/HY-MT2-1.8B \
 --trust-remote-code --port 8000 \
 --gpu-memory-utilization 0.95 \
