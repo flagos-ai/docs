@@ -41,7 +41,7 @@ docker pull harbor.baai.ac.cn/flagrelease-public/qwen3.8-flash-next-hygon001-gem
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.8-Flash-Next-BF16-hygon-FlagOS --local_dir /data/Qwen3.8-Flash-Next
+modelscope download --model FlagRelease/Qwen3.8-Flash-Next-BF16-hygon-FlagOS
 ```
 
 ### Start the Container
@@ -53,9 +53,6 @@ docker run -d --name flagos \
   --mount type=bind,src=/sys/class/infiniband,dst=/sys/class/infiniband,readonly \
   --mount type=bind,src=/sys/class/infiniband_verbs,dst=/sys/class/infiniband_verbs,readonly \
   --mount type=bind,src=/sys/class/net,dst=/sys/class/net,readonly \
-  --mount type=bind,src=/usr/etc/libibverbs.d,dst=/usr/etc/libibverbs.d,readonly \
-  --mount type=bind,src=/lib/x86_64-linux-gnu/libibverbs.so.1.14.44.0,dst=/lib/x86_64-linux-gnu/libibverbs.so.1.14.47.0,readonly \
-  --mount type=bind,src=/lib/x86_64-linux-gnu/libshca-rdmav34.so,dst=/lib/x86_64-linux-gnu/libshca-rdmav34.so,readonly \
   --mount type=bind,src=/lib/x86_64-linux-gnu/libnl-3.so.200,dst=/lib/x86_64-linux-gnu/libnl-3.so.200,readonly \
   --mount type=bind,src=/lib/x86_64-linux-gnu/libnl-route-3.so.200,dst=/lib/x86_64-linux-gnu/libnl-route-3.so.200,readonly \
   -v /opt/hyhal:/opt/hyhal \
@@ -93,6 +90,14 @@ export HF_DATASETS_OFFLINE=1
 # vLLM 0.24+ RPC timeout for execute_model calls (seconds).
 # W8A8 quantized models need extra time on first inference for kernel compilation.
 export VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=1800
+export MODEL_PATH=/public-flash/models/Qwen3.8-Flash-Next
+export SERVED_MODEL_NAME=Qwen3.8-Flash-Next
+export NODE_RANK=0
+export MASTER_PORT=29801
+export TP=8
+export PP=1
+export DP=1
+export LOAD_FORMAT=safetensors
 vllm serve "$MODEL_PATH" \
     --served-model-name "$SERVED_MODEL_NAME" \
     --trust-remote-code \
@@ -120,7 +125,7 @@ vllm serve "$MODEL_PATH" \
 ## Service Invocation
 ### Invocation Script
 ```bash
-curl http://localhost:$MASTER_PORT/v1/chat/completions \
+curl http://localhost:8000/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
     "model": "$SERVED_MODEL_NAME",

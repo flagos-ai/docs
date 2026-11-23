@@ -70,6 +70,8 @@ docker exec -it flagos bash
 ```
 ### Start the Server
 ```bash
+source /opt/dtk/env.sh
+source /opt/hyhal/env.sh
 export VLLM_FL_FLAGOS_WHITELIST="cos,cumsum,fill,full,gather,gt,le,lt,max,mul,sin,softmax,to,where,zeros,zeros_like"
 export HIP_VISIBLE_DEVICES="0,1"
 export VLLM_SPARSE_THRESHOLD=0.01
