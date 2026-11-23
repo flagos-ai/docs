@@ -74,6 +74,8 @@ docker run -dit \
     --device /dev/alixpu_ppu15 \
     -v /mnt/:/mnt/ \
     harbor.baai.ac.cn/flagrelease-public/qwen3.8-27b-pp001-gems0.0-treenone-cxnone-plugin0.2.0-vllm0.24.0-cp312-pt210-hggc130-x64-1.3.2-d7f5a2:202608141100
+
+docker exec -it qwen3.8-27B /bin/bash
 ```
 ### Start the Server
 ```bash

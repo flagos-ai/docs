@@ -66,6 +66,7 @@ docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
+pip install modelscope
 vllm serve /data/MiniCPM5-2B \
     --trust-remote-code \
     --enforce-eager \
