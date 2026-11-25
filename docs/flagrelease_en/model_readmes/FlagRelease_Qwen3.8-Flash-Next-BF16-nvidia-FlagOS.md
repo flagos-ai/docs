@@ -1,8 +1,8 @@
 ---
+license: apache-2.0
 language:
 - zh
 - en
-license: apache-2.0
 ---
 
 # Introduction
@@ -10,78 +10,98 @@ On August 26, Alibaba open-sourced its multimodal MoE model Qwen3.8-Flash-Next. 
 
 
 ### Integrated Deployment
-- Out-of-the-box inference scripts with pre-configured hardware and software parameters	
+- Out-of-the-box inference scripts with pre-configured hardware and software parameters
 - Released **FlagOS-Nvidia** container image supporting deployment within minutes
 ### Consistency Validation
-- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public.	
-
+- Rigorously evaluated through benchmark testing: Performance and results from the FlagOS software stack are compared against native stacks on multiple public benchmarks.
 
 # Evaluation Results
 ## Benchmark Result
-| Metrics      | Qwen3.8-Flash-Next-Nvidia-Origin | Qwen3.8-Flash-Next-Nvidia-FlagOS |
-|--------------|--------------------------------|--------------------------------------|
+| Metrics | Qwen3.8-Flash-Next-Nvidia-Origin | Qwen3.8-Flash-Next-Nvidia-FlagOS |
+|---|---|---|
 | GPQA_Diamond | 92.9                             | 91.3                    |
-| MuSR         | 78.57                            | Evaluating                                |
+| MuSR         | 78.57                            | 76.46                               |
 
 # User Guide
-Environment Setup
 
-| Item             | Version              |
-|------------------|----------------------|
-| Docker Version   | Docker version 24.0.0, build 98fdcd7 |
-| Operating System | 22.04.4 LTS (Jammy Jellyfish) |
+## Environment Setup
+
+### Host Environment
+
+| Item | Version / Spec |
+|---|---|
+| Hardware (GPU) | H100 x8卡 |
+| Docker Version | 24.0.0 |
+| Operating System | Ubuntu 22.04.4 LTS |
+| Driver | 580.105.08 |
+| SDK | CUDA 13.0 |
 
 ## Operation Steps
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/qwen3.8-flash-next-nvidia003-gems5.3.3-tree0.5.0-cxnone-plugin0.3.0-vllm0.24.0-cp312-pt211-cu129-x64-580.126.20:202608262106
+docker pull harbor.baai.ac.cn/flagrelease-public/qwen3.8-flash-next-nvidia003-gems5.3.3-tree0.5.0-cxnone-plugin0.3.0-vllm0.24.0-sglangnone-sglangflnone-cp312-pt211-cu129-x64-580.105.08:202611161600
 ```
 
 ### Download Open-source Model Weights
 ```bash
 pip install modelscope
-modelscope download --model FlagRelease/Qwen3.8-Flash-Next-BF16-nvidia-FlagOS --local_dir /data/Qwen3.8-Flash-Next
+modelscope download --model FlagRelease/Qwen3.8-Flash-Next-BF16-nvidia-FlagOS
 ```
 
 ### Start the Container
 ```bash
-set -euo pipefail
-IMAGE_URI='harbor.baai.ac.cn/flagrelease-public/qwen3.8-flash-next-nvidia003-gems5.3.3-tree0.5.0-cxnone-plugin0.3.0-vllm0.24.0-cp312-pt211-cu129-x64-580.126.20:202608262106'
-MODEL_DIR='/data/Qwen3.8-Flash-Next'
-CONTAINER='qwen38_flash_next_flagos_release'
-test -d "$MODEL_DIR"
-docker run -d --name "$CONTAINER" --network host --shm-size 64g \
+docker run -d --name qwen38_flash_next_formal --network host --shm-size 64g \
   --device /dev/nvidia0 --device /dev/nvidia1 --device /dev/nvidia2 --device /dev/nvidia3 \
   --device /dev/nvidia4 --device /dev/nvidia5 --device /dev/nvidia6 --device /dev/nvidia7 \
   --device /dev/nvidiactl --device /dev/nvidia-uvm --device /dev/nvidia-uvm-tools \
-  --device /dev/nvidia-nvlink --device /dev/nvidia-nvswitch0 --device /dev/nvidia-nvswitch1 \
-  --device /dev/nvidia-nvswitch2 --device /dev/nvidia-nvswitch3 --device /dev/nvidia-nvswitchctl \
-  --device /dev/nvidia-caps/nvidia-cap0 --device /dev/nvidia-caps/nvidia-cap1 --device /dev/nvidia-caps/nvidia-cap2 \
-  -v /usr/lib/x86_64-linux-gnu/libcuda.so.580.126.20:/driver/libcuda.so:ro \
-  -v /usr/lib/x86_64-linux-gnu/libcuda.so.580.126.20:/driver/libcuda.so.1:ro \
-  -v /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.580.126.20:/driver/libnvidia-ml.so:ro \
-  -v /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.580.126.20:/driver/libnvidia-ml.so.1:ro \
-  -v /usr/lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.580.126.20:/driver/libnvidia-ptxjitcompiler.so:ro \
-  -v /usr/lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.580.126.20:/driver/libnvidia-ptxjitcompiler.so.1:ro \
-  -v "$MODEL_DIR:/models/Qwen3.8-Flash-Next:ro" \
+  --device /dev/nvidia-nvswitch0 --device /dev/nvidia-nvswitch1 \
+  --device /dev/nvidia-nvswitch2 --device /dev/nvidia-nvswitch3 \
+  --device /dev/nvidia-caps/nvidia-cap0 --device /dev/nvidia-caps/nvidia-cap1 \
+  --device /dev/nvidia-caps/nvidia-cap2 \
+  -v /usr/lib/x86_64-linux-gnu/libcuda.so.580.105.08:/driver/libcuda.so:ro \
+  -v /usr/lib/x86_64-linux-gnu/libcuda.so.580.105.08:/driver/libcuda.so.1:ro \
+  -v /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.580.105.08:/driver/libnvidia-ml.so:ro \
+  -v /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.580.105.08:/driver/libnvidia-ml.so.1:ro \
+  -v /usr/lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.580.105.08:/driver/libnvidia-ptxjitcompiler.so:ro \
+  -v /usr/lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.580.105.08:/driver/libnvidia-ptxjitcompiler.so.1:ro \
+  -v /public/models/Qwen3.8-Flash-Next:/models/Qwen3.8-Flash-Next:ro \
   -e NVIDIA_VISIBLE_DEVICES=all -e NVIDIA_DRIVER_CAPABILITIES=compute,utility \
-  "$IMAGE_URI" -lc 'exec sleep infinity'
+  --entrypoint /bin/bash \
+  harbor.baai.ac.cn/flagrelease-public/qwen3.8-flash-next-nvidia003-gems5.3.3-tree0.5.0-cxnone-plugin0.3.0-vllm0.24.0-sglangnone-sglangflnone-cp312-pt211-cu129-x64-580.105.08:202611161600 \
+  -lc "exec sleep infinity"
+docker exec -it qwen38_flash_next_formal /bin/bash
 ```
-### Start the Server
+
+### Start the Inference Server
 ```bash
-docker exec -d qwen38_flash_next_flagos_release bash -lc 'export FLAGGEMS_ATEN_PLAN_CACHE=0 VLLM_PLUGINS=fl USE_FLAGGEMS=1 VLLM_FL_PREFER=flagos VLLM_FL_PREFER_ENABLED=true QWEN4_QSA_FUSED_COMPRESS=1 VLLM_WORKER_MULTIPROC_METHOD=spawn VLLM_ENABLE_V1_MULTIPROCESSING=1 VLLM_MOE_USE_DEEP_GEMM=0 VLLM_USE_DEEP_GEMM=0 VLLM_USE_FLASHINFER_MOE_FP8=0 CUDA_DEVICE_ORDER=PCI_BUS_ID OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1; export VLLM_FL_FLAGOS_BLACKLIST=index_put_,index_put,_index_put_impl_,nonzero,copy_,to_copy,index,index_select,conv1d,_conv_depthwise2d,conv2d,pad,constant_pad_nd,mul; export LD_LIBRARY_PATH=/driver:/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}; exec python3 -m vllm.entrypoints.cli.main serve /models/Qwen3.8-Flash-Next --served-model-name Qwen3.8-Flash-Next --host 0.0.0.0 --port 8001 --tensor-parallel-size 8 --distributed-executor-backend mp --max-model-len 102400 --max-num-seqs 64 --max-num-batched-tokens 32768 --limit-mm-per-prompt '\''{"image":16}'\'' --mm-encoder-tp-mode data --gpu-memory-utilization 0.90 --no-enable-prefix-caching --disable-custom-all-reduce --moe-backend triton --compilation-config '\''{"mode":"NONE","cudagraph_mode":"FULL","cudagraph_capture_sizes":[1,2,4,8,16],"max_cudagraph_capture_size":16,"pass_config":{"fuse_allreduce_rms":false}}'\'' >/tmp/qwen38-flagrelease-server.log 2>&1'
+export FLAGGEMS_ATEN_PLAN_CACHE=0 VLLM_PLUGINS=fl USE_FLAGGEMS=1
+export VLLM_FL_PREFER=flagos VLLM_FL_PREFER_ENABLED=true QWEN4_QSA_FUSED_COMPRESS=1
+export VLLM_WORKER_MULTIPROC_METHOD=spawn VLLM_ENABLE_V1_MULTIPROCESSING=1
+export VLLM_MOE_USE_DEEP_GEMM=0 VLLM_USE_DEEP_GEMM=0
+export CUDA_DEVICE_ORDER=PCI_BUS_ID OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+export VLLM_FL_FLAGOS_BLACKLIST=index_put_,index_put,_index_put_impl_,nonzero,copy_,to_copy,index,index_select,conv1d,_conv_depthwise2d,conv2d,pad,constant_pad_nd,mul,sqrt,rsqrt
+export VLLM_TUNED_CONFIG_FOLDER=/opt/flagos-tuned
+export LD_LIBRARY_PATH=/driver:/usr/local/cuda/lib64:${LD_LIBRARY_PATH:-}
+exec python3 -m vllm.entrypoints.cli.main serve /models/Qwen3.8-Flash-Next \
+  --served-model-name Qwen3.8-Flash-Next --host 0.0.0.0 --port 8001 \
+  --tensor-parallel-size 8 --distributed-executor-backend mp \
+  --max-model-len 102400 --max-num-seqs 64 --max-num-batched-tokens 16384 \
+  --limit-mm-per-prompt "{\"image\":16}" --mm-encoder-tp-mode data \
+  --gpu-memory-utilization 0.90 --no-enable-prefix-caching \
+  --disable-custom-all-reduce --moe-backend triton \
+  --compilation-config "{\"mode\":\"NONE\",\"cudagraph_mode\":\"FULL\",\"cudagraph_capture_sizes\":[1,2,4,8,16,32,64],\"max_cudagraph_capture_size\":64,\"pass_config\":{\"fuse_allreduce_rms\":false}}" \
+  > /tmp/qwen38-serve.log 2>&1
 ```
 
 ## Service Invocation
-### Invocation Script
+### Invocation Script (Text)
 ```bash
-curl --fail --silent --show-error http://127.0.0.1:8001/health >/dev/null
-curl --fail --silent --show-error http://127.0.0.1:8001/v1/chat/completions \
-  --header 'Content-Type: application/json' \
-  --data-raw '{"model":"Qwen3.8-Flash-Next","messages":[{"role":"user","content":"Reply with exactly: OK"}],"temperature":0,"max_tokens":8}'
+curl -s http://127.0.0.1:8001/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"Qwen3.8-Flash-Next","messages":[{"role":"user","content":"用两句话说明牛顿第二定律，并给出一个公式。"}],"max_tokens":256,"temperature":0}'
 ```
-
 
 ### AnythingLLM Integration Guide
 
@@ -102,10 +122,11 @@ curl --fail --silent --show-error http://127.0.0.1:8001/v1/chat/completions \
 
 - After model loading is complete:
 - Click **"New Conversation"**
-- Enter your question (e.g., “Explain the basics of quantum computing”)
+- Enter your question (e.g., "Explain the basics of quantum computing")
 - Click the send button to get a response
+
 # Technical Overview
-**FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a “develop once, run anywhere” workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of \<chip + open-source model\>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
+**FlagOS** is a fully open-source system software stack designed to unify the "model–system–chip" layers and foster an open, collaborative ecosystem. It enables a "develop once, run anywhere" workflow across diverse AI accelerators, unlocking hardware performance, eliminating fragmentation among vendor-specific software stacks, and substantially lowering the cost of porting and maintaining AI workloads. With core technologies such as the **FlagScale**, together with vllm-plugin-fl, distributed training/inference framework, **FlagGems** universal operator library, **FlagCX** communication library, and **FlagTree** unified compiler, the **FlagRelease** platform leverages the **FlagOS** stack to automatically produce and release various combinations of <chip + open-source model>. This enables efficient and automated model migration across diverse chips, opening a new chapter for large model deployment and application.
 ## FlagGems
 FlagGems is a high-performance, generic operator libraryimplemented in [Triton](https://github.com/openai/triton) language. It is built on a collection of backend-neutralkernels that aims to accelerate LLM (Large-Language Models) training and inference across diverse hardware platforms.
 ## FlagTree
@@ -129,6 +150,7 @@ We warmly welcome global developers to join us:
 2. Create Pull Requests to contribute code
 3. Improve technical documentation
 4. Expand hardware adaptation support
+
 # License
-The model weights are derived from Qwen/Qwen3.8-Flash-Next and are open‑sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
+The model weights are derived from Qwen3.8-Flash-Next and are open-sourced under the Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0.txt
 
