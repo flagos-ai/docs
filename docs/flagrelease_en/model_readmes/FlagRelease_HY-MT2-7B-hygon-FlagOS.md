@@ -71,6 +71,7 @@ docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
+pip install modelscope
 VLLM_FL_FLAGOS_BLACKLIST="pow_scalar,pow_tensor_scalar,pow_tensor_tensor,pow_tensor_scalar_,pow_tensor_tensor_" vllm serve /data/HY-MT2-7B \
 --trust-remote-code --port 8000 \
 --gpu-memory-utilization 0.95 \

@@ -57,6 +57,7 @@ docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
+pip install modelscope
 export VLLM_FL_FLAGOS_BLACKLIST="flash_attention_forward" 
 export GEMS_VENDOR="hygon" 
 vllm serve /workspace/model-share/Qwen3.6-35B-A3B-nomtp -tp 4 --enforce-eager --port 8000 --host 0.0.0.0 --served-model-name qwen36
