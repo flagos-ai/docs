@@ -45,6 +45,36 @@ docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-1.8b-zhenwu-
 pip install modelscope
 modelscope download --model FlagRelease/HY-MT2-1.8B-zhenwu-FlagOS --local_dir /data/HY-MT2-1.8B
 ```
+### Start the Container
+```bash
+docker run -dit \
+    --name HY-MT2-1.8B \
+    --shm-size=64g \
+    --network=host \
+    --device /dev/alixpu \
+    --device /dev/alixpu_ctl \
+    --device /dev/alixpu_ppu0 \
+    --device /dev/alixpu_ppu1 \
+    --device /dev/alixpu_ppu2 \
+    --device /dev/alixpu_ppu3 \
+    --device /dev/alixpu_ppu4 \
+    --device /dev/alixpu_ppu5 \
+    --device /dev/alixpu_ppu6 \
+    --device /dev/alixpu_ppu7 \
+    --device /dev/alixpu_ppu8 \
+    --device /dev/alixpu_ppu9 \
+    --device /dev/alixpu_ppu10 \
+    --device /dev/alixpu_ppu11 \
+    --device /dev/alixpu_ppu12 \
+    --device /dev/alixpu_ppu13 \
+    --device /dev/alixpu_ppu14 \
+    --device /dev/alixpu_ppu15 \
+    -v /mnt/:/mnt/ \
+    -v /models/:/models/ \
+    harbor.baai.ac.cn/flagrelease-public/flagrelease-hy-mt2-1.8b-zhenwu-tree_none-gems_5.0.1rc0-vllm_0.13.1.dev0_g72506c983.d20260218-plugin_0.1.0_vllm0.13.0-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.3.2-d7f5a2:202605191318 \
+    /bin/bash
+docker exec -it HY-MT2-1.8B /bin/bash
+```
 ### Start the Server
 ```bash
 vllm serve /data/HY-MT2-1.8B \

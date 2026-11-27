@@ -20,8 +20,10 @@ Built upon the TeleChat1-3 series, Xing4.0-29B-A4B is a comprehensively upgraded
 ## Benchmark Result
 | Metrics      | Xing4.0-29B-A4B-Nvidia-Origin | Xing4.0-29B-A4B-Hygon-FlagOS |
 |--------------|--------------------------------|--------------------------------------|
-| GPQA_Diamond | 62.23 | Evaluating  |
-| Math-500        | 84.80 | Evaluating   |
+| GPQA_Diamond | 62.23 | 67.17 |
+| Math-500        | 84.80 | 82.00 |
+
+> Hygon-FlagOS results were measured with this container image on Hygon HCU (vLLM 0.24.0 + FlagGems, TP=8, max_model_len=100000). GPQA_Diamond is reported with `flexible-extract`.
 
 # User Guide
 Environment Setup
@@ -35,8 +37,9 @@ Environment Setup
 
 ### Download FlagOS Image
 ```bash
-docker pull harbor.baai.ac.cn/flagrelease-public/flagtree-hcu-py310-torch2.10.0-dtk26.04-ubuntu22.04:202608-3.6-vllm0.24.0-xingcgen4
+docker pull harbor.baai.ac.cn/flagrelease-public/flagtree-hcu-py310-torch2.10.0-dtk26.04-ubuntu22.04:202608-3.6-vllm0.24.0-xing4
 ```
+
 
 ### Download Open-source Model Weights
 ```bash
@@ -46,37 +49,80 @@ modelscope download --model FlagRelease/Xing4.0-29B-A4B-BF16-hygon-FlagOS --loca
 
 ### Start the Container
 ```bash
-docker run -d --name flagos --net=host --ipc=host --device=/dev/kfd --device=/dev/mkfd --device=/dev/dri --group-add video -v /opt/hyhal:/opt/hyhal -v /data:/data -v /data:/data  harbor.baai.ac.cn/flagrelease-public/flagtree-hcu-py310-torch2.10.0-dtk26.04-ubuntu22.04:202608-3.6-vllm0.24.0-xingcgen4 sleep infinity
+docker run -d --name flagos --net=host --ipc=host \
+  --device=/dev/kfd --device=/dev/dri --group-add video \
+  -v /opt/hyhal:/opt/hyhal:ro \
+  -v /data:/data \
+  harbor.baai.ac.cn/flagrelease-public/flagtree-hcu-py310-torch2.10.0-dtk26.04-ubuntu22.04:202608-3.6-vllm0.24.0-xing4 \
+  sleep infinity
+docker exec -it flagos /bin/bash
 ```
 ### Start the Server
 ```bash
+export LD_LIBRARY_PATH=/opt/dtk-26.04-DCC2602-0317/hip/lib:/opt/dtk-26.04-DCC2602-0317/lib:/opt/dtk-26.04-DCC2602-0317/.hyhal/rocm_smi/lib:/opt/dtk-26.04-DCC2602-0317/aillvm/lib:${LD_LIBRARY_PATH}
+export TRITON_HIP_CLANG_PATH=/workspace/clang18-hygon.sh
 export GEMS_VENDOR=hygon
 export VLLM_PLUGINS=fl
-export HIP_VISIBLE_DEVICES=0,1,2,3
+export HIP_VISIBLE_DEVICES=0,1
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
-export VLLM_FL_FLAGOS_BLACKLIST=cat,slice
+export VLLM_FL_FLAGOS_BLACKLIST=cat,to_copy,_to_copy,copy_,index,slice,pad,bmm_out,to,linear,index_put_,index_put,_index_put_impl_,sort,cumsum,softmax,exponential_,argmax,scatter_
 export VLLM_ENGINE_ITERATION_TIMEOUT_S=7200
 export VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS=7200
 
 vllm serve /data/Xing4.0-29B-A4B \
-  --served-model-name xingchen429 \
+  --served-model-name xing4 \
   --dtype bfloat16 \
-  --tensor-parallel-size 4 \
-  --max-model-len 80000 \
+  --tensor-parallel-size 2 \
+  --max-model-len 100000 \
+  --max-num-seqs 16 \
   --gpu-memory-utilization 0.9 \
-  --port 8031 \
+  --port 8033 \
   --attention-backend TRITON_MLA \
   --no-enable-chunked-prefill \
   --no-enable-prefix-caching \
+  --reasoning-parser xing4_0 \
   --enforce-eager \
   --trust-remote-code
 ```
 
+Notes:
+- The configuration above is verified end-to-end on 2× Hygon HCU (64 GB each): the server reaches `Application startup complete` and answers the smoke test correctly. With more cards, raise `--tensor-parallel-size` (it must divide the model's 32 attention heads; TP=8 gives the best throughput).
+- `TRITON_HIP_CLANG_PATH` must point to the clang-18 wrapper shipped in the image (`/workspace/clang18-hygon.sh`). Without it Triton falls back to clang-17, which does not understand Hygon flags, and startup fails with `HSACOError`.
+- `--reasoning-parser xing4_0` is required whenever clients send `thinking_token_budget`; otherwise the request is rejected with HTTP 400.
+- `VLLM_FL_FLAGOS_BLACKLIST` must be set explicitly — the environment variable fully overrides `hygon.yaml`. The 19-operator list is needed for numerical stability on Hygon HCU (the `cat`/`slice` entries also avoid two independent crashes).
+
 ## Service Invocation
-### Invocation Script
+
+Health check and model list:
 ```bash
-bash models/xingchen4-hygon/test_inference.sh 8031
+curl http://127.0.0.1:8033/v1/models
 ```
+
+Capital-of-China smoke test (`/v1/completions`, expected to contain "北京"):
+```bash
+curl -sS http://127.0.0.1:8033/v1/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "xing4",
+    "prompt": "问:中国的首都是哪个城市呢？答:",
+    "max_tokens": 16,
+    "temperature": 0.2
+  }'
+```
+
+Chat endpoint with thinking disabled:
+```bash
+curl -sS http://127.0.0.1:8033/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "xing4",
+    "messages": [{"role": "user", "content": "中国的首都是哪个城市？"}],
+    "max_tokens": 32,
+    "temperature": 0.2,
+    "chat_template_kwargs": {"enable_thinking": false}
+  }'
+```
+A successful call returns `content` containing "北京" and `reasoning: null`.
 
 
 ### AnythingLLM Integration Guide
@@ -91,7 +137,8 @@ bash models/xingchen4-hygon/test_inference.sh 8031
 
 - Launch AnythingLLM
 - Open settings (bottom left, fourth tab)
-- Configure core LLM parameters
+- Set the LLM provider to an OpenAI-compatible endpoint
+- Set **Base URL** to `http://<server-ip>:8033/v1` and **Model** to `xing4`
 - Click "Save Settings" to apply changes
 
 #### 3. Model Interaction
