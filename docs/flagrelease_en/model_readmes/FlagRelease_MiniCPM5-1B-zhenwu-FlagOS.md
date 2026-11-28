@@ -39,7 +39,7 @@ Environment Setup
 | Operating System | Ubuntu 22.04.5 LTS (Noble Numbat) |
 
 ## Operation Steps
-This model requires 1 machine with 16 GPUs. Please follow this link to apply for 1 machine resource. link：https://help.aliyun.com/zh/pai/user-guide
+This model requires 1 machine with 1 GPUs. Please follow this link to apply for 1 machine resource. link：https://help.aliyun.com/zh/pai/user-guide
 ### Download FlagOS Image
 ```bash
 docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-minicpm5-zhenwu-tree_none-gems_5.0.1rc0-vllm_0.13.1.dev0_g72506c983.d20260218-plugin_0.1.0_vllm0.13.0-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.3.2-d7f5a2:202605191318
@@ -49,6 +49,36 @@ docker pull harbor.baai.ac.cn/flagrelease-public/flagrelease-minicpm5-zhenwu-tre
 ```bash
 pip install modelscope
 modelscope download --model FlagRelease/MiniCPM5-1B-zhenwu-FlagOS --local_dir /data/MiniCPM5-1B
+```
+### Start the Container
+```bash
+docker run -dit \
+    --name MiniCPM5-1B \
+    --shm-size=64g \
+    --network=host \
+    --device /dev/alixpu \
+    --device /dev/alixpu_ctl \
+    --device /dev/alixpu_ppu0 \
+    --device /dev/alixpu_ppu1 \
+    --device /dev/alixpu_ppu2 \
+    --device /dev/alixpu_ppu3 \
+    --device /dev/alixpu_ppu4 \
+    --device /dev/alixpu_ppu5 \
+    --device /dev/alixpu_ppu6 \
+    --device /dev/alixpu_ppu7 \
+    --device /dev/alixpu_ppu8 \
+    --device /dev/alixpu_ppu9 \
+    --device /dev/alixpu_ppu10 \
+    --device /dev/alixpu_ppu11 \
+    --device /dev/alixpu_ppu12 \
+    --device /dev/alixpu_ppu13 \
+    --device /dev/alixpu_ppu14 \
+    --device /dev/alixpu_ppu15 \
+    -v /mnt/:/mnt/ \
+    -v /models/:/models/ \
+    harbor.baai.ac.cn/flagrelease-public/flagrelease-minicpm5-zhenwu-tree_none-gems_5.0.1rc0-vllm_0.13.1.dev0_g72506c983.d20260218-plugin_0.1.0_vllm0.13.0-cx_none-python_3.12.3-torch_2.9.0-pcp_hggc13.0-gpu_pp001-arc_amd64-driver_1.3.2-d7f5a2:202605191318 \
+    /bin/bash
+docker exec -it MiniCPM5-1B /bin/bash
 ```
 ### Start the Server
 ```bash
